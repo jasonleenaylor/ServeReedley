@@ -1,0 +1,21 @@
+type Request @model {
+  id: ID!
+  dateOfRequest: String!
+  firstName: String!
+  lastName: String!
+  address1: String
+  address2: String
+  city: String!
+  zipCode: Int
+  phone: String
+  email: String
+  spanishOnly: Boolean
+  preferredContactTime: String
+  request: String
+  specificNeed: String
+  status: String
+  note: String
+  needFulfiller: String
+  dateFulfilled: String
+  followUp: String
+}
