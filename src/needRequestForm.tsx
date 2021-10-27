@@ -13,12 +13,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@mui/material";
+import { API, graphqlOperation } from "aws-amplify";
 import { useState } from "react";
+import { createRequest } from "./graphql/mutations";
 import { SelfOrAgent } from "./selfOrAgentComponent";
 
 export const NeedRequestForm = () => {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("last");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address1, setAddress1] = useState("");
@@ -27,9 +29,37 @@ export const NeedRequestForm = () => {
   const [zip, setZip] = useState("");
   const [agent, setAgent] = useState<"" | "yes" | "no">("");
   const cardStyle = { padding: 4 };
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    let request = {
+      dateOfRequest: Date.now,
+      firstName: firstName,
+      lastName: lastName,
+      address1: address1,
+      address2: address2,
+      city: city,
+      zipCode: zip,
+      phone: phone,
+      email: email,
+      spanishOnly: true,
+      preferredContactTime: "",
+      request: "Form Not Complete",
+      specificNeed: "Form Not Complete",
+      status: "",
+      note: "",
+      needFulfiller: "Form not complete",
+      dateFulfilled: "",
+      followUp: "",
+    };
+
+    await API.graphql(graphqlOperation(createRequest, { input: request }));
+    alert("Submitted");
+  }
+
   return (
     <Container>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
             <Card style={cardStyle}>
