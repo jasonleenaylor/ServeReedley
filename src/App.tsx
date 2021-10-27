@@ -1,59 +1,51 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import { API } from "aws-amplify";
-import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
-import { listRequests } from "./graphql/queries";
-import MaterialTable, { Column } from "@material-table/core";
-import tableIcons from "./tableIcons";
+import React from "react";
+import { LocalizeProvider } from "react-localize-redux";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { NeedRequestForm } from "./needRequestForm";
+import NeedRequestTable from "./NeedRequestTable";
+import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import theme from "./theme";
 
-function App() {
-  const [requests, setRequests] = useState([]);
-  const columns: Column<any>[] = [
-    // Vernacular column
-    { title: "Date Of Request", field: "dateOfRequest" },
-    { title: "First Name", field: "firstName" },
-    { title: "Last Name", field: "lastName" },
-    { title: "Address 1", field: "address1" },
-    { title: "Address 2", field: "address2" },
-    { title: "City", field: "city" },
-    { title: "Zip Code", field: "zipCode", type: "numeric" },
-    { title: "Phone", field: "phone" },
-    { title: "Email", field: "email" },
-    { title: "Spanish Only", field: "spanishOnly" },
-    { title: "Specific Need", field: "specificNeed" },
-    { title: "Preferred Contact Time", field: "preferredContactTime" },
-    { title: "Request", field: "request" },
-    { title: "Status", field: "status" },
-    { title: "Note", field: "note" },
-    { title: "Need Fulfiller", field: "needFulfiller" },
-    { title: "Date Fulfilled", field: "dateFulfilled" },
-    { title: "Follow Up", field: "followUp" },
-  ];
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
-  async function fetchNotes() {
-    const apiData: any = await API.graphql({ query: listRequests });
-    setRequests(apiData.data.listRequests.items);
-  }
-
+export default function App() {
   return (
-    <div className="App">
-      <div>
-        <MaterialTable
-          columns={columns}
-          icons={tableIcons}
-          data={requests}
-          title="Need Requests"
-        />
-      </div>
-      <span style={{ width: "20%" }} />
-      <AmplifySignOut />
-    </div>
+    <ThemeProvider theme={theme}>
+      <LocalizeProvider>
+        <Router>
+          <div style={{ width: "100%" }}>
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/request-need">Need Help?</Link>
+                </li>
+                <li>
+                  <Link to="/requests">View Current Needs</Link>
+                </li>
+              </ul>
+            </nav>
+
+            {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+            <Switch>
+              <Route path="/request-need">
+                <NeedRequestForm />
+              </Route>
+              <Route path="/requests">
+                <NeedRequestTable />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      </LocalizeProvider>
+    </ThemeProvider>
   );
 }
 
-export default withAuthenticator(App);
+function Home() {
+  return <h2>Home</h2>;
+}
