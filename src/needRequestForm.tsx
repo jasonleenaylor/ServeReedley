@@ -30,10 +30,10 @@ export const NeedRequestForm = () => {
   const [agent, setAgent] = useState<"" | "yes" | "no">("");
   const cardStyle = { padding: 4 };
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     let request = {
-      dateOfRequest: Date.now,
+      dateOfRequest: new Date().toUTCString(),
       firstName: firstName,
       lastName: lastName,
       address1: address1,
@@ -54,8 +54,7 @@ export const NeedRequestForm = () => {
     };
 
     await API.graphql(graphqlOperation(createRequest, { input: request }));
-    alert("Submitted");
-  }
+  };
 
   return (
     <Container>
