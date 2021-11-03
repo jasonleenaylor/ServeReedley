@@ -10,5 +10,7 @@
   },
   "cSpell.words": [
     "Reedley"
-  ]
+  ],
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true
 }
