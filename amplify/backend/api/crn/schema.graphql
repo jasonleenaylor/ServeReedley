@@ -3,8 +3,7 @@ type Request @model {
   dateOfRequest: String!
   firstName: String!
   lastName: String!
-  address1: String
-  address2: String
+  address: String
   city: String!
   zipCode: Int
   phone: String
@@ -12,10 +11,70 @@ type Request @model {
   spanishOnly: Boolean
   preferredContactTime: String
   request: String
-  specificNeed: String
-  status: String
+  leadSource: LeadSource!
+  leadOtherDetails: String
+  foodRequest: FoodInfo
+  needReason: [NeedReason]!
+  needTypes: [NeedType]!
+  status: RequestStatus!
   note: String
   needFulfiller: String
   dateFulfilled: String
   followUp: String
+}
+
+type FoodInfo @model {
+  familyMembers: Int
+  children: String
+  haveAllergies: Boolean
+  allergies: String
+  groceries: Groceries
+}
+
+type Groceries @model {
+  milk: Boolean
+  eggs: Boolean
+  bread: Boolean
+  tortillas: Boolean
+  rice: Boolean
+  beans: Boolean
+  cheese: Boolean
+  beef: Boolean
+  hotdogs: Boolean
+  lunchMeat: Boolean
+  fruit: Boolean
+  peanutButter: Boolean
+  jelly: Boolean
+}
+
+enum RequestStatus {
+  NEW
+  INPROGRESS
+  FULFILLED
+}
+
+enum NeedType {
+  MEALS
+  GROCERIES
+  MOVING
+  JOBTRAINING
+  HOMEREPAIR
+  CARREPAIR
+  HOUSING
+  CLOTHING
+  FURNITURE
+  OTHER
+}
+
+enum NeedReason {
+  COVID
+  ILLNESS
+  FINANCIAL
+}
+
+enum LeadSource {
+  REDEEMERS
+  FAMILY
+  FRIEND
+  OTHER
 }
