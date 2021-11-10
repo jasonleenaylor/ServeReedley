@@ -482,7 +482,6 @@ export const NeedRequestForm = () => {
                 pattern: "([0-9][0-8]?[ -,]?[ ]?)*",
               }}
               helperText="1,4,12"
-              required
             ></TextField>
           </FormControl>
         </Grid>
