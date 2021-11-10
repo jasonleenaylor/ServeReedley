@@ -20,14 +20,14 @@ import { makeStyles } from "@mui/material";
 import { API, graphqlOperation } from "aws-amplify";
 import { FormEvent, useState } from "react";
 import { createRequest } from "./graphql/mutations";
+import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
 
 export const NeedRequestForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
+  const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
   const [agent, setAgent] = useState<"" | "yes" | "no">("");
@@ -37,9 +37,7 @@ export const NeedRequestForm = () => {
   const [otherResoources, setOtherResources] = useState("");
   const [referee, setReferee] = useState("");
   const [refereeKnows, setRefereeKnows] = useState<"" | "yes" | "no">("");
-  const [lead, setLead] = useState<
-    "" | "Redeemers" | "Family" | "Friend" | "Other"
-  >("");
+  const [lead, setLead] = useState<LeadSource | null>(null);
   const [leadOther, setLeadOther] = useState("");
   const [needReason, setNeedReason] = useState({
     covid: false,
@@ -84,8 +82,7 @@ export const NeedRequestForm = () => {
       dateOfRequest: new Date().toUTCString(),
       firstName: firstName,
       lastName: lastName,
-      address1: address1,
-      address2: address2,
+      address: address,
       city: city,
       zipCode: zip ? zip : undefined,
       phone: phone,
@@ -93,8 +90,11 @@ export const NeedRequestForm = () => {
       spanishOnly: true,
       preferredContactTime: "",
       request: "" + needType,
-      specificNeed: "Form Not Complete",
-      status: "New",
+      leadSource: lead,
+      leadOtherDetails: leadOther,
+      needReason: getReasons(needReason),
+      needTypes: getNeedTypes(needType),
+      status: RequestStatus.NEW,
       note: "",
       needFulfiller: "Form not complete",
       dateFulfilled: "",
@@ -147,8 +147,8 @@ export const NeedRequestForm = () => {
       />
       <TextField
         label="Street Address"
-        value={address1}
-        onChange={(changeEvent: any) => setAddress1(changeEvent.target.value)}
+        value={address}
+        onChange={(changeEvent: any) => setAddress(changeEvent.target.value)}
         autoComplete="address-line1"
         multiline
         fullWidth
@@ -271,27 +271,27 @@ export const NeedRequestForm = () => {
           onChange={(changeEvent: any) => setLead(changeEvent.target.value)}
         >
           <FormControlLabel
-            value="Redeemer"
+            value={LeadSource.REDEEMERS}
             control={<Radio required={true} />}
             label="Redeemer's Church"
           />
           <FormControlLabel
-            value="Family"
+            value={LeadSource.FAMILY}
             control={<Radio required={true} />}
             label="Family Member"
           />
           <FormControlLabel
-            value="Friend"
+            value={LeadSource.FRIEND}
             control={<Radio required={true} />}
             label="Friend"
           />
           <FormControlLabel
-            value="Other"
+            value={LeadSource.OTHER}
             control={<Radio required={true} />}
             label="Other"
           />
         </RadioGroup>
-        {lead === "Other" && (
+        {lead === LeadSource.OTHER && (
           <TextField
             value={leadOther}
             onChange={(changeEvent: any) =>
@@ -900,3 +900,40 @@ export const NeedRequestForm = () => {
     </Container>
   );
 };
+function getReasons(needReason: {
+  covid: boolean;
+  illness: boolean;
+  financial: boolean;
+}) {
+  let reasons: NeedReason[] = [];
+  if (needReason.covid) reasons.push(NeedReason.COVID);
+  if (needReason.illness) reasons.push(NeedReason.ILLNESS);
+  if (needReason.financial) reasons.push(NeedReason.FINANCIAL);
+  return reasons;
+}
+
+function getNeedTypes(needType: {
+  meals: boolean;
+  groceries: boolean;
+  moving: boolean;
+  jobTraining: boolean;
+  homeRepair: boolean;
+  carRepair: boolean;
+  housing: boolean;
+  clothing: boolean;
+  furniture: boolean;
+  other: boolean;
+}) {
+  let types: NeedType[] = [];
+  if (needType.meals) types.push(NeedType.MEALS);
+  if (needType.groceries) types.push(NeedType.GROCERIES);
+  if (needType.moving) types.push(NeedType.MOVING);
+  if (needType.carRepair) types.push(NeedType.CARREPAIR);
+  if (needType.housing) types.push(NeedType.HOUSING);
+  if (needType.homeRepair) types.push(NeedType.HOMEREPAIR);
+  if (needType.jobTraining) types.push(NeedType.JOBTRAINING);
+  if (needType.clothing) types.push(NeedType.CLOTHING);
+  if (needType.furniture) types.push(NeedType.FURNITURE);
+  if (needType.other) types.push(NeedType.OTHER);
+  return types;
+}

@@ -9,8 +9,7 @@ export const onCreateRequest = /* GraphQL */ `
       dateOfRequest
       firstName
       lastName
-      address1
-      address2
+      address
       city
       zipCode
       phone
@@ -18,7 +17,37 @@ export const onCreateRequest = /* GraphQL */ `
       spanishOnly
       preferredContactTime
       request
-      specificNeed
+      leadSource
+      leadOtherDetails
+      foodRequest {
+        id
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        groceries {
+          id
+          milk
+          eggs
+          bread
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      needReason
+      needTypes
       status
       note
       needFulfiller
@@ -36,8 +65,7 @@ export const onUpdateRequest = /* GraphQL */ `
       dateOfRequest
       firstName
       lastName
-      address1
-      address2
+      address
       city
       zipCode
       phone
@@ -45,7 +73,37 @@ export const onUpdateRequest = /* GraphQL */ `
       spanishOnly
       preferredContactTime
       request
-      specificNeed
+      leadSource
+      leadOtherDetails
+      foodRequest {
+        id
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        groceries {
+          id
+          milk
+          eggs
+          bread
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      needReason
+      needTypes
       status
       note
       needFulfiller
@@ -63,8 +121,7 @@ export const onDeleteRequest = /* GraphQL */ `
       dateOfRequest
       firstName
       lastName
-      address1
-      address2
+      address
       city
       zipCode
       phone
@@ -72,12 +129,201 @@ export const onDeleteRequest = /* GraphQL */ `
       spanishOnly
       preferredContactTime
       request
-      specificNeed
+      leadSource
+      leadOtherDetails
+      foodRequest {
+        id
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        groceries {
+          id
+          milk
+          eggs
+          bread
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      needReason
+      needTypes
       status
       note
       needFulfiller
       dateFulfilled
       followUp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateFoodInfo = /* GraphQL */ `
+  subscription OnCreateFoodInfo {
+    onCreateFoodInfo {
+      id
+      familyMembers
+      children
+      haveAllergies
+      allergies
+      groceries {
+        id
+        milk
+        eggs
+        bread
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateFoodInfo = /* GraphQL */ `
+  subscription OnUpdateFoodInfo {
+    onUpdateFoodInfo {
+      id
+      familyMembers
+      children
+      haveAllergies
+      allergies
+      groceries {
+        id
+        milk
+        eggs
+        bread
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteFoodInfo = /* GraphQL */ `
+  subscription OnDeleteFoodInfo {
+    onDeleteFoodInfo {
+      id
+      familyMembers
+      children
+      haveAllergies
+      allergies
+      groceries {
+        id
+        milk
+        eggs
+        bread
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateGroceries = /* GraphQL */ `
+  subscription OnCreateGroceries {
+    onCreateGroceries {
+      id
+      milk
+      eggs
+      bread
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateGroceries = /* GraphQL */ `
+  subscription OnUpdateGroceries {
+    onUpdateGroceries {
+      id
+      milk
+      eggs
+      bread
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteGroceries = /* GraphQL */ `
+  subscription OnDeleteGroceries {
+    onDeleteGroceries {
+      id
+      milk
+      eggs
+      bread
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
       createdAt
       updatedAt
     }

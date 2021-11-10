@@ -9,8 +9,7 @@ export const getRequest = /* GraphQL */ `
       dateOfRequest
       firstName
       lastName
-      address1
-      address2
+      address
       city
       zipCode
       phone
@@ -18,7 +17,37 @@ export const getRequest = /* GraphQL */ `
       spanishOnly
       preferredContactTime
       request
-      specificNeed
+      leadSource
+      leadOtherDetails
+      foodRequest {
+        id
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        groceries {
+          id
+          milk
+          eggs
+          bread
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      needReason
+      needTypes
       status
       note
       needFulfiller
@@ -41,8 +70,7 @@ export const listRequests = /* GraphQL */ `
         dateOfRequest
         firstName
         lastName
-        address1
-        address2
+        address
         city
         zipCode
         phone
@@ -50,12 +78,144 @@ export const listRequests = /* GraphQL */ `
         spanishOnly
         preferredContactTime
         request
-        specificNeed
+        leadSource
+        leadOtherDetails
+        foodRequest {
+          id
+          familyMembers
+          children
+          haveAllergies
+          allergies
+          createdAt
+          updatedAt
+        }
+        needReason
+        needTypes
         status
         note
         needFulfiller
         dateFulfilled
         followUp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getFoodInfo = /* GraphQL */ `
+  query GetFoodInfo($id: ID!) {
+    getFoodInfo(id: $id) {
+      id
+      familyMembers
+      children
+      haveAllergies
+      allergies
+      groceries {
+        id
+        milk
+        eggs
+        bread
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listFoodInfos = /* GraphQL */ `
+  query ListFoodInfos(
+    $filter: ModelFoodInfoFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listFoodInfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        groceries {
+          id
+          milk
+          eggs
+          bread
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getGroceries = /* GraphQL */ `
+  query GetGroceries($id: ID!) {
+    getGroceries(id: $id) {
+      id
+      milk
+      eggs
+      bread
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listGroceriess = /* GraphQL */ `
+  query ListGroceriess(
+    $filter: ModelGroceriesFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGroceriess(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        milk
+        eggs
+        bread
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
         createdAt
         updatedAt
       }
