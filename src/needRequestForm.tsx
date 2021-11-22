@@ -96,7 +96,7 @@ export const NeedRequestForm = () => {
       needTypes: getNeedTypes(needType),
       status: RequestStatus.NEW,
       note: "",
-      needFulfiller: "Form not complete",
+      needFulfiller: "",
       dateFulfilled: "",
       followUp: "",
     };
@@ -682,34 +682,6 @@ export const NeedRequestForm = () => {
         </Grid>
         <Grid item xs={12}>
           <Typography>
-            Could you provide pictures or measurements if requested?
-          </Typography>
-          <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
-          >
-            <FormControlLabel
-              value="yes"
-              control={<Radio required={true} />}
-              label="Yes"
-            />
-            <FormControlLabel
-              value="no"
-              control={<Radio required={true} />}
-              label="No"
-            />
-          </RadioGroup>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <Typography>
-              What tools or equipment will be needed for the move?
-            </Typography>
-            <TextField required></TextField>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>
             Do you have transportation such as your own truck or a rented UHaul?
           </Typography>
           <RadioGroup
@@ -727,12 +699,6 @@ export const NeedRequestForm = () => {
               label="No"
             />
           </RadioGroup>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <Typography>What type of transportation will you need?</Typography>
-            <TextField required></TextField>
-          </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl>
@@ -766,7 +732,7 @@ export const NeedRequestForm = () => {
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <TextField required label="Please list conditions"></TextField>
+            <TextField label="Please list conditions"></TextField>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
