@@ -19,7 +19,12 @@ import {
 import { makeStyles } from "@mui/material";
 import { API, graphqlOperation } from "aws-amplify";
 import { FormEvent, useState } from "react";
-import { createRequest } from "./graphql/mutations";
+import {
+  createFoodInfo,
+  createGroceries,
+  createRequest,
+  createSelfOrOtherInfo,
+} from "./graphql/mutations";
 import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
 
 export const NeedRequestForm = () => {
@@ -56,6 +61,28 @@ export const NeedRequestForm = () => {
     furniture: false,
     other: false,
   });
+  const [foodInfo, setFoodInfo] = useState({
+    familyMembers: null,
+    children: "",
+    haveAllergies: false,
+    allergies: "",
+  });
+  const [groceries, setGroceries] = useState({
+    milk: false,
+    eggs: false,
+    bread: false,
+    butter: false,
+    tortillas: false,
+    rice: false,
+    beans: false,
+    cheese: false,
+    beef: false,
+    hotdogs: false,
+    lunchMeat: false,
+    fruit: false,
+    peanutButter: false,
+    jelly: false,
+  });
 
   const cardStyle = { padding: 12 };
 
@@ -75,8 +102,56 @@ export const NeedRequestForm = () => {
     });
   };
 
+  const handleGroceriesChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setGroceries({
+      ...groceries,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const handleFoodInfoChange = (newFoodInfo: {}) => {
+    setFoodInfo({
+      ...foodInfo,
+      ...newFoodInfo,
+    });
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    let selfOrOther = {
+      forSelf: agent == "yes",
+      usedOtherResources: usedOtherResources == "yes",
+      otherResources: otherResoources,
+      requestFor: referee,
+      requestIsKnown: refereeKnows == "yes",
+    };
+
+    let food = {
+      familyMembers: foodInfo.familyMembers,
+      children: foodInfo.children,
+      haveAllergies: foodInfo.haveAllergies,
+      allergies: foodInfo.allergies,
+      foodInfoGroceriesId: "",
+    };
+
+    let groceriesInfo = {
+      milk: groceries.milk,
+      eggs: groceries.eggs,
+      bread: groceries.bread,
+      tortillas: groceries.tortillas,
+      rice: groceries.rice,
+      beans: groceries.beans,
+      cheese: groceries.cheese,
+      beef: groceries.beef,
+      hotdogs: groceries.hotdogs,
+      lunchMeat: groceries.lunchMeat,
+      fruit: groceries.fruit,
+      peanutButter: groceries.peanutButter,
+      jelly: groceries.jelly,
+    };
 
     let request = {
       dateOfRequest: new Date().toUTCString(),
@@ -88,6 +163,8 @@ export const NeedRequestForm = () => {
       phone: phone,
       email: email,
       spanishOnly: true,
+      requestSelfOrOtherInfoId: "",
+      requestFoodRequestId: "",
       preferredContactTime: "",
       request: "" + needType,
       leadSource: lead,
@@ -101,8 +178,34 @@ export const NeedRequestForm = () => {
       followUp: "",
     };
 
-    alert("submitting");
     try {
+      let result: any = await API.graphql(
+        graphqlOperation(createSelfOrOtherInfo, { input: selfOrOther })
+      );
+      request.requestSelfOrOtherInfoId = result.data.createSelfOrOtherInfo.id;
+      let groceriesId = "";
+      if (needType.groceries) {
+        try {
+          result = await API.graphql(
+            graphqlOperation(createGroceries, { input: groceriesInfo })
+          );
+          groceriesId = result.data.createGroceries.id;
+        } catch (err) {
+          alert("groceries error: " + JSON.stringify(err));
+        }
+      }
+      if (needType.meals || needType.groceries) {
+        try {
+          food.foodInfoGroceriesId = groceriesId;
+          result = await API.graphql(
+            graphqlOperation(createFoodInfo, { input: food })
+          );
+          request.requestFoodRequestId = result.data.createFoodInfo.id;
+        } catch (err) {
+          alert("food info: " + JSON.stringify(err));
+        }
+      }
+      alert("request: " + JSON.stringify(request));
       await API.graphql(graphqlOperation(createRequest, { input: request }));
     } catch (err) {
       alert("error: " + JSON.stringify(err));
@@ -165,7 +268,7 @@ export const NeedRequestForm = () => {
         value={zip}
         onChange={(changeEvent: any) => setZip(changeEvent.target.value)}
         inputProps={{
-          inputmode: "numeric",
+          inputMode: "numeric",
           pattern: "[1-9][0-9]{4}}",
           maxLength: 5,
           minLength: 5,
@@ -465,10 +568,14 @@ export const NeedRequestForm = () => {
           <TextField
             label="Number of family members"
             inputProps={{
-              inputmode: "numeric",
+              inputMode: "numeric",
               pattern: "[0-9][0-9]?",
               maxLength: 2,
             }}
+            onChange={(changeEvent: any) =>
+              handleFoodInfoChange({ familyMembers: changeEvent.target.value })
+            }
+            value={foodInfo.familyMembers}
             required
           ></TextField>
         </Grid>
@@ -523,9 +630,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.meals}
-                onChange={handleNeedTypeChange}
-                name="meals"
+                checked={groceries.milk}
+                onChange={handleGroceriesChange}
+                name="milk"
               />
             }
             label="Gallon of milk"
@@ -533,9 +640,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.groceries}
-                onChange={handleNeedTypeChange}
-                name="groceries"
+                checked={groceries.eggs}
+                onChange={handleGroceriesChange}
+                name="eggs"
               />
             }
             label="Dozen eggs"
@@ -543,9 +650,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.moving}
-                onChange={handleNeedTypeChange}
-                name="moving"
+                checked={groceries.bread}
+                onChange={handleGroceriesChange}
+                name="bread"
               />
             }
             label="Bread"
@@ -553,9 +660,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.jobTraining}
-                onChange={handleNeedTypeChange}
-                name="jobTraining"
+                checked={groceries.tortillas}
+                onChange={handleGroceriesChange}
+                name="tortillas"
               />
             }
             label="20 count flour tortillas"
@@ -563,9 +670,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.carRepair}
-                onChange={handleNeedTypeChange}
-                name="carRepair"
+                checked={groceries.rice}
+                onChange={handleGroceriesChange}
+                name="rice"
               />
             }
             label="Pound of long grain rice"
@@ -573,9 +680,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.homeRepair}
-                onChange={handleNeedTypeChange}
-                name="homeRepair"
+                checked={groceries.beans}
+                onChange={handleGroceriesChange}
+                name="beans"
               />
             }
             label="2 Pounds of pinto beans"
@@ -583,9 +690,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.housing}
-                onChange={handleNeedTypeChange}
-                name="housing"
+                checked={groceries.cheese}
+                onChange={handleGroceriesChange}
+                name="cheese"
               />
             }
             label="12oz American cheese singles"
@@ -593,9 +700,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.furniture}
-                onChange={handleNeedTypeChange}
-                name="furniture"
+                checked={groceries.beef}
+                onChange={handleGroceriesChange}
+                name="beef"
               />
             }
             label="Pound of ground beef"
@@ -603,9 +710,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.other}
-                onChange={handleNeedTypeChange}
-                name="other"
+                checked={groceries.hotdogs}
+                onChange={handleGroceriesChange}
+                name="hotdogs"
               />
             }
             label="8 count hot dogs"
@@ -613,9 +720,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.carRepair}
-                onChange={handleNeedTypeChange}
-                name="carRepair"
+                checked={groceries.lunchMeat}
+                onChange={handleGroceriesChange}
+                name="lunchMeat"
               />
             }
             label="Turkey lunch meat"
@@ -623,9 +730,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.homeRepair}
-                onChange={handleNeedTypeChange}
-                name="homeRepair"
+                checked={groceries.fruit}
+                onChange={handleGroceriesChange}
+                name="fruit"
               />
             }
             label="Fresh or canned fruit"
@@ -633,9 +740,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.housing}
-                onChange={handleNeedTypeChange}
-                name="housing"
+                checked={groceries.butter}
+                onChange={handleGroceriesChange}
+                name="butter"
               />
             }
             label="Pound of unsalted butter"
@@ -643,9 +750,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.clothing}
-                onChange={handleNeedTypeChange}
-                name="clothing"
+                checked={groceries.peanutButter}
+                onChange={handleGroceriesChange}
+                name="peanutButter"
               />
             }
             label="Peanut butter"
@@ -653,9 +760,9 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.furniture}
-                onChange={handleNeedTypeChange}
-                name="furniture"
+                checked={groceries.jelly}
+                onChange={handleGroceriesChange}
+                name="jelly"
               />
             }
             label="Jelly"

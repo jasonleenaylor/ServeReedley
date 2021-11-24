@@ -13,7 +13,8 @@ type Request @model {
   request: String
   leadSource: LeadSource!
   leadOtherDetails: String
-  foodRequest: FoodInfo
+  selfOrOtherInfo: SelfOrOtherInfo! @connection
+  foodRequest: FoodInfo @connection
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
@@ -23,12 +24,20 @@ type Request @model {
   followUp: String
 }
 
+type SelfOrOtherInfo @model {
+  forSelf: Boolean
+  usedOtherResources: Boolean
+  otherResources: String
+  requestFor: String
+  requestIsKnown: Boolean
+}
+
 type FoodInfo @model {
   familyMembers: Int
   children: String
   haveAllergies: Boolean
   allergies: String
-  groceries: Groceries
+  groceries: Groceries @connection
 }
 
 type Groceries @model {

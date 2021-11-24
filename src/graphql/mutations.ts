@@ -22,6 +22,16 @@ export const createRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -81,6 +91,16 @@ export const updateRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -140,6 +160,16 @@ export const deleteRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -174,6 +204,57 @@ export const deleteRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createSelfOrOtherInfo = /* GraphQL */ `
+  mutation CreateSelfOrOtherInfo(
+    $input: CreateSelfOrOtherInfoInput!
+    $condition: ModelSelfOrOtherInfoConditionInput
+  ) {
+    createSelfOrOtherInfo(input: $input, condition: $condition) {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateSelfOrOtherInfo = /* GraphQL */ `
+  mutation UpdateSelfOrOtherInfo(
+    $input: UpdateSelfOrOtherInfoInput!
+    $condition: ModelSelfOrOtherInfoConditionInput
+  ) {
+    updateSelfOrOtherInfo(input: $input, condition: $condition) {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteSelfOrOtherInfo = /* GraphQL */ `
+  mutation DeleteSelfOrOtherInfo(
+    $input: DeleteSelfOrOtherInfoInput!
+    $condition: ModelSelfOrOtherInfoConditionInput
+  ) {
+    deleteSelfOrOtherInfo(input: $input, condition: $condition) {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
       createdAt
       updatedAt
     }

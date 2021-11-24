@@ -19,6 +19,16 @@ export const onCreateRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -75,6 +85,16 @@ export const onUpdateRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -131,6 +151,16 @@ export const onDeleteRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -165,6 +195,48 @@ export const onDeleteRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateSelfOrOtherInfo = /* GraphQL */ `
+  subscription OnCreateSelfOrOtherInfo {
+    onCreateSelfOrOtherInfo {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateSelfOrOtherInfo = /* GraphQL */ `
+  subscription OnUpdateSelfOrOtherInfo {
+    onUpdateSelfOrOtherInfo {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteSelfOrOtherInfo = /* GraphQL */ `
+  subscription OnDeleteSelfOrOtherInfo {
+    onDeleteSelfOrOtherInfo {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
       createdAt
       updatedAt
     }

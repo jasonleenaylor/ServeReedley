@@ -24,6 +24,8 @@ export type CreateRequestInput = {
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
+  requestSelfOrOtherInfoId: string,
+  requestFoodRequestId?: string | null,
 };
 
 export enum LeadSource {
@@ -187,6 +189,7 @@ export type Request = {
   request?: string | null,
   leadSource: LeadSource,
   leadOtherDetails?: string | null,
+  selfOrOtherInfo: SelfOrOtherInfo,
   foodRequest?: FoodInfo | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
@@ -195,6 +198,18 @@ export type Request = {
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type SelfOrOtherInfo = {
+  __typename: "SelfOrOtherInfo",
+  id: string,
+  forSelf?: boolean | null,
+  usedOtherResources?: boolean | null,
+  otherResources?: string | null,
+  requestFor?: string | null,
+  requestIsKnown?: boolean | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -253,9 +268,43 @@ export type UpdateRequestInput = {
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
+  requestSelfOrOtherInfoId?: string | null,
+  requestFoodRequestId?: string | null,
 };
 
 export type DeleteRequestInput = {
+  id: string,
+};
+
+export type CreateSelfOrOtherInfoInput = {
+  id?: string | null,
+  forSelf?: boolean | null,
+  usedOtherResources?: boolean | null,
+  otherResources?: string | null,
+  requestFor?: string | null,
+  requestIsKnown?: boolean | null,
+};
+
+export type ModelSelfOrOtherInfoConditionInput = {
+  forSelf?: ModelBooleanInput | null,
+  usedOtherResources?: ModelBooleanInput | null,
+  otherResources?: ModelStringInput | null,
+  requestFor?: ModelStringInput | null,
+  requestIsKnown?: ModelBooleanInput | null,
+  and?: Array< ModelSelfOrOtherInfoConditionInput | null > | null,
+  or?: Array< ModelSelfOrOtherInfoConditionInput | null > | null,
+  not?: ModelSelfOrOtherInfoConditionInput | null,
+};
+
+export type UpdateSelfOrOtherInfoInput = {
+  forSelf?: boolean | null,
+  usedOtherResources?: boolean | null,
+  otherResources?: string | null,
+  requestFor?: string | null,
+  requestIsKnown?: boolean | null,
+};
+
+export type DeleteSelfOrOtherInfoInput = {
   id: string,
 };
 
@@ -265,6 +314,7 @@ export type CreateFoodInfoInput = {
   children?: string | null,
   haveAllergies?: boolean | null,
   allergies?: string | null,
+  foodInfoGroceriesId?: string | null,
 };
 
 export type ModelFoodInfoConditionInput = {
@@ -282,6 +332,7 @@ export type UpdateFoodInfoInput = {
   children?: string | null,
   haveAllergies?: boolean | null,
   allergies?: string | null,
+  foodInfoGroceriesId?: string | null,
 };
 
 export type DeleteFoodInfoInput = {
@@ -393,6 +444,23 @@ export type ModelRequestConnection = {
   nextToken?: string | null,
 };
 
+export type ModelSelfOrOtherInfoFilterInput = {
+  forSelf?: ModelBooleanInput | null,
+  usedOtherResources?: ModelBooleanInput | null,
+  otherResources?: ModelStringInput | null,
+  requestFor?: ModelStringInput | null,
+  requestIsKnown?: ModelBooleanInput | null,
+  and?: Array< ModelSelfOrOtherInfoFilterInput | null > | null,
+  or?: Array< ModelSelfOrOtherInfoFilterInput | null > | null,
+  not?: ModelSelfOrOtherInfoFilterInput | null,
+};
+
+export type ModelSelfOrOtherInfoConnection = {
+  __typename: "ModelSelfOrOtherInfoConnection",
+  items?:  Array<SelfOrOtherInfo | null > | null,
+  nextToken?: string | null,
+};
+
 export type ModelFoodInfoFilterInput = {
   familyMembers?: ModelIntInput | null,
   children?: ModelStringInput | null,
@@ -456,6 +524,17 @@ export type CreateRequestMutation = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -519,6 +598,17 @@ export type UpdateRequestMutation = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -582,6 +672,17 @@ export type DeleteRequestMutation = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -618,6 +719,63 @@ export type DeleteRequestMutation = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateSelfOrOtherInfoMutationVariables = {
+  input: CreateSelfOrOtherInfoInput,
+  condition?: ModelSelfOrOtherInfoConditionInput | null,
+};
+
+export type CreateSelfOrOtherInfoMutation = {
+  createSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateSelfOrOtherInfoMutationVariables = {
+  input: UpdateSelfOrOtherInfoInput,
+  condition?: ModelSelfOrOtherInfoConditionInput | null,
+};
+
+export type UpdateSelfOrOtherInfoMutation = {
+  updateSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteSelfOrOtherInfoMutationVariables = {
+  input: DeleteSelfOrOtherInfoInput,
+  condition?: ModelSelfOrOtherInfoConditionInput | null,
+};
+
+export type DeleteSelfOrOtherInfoMutation = {
+  deleteSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -836,6 +994,17 @@ export type GetRequestQuery = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -902,6 +1071,17 @@ export type ListRequestsQuery = {
       request?: string | null,
       leadSource: LeadSource,
       leadOtherDetails?: string | null,
+      selfOrOtherInfo:  {
+        __typename: "SelfOrOtherInfo",
+        id: string,
+        forSelf?: boolean | null,
+        usedOtherResources?: boolean | null,
+        otherResources?: string | null,
+        requestFor?: string | null,
+        requestIsKnown?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      },
       foodRequest?:  {
         __typename: "FoodInfo",
         id: string,
@@ -919,6 +1099,48 @@ export type ListRequestsQuery = {
       needFulfiller?: string | null,
       dateFulfilled?: string | null,
       followUp?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetSelfOrOtherInfoQueryVariables = {
+  id: string,
+};
+
+export type GetSelfOrOtherInfoQuery = {
+  getSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListSelfOrOtherInfosQueryVariables = {
+  filter?: ModelSelfOrOtherInfoFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListSelfOrOtherInfosQuery = {
+  listSelfOrOtherInfos?:  {
+    __typename: "ModelSelfOrOtherInfoConnection",
+    items?:  Array< {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null > | null,
@@ -1079,6 +1301,17 @@ export type OnCreateRequestSubscription = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -1137,6 +1370,17 @@ export type OnUpdateRequestSubscription = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -1195,6 +1439,17 @@ export type OnDeleteRequestSubscription = {
     request?: string | null,
     leadSource: LeadSource,
     leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      id: string,
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     foodRequest?:  {
       __typename: "FoodInfo",
       id: string,
@@ -1231,6 +1486,48 @@ export type OnDeleteRequestSubscription = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateSelfOrOtherInfoSubscription = {
+  onCreateSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateSelfOrOtherInfoSubscription = {
+  onUpdateSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteSelfOrOtherInfoSubscription = {
+  onDeleteSelfOrOtherInfo?:  {
+    __typename: "SelfOrOtherInfo",
+    id: string,
+    forSelf?: boolean | null,
+    usedOtherResources?: boolean | null,
+    otherResources?: string | null,
+    requestFor?: string | null,
+    requestIsKnown?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,

@@ -37,6 +37,37 @@ function NeedRequestTable() {
       field: "needTypes",
       render: (rowData) => rowData.needTypes.join(", "),
     },
+    { title: "Own Need", field: "selfOrOtherInfo.forSelf" },
+    { title: "Other Resources Used", field: "selfOrOtherInfo.otherResources" },
+    {
+      title: "Requested For (if not self)",
+      field: "selfOrOtherInfo.requestFor",
+    },
+    {
+      title: "Requested with knowledge",
+      field: "selfOrOtherInfo.requestIsKnown",
+    },
+    {
+      title: "Family Size",
+      field: "foodRequest.familyMembers",
+    },
+    {
+      title: "Children",
+      field: "foodRequest.children",
+    },
+    {
+      title: "Family Size",
+      field: "foodRequest.familyMembers",
+    },
+    {
+      title: "Allergies",
+      field: "foodRequest.alergies",
+    },
+    {
+      title: "Groceries",
+      field: "foodRequest.groceries",
+      render: (rowData) => JSON.stringify(rowData.foodRequest?.groceries),
+    },
     { title: "Need Fulfiller", field: "needFulfiller" },
     { title: "Date Fulfilled", field: "dateFulfilled", type: "datetime" },
     { title: "Follow Up", field: "followUp" },

@@ -19,6 +19,16 @@ export const getRequest = /* GraphQL */ `
       request
       leadSource
       leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
       foodRequest {
         id
         familyMembers
@@ -80,6 +90,16 @@ export const listRequests = /* GraphQL */ `
         request
         leadSource
         leadOtherDetails
+        selfOrOtherInfo {
+          id
+          forSelf
+          usedOtherResources
+          otherResources
+          requestFor
+          requestIsKnown
+          createdAt
+          updatedAt
+        }
         foodRequest {
           id
           familyMembers
@@ -96,6 +116,45 @@ export const listRequests = /* GraphQL */ `
         needFulfiller
         dateFulfilled
         followUp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getSelfOrOtherInfo = /* GraphQL */ `
+  query GetSelfOrOtherInfo($id: ID!) {
+    getSelfOrOtherInfo(id: $id) {
+      id
+      forSelf
+      usedOtherResources
+      otherResources
+      requestFor
+      requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSelfOrOtherInfos = /* GraphQL */ `
+  query ListSelfOrOtherInfos(
+    $filter: ModelSelfOrOtherInfoFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSelfOrOtherInfos(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
         createdAt
         updatedAt
       }
