@@ -17,6 +17,8 @@ export type CreateRequestInput = {
   request?: string | null,
   leadSource: LeadSource,
   leadOtherDetails?: string | null,
+  resumeHelp?: boolean | null,
+  coverLetterHelp?: boolean | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
@@ -26,6 +28,7 @@ export type CreateRequestInput = {
   followUp?: string | null,
   requestSelfOrOtherInfoId: string,
   requestFoodRequestId?: string | null,
+  requestMovingRequestId?: string | null,
 };
 
 export enum LeadSource {
@@ -78,6 +81,8 @@ export type ModelRequestConditionInput = {
   request?: ModelStringInput | null,
   leadSource?: ModelLeadSourceInput | null,
   leadOtherDetails?: ModelStringInput | null,
+  resumeHelp?: ModelBooleanInput | null,
+  coverLetterHelp?: ModelBooleanInput | null,
   needReason?: ModelNeedReasonListInput | null,
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
@@ -191,6 +196,9 @@ export type Request = {
   leadOtherDetails?: string | null,
   selfOrOtherInfo: SelfOrOtherInfo,
   foodRequest?: FoodInfo | null,
+  movingRequest?: MovingInfo | null,
+  resumeHelp?: boolean | null,
+  coverLetterHelp?: boolean | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
@@ -246,6 +254,18 @@ export type Groceries = {
   updatedAt: string,
 };
 
+export type MovingInfo = {
+  __typename: "MovingInfo",
+  id: string,
+  itemCount?: number | null,
+  distance?: number | null,
+  haveTransportation?: boolean | null,
+  specialConditions?: string | null,
+  liabilityAck?: boolean | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
 export type UpdateRequestInput = {
   id: string,
   dateOfRequest?: string | null,
@@ -261,6 +281,8 @@ export type UpdateRequestInput = {
   request?: string | null,
   leadSource?: LeadSource | null,
   leadOtherDetails?: string | null,
+  resumeHelp?: boolean | null,
+  coverLetterHelp?: boolean | null,
   needReason?: Array< NeedReason | null > | null,
   needTypes?: Array< NeedType | null > | null,
   status?: RequestStatus | null,
@@ -270,6 +292,7 @@ export type UpdateRequestInput = {
   followUp?: string | null,
   requestSelfOrOtherInfoId?: string | null,
   requestFoodRequestId?: string | null,
+  requestMovingRequestId?: string | null,
 };
 
 export type DeleteRequestInput = {
@@ -336,6 +359,50 @@ export type UpdateFoodInfoInput = {
 };
 
 export type DeleteFoodInfoInput = {
+  id: string,
+};
+
+export type CreateMovingInfoInput = {
+  id?: string | null,
+  itemCount?: number | null,
+  distance?: number | null,
+  haveTransportation?: boolean | null,
+  specialConditions?: string | null,
+  liabilityAck?: boolean | null,
+};
+
+export type ModelMovingInfoConditionInput = {
+  itemCount?: ModelIntInput | null,
+  distance?: ModelFloatInput | null,
+  haveTransportation?: ModelBooleanInput | null,
+  specialConditions?: ModelStringInput | null,
+  liabilityAck?: ModelBooleanInput | null,
+  and?: Array< ModelMovingInfoConditionInput | null > | null,
+  or?: Array< ModelMovingInfoConditionInput | null > | null,
+  not?: ModelMovingInfoConditionInput | null,
+};
+
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type UpdateMovingInfoInput = {
+  itemCount?: number | null,
+  distance?: number | null,
+  haveTransportation?: boolean | null,
+  specialConditions?: string | null,
+  liabilityAck?: boolean | null,
+};
+
+export type DeleteMovingInfoInput = {
   id: string,
 };
 
@@ -410,6 +477,8 @@ export type ModelRequestFilterInput = {
   request?: ModelStringInput | null,
   leadSource?: ModelLeadSourceInput | null,
   leadOtherDetails?: ModelStringInput | null,
+  resumeHelp?: ModelBooleanInput | null,
+  coverLetterHelp?: ModelBooleanInput | null,
   needReason?: ModelNeedReasonListInput | null,
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
@@ -474,6 +543,23 @@ export type ModelFoodInfoFilterInput = {
 export type ModelFoodInfoConnection = {
   __typename: "ModelFoodInfoConnection",
   items?:  Array<FoodInfo | null > | null,
+  nextToken?: string | null,
+};
+
+export type ModelMovingInfoFilterInput = {
+  itemCount?: ModelIntInput | null,
+  distance?: ModelFloatInput | null,
+  haveTransportation?: ModelBooleanInput | null,
+  specialConditions?: ModelStringInput | null,
+  liabilityAck?: ModelBooleanInput | null,
+  and?: Array< ModelMovingInfoFilterInput | null > | null,
+  or?: Array< ModelMovingInfoFilterInput | null > | null,
+  not?: ModelMovingInfoFilterInput | null,
+};
+
+export type ModelMovingInfoConnection = {
+  __typename: "ModelMovingInfoConnection",
+  items?:  Array<MovingInfo | null > | null,
   nextToken?: string | null,
 };
 
@@ -564,6 +650,19 @@ export type CreateRequestMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -638,6 +737,19 @@ export type UpdateRequestMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -712,6 +824,19 @@ export type DeleteRequestMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -892,6 +1017,63 @@ export type DeleteFoodInfoMutation = {
   } | null,
 };
 
+export type CreateMovingInfoMutationVariables = {
+  input: CreateMovingInfoInput,
+  condition?: ModelMovingInfoConditionInput | null,
+};
+
+export type CreateMovingInfoMutation = {
+  createMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateMovingInfoMutationVariables = {
+  input: UpdateMovingInfoInput,
+  condition?: ModelMovingInfoConditionInput | null,
+};
+
+export type UpdateMovingInfoMutation = {
+  updateMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteMovingInfoMutationVariables = {
+  input: DeleteMovingInfoInput,
+  condition?: ModelMovingInfoConditionInput | null,
+};
+
+export type DeleteMovingInfoMutation = {
+  deleteMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreateGroceriesMutationVariables = {
   input: CreateGroceriesInput,
   condition?: ModelGroceriesConditionInput | null,
@@ -1034,6 +1216,19 @@ export type GetRequestQuery = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1089,9 +1284,41 @@ export type ListRequestsQuery = {
         children?: string | null,
         haveAllergies?: boolean | null,
         allergies?: string | null,
+        groceries?:  {
+          __typename: "Groceries",
+          id: string,
+          milk?: boolean | null,
+          eggs?: boolean | null,
+          bread?: boolean | null,
+          tortillas?: boolean | null,
+          rice?: boolean | null,
+          beans?: boolean | null,
+          cheese?: boolean | null,
+          beef?: boolean | null,
+          hotdogs?: boolean | null,
+          lunchMeat?: boolean | null,
+          fruit?: boolean | null,
+          peanutButter?: boolean | null,
+          jelly?: boolean | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
         createdAt: string,
         updatedAt: string,
       } | null,
+      movingRequest?:  {
+        __typename: "MovingInfo",
+        id: string,
+        itemCount?: number | null,
+        distance?: number | null,
+        haveTransportation?: boolean | null,
+        specialConditions?: string | null,
+        liabilityAck?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      resumeHelp?: boolean | null,
+      coverLetterHelp?: boolean | null,
       needReason: Array< NeedReason | null >,
       needTypes: Array< NeedType | null >,
       status: RequestStatus,
@@ -1226,6 +1453,48 @@ export type ListFoodInfosQuery = {
   } | null,
 };
 
+export type GetMovingInfoQueryVariables = {
+  id: string,
+};
+
+export type GetMovingInfoQuery = {
+  getMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListMovingInfosQueryVariables = {
+  filter?: ModelMovingInfoFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListMovingInfosQuery = {
+  listMovingInfos?:  {
+    __typename: "ModelMovingInfoConnection",
+    items?:  Array< {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetGroceriesQueryVariables = {
   id: string,
 };
@@ -1341,6 +1610,19 @@ export type OnCreateRequestSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1410,6 +1692,19 @@ export type OnUpdateRequestSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1479,6 +1774,19 @@ export type OnDeleteRequestSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      id: string,
+      itemCount?: number | null,
+      distance?: number | null,
+      haveTransportation?: boolean | null,
+      specialConditions?: string | null,
+      liabilityAck?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1624,6 +1932,48 @@ export type OnDeleteFoodInfoSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateMovingInfoSubscription = {
+  onCreateMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateMovingInfoSubscription = {
+  onUpdateMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteMovingInfoSubscription = {
+  onDeleteMovingInfo?:  {
+    __typename: "MovingInfo",
+    id: string,
+    itemCount?: number | null,
+    distance?: number | null,
+    haveTransportation?: boolean | null,
+    specialConditions?: string | null,
+    liabilityAck?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,

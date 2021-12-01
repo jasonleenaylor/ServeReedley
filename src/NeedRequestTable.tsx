@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
@@ -56,17 +55,39 @@ function NeedRequestTable() {
       field: "foodRequest.children",
     },
     {
-      title: "Family Size",
-      field: "foodRequest.familyMembers",
-    },
-    {
       title: "Allergies",
-      field: "foodRequest.alergies",
+      field: "foodRequest.allergies",
     },
     {
       title: "Groceries",
       field: "foodRequest.groceries",
-      render: (rowData) => JSON.stringify(rowData.foodRequest?.groceries),
+      render: (rowData) => printGroceryList(rowData.foodRequest?.groceries), // JSON.stringify(rowData.foodRequest.groceries);
+    },
+    {
+      title: "Moving: Items",
+      field: "movingRequest.itemCount",
+    },
+    {
+      title: "Moving: Distance",
+      field: "moving.distance",
+    },
+    {
+      title: "Moving: Has Vehicle",
+      field: "moving.haveTransportation",
+    },
+    {
+      title: "Moving: Special Conditions",
+      field: "moving.specialConditions",
+    },
+    {
+      title: "Job: Resume Help",
+      field: "resumeHelp",
+      type: "boolean",
+    },
+    {
+      title: "Job: Cover Letter Help",
+      field: "coverLetterHelp",
+      type: "boolean",
     },
     { title: "Need Fulfiller", field: "needFulfiller" },
     { title: "Date Fulfilled", field: "dateFulfilled", type: "datetime" },
@@ -76,6 +97,37 @@ function NeedRequestTable() {
   useEffect(() => {
     fetchNotes();
   }, []);
+
+  function printGroceryList(groceries: {
+    milk: boolean;
+    eggs: boolean;
+    beans: boolean;
+    rice: boolean;
+    bread: boolean;
+    butter: boolean;
+    tortillas: boolean;
+    peanutButter: boolean;
+    jelly: boolean;
+    fruit: boolean;
+    lunchmeat: boolean;
+    hotdogs: boolean;
+  }): string {
+    let groceryList = "";
+    if (groceries) {
+      if (groceries.milk) groceryList += ", Milk";
+      if (groceries.eggs) groceryList += ", Eggs";
+      if (groceries.beans) groceryList += ", Beans";
+      if (groceries.bread) groceryList += ", Bread";
+      if (groceries.butter) groceryList += ", Butter";
+      if (groceries.rice) groceryList += ", Rice";
+      if (groceries.tortillas) groceryList += ", Tortillas";
+      if (groceries.fruit) groceryList += ", Fruit";
+      if (groceries.peanutButter) groceryList += ", Peanut Butter";
+      if (groceries.jelly) groceryList += ", Jelly";
+      if (groceries.hotdogs) groceryList += ", Hot Dogs";
+    }
+    return groceryList.substring(2);
+  }
 
   async function fetchNotes() {
     const apiData: any = await API.graphql({ query: listRequests });

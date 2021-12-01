@@ -56,6 +56,18 @@ export const onCreateRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -122,6 +134,18 @@ export const onUpdateRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -188,6 +212,18 @@ export const onDeleteRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -330,6 +366,48 @@ export const onDeleteFoodInfo = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateMovingInfo = /* GraphQL */ `
+  subscription OnCreateMovingInfo {
+    onCreateMovingInfo {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMovingInfo = /* GraphQL */ `
+  subscription OnUpdateMovingInfo {
+    onUpdateMovingInfo {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMovingInfo = /* GraphQL */ `
+  subscription OnDeleteMovingInfo {
+    onDeleteMovingInfo {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
       createdAt
       updatedAt
     }

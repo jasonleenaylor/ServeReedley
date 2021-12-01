@@ -15,6 +15,9 @@ type Request @model {
   leadOtherDetails: String
   selfOrOtherInfo: SelfOrOtherInfo! @connection
   foodRequest: FoodInfo @connection
+  movingRequest: MovingInfo @connection
+  resumeHelp: Boolean
+  coverLetterHelp: Boolean
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
@@ -38,6 +41,14 @@ type FoodInfo @model {
   haveAllergies: Boolean
   allergies: String
   groceries: Groceries @connection
+}
+
+type MovingInfo @model {
+  itemCount: Int
+  distance: Float
+  haveTransportation: Boolean
+  specialConditions: String
+  liabilityAck: Boolean
 }
 
 type Groceries @model {

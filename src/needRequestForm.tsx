@@ -2,6 +2,7 @@ import { isNonModelFieldType } from "@aws-amplify/datastore";
 import {
   Button,
   Card,
+  CardHeader,
   Checkbox,
   Container,
   createStyles,
@@ -19,9 +20,12 @@ import {
 import { makeStyles } from "@mui/material";
 import { API, graphqlOperation } from "aws-amplify";
 import { FormEvent, useState } from "react";
+import "react-phone-input-2/lib/material.css";
+import PhoneInput from "react-phone-input-2";
 import {
   createFoodInfo,
   createGroceries,
+  createMovingInfo,
   createRequest,
   createSelfOrOtherInfo,
 } from "./graphql/mutations";
@@ -83,6 +87,21 @@ export const NeedRequestForm = () => {
     peanutButter: false,
     jelly: false,
   });
+  const [moving, setMoving] = useState({
+    itemCount: 0,
+    haveTransportation: true,
+    distance: 0.0,
+    haveSpecialConditions: false,
+    specialConditions: "",
+    liabilityAck: false,
+  });
+  const [jobTraining, setJobTraining] = useState<{
+    resumeHelp: "" | "yes" | "no";
+    coverLetterHelp: "" | "yes" | "no";
+  }>({
+    resumeHelp: "",
+    coverLetterHelp: "",
+  });
 
   const cardStyle = { padding: 12 };
 
@@ -115,6 +134,13 @@ export const NeedRequestForm = () => {
     setFoodInfo({
       ...foodInfo,
       ...newFoodInfo,
+    });
+  };
+
+  const handleMovingChange = (newMovingInfo: {}) => {
+    setMoving({
+      ...moving,
+      ...newMovingInfo,
     });
   };
 
@@ -153,6 +179,14 @@ export const NeedRequestForm = () => {
       jelly: groceries.jelly,
     };
 
+    let movingInfo = {
+      itemCount: moving.itemCount,
+      distance: moving.distance,
+      haveTransportation: moving.haveTransportation,
+      specialConditions: moving.specialConditions,
+      liabilityAck: moving.liabilityAck,
+    };
+
     let request = {
       dateOfRequest: new Date().toUTCString(),
       firstName: firstName,
@@ -165,10 +199,13 @@ export const NeedRequestForm = () => {
       spanishOnly: true,
       requestSelfOrOtherInfoId: "",
       requestFoodRequestId: "",
+      requestMovingRequestId: "",
       preferredContactTime: "",
       request: "" + needType,
       leadSource: lead,
       leadOtherDetails: leadOther,
+      resumeHelp: false,
+      coverLetterHelp: false,
       needReason: getReasons(needReason),
       needTypes: getNeedTypes(needType),
       status: RequestStatus.NEW,
@@ -205,7 +242,17 @@ export const NeedRequestForm = () => {
           alert("food info: " + JSON.stringify(err));
         }
       }
-      alert("request: " + JSON.stringify(request));
+      if (needType.moving) {
+        let result: any = await API.graphql(
+          graphqlOperation(createMovingInfo, { input: movingInfo })
+        );
+        request.requestMovingRequestId = result.data.createMovingInfo.id;
+      }
+      if (needType.jobTraining) {
+        request.resumeHelp = jobTraining.resumeHelp == "yes";
+        request.coverLetterHelp = jobTraining.coverLetterHelp == "yes";
+      }
+      alert("Request Submitted.");
       await API.graphql(graphqlOperation(createRequest, { input: request }));
     } catch (err) {
       alert("error: " + JSON.stringify(err));
@@ -233,13 +280,14 @@ export const NeedRequestForm = () => {
 
   const contactCard = (
     <Card style={cardStyle}>
-      <TextField
-        label="Phone Number"
+      <PhoneInput
         value={phone}
-        onChange={(changeEvent: any) => setPhone(changeEvent.target.value)}
-        autoComplete="tel"
-        fullWidth
-        required
+        onChange={(changeEvent: any) => setPhone(changeEvent.value)}
+        disableCountryCode={true}
+        disableCountryGuess={true}
+        disableDropdown={true}
+        country={"us"}
+        placeholder={"(559) 555-5555"}
       />
       <TextField
         label="Email Address"
@@ -563,6 +611,12 @@ export const NeedRequestForm = () => {
 
   const foodInfoCard = (
     <Card style={cardStyle}>
+      <CardHeader
+        title={
+          needType.meals ? "Family info for meals" : "Family info for groceries"
+        }
+        titleTypographyProps={{ variant: "h6" }}
+      />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <TextField
@@ -589,14 +643,24 @@ export const NeedRequestForm = () => {
                 pattern: "([0-9][0-8]?[ -,]?[ ]?)*",
               }}
               helperText="1,4,12"
+              value={foodInfo.children}
+              onChange={(changeEvent: any) =>
+                handleFoodInfoChange({
+                  children: changeEvent.target.value,
+                })
+              }
             ></TextField>
           </FormControl>
         </Grid>
         <Grid item>
           <Typography>Are there any food allergies?</Typography>
           <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
+            value={foodInfo.haveAllergies}
+            onChange={(changeEvent: any) =>
+              handleFoodInfoChange({
+                haveAllergies: changeEvent.target.value,
+              })
+            }
           >
             <FormControlLabel
               value="yes"
@@ -610,17 +674,28 @@ export const NeedRequestForm = () => {
             />
           </RadioGroup>
         </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <Typography>Please list allergies</Typography>
-            <TextField required></TextField>
-          </FormControl>
-        </Grid>
+        {foodInfo.haveAllergies && (
+          <Grid item xs={12}>
+            <FormControl>
+              <Typography>Please list allergies</Typography>
+              <TextField
+                value={foodInfo.allergies}
+                onChange={(changeEvent: any) =>
+                  handleFoodInfoChange({
+                    allergies: changeEvent.target.value,
+                  })
+                }
+                required
+              ></TextField>
+            </FormControl>
+          </Grid>
+        )}{" "}
       </Grid>
     </Card>
   );
   const groceriesCard = (
     <Card style={cardStyle}>
+      <CardHeader title="Groceries" titleTypographyProps={{ variant: "h6" }} />
       <FormControl required>
         <FormGroup>
           <Typography>
@@ -776,6 +851,7 @@ export const NeedRequestForm = () => {
   const furnitureCard = <Card style={cardStyle}>F</Card>;
   const movingCard = (
     <Card style={cardStyle}>
+      <CardHeader title="Moving" titleTypographyProps={{ variant: "h6" }} />
       <Grid container spacing={4}>
         <Grid item>
           {" "}
@@ -784,7 +860,13 @@ export const NeedRequestForm = () => {
               How many items need to be moved (couch, appliance, whole
               household)?
             </Typography>
-            <TextField required></TextField>
+            <TextField
+              required
+              value={moving.itemCount}
+              onChange={(changeEvent: any) =>
+                handleMovingChange({ itemCount: changeEvent.target.value })
+              }
+            ></TextField>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
@@ -792,8 +874,12 @@ export const NeedRequestForm = () => {
             Do you have transportation such as your own truck or a rented UHaul?
           </Typography>
           <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
+            value={moving.haveTransportation}
+            onChange={(changeEvent: any) =>
+              handleMovingChange({
+                haveTransportation: changeEvent.target.value,
+              })
+            }
           >
             <FormControlLabel
               value="yes"
@@ -813,7 +899,15 @@ export const NeedRequestForm = () => {
               Distance of travel? (We can only help with moves less than 30
               miles)
             </Typography>
-            <TextField required></TextField>
+            <TextField
+              required
+              value={moving.distance}
+              onChange={(changeEvent: any) =>
+                handleMovingChange({
+                  distance: changeEvent.target.value,
+                })
+              }
+            ></TextField>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
@@ -822,16 +916,21 @@ export const NeedRequestForm = () => {
             driveway, dirt roads, stairs, etc.)
           </Typography>
           <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
+            value={moving.haveSpecialConditions}
+            onChange={
+              (changeEvent: any) => alert(changeEvent.target.value)
+              // handleMovingChange({
+              //   haveSpecialConditions: changeEvent.target.value,
+              // })
+            }
           >
             <FormControlLabel
-              value="yes"
+              value={true}
               control={<Radio required={true} />}
               label="Yes"
             />
             <FormControlLabel
-              value="no"
+              value={false}
               control={<Radio required={true} />}
               label="No"
             />
@@ -839,7 +938,17 @@ export const NeedRequestForm = () => {
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <TextField label="Please list conditions"></TextField>
+            {moving.haveSpecialConditions && (
+              <TextField
+                label="Please list conditions"
+                value={moving.specialConditions}
+                onChange={(changeEvent: any) =>
+                  handleMovingChange({
+                    specialConditions: changeEvent.target.value,
+                  })
+                }
+              ></TextField>
+            )}
           </FormControl>
         </Grid>
         <Grid item xs={12}>
@@ -869,32 +978,21 @@ export const NeedRequestForm = () => {
 
   const jobTrainingCard = (
     <Card style={cardStyle}>
+      <CardHeader
+        title="Job Training"
+        titleTypographyProps={{ variant: "h6" }}
+      />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography>Do you need help with your resume?</Typography>
           <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
-          >
-            <FormControlLabel
-              value="yes"
-              control={<Radio required={true} />}
-              label="Yes"
-            />
-            <FormControlLabel
-              value="no"
-              control={<Radio required={true} />}
-              label="No"
-            />
-          </RadioGroup>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>
-            Do you have a list of references? Need at least 3 minimum
-          </Typography>
-          <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
+            value={jobTraining.resumeHelp}
+            onChange={(changeEvent: any) =>
+              setJobTraining({
+                ...jobTraining,
+                resumeHelp: changeEvent.target.value,
+              })
+            }
           >
             <FormControlLabel
               value="yes"
@@ -911,8 +1009,13 @@ export const NeedRequestForm = () => {
         <Grid item xs={12}>
           <Typography>Do you need help writing a cover letter?</Typography>
           <RadioGroup
-          //            value={agent}
-          //            onChange={(changeEvent: any) => setAllergies(changeEvent.target.value)}
+            value={jobTraining.coverLetterHelp}
+            onChange={(changeEvent: any) =>
+              setJobTraining({
+                ...jobTraining,
+                coverLetterHelp: changeEvent.target.value,
+              })
+            }
           >
             <FormControlLabel
               value="yes"

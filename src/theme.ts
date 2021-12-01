@@ -59,8 +59,13 @@ import {
     props: {
       MuiButtonBase: {
         disableRipple: false,
-      },
+      }
     },
+    overrides: {
+      MuiCardHeader: {
+        root: {background: themeColors.primary, margin: -1, }
+        }
+    }
   });
   
   // Can have a number of additional options passed in; here, sticks with defaults

@@ -59,6 +59,18 @@ export const createRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -128,6 +140,18 @@ export const updateRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -197,6 +221,18 @@ export const deleteRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -357,6 +393,57 @@ export const deleteFoodInfo = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createMovingInfo = /* GraphQL */ `
+  mutation CreateMovingInfo(
+    $input: CreateMovingInfoInput!
+    $condition: ModelMovingInfoConditionInput
+  ) {
+    createMovingInfo(input: $input, condition: $condition) {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateMovingInfo = /* GraphQL */ `
+  mutation UpdateMovingInfo(
+    $input: UpdateMovingInfoInput!
+    $condition: ModelMovingInfoConditionInput
+  ) {
+    updateMovingInfo(input: $input, condition: $condition) {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMovingInfo = /* GraphQL */ `
+  mutation DeleteMovingInfo(
+    $input: DeleteMovingInfoInput!
+    $condition: ModelMovingInfoConditionInput
+  ) {
+    deleteMovingInfo(input: $input, condition: $condition) {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
       createdAt
       updatedAt
     }

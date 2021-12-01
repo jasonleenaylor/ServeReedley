@@ -56,6 +56,18 @@ export const getRequest = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      movingRequest {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
       needReason
       needTypes
       status
@@ -106,9 +118,39 @@ export const listRequests = /* GraphQL */ `
           children
           haveAllergies
           allergies
+          groceries {
+            id
+            milk
+            eggs
+            bread
+            tortillas
+            rice
+            beans
+            cheese
+            beef
+            hotdogs
+            lunchMeat
+            fruit
+            peanutButter
+            jelly
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
         }
+        movingRequest {
+          id
+          itemCount
+          distance
+          haveTransportation
+          specialConditions
+          liabilityAck
+          createdAt
+          updatedAt
+        }
+        resumeHelp
+        coverLetterHelp
         needReason
         needTypes
         status
@@ -224,6 +266,41 @@ export const listFoodInfos = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getMovingInfo = /* GraphQL */ `
+  query GetMovingInfo($id: ID!) {
+    getMovingInfo(id: $id) {
+      id
+      itemCount
+      distance
+      haveTransportation
+      specialConditions
+      liabilityAck
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMovingInfos = /* GraphQL */ `
+  query ListMovingInfos(
+    $filter: ModelMovingInfoFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMovingInfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        itemCount
+        distance
+        haveTransportation
+        specialConditions
+        liabilityAck
         createdAt
         updatedAt
       }
