@@ -59,9 +59,12 @@ export const getRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -142,9 +145,12 @@ export const listRequests = /* GraphQL */ `
         movingRequest {
           id
           itemCount
-          distance
           haveTransportation
-          specialConditions
+          steepDriveway
+          stairs
+          unpavedRoad
+          other
+          otherDetails
           liabilityAck
           createdAt
           updatedAt
@@ -278,9 +284,12 @@ export const getMovingInfo = /* GraphQL */ `
     getMovingInfo(id: $id) {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt
@@ -297,9 +306,12 @@ export const listMovingInfos = /* GraphQL */ `
       items {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt

@@ -45,9 +45,12 @@ type FoodInfo @model {
 
 type MovingInfo @model {
   itemCount: Int
-  distance: Float
   haveTransportation: Boolean
-  specialConditions: String
+  steepDriveway: Boolean
+  stairs: Boolean
+  unpavedRoad: Boolean
+  other: Boolean
+  otherDetails: String
   liabilityAck: Boolean
 }
 

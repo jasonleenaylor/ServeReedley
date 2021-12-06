@@ -29,7 +29,26 @@ import {
   createRequest,
   createSelfOrOtherInfo,
 } from "./graphql/mutations";
-import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
+import {
+  FoodInfo,
+  LeadSource,
+  NeedReason,
+  NeedType,
+  RequestStatus,
+} from "./RequestAPI";
+import {
+  GroceriesType,
+  defaultGroceries,
+  defaultMoving,
+  RadioButtonState,
+  SelfOrOtherGQL,
+  FoodInfoGQL,
+  GroceriesGQL,
+  MovingInfoGQL,
+  NeedRequestGQL,
+  HomeRepairType,
+  defaultHomeRepair,
+} from "./needRequestTypes";
 
 export const NeedRequestForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -39,13 +58,14 @@ export const NeedRequestForm = () => {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
-  const [agent, setAgent] = useState<"" | "yes" | "no">("");
-  const [usedOtherResources, setUsedOtherResources] = useState<
-    "" | "yes" | "no"
-  >("");
+  const [agent, setAgent] = useState<RadioButtonState>(RadioButtonState.UNSET);
+  const [usedOtherResources, setUsedOtherResources] =
+    useState<RadioButtonState>(RadioButtonState.UNSET);
   const [otherResoources, setOtherResources] = useState("");
   const [referee, setReferee] = useState("");
-  const [refereeKnows, setRefereeKnows] = useState<"" | "yes" | "no">("");
+  const [refereeKnows, setRefereeKnows] = useState<RadioButtonState>(
+    RadioButtonState.UNSET
+  );
   const [lead, setLead] = useState<LeadSource | null>(null);
   const [leadOther, setLeadOther] = useState("");
   const [needReason, setNeedReason] = useState({
@@ -71,38 +91,22 @@ export const NeedRequestForm = () => {
     haveAllergies: false,
     allergies: "",
   });
-  const [groceries, setGroceries] = useState({
-    milk: false,
-    eggs: false,
-    bread: false,
-    butter: false,
-    tortillas: false,
-    rice: false,
-    beans: false,
-    cheese: false,
-    beef: false,
-    hotdogs: false,
-    lunchMeat: false,
-    fruit: false,
-    peanutButter: false,
-    jelly: false,
-  });
-  const [moving, setMoving] = useState({
-    itemCount: 0,
-    haveTransportation: true,
-    distance: 0.0,
-    haveSpecialConditions: false,
-    specialConditions: "",
-    liabilityAck: false,
-  });
+  const [groceries, setGroceries] = useState(defaultGroceries);
+  const [moving, setMoving] = useState(defaultMoving);
   const [jobTraining, setJobTraining] = useState<{
-    resumeHelp: "" | "yes" | "no";
-    coverLetterHelp: "" | "yes" | "no";
+    resumeHelp: RadioButtonState;
+    coverLetterHelp: RadioButtonState;
   }>({
-    resumeHelp: "",
-    coverLetterHelp: "",
+    resumeHelp: RadioButtonState.UNSET,
+    coverLetterHelp: RadioButtonState.UNSET,
   });
-
+  const [carRepairDetails, setCarRepairDetails] = useState("");
+  const [homeRepairDetails, setHomeRepairDetails] =
+    useState<HomeRepairType>(defaultHomeRepair);
+  const [clothingType, setClothingType] = useState("");
+  const [clothingSize, setClothingSize] = useState("");
+  const [furnitureType, setFurnitureType] = useState("");
+  const [furnitureSize, setFurnitureSize] = useState("");
   const cardStyle = { padding: 12 };
 
   const handleNeedReasonChange = (
@@ -117,6 +121,22 @@ export const NeedRequestForm = () => {
   const handleNeedTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNeedType({
       ...needType,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const handleMovingConditions = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMoving({
+      ...moving,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const handleHomeRepair = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHomeRepairDetails({
+      ...homeRepairDetails,
       [event.target.name]: event.target.checked,
     });
   };
@@ -147,15 +167,15 @@ export const NeedRequestForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    let selfOrOther = {
-      forSelf: agent == "yes",
-      usedOtherResources: usedOtherResources == "yes",
+    let selfOrOther: SelfOrOtherGQL = {
+      forSelf: agent === RadioButtonState.YES,
+      usedOtherResources: usedOtherResources === RadioButtonState.YES,
       otherResources: otherResoources,
       requestFor: referee,
-      requestIsKnown: refereeKnows == "yes",
+      requestIsKnown: refereeKnows === RadioButtonState.YES,
     };
 
-    let food = {
+    let food: FoodInfoGQL = {
       familyMembers: foodInfo.familyMembers,
       children: foodInfo.children,
       haveAllergies: foodInfo.haveAllergies,
@@ -163,7 +183,7 @@ export const NeedRequestForm = () => {
       foodInfoGroceriesId: "",
     };
 
-    let groceriesInfo = {
+    let groceriesInfo: GroceriesGQL = {
       milk: groceries.milk,
       eggs: groceries.eggs,
       bread: groceries.bread,
@@ -179,21 +199,24 @@ export const NeedRequestForm = () => {
       jelly: groceries.jelly,
     };
 
-    let movingInfo = {
+    let movingInfo: MovingInfoGQL = {
       itemCount: moving.itemCount,
-      distance: moving.distance,
-      haveTransportation: moving.haveTransportation,
-      specialConditions: moving.specialConditions,
+      haveTransportation: moving.haveTransportation === RadioButtonState.YES,
+      steepDriveway: moving.driveway,
+      stairs: moving.stairs,
+      unpavedRoad: moving.unpavedRoad,
+      other: moving.other,
+      otherDetails: moving.otherDetails,
       liabilityAck: moving.liabilityAck,
     };
 
-    let request = {
+    let request: NeedRequestGQL = {
       dateOfRequest: new Date().toUTCString(),
       firstName: firstName,
       lastName: lastName,
       address: address,
       city: city,
-      zipCode: zip ? zip : undefined,
+      zipCode: parseInt(zip) === NaN ? parseInt(zip) : null,
       phone: phone,
       email: email,
       spanishOnly: true,
@@ -202,7 +225,7 @@ export const NeedRequestForm = () => {
       requestMovingRequestId: "",
       preferredContactTime: "",
       request: "" + needType,
-      leadSource: lead,
+      leadSource: lead!,
       leadOtherDetails: leadOther,
       resumeHelp: false,
       coverLetterHelp: false,
@@ -249,8 +272,8 @@ export const NeedRequestForm = () => {
         request.requestMovingRequestId = result.data.createMovingInfo.id;
       }
       if (needType.jobTraining) {
-        request.resumeHelp = jobTraining.resumeHelp == "yes";
-        request.coverLetterHelp = jobTraining.coverLetterHelp == "yes";
+        request.resumeHelp = jobTraining.resumeHelp === "yes";
+        request.coverLetterHelp = jobTraining.coverLetterHelp === "yes";
       }
       alert("Request Submitted.");
       await API.graphql(graphqlOperation(createRequest, { input: request }));
@@ -288,6 +311,10 @@ export const NeedRequestForm = () => {
         disableDropdown={true}
         country={"us"}
         placeholder={"(559) 555-5555"}
+        inputProps={{
+          autoComplete: "tel",
+          required: true,
+        }}
       />
       <TextField
         label="Email Address"
@@ -847,8 +874,77 @@ export const NeedRequestForm = () => {
     </Card>
   );
 
-  const clothingCard = <Card style={cardStyle}>C</Card>;
-  const furnitureCard = <Card style={cardStyle}>F</Card>;
+  const clothingCard = (
+    <Card style={cardStyle}>
+      {" "}
+      <CardHeader title="Clothing" titleTypographyProps={{ variant: "h6" }} />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          {" "}
+          <FormControl>
+            <Typography>What type of clothing do you need?</Typography>
+            <TextField
+              required
+              value={clothingType}
+              onChange={(changeEvent: any) =>
+                setClothingType(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          {" "}
+          <FormControl>
+            <Typography>What size clothing do you need?</Typography>
+            <TextField
+              required
+              value={clothingSize}
+              onChange={(changeEvent: any) =>
+                setClothingSize(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+  const furnitureCard = (
+    <Card style={cardStyle}>
+      {" "}
+      <CardHeader title="Furniture" titleTypographyProps={{ variant: "h6" }} />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          {" "}
+          <FormControl>
+            <Typography>What type of furniture do you need?</Typography>
+            <TextField
+              required
+              value={furnitureType}
+              onChange={(changeEvent: any) =>
+                setFurnitureType(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          {" "}
+          <FormControl>
+            <Typography>
+              What is the measurement of the space you need to fit the furniture
+              in?
+            </Typography>
+            <TextField
+              required
+              value={furnitureSize}
+              onChange={(changeEvent: any) =>
+                setFurnitureSize(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
   const movingCard = (
     <Card style={cardStyle}>
       <CardHeader title="Moving" titleTypographyProps={{ variant: "h6" }} />
@@ -895,19 +991,31 @@ export const NeedRequestForm = () => {
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <Typography>
-              Distance of travel? (We can only help with moves less than 30
-              miles)
-            </Typography>
-            <TextField
-              required
-              value={moving.distance}
-              onChange={(changeEvent: any) =>
+            <Typography>Is this move within 30 miles of Reedley?</Typography>
+            <RadioGroup
+              value={moving.withinRange}
+              onChange={(changeEvent: any) => {
                 handleMovingChange({
-                  distance: changeEvent.target.value,
-                })
-              }
-            ></TextField>
+                  withinRange: changeEvent.target.value,
+                });
+                if (!moving.withinRange) {
+                  alert(
+                    "We can only help with moves within 30 miles of Reedley."
+                  );
+                }
+              }}
+            >
+              <FormControlLabel
+                value="yes"
+                control={<Radio required={true} />}
+                label="Yes"
+              />
+              <FormControlLabel
+                value="no"
+                control={<Radio required={true} />}
+                label="No"
+              />
+            </RadioGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
@@ -917,55 +1025,99 @@ export const NeedRequestForm = () => {
           </Typography>
           <RadioGroup
             value={moving.haveSpecialConditions}
-            onChange={
-              (changeEvent: any) => alert(changeEvent.target.value)
-              // handleMovingChange({
-              //   haveSpecialConditions: changeEvent.target.value,
-              // })
+            onChange={(changeEvent: any) =>
+              handleMovingChange({
+                haveSpecialConditions: changeEvent.target.value,
+              })
             }
           >
             <FormControlLabel
-              value={true}
+              value="yes"
               control={<Radio required={true} />}
               label="Yes"
             />
             <FormControlLabel
-              value={false}
+              value="No"
               control={<Radio required={true} />}
               label="No"
             />
           </RadioGroup>
         </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            {moving.haveSpecialConditions && (
-              <TextField
-                label="Please list conditions"
-                value={moving.specialConditions}
-                onChange={(changeEvent: any) =>
-                  handleMovingChange({
-                    specialConditions: changeEvent.target.value,
-                  })
-                }
-              ></TextField>
-            )}
-          </FormControl>
-        </Grid>
+        {moving.haveSpecialConditions === "yes" && (
+          <Grid item xs={12}>
+            <FormControl>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={moving.driveway}
+                      onChange={handleMovingConditions}
+                      name="driveway"
+                    />
+                  }
+                  label="Steep Driveway"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={moving.stairs}
+                      onChange={handleMovingConditions}
+                      name="stairs"
+                    />
+                  }
+                  label="Stairs"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={moving.unpavedRoad}
+                      onChange={handleMovingConditions}
+                      name="unpavedRoad"
+                    />
+                  }
+                  label="Unpaved Road"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={moving.other}
+                      onChange={handleMovingConditions}
+                      name="other"
+                    />
+                  }
+                  label="Other?"
+                />
+              </FormGroup>
+
+              {moving.other && (
+                <FormControl>
+                  <Typography>What other things should we know?</Typography>
+                  <TextField
+                    value={moving.otherDetails}
+                    onChange={(changeEvent: any) =>
+                      setMoving({
+                        ...moving,
+                        otherDetails: changeEvent.target.value,
+                      })
+                    }
+                    required
+                  ></TextField>
+                </FormControl>
+              )}
+            </FormControl>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <FormControlLabel
             value="false"
             control={<Checkbox required={true} />}
             label="I understand that I'm responsible for packing and wrapping."
           />
-        </Grid>
-        <Grid item xs={12}>
           <FormControlLabel
             value="false"
             control={<Checkbox required={true} />}
             label="I understand that this is a volunteer operation and that I am responsible for any damage."
           />
-        </Grid>
-        <Grid item xs={12}>
           <FormControlLabel
             value="false"
             control={<Checkbox required={true} />}
@@ -1032,10 +1184,250 @@ export const NeedRequestForm = () => {
       </Grid>
     </Card>
   );
-  const housingCard = <Card style={cardStyle}>House</Card>;
-  const carRepairCard = <Card style={cardStyle}>Car</Card>;
+  const housingCard = (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Housing Referrals"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>HOPE Sanger</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5598757677">(559) 875-7677</a>
+            </Grid>
+            <Grid item xs={12}>
+              Address: 502 L Street, Sanger, CA 93657
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: 17 rooms at a renovated hotel for homeless individuals,
+              families, and single parents with children.
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>Marjaree Mason Center</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5592334357">(559) 233-4357</a>
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: victims of domestic violence, male or female, families
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>Faith House</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5594034342">(559) 403-4342</a>
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: 30-60 day stay for displaced families.
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>River Harvest Community Center</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5596388882">(559) 638-8882</a>
+            </Grid>
+            <Grid item xs={12}>
+              Address: 856 S. Reed Ave. Reedley, CA 93654
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: sober living accommodations for male, female, or
+              families
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>Map Point</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5595126777">(559) 512-6777</a>
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: Low income housing
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>Evangel Home</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5592644714">(559) 264-4714</a>
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: Emergency shelter in Fresno; possible long term housing
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>Fresno Housing Authority</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:18558328082">1-855-832-8082</a> and/or{" "}
+              <a href="tel:5594438400">(559) 443-8400</a> x 4475
+            </Grid>
+            <Grid item xs={12}>
+              Address: 1331 Fulton Street, Fresno, CA
+            </Grid>
+            <Grid item xs={12}>
+              Criteria: Emergency Housing
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography>
+                Westcare Continuum of Care Program for Homeless Persons
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              Phone: <a href="tel:5592654800">(559) 265-4800</a>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Card>
+  );
 
-  const homeRepairCard = <Card style={cardStyle}>Home</Card>;
+  const carRepairCard = (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Car Maintenence/Repair"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography>
+            Serve Reedley can only help with minor maintenance and repairs.
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <Typography>
+              Please describe the work needed on your vehicle.
+            </Typography>
+            <TextField
+              value={carRepairDetails}
+              onChange={(changeEvent: any) =>
+                setCarRepairDetails(changeEvent.target.value)
+              }
+              required
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+
+  const homeRepairCard = (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Home Maintenance/Repair"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography>
+            Serve Reedley can only help with minor maintenance and repairs.
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.plumbing}
+                    onChange={handleHomeRepair}
+                    name="plumbing"
+                  />
+                }
+                label="Plumbing"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.electrical}
+                    onChange={handleHomeRepair}
+                    name="electrical"
+                  />
+                }
+                label="Electrical"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.painting}
+                    onChange={handleHomeRepair}
+                    name="painting"
+                  />
+                }
+                label="Painting"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.yardwork}
+                    onChange={handleHomeRepair}
+                    name="yardwork"
+                  />
+                }
+                label="Yard Work"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.other}
+                    onChange={handleHomeRepair}
+                    name="other"
+                  />
+                }
+                label="Other?"
+              />
+            </FormGroup>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <Typography>
+              Please describe the work needed on your home.
+            </Typography>
+            <TextField
+              value={homeRepairDetails.details}
+              onChange={(changeEvent: any) =>
+                setHomeRepairDetails({
+                  ...homeRepairDetails,
+                  details: changeEvent.target.value,
+                })
+              }
+              required
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
   const otherNeedCard = <Card style={cardStyle}>Other</Card>;
   return (
     <Container>

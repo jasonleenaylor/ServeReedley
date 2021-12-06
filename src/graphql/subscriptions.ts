@@ -59,9 +59,12 @@ export const onCreateRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -137,9 +140,12 @@ export const onUpdateRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -215,9 +221,12 @@ export const onDeleteRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -376,9 +385,12 @@ export const onCreateMovingInfo = /* GraphQL */ `
     onCreateMovingInfo {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt
@@ -390,9 +402,12 @@ export const onUpdateMovingInfo = /* GraphQL */ `
     onUpdateMovingInfo {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt
@@ -404,9 +419,12 @@ export const onDeleteMovingInfo = /* GraphQL */ `
     onDeleteMovingInfo {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt

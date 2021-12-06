@@ -62,9 +62,12 @@ export const createRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -143,9 +146,12 @@ export const updateRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -224,9 +230,12 @@ export const deleteRequest = /* GraphQL */ `
       movingRequest {
         id
         itemCount
-        distance
         haveTransportation
-        specialConditions
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
         liabilityAck
         createdAt
         updatedAt
@@ -406,9 +415,12 @@ export const createMovingInfo = /* GraphQL */ `
     createMovingInfo(input: $input, condition: $condition) {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt
@@ -423,9 +435,12 @@ export const updateMovingInfo = /* GraphQL */ `
     updateMovingInfo(input: $input, condition: $condition) {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt
@@ -440,9 +455,12 @@ export const deleteMovingInfo = /* GraphQL */ `
     deleteMovingInfo(input: $input, condition: $condition) {
       id
       itemCount
-      distance
       haveTransportation
-      specialConditions
+      steepDriveway
+      stairs
+      unpavedRoad
+      other
+      otherDetails
       liabilityAck
       createdAt
       updatedAt

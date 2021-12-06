@@ -7,6 +7,7 @@ import { createRequest } from "./graphql/mutations";
 import MaterialTable, { Column } from "@material-table/core";
 import tableIcons from "./tableIcons";
 import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
+import { MovingInfoGQL } from "./needRequestTypes";
 
 function NeedRequestTable() {
   const [requests, setRequests] = useState([]);
@@ -68,16 +69,18 @@ function NeedRequestTable() {
       field: "movingRequest.itemCount",
     },
     {
-      title: "Moving: Distance",
-      field: "moving.distance",
-    },
-    {
       title: "Moving: Has Vehicle",
-      field: "moving.haveTransportation",
+      field: "movingRequest.haveTransportation",
+      type: "boolean",
     },
     {
       title: "Moving: Special Conditions",
-      field: "moving.specialConditions",
+      field: "movingRequest.specialConditions",
+      render: (rowData) => printMovingConditions(rowData.movingRequest),
+    },
+    {
+      title: "Moving: Other Special Conditions",
+      field: "movingRequest.otherDetails",
     },
     {
       title: "Job: Resume Help",
@@ -127,6 +130,24 @@ function NeedRequestTable() {
       if (groceries.hotdogs) groceryList += ", Hot Dogs";
     }
     return groceryList.substring(2);
+  }
+  function printMovingConditions(movingRequest: MovingInfoGQL): string {
+    let movingConditions = "";
+    if (movingRequest) {
+      if (movingRequest.steepDriveway) {
+        movingConditions += ", Steep Driveway";
+      }
+      if (movingRequest.unpavedRoad) {
+        movingConditions += ", Unpaved Road";
+      }
+      if (movingRequest.stairs) {
+        movingConditions += ", Stairs";
+      }
+      if (movingRequest.other) {
+        movingConditions += ", Other";
+      }
+    }
+    return movingConditions.substring(2);
   }
 
   async function fetchNotes() {
