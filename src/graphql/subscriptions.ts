@@ -71,6 +71,22 @@ export const onCreateRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -152,6 +168,22 @@ export const onUpdateRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -233,6 +265,22 @@ export const onDeleteRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -492,6 +540,51 @@ export const onDeleteGroceries = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateHomeRepairType = /* GraphQL */ `
+  subscription OnCreateHomeRepairType {
+    onCreateHomeRepairType {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateHomeRepairType = /* GraphQL */ `
+  subscription OnUpdateHomeRepairType {
+    onUpdateHomeRepairType {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteHomeRepairType = /* GraphQL */ `
+  subscription OnDeleteHomeRepairType {
+    onDeleteHomeRepairType {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
       createdAt
       updatedAt
     }

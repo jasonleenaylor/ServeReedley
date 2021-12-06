@@ -18,6 +18,12 @@ type Request @model {
   movingRequest: MovingInfo @connection
   resumeHelp: Boolean
   coverLetterHelp: Boolean
+  carRepairDetails: String
+  homeRepairType: HomeRepairType @connection
+  clothingType: String
+  clothingSize: String
+  furnitureType: String
+  furnitureSize: String
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
@@ -68,6 +74,15 @@ type Groceries @model {
   fruit: Boolean
   peanutButter: Boolean
   jelly: Boolean
+}
+
+type HomeRepairType @model {
+  plumbing: Boolean
+  electrical: Boolean
+  painting: Boolean
+  yardwork: Boolean
+  other: Boolean
+  details: String
 }
 
 enum RequestStatus {

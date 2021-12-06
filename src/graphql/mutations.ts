@@ -74,6 +74,22 @@ export const createRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -158,6 +174,22 @@ export const updateRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -242,6 +274,22 @@ export const deleteRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -537,6 +585,60 @@ export const deleteGroceries = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createHomeRepairType = /* GraphQL */ `
+  mutation CreateHomeRepairType(
+    $input: CreateHomeRepairTypeInput!
+    $condition: ModelHomeRepairTypeConditionInput
+  ) {
+    createHomeRepairType(input: $input, condition: $condition) {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateHomeRepairType = /* GraphQL */ `
+  mutation UpdateHomeRepairType(
+    $input: UpdateHomeRepairTypeInput!
+    $condition: ModelHomeRepairTypeConditionInput
+  ) {
+    updateHomeRepairType(input: $input, condition: $condition) {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteHomeRepairType = /* GraphQL */ `
+  mutation DeleteHomeRepairType(
+    $input: DeleteHomeRepairTypeInput!
+    $condition: ModelHomeRepairTypeConditionInput
+  ) {
+    deleteHomeRepairType(input: $input, condition: $condition) {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
       createdAt
       updatedAt
     }

@@ -71,6 +71,22 @@ export const getRequest = /* GraphQL */ `
       }
       resumeHelp
       coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      furnitureSize
       needReason
       needTypes
       status
@@ -157,6 +173,22 @@ export const listRequests = /* GraphQL */ `
         }
         resumeHelp
         coverLetterHelp
+        carRepairDetails
+        homeRepairType {
+          id
+          plumbing
+          electrical
+          painting
+          yardwork
+          other
+          details
+          createdAt
+          updatedAt
+        }
+        clothingType
+        clothingSize
+        furnitureType
+        furnitureSize
         needReason
         needTypes
         status
@@ -364,6 +396,43 @@ export const listGroceriess = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getHomeRepairType = /* GraphQL */ `
+  query GetHomeRepairType($id: ID!) {
+    getHomeRepairType(id: $id) {
+      id
+      plumbing
+      electrical
+      painting
+      yardwork
+      other
+      details
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listHomeRepairTypes = /* GraphQL */ `
+  query ListHomeRepairTypes(
+    $filter: ModelHomeRepairTypeFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listHomeRepairTypes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
         createdAt
         updatedAt
       }

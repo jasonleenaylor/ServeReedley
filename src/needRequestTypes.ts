@@ -1,4 +1,10 @@
-import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
+import {
+  HomeRepairType,
+  LeadSource,
+  NeedReason,
+  NeedType,
+  RequestStatus,
+} from "./RequestAPI";
 
 export enum RadioButtonState {
   UNSET = "",
@@ -6,7 +12,7 @@ export enum RadioButtonState {
   NO = "no",
 }
 
-export interface GroceriesType {
+export interface IGroceriesType {
   milk: boolean;
   eggs: boolean;
   bread: boolean;
@@ -23,7 +29,7 @@ export interface GroceriesType {
   jelly: boolean;
 }
 
-export interface MovingType {
+export interface IMovingType {
   withinRange: RadioButtonState;
   itemCount: number;
   haveTransportation: RadioButtonState;
@@ -36,7 +42,7 @@ export interface MovingType {
   liabilityAck: boolean;
 }
 
-export const defaultGroceries: GroceriesType = {
+export const defaultGroceries: IGroceriesType = {
   milk: false,
   eggs: false,
   bread: false,
@@ -53,7 +59,7 @@ export const defaultGroceries: GroceriesType = {
   jelly: false,
 };
 
-export const defaultMoving: MovingType = {
+export const defaultMoving: IMovingType = {
   withinRange: RadioButtonState.UNSET,
   itemCount: 0,
   haveTransportation: RadioButtonState.UNSET,
@@ -66,7 +72,7 @@ export const defaultMoving: MovingType = {
   liabilityAck: false,
 };
 
-export const defaultHomeRepair: HomeRepairType = {
+export const defaultHomeRepair: IHomeRepairType = {
   plumbing: false,
   electrical: false,
   painting: false,
@@ -137,6 +143,12 @@ export interface NeedRequestGQL {
   requestMovingRequestId: string | null;
   resumeHelp?: boolean | null;
   coverLetterHelp?: boolean | null;
+  carRepairDetails?: string;
+  requestHomeRepairTypeId?: string | null;
+  clothingType?: string;
+  clothingSize?: string;
+  furnitureType?: string;
+  furnitureSize?: string;
   needReason: Array<NeedReason | null>;
   needTypes: Array<NeedType | null>;
   status: RequestStatus;
@@ -146,7 +158,7 @@ export interface NeedRequestGQL {
   followUp?: string | null;
 }
 
-export interface HomeRepairType {
+export interface IHomeRepairType {
   plumbing: boolean;
   electrical: boolean;
   painting: boolean;

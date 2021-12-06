@@ -19,6 +19,11 @@ export type CreateRequestInput = {
   leadOtherDetails?: string | null,
   resumeHelp?: boolean | null,
   coverLetterHelp?: boolean | null,
+  carRepairDetails?: string | null,
+  clothingType?: string | null,
+  clothingSize?: string | null,
+  furnitureType?: string | null,
+  furnitureSize?: string | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
@@ -29,6 +34,7 @@ export type CreateRequestInput = {
   requestSelfOrOtherInfoId: string,
   requestFoodRequestId?: string | null,
   requestMovingRequestId?: string | null,
+  requestHomeRepairTypeId?: string | null,
 };
 
 export enum LeadSource {
@@ -83,6 +89,11 @@ export type ModelRequestConditionInput = {
   leadOtherDetails?: ModelStringInput | null,
   resumeHelp?: ModelBooleanInput | null,
   coverLetterHelp?: ModelBooleanInput | null,
+  carRepairDetails?: ModelStringInput | null,
+  clothingType?: ModelStringInput | null,
+  clothingSize?: ModelStringInput | null,
+  furnitureType?: ModelStringInput | null,
+  furnitureSize?: ModelStringInput | null,
   needReason?: ModelNeedReasonListInput | null,
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
@@ -199,6 +210,12 @@ export type Request = {
   movingRequest?: MovingInfo | null,
   resumeHelp?: boolean | null,
   coverLetterHelp?: boolean | null,
+  carRepairDetails?: string | null,
+  homeRepairType?: HomeRepairType | null,
+  clothingType?: string | null,
+  clothingSize?: string | null,
+  furnitureType?: string | null,
+  furnitureSize?: string | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
@@ -269,6 +286,19 @@ export type MovingInfo = {
   updatedAt: string,
 };
 
+export type HomeRepairType = {
+  __typename: "HomeRepairType",
+  id: string,
+  plumbing?: boolean | null,
+  electrical?: boolean | null,
+  painting?: boolean | null,
+  yardwork?: boolean | null,
+  other?: boolean | null,
+  details?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
 export type UpdateRequestInput = {
   id: string,
   dateOfRequest?: string | null,
@@ -286,6 +316,11 @@ export type UpdateRequestInput = {
   leadOtherDetails?: string | null,
   resumeHelp?: boolean | null,
   coverLetterHelp?: boolean | null,
+  carRepairDetails?: string | null,
+  clothingType?: string | null,
+  clothingSize?: string | null,
+  furnitureType?: string | null,
+  furnitureSize?: string | null,
   needReason?: Array< NeedReason | null > | null,
   needTypes?: Array< NeedType | null > | null,
   status?: RequestStatus | null,
@@ -296,6 +331,7 @@ export type UpdateRequestInput = {
   requestSelfOrOtherInfoId?: string | null,
   requestFoodRequestId?: string | null,
   requestMovingRequestId?: string | null,
+  requestHomeRepairTypeId?: string | null,
 };
 
 export type DeleteRequestInput = {
@@ -462,6 +498,41 @@ export type DeleteGroceriesInput = {
   id: string,
 };
 
+export type CreateHomeRepairTypeInput = {
+  id?: string | null,
+  plumbing?: boolean | null,
+  electrical?: boolean | null,
+  painting?: boolean | null,
+  yardwork?: boolean | null,
+  other?: boolean | null,
+  details?: string | null,
+};
+
+export type ModelHomeRepairTypeConditionInput = {
+  plumbing?: ModelBooleanInput | null,
+  electrical?: ModelBooleanInput | null,
+  painting?: ModelBooleanInput | null,
+  yardwork?: ModelBooleanInput | null,
+  other?: ModelBooleanInput | null,
+  details?: ModelStringInput | null,
+  and?: Array< ModelHomeRepairTypeConditionInput | null > | null,
+  or?: Array< ModelHomeRepairTypeConditionInput | null > | null,
+  not?: ModelHomeRepairTypeConditionInput | null,
+};
+
+export type UpdateHomeRepairTypeInput = {
+  plumbing?: boolean | null,
+  electrical?: boolean | null,
+  painting?: boolean | null,
+  yardwork?: boolean | null,
+  other?: boolean | null,
+  details?: string | null,
+};
+
+export type DeleteHomeRepairTypeInput = {
+  id: string,
+};
+
 export type ModelRequestFilterInput = {
   id?: ModelIDInput | null,
   dateOfRequest?: ModelStringInput | null,
@@ -479,6 +550,11 @@ export type ModelRequestFilterInput = {
   leadOtherDetails?: ModelStringInput | null,
   resumeHelp?: ModelBooleanInput | null,
   coverLetterHelp?: ModelBooleanInput | null,
+  carRepairDetails?: ModelStringInput | null,
+  clothingType?: ModelStringInput | null,
+  clothingSize?: ModelStringInput | null,
+  furnitureType?: ModelStringInput | null,
+  furnitureSize?: ModelStringInput | null,
   needReason?: ModelNeedReasonListInput | null,
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
@@ -591,6 +667,24 @@ export type ModelGroceriesConnection = {
   nextToken?: string | null,
 };
 
+export type ModelHomeRepairTypeFilterInput = {
+  plumbing?: ModelBooleanInput | null,
+  electrical?: ModelBooleanInput | null,
+  painting?: ModelBooleanInput | null,
+  yardwork?: ModelBooleanInput | null,
+  other?: ModelBooleanInput | null,
+  details?: ModelStringInput | null,
+  and?: Array< ModelHomeRepairTypeFilterInput | null > | null,
+  or?: Array< ModelHomeRepairTypeFilterInput | null > | null,
+  not?: ModelHomeRepairTypeFilterInput | null,
+};
+
+export type ModelHomeRepairTypeConnection = {
+  __typename: "ModelHomeRepairTypeConnection",
+  items:  Array<HomeRepairType >,
+  nextToken?: string | null,
+};
+
 export type CreateRequestMutationVariables = {
   input: CreateRequestInput,
   condition?: ModelRequestConditionInput | null,
@@ -669,6 +763,23 @@ export type CreateRequestMutation = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -759,6 +870,23 @@ export type UpdateRequestMutation = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -849,6 +977,23 @@ export type DeleteRequestMutation = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1176,6 +1321,66 @@ export type DeleteGroceriesMutation = {
   } | null,
 };
 
+export type CreateHomeRepairTypeMutationVariables = {
+  input: CreateHomeRepairTypeInput,
+  condition?: ModelHomeRepairTypeConditionInput | null,
+};
+
+export type CreateHomeRepairTypeMutation = {
+  createHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateHomeRepairTypeMutationVariables = {
+  input: UpdateHomeRepairTypeInput,
+  condition?: ModelHomeRepairTypeConditionInput | null,
+};
+
+export type UpdateHomeRepairTypeMutation = {
+  updateHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteHomeRepairTypeMutationVariables = {
+  input: DeleteHomeRepairTypeInput,
+  condition?: ModelHomeRepairTypeConditionInput | null,
+};
+
+export type DeleteHomeRepairTypeMutation = {
+  deleteHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type GetRequestQueryVariables = {
   id: string,
 };
@@ -1253,6 +1458,23 @@ export type GetRequestQuery = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1346,6 +1568,23 @@ export type ListRequestsQuery = {
       } | null,
       resumeHelp?: boolean | null,
       coverLetterHelp?: boolean | null,
+      carRepairDetails?: string | null,
+      homeRepairType?:  {
+        __typename: "HomeRepairType",
+        id: string,
+        plumbing?: boolean | null,
+        electrical?: boolean | null,
+        painting?: boolean | null,
+        yardwork?: boolean | null,
+        other?: boolean | null,
+        details?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      clothingType?: string | null,
+      clothingSize?: string | null,
+      furnitureType?: string | null,
+      furnitureSize?: string | null,
       needReason: Array< NeedReason | null >,
       needTypes: Array< NeedType | null >,
       status: RequestStatus,
@@ -1586,6 +1825,50 @@ export type ListGroceriessQuery = {
   } | null,
 };
 
+export type GetHomeRepairTypeQueryVariables = {
+  id: string,
+};
+
+export type GetHomeRepairTypeQuery = {
+  getHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListHomeRepairTypesQueryVariables = {
+  filter?: ModelHomeRepairTypeFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListHomeRepairTypesQuery = {
+  listHomeRepairTypes?:  {
+    __typename: "ModelHomeRepairTypeConnection",
+    items:  Array< {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type OnCreateRequestSubscription = {
   onCreateRequest?:  {
     __typename: "Request",
@@ -1659,6 +1942,23 @@ export type OnCreateRequestSubscription = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1744,6 +2044,23 @@ export type OnUpdateRequestSubscription = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1829,6 +2146,23 @@ export type OnDeleteRequestSubscription = {
     } | null,
     resumeHelp?: boolean | null,
     coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      id: string,
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    furnitureSize?: string | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -2091,6 +2425,51 @@ export type OnDeleteGroceriesSubscription = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateHomeRepairTypeSubscription = {
+  onCreateHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateHomeRepairTypeSubscription = {
+  onUpdateHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteHomeRepairTypeSubscription = {
+  onDeleteHomeRepairType?:  {
+    __typename: "HomeRepairType",
+    id: string,
+    plumbing?: boolean | null,
+    electrical?: boolean | null,
+    painting?: boolean | null,
+    yardwork?: boolean | null,
+    other?: boolean | null,
+    details?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

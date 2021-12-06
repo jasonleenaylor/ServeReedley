@@ -25,6 +25,7 @@ import PhoneInput from "react-phone-input-2";
 import {
   createFoodInfo,
   createGroceries,
+  createHomeRepairType,
   createMovingInfo,
   createRequest,
   createSelfOrOtherInfo,
@@ -37,7 +38,7 @@ import {
   RequestStatus,
 } from "./RequestAPI";
 import {
-  GroceriesType,
+  IGroceriesType,
   defaultGroceries,
   defaultMoving,
   RadioButtonState,
@@ -46,7 +47,7 @@ import {
   GroceriesGQL,
   MovingInfoGQL,
   NeedRequestGQL,
-  HomeRepairType,
+  IHomeRepairType,
   defaultHomeRepair,
 } from "./needRequestTypes";
 
@@ -102,7 +103,7 @@ export const NeedRequestForm = () => {
   });
   const [carRepairDetails, setCarRepairDetails] = useState("");
   const [homeRepairDetails, setHomeRepairDetails] =
-    useState<HomeRepairType>(defaultHomeRepair);
+    useState<IHomeRepairType>(defaultHomeRepair);
   const [clothingType, setClothingType] = useState("");
   const [clothingSize, setClothingSize] = useState("");
   const [furnitureType, setFurnitureType] = useState("");
@@ -210,6 +211,15 @@ export const NeedRequestForm = () => {
       liabilityAck: moving.liabilityAck,
     };
 
+    let homeRepairInfo: IHomeRepairType = {
+      plumbing: homeRepairDetails.plumbing,
+      electrical: homeRepairDetails.electrical,
+      painting: homeRepairDetails.painting,
+      yardwork: homeRepairDetails.yardwork,
+      other: homeRepairDetails.other,
+      details: homeRepairDetails.details,
+    };
+
     let request: NeedRequestGQL = {
       dateOfRequest: new Date().toUTCString(),
       firstName: firstName,
@@ -274,6 +284,27 @@ export const NeedRequestForm = () => {
       if (needType.jobTraining) {
         request.resumeHelp = jobTraining.resumeHelp === "yes";
         request.coverLetterHelp = jobTraining.coverLetterHelp === "yes";
+      }
+      if (needType.carRepair) {
+        request.carRepairDetails = carRepairDetails;
+      }
+      if (needType.homeRepair) {
+        try {
+          result = await API.graphql(
+            graphqlOperation(createHomeRepairType, { input: homeRepairInfo })
+          );
+          request.requestHomeRepairTypeId = result.data.createHomeRepairType.id;
+        } catch (err) {
+          alert("home maintenance error: " + JSON.stringify(err));
+        }
+      }
+      if (needType.clothing) {
+        request.clothingSize = clothingSize;
+        request.clothingType = clothingType;
+      }
+      if (needType.furniture) {
+        request.furnitureType = furnitureType;
+        request.furnitureSize = furnitureSize;
       }
       alert("Request Submitted.");
       await API.graphql(graphqlOperation(createRequest, { input: request }));
