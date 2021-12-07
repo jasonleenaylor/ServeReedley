@@ -7,7 +7,7 @@ import { createRequest } from "./graphql/mutations";
 import MaterialTable, { Column } from "@material-table/core";
 import tableIcons from "./tableIcons";
 import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
-import { MovingInfoGQL } from "./needRequestTypes";
+import { IHomeRepairType, MovingInfoGQL } from "./needRequestTypes";
 
 function NeedRequestTable() {
   const [requests, setRequests] = useState([]);
@@ -92,6 +92,35 @@ function NeedRequestTable() {
       field: "coverLetterHelp",
       type: "boolean",
     },
+    {
+      title: "Car Repair Details",
+      field: "carRepairDetails",
+    },
+    {
+      title: "Home Repair Details",
+      field: "homeRepairType.details",
+    },
+    {
+      title: "Home Repair Categories",
+      field: "homeRepairType",
+      render: (rowData) => printHomeRepairList(rowData.homeRepairType), // JSON.stringify(rowData.foodRequest.groceries);
+    },
+    {
+      title: "Clothing Type",
+      field: "clothingType",
+    },
+    {
+      title: "Clothing Size",
+      field: "clothingSize",
+    },
+    {
+      title: "Furniture",
+      field: "furnitureType",
+    },
+    {
+      title: "Furniture Dimensions",
+      field: "furnitureSize",
+    },
     { title: "Need Fulfiller", field: "needFulfiller" },
     { title: "Date Fulfilled", field: "dateFulfilled", type: "datetime" },
     { title: "Follow Up", field: "followUp" },
@@ -148,6 +177,28 @@ function NeedRequestTable() {
       }
     }
     return movingConditions.substring(2);
+  }
+
+  function printHomeRepairList(homeRepairType: IHomeRepairType): string {
+    let homeRepairs = "";
+    if (homeRepairType) {
+      if (homeRepairType.plumbing) {
+        homeRepairs += ", Plumbing";
+      }
+      if (homeRepairType.electrical) {
+        homeRepairs += ", Electric";
+      }
+      if (homeRepairType.yardwork) {
+        homeRepairs += ", Yardwork";
+      }
+      if (homeRepairType.painting) {
+        homeRepairs += ", Painting";
+      }
+      if (homeRepairType.other) {
+        homeRepairs += ", Other";
+      }
+    }
+    return homeRepairs.substring(2);
   }
 
   async function fetchNotes() {
