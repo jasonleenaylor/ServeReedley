@@ -3,16 +3,48 @@ import "./App.css";
 import { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { listRequests } from "./graphql/queries";
-import { createRequest } from "./graphql/mutations";
+import { createRequest, updateRequest } from "./graphql/mutations";
 import MaterialTable, { Column } from "@material-table/core";
 import tableIcons from "./tableIcons";
-import { LeadSource, NeedReason, NeedType, RequestStatus } from "./RequestAPI";
-import { IHomeRepairType, MovingInfoGQL } from "./needRequestTypes";
+import {
+  LeadSource,
+  ListRequestsQuery,
+  NeedReason,
+  NeedType,
+  RequestStatus,
+  UpdateRequestInput,
+} from "./RequestAPI";
+import {
+  IHomeRepairType,
+  MovingInfoGQL,
+  NeedRequestType,
+} from "./needRequestTypes";
+import UpdateRequestDialogButton from "./UpdateRequestDialog";
 
 function NeedRequestTable() {
   const [requests, setRequests] = useState([]);
   const columns: Column<any>[] = [
     // Vernacular column
+    {
+      title: "Work on Request",
+      field: "modify",
+      render: (rowData: NeedRequestType) => {
+        return (
+          <UpdateRequestDialogButton
+            requestData={rowData}
+            open={false}
+            onClose={async function (value: NeedRequestType) {
+              await API.graphql(
+                graphqlOperation(updateRequest, {
+                  input: needUpdateFromNeedReqData(value),
+                })
+              );
+              fetchNotes();
+            }}
+          />
+        );
+      },
+    },
     { title: "Date Of Request", field: "dateOfRequest", type: "datetime" },
     { title: "First Name", field: "firstName" },
     { title: "Last Name", field: "lastName" },
@@ -66,7 +98,7 @@ function NeedRequestTable() {
     },
     {
       title: "Moving: Items",
-      field: "movingRequest.itemCount",
+      field: "movingRequest.items",
     },
     {
       title: "Moving: Has Vehicle",
@@ -244,12 +276,27 @@ function NeedRequestTable() {
         </form>
       }
       <div>
-        <MaterialTable
+        <MaterialTable<any>
           columns={columns}
           icons={tableIcons}
           data={requests}
           title="Need Requests"
           options={{ filtering: true }}
+          // editable={{
+          //   onRowUpdate: (
+          //     newData: ListRequestsQuery,
+          //     oldData: ListRequestsQuery
+          //   ) =>
+          //     new Promise(async (resolve, reject) => {
+          //       await props
+          //         .onRowUpdate(newData, oldData)
+          //         .then(resolve)
+          //         .catch((reason) => {
+          //           alert(translate(reason));
+          //           reject(reason);
+          //         });
+          //     }),
+          // }}
         />
       </div>
       <span style={{ width: "20%" }} />
@@ -259,3 +306,6 @@ function NeedRequestTable() {
 }
 
 export default withAuthenticator(NeedRequestTable);
+function needUpdateFromNeedReqData(value: NeedRequestType): UpdateRequestInput {
+  return { id: value.id, firstName: value.firstName, lastName: value.lastName };
+}

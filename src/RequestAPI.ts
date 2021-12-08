@@ -23,7 +23,7 @@ export type CreateRequestInput = {
   clothingType?: string | null,
   clothingSize?: string | null,
   furnitureType?: string | null,
-  furnitureSize?: string | null,
+  housingHelp?: boolean | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
@@ -93,7 +93,7 @@ export type ModelRequestConditionInput = {
   clothingType?: ModelStringInput | null,
   clothingSize?: ModelStringInput | null,
   furnitureType?: ModelStringInput | null,
-  furnitureSize?: ModelStringInput | null,
+  housingHelp?: ModelBooleanInput | null,
   needReason?: ModelNeedReasonListInput | null,
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
@@ -215,7 +215,7 @@ export type Request = {
   clothingType?: string | null,
   clothingSize?: string | null,
   furnitureType?: string | null,
-  furnitureSize?: string | null,
+  housingHelp?: boolean | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
@@ -274,7 +274,7 @@ export type Groceries = {
 export type MovingInfo = {
   __typename: "MovingInfo",
   id: string,
-  itemCount?: number | null,
+  items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
   stairs?: boolean | null,
@@ -320,7 +320,7 @@ export type UpdateRequestInput = {
   clothingType?: string | null,
   clothingSize?: string | null,
   furnitureType?: string | null,
-  furnitureSize?: string | null,
+  housingHelp?: boolean | null,
   needReason?: Array< NeedReason | null > | null,
   needTypes?: Array< NeedType | null > | null,
   status?: RequestStatus | null,
@@ -403,7 +403,7 @@ export type DeleteFoodInfoInput = {
 
 export type CreateMovingInfoInput = {
   id?: string | null,
-  itemCount?: number | null,
+  items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
   stairs?: boolean | null,
@@ -414,7 +414,7 @@ export type CreateMovingInfoInput = {
 };
 
 export type ModelMovingInfoConditionInput = {
-  itemCount?: ModelIntInput | null,
+  items?: ModelStringInput | null,
   haveTransportation?: ModelBooleanInput | null,
   steepDriveway?: ModelBooleanInput | null,
   stairs?: ModelBooleanInput | null,
@@ -428,7 +428,7 @@ export type ModelMovingInfoConditionInput = {
 };
 
 export type UpdateMovingInfoInput = {
-  itemCount?: number | null,
+  items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
   stairs?: boolean | null,
@@ -554,7 +554,7 @@ export type ModelRequestFilterInput = {
   clothingType?: ModelStringInput | null,
   clothingSize?: ModelStringInput | null,
   furnitureType?: ModelStringInput | null,
-  furnitureSize?: ModelStringInput | null,
+  housingHelp?: ModelBooleanInput | null,
   needReason?: ModelNeedReasonListInput | null,
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
@@ -623,7 +623,7 @@ export type ModelFoodInfoConnection = {
 };
 
 export type ModelMovingInfoFilterInput = {
-  itemCount?: ModelIntInput | null,
+  items?: ModelStringInput | null,
   haveTransportation?: ModelBooleanInput | null,
   steepDriveway?: ModelBooleanInput | null,
   stairs?: ModelBooleanInput | null,
@@ -750,7 +750,7 @@ export type CreateRequestMutation = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -779,7 +779,7 @@ export type CreateRequestMutation = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -857,7 +857,7 @@ export type UpdateRequestMutation = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -886,7 +886,7 @@ export type UpdateRequestMutation = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -964,7 +964,7 @@ export type DeleteRequestMutation = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -993,7 +993,7 @@ export type DeleteRequestMutation = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1183,7 +1183,7 @@ export type CreateMovingInfoMutation = {
   createMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,
@@ -1205,7 +1205,7 @@ export type UpdateMovingInfoMutation = {
   updateMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,
@@ -1227,7 +1227,7 @@ export type DeleteMovingInfoMutation = {
   deleteMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,
@@ -1445,7 +1445,7 @@ export type GetRequestQuery = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -1474,7 +1474,7 @@ export type GetRequestQuery = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -1555,7 +1555,7 @@ export type ListRequestsQuery = {
       movingRequest?:  {
         __typename: "MovingInfo",
         id: string,
-        itemCount?: number | null,
+        items?: string | null,
         haveTransportation?: boolean | null,
         steepDriveway?: boolean | null,
         stairs?: boolean | null,
@@ -1584,7 +1584,7 @@ export type ListRequestsQuery = {
       clothingType?: string | null,
       clothingSize?: string | null,
       furnitureType?: string | null,
-      furnitureSize?: string | null,
+      housingHelp?: boolean | null,
       needReason: Array< NeedReason | null >,
       needTypes: Array< NeedType | null >,
       status: RequestStatus,
@@ -1727,7 +1727,7 @@ export type GetMovingInfoQuery = {
   getMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,
@@ -1752,7 +1752,7 @@ export type ListMovingInfosQuery = {
     items:  Array< {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -1929,7 +1929,7 @@ export type OnCreateRequestSubscription = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -1958,7 +1958,7 @@ export type OnCreateRequestSubscription = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -2031,7 +2031,7 @@ export type OnUpdateRequestSubscription = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -2060,7 +2060,7 @@ export type OnUpdateRequestSubscription = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -2133,7 +2133,7 @@ export type OnDeleteRequestSubscription = {
     movingRequest?:  {
       __typename: "MovingInfo",
       id: string,
-      itemCount?: number | null,
+      items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
       stairs?: boolean | null,
@@ -2162,7 +2162,7 @@ export type OnDeleteRequestSubscription = {
     clothingType?: string | null,
     clothingSize?: string | null,
     furnitureType?: string | null,
-    furnitureSize?: string | null,
+    housingHelp?: boolean | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
@@ -2317,7 +2317,7 @@ export type OnCreateMovingInfoSubscription = {
   onCreateMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,
@@ -2334,7 +2334,7 @@ export type OnUpdateMovingInfoSubscription = {
   onUpdateMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,
@@ -2351,7 +2351,7 @@ export type OnDeleteMovingInfoSubscription = {
   onDeleteMovingInfo?:  {
     __typename: "MovingInfo",
     id: string,
-    itemCount?: number | null,
+    items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
     stairs?: boolean | null,

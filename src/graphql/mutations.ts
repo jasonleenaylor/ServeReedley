@@ -61,7 +61,7 @@ export const createRequest = /* GraphQL */ `
       }
       movingRequest {
         id
-        itemCount
+        items
         haveTransportation
         steepDriveway
         stairs
@@ -89,7 +89,7 @@ export const createRequest = /* GraphQL */ `
       clothingType
       clothingSize
       furnitureType
-      furnitureSize
+      housingHelp
       needReason
       needTypes
       status
@@ -161,7 +161,7 @@ export const updateRequest = /* GraphQL */ `
       }
       movingRequest {
         id
-        itemCount
+        items
         haveTransportation
         steepDriveway
         stairs
@@ -189,7 +189,7 @@ export const updateRequest = /* GraphQL */ `
       clothingType
       clothingSize
       furnitureType
-      furnitureSize
+      housingHelp
       needReason
       needTypes
       status
@@ -261,7 +261,7 @@ export const deleteRequest = /* GraphQL */ `
       }
       movingRequest {
         id
-        itemCount
+        items
         haveTransportation
         steepDriveway
         stairs
@@ -289,7 +289,7 @@ export const deleteRequest = /* GraphQL */ `
       clothingType
       clothingSize
       furnitureType
-      furnitureSize
+      housingHelp
       needReason
       needTypes
       status
@@ -462,7 +462,7 @@ export const createMovingInfo = /* GraphQL */ `
   ) {
     createMovingInfo(input: $input, condition: $condition) {
       id
-      itemCount
+      items
       haveTransportation
       steepDriveway
       stairs
@@ -482,7 +482,7 @@ export const updateMovingInfo = /* GraphQL */ `
   ) {
     updateMovingInfo(input: $input, condition: $condition) {
       id
-      itemCount
+      items
       haveTransportation
       steepDriveway
       stairs
@@ -502,7 +502,7 @@ export const deleteMovingInfo = /* GraphQL */ `
   ) {
     deleteMovingInfo(input: $input, condition: $condition) {
       id
-      itemCount
+      items
       haveTransportation
       steepDriveway
       stairs

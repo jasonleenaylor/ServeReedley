@@ -23,7 +23,7 @@ type Request @model {
   clothingType: String
   clothingSize: String
   furnitureType: String
-  furnitureSize: String
+  housingHelp: Boolean
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
@@ -50,7 +50,7 @@ type FoodInfo @model {
 }
 
 type MovingInfo @model {
-  itemCount: Int
+  items: String
   haveTransportation: Boolean
   steepDriveway: Boolean
   stairs: Boolean

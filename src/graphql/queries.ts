@@ -58,7 +58,7 @@ export const getRequest = /* GraphQL */ `
       }
       movingRequest {
         id
-        itemCount
+        items
         haveTransportation
         steepDriveway
         stairs
@@ -86,7 +86,7 @@ export const getRequest = /* GraphQL */ `
       clothingType
       clothingSize
       furnitureType
-      furnitureSize
+      housingHelp
       needReason
       needTypes
       status
@@ -160,7 +160,7 @@ export const listRequests = /* GraphQL */ `
         }
         movingRequest {
           id
-          itemCount
+          items
           haveTransportation
           steepDriveway
           stairs
@@ -188,7 +188,7 @@ export const listRequests = /* GraphQL */ `
         clothingType
         clothingSize
         furnitureType
-        furnitureSize
+        housingHelp
         needReason
         needTypes
         status
@@ -315,7 +315,7 @@ export const getMovingInfo = /* GraphQL */ `
   query GetMovingInfo($id: ID!) {
     getMovingInfo(id: $id) {
       id
-      itemCount
+      items
       haveTransportation
       steepDriveway
       stairs
@@ -337,7 +337,7 @@ export const listMovingInfos = /* GraphQL */ `
     listMovingInfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        itemCount
+        items
         haveTransportation
         steepDriveway
         stairs
