@@ -23,6 +23,7 @@ import {
   forOtherDetailsCard,
   forSelfDetailsCard,
   forYouOrOtherCard,
+  movingCard,
   nameCard,
   needReasonCard,
   needRequestCard,
@@ -142,6 +143,27 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                 });
               }
             )}
+          </Grid>
+          <Grid>
+            {movingCard(
+              {
+                withinRange: RadioButtonState.YES,
+                items: requestData.movingRequest?.items!,
+                haveTransportation: requestData.movingRequest
+                  ?.haveTransportation
+                  ? RadioButtonState.YES
+                  : RadioButtonState.NO,
+                haveSpecialConditions: RadioButtonState.YES,
+                driveway: requestData.movingRequest?.steepDriveway!,
+                stairs: requestData.movingRequest?.stairs!,
+                unpavedRoad: requestData.movingRequest?.unpavedRoad!,
+                other: requestData.movingRequest?.other!,
+                otherDetails: requestData.movingRequest?.otherDetails!,
+                liabilityAck: true,
+              },
+              () => {},
+              () => {}
+            )}{" "}
           </Grid>
         </Grid>
       </Container>
