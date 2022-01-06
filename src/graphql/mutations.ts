@@ -43,6 +43,7 @@ export const createRequest = /* GraphQL */ `
           milk
           eggs
           bread
+          butter
           tortillas
           rice
           beans
@@ -143,6 +144,7 @@ export const updateRequest = /* GraphQL */ `
           milk
           eggs
           bread
+          butter
           tortillas
           rice
           beans
@@ -243,6 +245,7 @@ export const deleteRequest = /* GraphQL */ `
           milk
           eggs
           bread
+          butter
           tortillas
           rice
           beans
@@ -369,6 +372,7 @@ export const createFoodInfo = /* GraphQL */ `
         milk
         eggs
         bread
+        butter
         tortillas
         rice
         beans
@@ -403,6 +407,7 @@ export const updateFoodInfo = /* GraphQL */ `
         milk
         eggs
         bread
+        butter
         tortillas
         rice
         beans
@@ -437,6 +442,7 @@ export const deleteFoodInfo = /* GraphQL */ `
         milk
         eggs
         bread
+        butter
         tortillas
         rice
         beans
@@ -525,6 +531,7 @@ export const createGroceries = /* GraphQL */ `
       milk
       eggs
       bread
+      butter
       tortillas
       rice
       beans
@@ -550,6 +557,7 @@ export const updateGroceries = /* GraphQL */ `
       milk
       eggs
       bread
+      butter
       tortillas
       rice
       beans
@@ -575,6 +583,7 @@ export const deleteGroceries = /* GraphQL */ `
       milk
       eggs
       bread
+      butter
       tortillas
       rice
       beans

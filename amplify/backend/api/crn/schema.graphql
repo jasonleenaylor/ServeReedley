@@ -27,7 +27,7 @@ type Request @model {
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
-  note: String
+  note: [String]
   needFulfiller: String
   dateFulfilled: String
   followUp: String
@@ -64,6 +64,7 @@ type Groceries @model {
   milk: Boolean
   eggs: Boolean
   bread: Boolean
+  butter: Boolean
   tortillas: Boolean
   rice: Boolean
   beans: Boolean

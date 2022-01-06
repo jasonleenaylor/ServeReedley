@@ -55,10 +55,22 @@ export interface INeedTypes {
   other: boolean;
 }
 
+export interface IFoodInfo {
+  familyMembers?: number;
+  children: string;
+  haveAllergies: RadioButtonState;
+  allergies: string;
+}
+
 export interface INeedReason {
   covid: boolean;
   illness: boolean;
   financial: boolean;
+}
+
+export interface IJobTraining {
+  resumeHelp: RadioButtonState;
+  coverLetterHelp: RadioButtonState;
 }
 
 export const defaultGroceries: IGroceriesType = {
@@ -95,6 +107,13 @@ export const defaultNeedType: INeedTypes = {
   clothing: false,
   furniture: false,
   other: false,
+};
+
+export const defaultFoodInfo: IFoodInfo = {
+  familyMembers: undefined,
+  children: "",
+  haveAllergies: RadioButtonState.UNSET,
+  allergies: "",
 };
 
 export const defaultMoving: IMovingType = {
@@ -183,14 +202,14 @@ export interface NeedRequestGQL {
   coverLetterHelp?: boolean | null;
   carRepairDetails?: string;
   requestHomeRepairTypeId?: string | null;
-  clothingType?: string;
-  clothingSize?: string;
-  furnitureType?: string;
-  furnitureSize?: string;
+  clothingType?: string | null;
+  clothingSize?: string | null;
+  furnitureType?: string | null;
+  housingHelp?: boolean | null;
   needReason: Array<NeedReason | null>;
   needTypes: Array<NeedType | null>;
   status: RequestStatus;
-  note?: string | null;
+  note?: Array<string | null> | null;
   needFulfiller?: string | null;
   dateFulfilled?: string | null;
   followUp?: string | null;
@@ -246,6 +265,7 @@ export interface NeedRequestType {
       milk?: boolean | null;
       eggs?: boolean | null;
       bread?: boolean | null;
+      butter?: boolean | null;
       tortillas?: boolean | null;
       rice?: boolean | null;
       beans?: boolean | null;
@@ -298,7 +318,7 @@ export interface NeedRequestType {
   needReason: Array<NeedReason | null>;
   needTypes: Array<NeedType | null>;
   status: RequestStatus;
-  note?: string | null;
+  note?: Array<string> | null;
   needFulfiller?: string | null;
   dateFulfilled?: string | null;
   followUp?: string | null;

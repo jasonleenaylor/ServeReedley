@@ -14,6 +14,10 @@ import {
 import PhoneInput from "react-phone-input-2";
 import { cardStyle } from "./needRequestForm";
 import {
+  IFoodInfo,
+  IGroceriesType,
+  IHomeRepairType,
+  IJobTraining,
   IMovingType,
   INeedReason,
   INeedTypes,
@@ -431,6 +435,99 @@ export function needReasonCard(
   );
 }
 
+export function foodInfoCard(
+  mealsOrGroceries: boolean,
+  foodInfo: IFoodInfo,
+  handleFoodInfoChange: (newFoodInfo: {}) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title={
+          mealsOrGroceries
+            ? "Family info for meals"
+            : "Family info for groceries"
+        }
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <TextField
+            label="Number of family members"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9][0-9]?",
+              maxLength: 2,
+            }}
+            onChange={(changeEvent: any) =>
+              handleFoodInfoChange({ familyMembers: changeEvent.target.value })
+            }
+            value={foodInfo.familyMembers}
+            required
+          ></TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <Typography>
+              Please list ages of children under the age of 18
+            </Typography>
+            <TextField
+              inputProps={{
+                pattern: "([0-9][0-8]?[ -,]?[ ]?)*",
+              }}
+              helperText="1,4,12"
+              value={foodInfo.children}
+              onChange={(changeEvent: any) =>
+                handleFoodInfoChange({
+                  children: changeEvent.target.value,
+                })
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+        <Grid item>
+          <Typography>Are there any food allergies?</Typography>
+          <RadioGroup
+            value={foodInfo.haveAllergies}
+            onChange={(changeEvent: any) =>
+              handleFoodInfoChange({
+                haveAllergies: changeEvent.target.value,
+              })
+            }
+          >
+            <FormControlLabel
+              value="yes"
+              control={<Radio required={true} />}
+              label="Yes"
+            />
+            <FormControlLabel
+              value="no"
+              control={<Radio required={true} />}
+              label="No"
+            />
+          </RadioGroup>
+        </Grid>
+        {foodInfo.haveAllergies && (
+          <Grid item xs={12}>
+            <FormControl>
+              <Typography>Please list allergies</Typography>
+              <TextField
+                value={foodInfo.allergies}
+                onChange={(changeEvent: any) =>
+                  handleFoodInfoChange({
+                    allergies: changeEvent.target.value,
+                  })
+                }
+                required
+              ></TextField>
+            </FormControl>
+          </Grid>
+        )}{" "}
+      </Grid>
+    </Card>
+  );
+}
+
 export function movingCard(
   moving: IMovingType,
   handleMovingChange: (newMovingInfo: {}) => void,
@@ -488,7 +585,7 @@ export function movingCard(
                 handleMovingChange({
                   withinRange: changeEvent.target.value,
                 });
-                if (!moving.withinRange) {
+                if (changeEvent.target.value.toLowerCase() !== "yes") {
                   alert(
                     "We can only help with moves within 30 miles of Reedley."
                   );
@@ -596,22 +693,444 @@ export function movingCard(
             </FormControl>
           </Grid>
         )}
+        {moving.liabilityAck || (
+          <Grid item xs={12}>
+            <FormControlLabel
+              value="false"
+              control={<Checkbox required={true} />}
+              label="I understand that I'm responsible for packing and wrapping."
+            />
+            <FormControlLabel
+              value="false"
+              control={<Checkbox required={true} />}
+              label="I understand that this is a volunteer operation and that I am responsible for any damage."
+            />
+            <FormControlLabel
+              value="false"
+              control={<Checkbox required={true} />}
+              label="If the move is to a storage unit I agree to make all arrangements prior to the move."
+            />
+          </Grid>
+        )}
+      </Grid>
+    </Card>
+  );
+}
+
+export function groceriesCard(
+  groceries: IGroceriesType,
+  handleGroceriesChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+): JSX.Element {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader title="Groceries" titleTypographyProps={{ variant: "h6" }} />
+      <FormControl required>
+        <FormGroup>
+          <Typography>
+            Below is a list of items that we can provide. Please check the items
+            you would use.
+          </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.milk}
+                onChange={handleGroceriesChange}
+                name="milk"
+              />
+            }
+            label="Gallon of milk"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.eggs}
+                onChange={handleGroceriesChange}
+                name="eggs"
+              />
+            }
+            label="Dozen eggs"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.bread}
+                onChange={handleGroceriesChange}
+                name="bread"
+              />
+            }
+            label="Bread"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.tortillas}
+                onChange={handleGroceriesChange}
+                name="tortillas"
+              />
+            }
+            label="20 count flour tortillas"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.rice}
+                onChange={handleGroceriesChange}
+                name="rice"
+              />
+            }
+            label="Pound of long grain rice"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.beans}
+                onChange={handleGroceriesChange}
+                name="beans"
+              />
+            }
+            label="2 Pounds of pinto beans"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.cheese}
+                onChange={handleGroceriesChange}
+                name="cheese"
+              />
+            }
+            label="12oz American cheese singles"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.beef}
+                onChange={handleGroceriesChange}
+                name="beef"
+              />
+            }
+            label="Pound of ground beef"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.hotdogs}
+                onChange={handleGroceriesChange}
+                name="hotdogs"
+              />
+            }
+            label="8 count hot dogs"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.lunchMeat}
+                onChange={handleGroceriesChange}
+                name="lunchMeat"
+              />
+            }
+            label="Turkey lunch meat"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.fruit}
+                onChange={handleGroceriesChange}
+                name="fruit"
+              />
+            }
+            label="Fresh or canned fruit"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.butter}
+                onChange={handleGroceriesChange}
+                name="butter"
+              />
+            }
+            label="Pound of unsalted butter"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.peanutButter}
+                onChange={handleGroceriesChange}
+                name="peanutButter"
+              />
+            }
+            label="Peanut butter"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={groceries.jelly}
+                onChange={handleGroceriesChange}
+                name="jelly"
+              />
+            }
+            label="Jelly"
+          />
+        </FormGroup>
+      </FormControl>
+    </Card>
+  );
+}
+
+export function clothingCard(
+  clothingType: string,
+  clothingSize: string,
+  setClothingType: (type: string) => void,
+  setClothingSize: (size: string) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      {" "}
+      <CardHeader title="Clothing" titleTypographyProps={{ variant: "h6" }} />
+      <Grid container spacing={4}>
         <Grid item xs={12}>
-          <FormControlLabel
-            value="false"
-            control={<Checkbox required={true} />}
-            label="I understand that I'm responsible for packing and wrapping."
-          />
-          <FormControlLabel
-            value="false"
-            control={<Checkbox required={true} />}
-            label="I understand that this is a volunteer operation and that I am responsible for any damage."
-          />
-          <FormControlLabel
-            value="false"
-            control={<Checkbox required={true} />}
-            label="If the move is to a storage unit I agree to make all arrangements prior to the move."
-          />
+          {" "}
+          <FormControl>
+            <Typography>What type of clothing do you need?</Typography>
+            <TextField
+              required
+              value={clothingType}
+              onChange={(changeEvent: any) =>
+                setClothingType(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          {" "}
+          <FormControl>
+            <Typography>What size clothing do you need?</Typography>
+            <TextField
+              required
+              value={clothingSize}
+              onChange={(changeEvent: any) =>
+                setClothingSize(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+}
+
+export function furnitureCard(
+  furnitureType: string,
+  setFurnitureType: (ft: string) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      {" "}
+      <CardHeader title="Furniture" titleTypographyProps={{ variant: "h6" }} />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          {" "}
+          <FormControl>
+            <Typography>What type of furniture do you need?</Typography>
+            <TextField
+              required
+              value={furnitureType}
+              onChange={(changeEvent: any) =>
+                setFurnitureType(changeEvent.target.value)
+              }
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+}
+
+export function jobTrainingCard(
+  jobTraining: IJobTraining,
+  setJobTraining: (jt: IJobTraining) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Job Training"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography>Do you need help with your resume?</Typography>
+          <RadioGroup
+            value={jobTraining.resumeHelp}
+            onChange={(changeEvent: any) =>
+              setJobTraining({
+                ...jobTraining,
+                resumeHelp: changeEvent.target.value,
+              })
+            }
+          >
+            <FormControlLabel
+              value="yes"
+              control={<Radio required={true} />}
+              label="Yes"
+            />
+            <FormControlLabel
+              value="no"
+              control={<Radio required={true} />}
+              label="No"
+            />
+          </RadioGroup>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>Do you need help writing a cover letter?</Typography>
+          <RadioGroup
+            value={jobTraining.coverLetterHelp}
+            onChange={(changeEvent: any) =>
+              setJobTraining({
+                ...jobTraining,
+                coverLetterHelp: changeEvent.target.value,
+              })
+            }
+          >
+            <FormControlLabel
+              value="yes"
+              control={<Radio required={true} />}
+              label="Yes"
+            />
+            <FormControlLabel
+              value="no"
+              control={<Radio required={true} />}
+              label="No"
+            />
+          </RadioGroup>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+}
+
+export function carRepairCard(
+  carRepairDetails: string,
+  setCarRepairDetails: (details: string) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Car Maintenence/Repair"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography>
+            Serve Reedley can only help with minor maintenance and repairs.
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <Typography>
+              Please describe the work needed on your vehicle.
+            </Typography>
+            <TextField
+              value={carRepairDetails}
+              onChange={(changeEvent: any) =>
+                setCarRepairDetails(changeEvent.target.value)
+              }
+              required
+            ></TextField>
+          </FormControl>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+}
+
+export function homeRepairCard(
+  homeRepairDetails: IHomeRepairType,
+  handleHomeRepair: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  setHomeRepairDetails: (details: IHomeRepairType) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Home Maintenance/Repair"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography>
+            Serve Reedley can only help with minor maintenance and repairs.
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.plumbing}
+                    onChange={handleHomeRepair}
+                    name="plumbing"
+                  />
+                }
+                label="Plumbing"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.electrical}
+                    onChange={handleHomeRepair}
+                    name="electrical"
+                  />
+                }
+                label="Electrical"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.painting}
+                    onChange={handleHomeRepair}
+                    name="painting"
+                  />
+                }
+                label="Painting"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.yardwork}
+                    onChange={handleHomeRepair}
+                    name="yardwork"
+                  />
+                }
+                label="Yard Work"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairDetails.other}
+                    onChange={handleHomeRepair}
+                    name="other"
+                  />
+                }
+                label="Other?"
+              />
+            </FormGroup>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl>
+            <Typography>
+              Please describe the work needed on your home.
+            </Typography>
+            <TextField
+              value={homeRepairDetails.details}
+              onChange={(changeEvent: any) =>
+                setHomeRepairDetails({
+                  ...homeRepairDetails,
+                  details: changeEvent.target.value,
+                })
+              }
+              required
+            ></TextField>
+          </FormControl>
         </Grid>
       </Grid>
     </Card>

@@ -52,12 +52,21 @@ import {
   defaultNeedType,
   defaultNeedReason,
   getNeedTypes,
+  defaultFoodInfo,
+  IJobTraining,
 } from "./needRequestTypes";
 import {
+  carRepairCard,
+  clothingCard,
   contactCard,
+  foodInfoCard,
   forOtherDetailsCard,
   forSelfDetailsCard,
   forYouOrOtherCard,
+  furnitureCard,
+  groceriesCard,
+  homeRepairCard,
+  jobTrainingCard,
   leadTracingCard,
   movingCard,
   nameCard,
@@ -85,18 +94,10 @@ export const NeedRequestForm = () => {
   const [leadOther, setLeadOther] = useState("");
   const [needReason, setNeedReason] = useState(defaultNeedReason);
   const [needType, setNeedType] = useState(defaultNeedType);
-  const [foodInfo, setFoodInfo] = useState({
-    familyMembers: null,
-    children: "",
-    haveAllergies: false,
-    allergies: "",
-  });
+  const [foodInfo, setFoodInfo] = useState(defaultFoodInfo);
   const [groceries, setGroceries] = useState(defaultGroceries);
   const [moving, setMoving] = useState(defaultMoving);
-  const [jobTraining, setJobTraining] = useState<{
-    resumeHelp: RadioButtonState;
-    coverLetterHelp: RadioButtonState;
-  }>({
+  const [jobTraining, setJobTraining] = useState<IJobTraining>({
     resumeHelp: RadioButtonState.UNSET,
     coverLetterHelp: RadioButtonState.UNSET,
   });
@@ -179,7 +180,7 @@ export const NeedRequestForm = () => {
     let food: FoodInfoGQL = {
       familyMembers: foodInfo.familyMembers,
       children: foodInfo.children,
-      haveAllergies: foodInfo.haveAllergies,
+      haveAllergies: foodInfo.haveAllergies === RadioButtonState.YES,
       allergies: foodInfo.allergies,
       foodInfoGroceriesId: "",
     };
@@ -242,7 +243,8 @@ export const NeedRequestForm = () => {
       needReason: getReasons(needReason),
       needTypes: getNeedTypes(needType),
       status: RequestStatus.NEW,
-      note: "",
+      housingHelp: housingHelp == RadioButtonState.YES,
+      note: [],
       needFulfiller: "",
       dateFulfilled: "",
       followUp: "",
@@ -312,356 +314,6 @@ export const NeedRequestForm = () => {
     }
   };
 
-  const foodInfoCard = (
-    <Card style={cardStyle}>
-      <CardHeader
-        title={
-          needType.meals ? "Family info for meals" : "Family info for groceries"
-        }
-        titleTypographyProps={{ variant: "h6" }}
-      />
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <TextField
-            label="Number of family members"
-            inputProps={{
-              inputMode: "numeric",
-              pattern: "[0-9][0-9]?",
-              maxLength: 2,
-            }}
-            onChange={(changeEvent: any) =>
-              handleFoodInfoChange({ familyMembers: changeEvent.target.value })
-            }
-            value={foodInfo.familyMembers}
-            required
-          ></TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <Typography>
-              Please list ages of children under the age of 18
-            </Typography>
-            <TextField
-              inputProps={{
-                pattern: "([0-9][0-8]?[ -,]?[ ]?)*",
-              }}
-              helperText="1,4,12"
-              value={foodInfo.children}
-              onChange={(changeEvent: any) =>
-                handleFoodInfoChange({
-                  children: changeEvent.target.value,
-                })
-              }
-            ></TextField>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <Typography>Are there any food allergies?</Typography>
-          <RadioGroup
-            value={foodInfo.haveAllergies}
-            onChange={(changeEvent: any) =>
-              handleFoodInfoChange({
-                haveAllergies: changeEvent.target.value,
-              })
-            }
-          >
-            <FormControlLabel
-              value="yes"
-              control={<Radio required={true} />}
-              label="Yes"
-            />
-            <FormControlLabel
-              value="no"
-              control={<Radio required={true} />}
-              label="No"
-            />
-          </RadioGroup>
-        </Grid>
-        {foodInfo.haveAllergies && (
-          <Grid item xs={12}>
-            <FormControl>
-              <Typography>Please list allergies</Typography>
-              <TextField
-                value={foodInfo.allergies}
-                onChange={(changeEvent: any) =>
-                  handleFoodInfoChange({
-                    allergies: changeEvent.target.value,
-                  })
-                }
-                required
-              ></TextField>
-            </FormControl>
-          </Grid>
-        )}{" "}
-      </Grid>
-    </Card>
-  );
-  const groceriesCard = (
-    <Card style={cardStyle}>
-      <CardHeader title="Groceries" titleTypographyProps={{ variant: "h6" }} />
-      <FormControl required>
-        <FormGroup>
-          <Typography>
-            Below is a list of items that we can provide. Please check the items
-            you would use.
-          </Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.milk}
-                onChange={handleGroceriesChange}
-                name="milk"
-              />
-            }
-            label="Gallon of milk"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.eggs}
-                onChange={handleGroceriesChange}
-                name="eggs"
-              />
-            }
-            label="Dozen eggs"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.bread}
-                onChange={handleGroceriesChange}
-                name="bread"
-              />
-            }
-            label="Bread"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.tortillas}
-                onChange={handleGroceriesChange}
-                name="tortillas"
-              />
-            }
-            label="20 count flour tortillas"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.rice}
-                onChange={handleGroceriesChange}
-                name="rice"
-              />
-            }
-            label="Pound of long grain rice"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.beans}
-                onChange={handleGroceriesChange}
-                name="beans"
-              />
-            }
-            label="2 Pounds of pinto beans"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.cheese}
-                onChange={handleGroceriesChange}
-                name="cheese"
-              />
-            }
-            label="12oz American cheese singles"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.beef}
-                onChange={handleGroceriesChange}
-                name="beef"
-              />
-            }
-            label="Pound of ground beef"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.hotdogs}
-                onChange={handleGroceriesChange}
-                name="hotdogs"
-              />
-            }
-            label="8 count hot dogs"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.lunchMeat}
-                onChange={handleGroceriesChange}
-                name="lunchMeat"
-              />
-            }
-            label="Turkey lunch meat"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.fruit}
-                onChange={handleGroceriesChange}
-                name="fruit"
-              />
-            }
-            label="Fresh or canned fruit"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.butter}
-                onChange={handleGroceriesChange}
-                name="butter"
-              />
-            }
-            label="Pound of unsalted butter"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.peanutButter}
-                onChange={handleGroceriesChange}
-                name="peanutButter"
-              />
-            }
-            label="Peanut butter"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={groceries.jelly}
-                onChange={handleGroceriesChange}
-                name="jelly"
-              />
-            }
-            label="Jelly"
-          />
-        </FormGroup>
-      </FormControl>
-    </Card>
-  );
-
-  const clothingCard = (
-    <Card style={cardStyle}>
-      {" "}
-      <CardHeader title="Clothing" titleTypographyProps={{ variant: "h6" }} />
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          {" "}
-          <FormControl>
-            <Typography>What type of clothing do you need?</Typography>
-            <TextField
-              required
-              value={clothingType}
-              onChange={(changeEvent: any) =>
-                setClothingType(changeEvent.target.value)
-              }
-            ></TextField>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          {" "}
-          <FormControl>
-            <Typography>What size clothing do you need?</Typography>
-            <TextField
-              required
-              value={clothingSize}
-              onChange={(changeEvent: any) =>
-                setClothingSize(changeEvent.target.value)
-              }
-            ></TextField>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Card>
-  );
-  const furnitureCard = (
-    <Card style={cardStyle}>
-      {" "}
-      <CardHeader title="Furniture" titleTypographyProps={{ variant: "h6" }} />
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          {" "}
-          <FormControl>
-            <Typography>What type of furniture do you need?</Typography>
-            <TextField
-              required
-              value={furnitureType}
-              onChange={(changeEvent: any) =>
-                setFurnitureType(changeEvent.target.value)
-              }
-            ></TextField>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Card>
-  );
-
-  const jobTrainingCard = (
-    <Card style={cardStyle}>
-      <CardHeader
-        title="Job Training"
-        titleTypographyProps={{ variant: "h6" }}
-      />
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography>Do you need help with your resume?</Typography>
-          <RadioGroup
-            value={jobTraining.resumeHelp}
-            onChange={(changeEvent: any) =>
-              setJobTraining({
-                ...jobTraining,
-                resumeHelp: changeEvent.target.value,
-              })
-            }
-          >
-            <FormControlLabel
-              value="yes"
-              control={<Radio required={true} />}
-              label="Yes"
-            />
-            <FormControlLabel
-              value="no"
-              control={<Radio required={true} />}
-              label="No"
-            />
-          </RadioGroup>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>Do you need help writing a cover letter?</Typography>
-          <RadioGroup
-            value={jobTraining.coverLetterHelp}
-            onChange={(changeEvent: any) =>
-              setJobTraining({
-                ...jobTraining,
-                coverLetterHelp: changeEvent.target.value,
-              })
-            }
-          >
-            <FormControlLabel
-              value="yes"
-              control={<Radio required={true} />}
-              label="Yes"
-            />
-            <FormControlLabel
-              value="no"
-              control={<Radio required={true} />}
-              label="No"
-            />
-          </RadioGroup>
-        </Grid>
-      </Grid>
-    </Card>
-  );
   const housingCard = (
     <Card style={cardStyle}>
       <CardHeader
@@ -785,130 +437,27 @@ export const NeedRequestForm = () => {
           </Grid>
         </Grid>
         <Grid item>
-          <Typography>I would like additional help with housing</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={housingHelp == RadioButtonState.YES}
+                onChange={(event) =>
+                  setHousingHelp(
+                    event.target.checked
+                      ? RadioButtonState.YES
+                      : RadioButtonState.NO
+                  )
+                }
+                name="housingHelp"
+              />
+            }
+            label="I would like additional help with housing"
+          />
         </Grid>
       </Grid>
     </Card>
   );
 
-  const carRepairCard = (
-    <Card style={cardStyle}>
-      <CardHeader
-        title="Car Maintenence/Repair"
-        titleTypographyProps={{ variant: "h6" }}
-      />
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography>
-            Serve Reedley can only help with minor maintenance and repairs.
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <Typography>
-              Please describe the work needed on your vehicle.
-            </Typography>
-            <TextField
-              value={carRepairDetails}
-              onChange={(changeEvent: any) =>
-                setCarRepairDetails(changeEvent.target.value)
-              }
-              required
-            ></TextField>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Card>
-  );
-
-  const homeRepairCard = (
-    <Card style={cardStyle}>
-      <CardHeader
-        title="Home Maintenance/Repair"
-        titleTypographyProps={{ variant: "h6" }}
-      />
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography>
-            Serve Reedley can only help with minor maintenance and repairs.
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={homeRepairDetails.plumbing}
-                    onChange={handleHomeRepair}
-                    name="plumbing"
-                  />
-                }
-                label="Plumbing"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={homeRepairDetails.electrical}
-                    onChange={handleHomeRepair}
-                    name="electrical"
-                  />
-                }
-                label="Electrical"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={homeRepairDetails.painting}
-                    onChange={handleHomeRepair}
-                    name="painting"
-                  />
-                }
-                label="Painting"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={homeRepairDetails.yardwork}
-                    onChange={handleHomeRepair}
-                    name="yardwork"
-                  />
-                }
-                label="Yard Work"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={homeRepairDetails.other}
-                    onChange={handleHomeRepair}
-                    name="other"
-                  />
-                }
-                label="Other?"
-              />
-            </FormGroup>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControl>
-            <Typography>
-              Please describe the work needed on your home.
-            </Typography>
-            <TextField
-              value={homeRepairDetails.details}
-              onChange={(changeEvent: any) =>
-                setHomeRepairDetails({
-                  ...homeRepairDetails,
-                  details: changeEvent.target.value,
-                })
-              }
-              required
-            ></TextField>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Card>
-  );
   const otherNeedCard = <Card style={cardStyle}>Other</Card>;
   return (
     <Container>
@@ -956,20 +505,49 @@ export const NeedRequestForm = () => {
           </Grid>
           <Grid item>{needRequestCard(needType, handleNeedTypeChange)}</Grid>
           {(needType.meals || needType.groceries) && (
-            <Grid item>{foodInfoCard}</Grid>
+            <Grid item>
+              {foodInfoCard(needType.meals, foodInfo, handleFoodInfoChange)}
+            </Grid>
           )}
-          {needType.groceries && <Grid item>{groceriesCard}</Grid>}
+          {needType.groceries && (
+            <Grid item>{groceriesCard(groceries, handleGroceriesChange)}</Grid>
+          )}
           {needType.moving && (
             <Grid item>
               {movingCard(moving, handleMovingChange, handleMovingConditions)}
             </Grid>
           )}
-          {needType.jobTraining && <Grid item>{jobTrainingCard}</Grid>}
-          {needType.carRepair && <Grid item>{carRepairCard}</Grid>}
-          {needType.homeRepair && <Grid item>{homeRepairCard}</Grid>}
+          {needType.jobTraining && (
+            <Grid item>{jobTrainingCard(jobTraining, setJobTraining)}</Grid>
+          )}
+          {needType.carRepair && (
+            <Grid item>
+              {carRepairCard(carRepairDetails, setCarRepairDetails)}
+            </Grid>
+          )}
+          {needType.homeRepair && (
+            <Grid item>
+              {homeRepairCard(
+                homeRepairDetails,
+                handleHomeRepair,
+                setHomeRepairDetails
+              )}
+            </Grid>
+          )}
           {needType.housing && <Grid item>{housingCard}</Grid>}
-          {needType.clothing && <Grid item>{clothingCard}</Grid>}
-          {needType.furniture && <Grid item>{furnitureCard}</Grid>}
+          {needType.clothing && (
+            <Grid item>
+              {clothingCard(
+                clothingType,
+                clothingSize,
+                setClothingType,
+                setClothingSize
+              )}
+            </Grid>
+          )}
+          {needType.furniture && (
+            <Grid item>{furnitureCard(furnitureType, setFurnitureType)}</Grid>
+          )}
           {needType.other && <Grid item>{otherNeedCard}</Grid>}
           <Grid item>
             <Button type="submit">Submit</Button>
