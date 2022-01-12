@@ -348,7 +348,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                 titleTypographyProps={{ variant: "h6" }}
               />
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} style={{ padding: 4 }}>
                 {requestData.note?.map((note, index) => {
                   return (
                     <Grid item xs={12}>
@@ -358,18 +358,18 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                     </Grid>
                   );
                 })}
-              </Grid>
-              <Grid xs={12}>
-                <TextField
-                  fullWidth
-                  value={currentNote}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setCurrentNote(e.currentTarget.value);
-                  }}
-                />
-                <Button variant="outlined" onClick={handleNewNote}>
-                  Add Note
-                </Button>
+                <Grid xs={12}>
+                  <TextField
+                    fullWidth
+                    value={currentNote}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setCurrentNote(e.currentTarget.value);
+                    }}
+                  />
+                  <Button variant="outlined" onClick={handleNewNote}>
+                    Add Note
+                  </Button>
+                </Grid>
               </Grid>
             </Card>
           </Grid>
