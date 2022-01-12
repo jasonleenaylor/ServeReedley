@@ -5,6 +5,7 @@ import { NeedRequestForm } from "./needRequestForm";
 import NeedRequestTable from "./NeedRequestTable";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import theme from "./theme";
+import NeedSubmitted from "./NeedSubmitted";
 
 export default function App() {
   return (
@@ -23,6 +24,9 @@ export default function App() {
                 <li>
                   <Link to="/requests">View Current Needs</Link>
                 </li>
+                <li>
+                  <Link to="/need-submitted">Form Completed</Link>
+                </li>
               </ul>
             </nav>
 
@@ -31,6 +35,9 @@ export default function App() {
             <Switch>
               <Route path="/request-need">
                 <NeedRequestForm />
+              </Route>
+              <Route path="/need-submitted">
+                <NeedSubmitted />
               </Route>
               <Route path="/requests">
                 <NeedRequestTable />

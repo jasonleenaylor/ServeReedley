@@ -57,8 +57,10 @@ import {
   needRequestCard,
   otherNeedCard,
 } from "./needFormCards";
+import { useHistory } from "react-router-dom";
 
 export const NeedRequestForm = () => {
+  const history = useHistory();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -293,8 +295,8 @@ export const NeedRequestForm = () => {
       if (needType.furniture) {
         request.furnitureType = furnitureType;
       }
-      alert("Request Submitted.");
       await API.graphql(graphqlOperation(createRequest, { input: request }));
+      history.push("/need-submitted");
     } catch (err) {
       alert("error: " + JSON.stringify(err));
     }
