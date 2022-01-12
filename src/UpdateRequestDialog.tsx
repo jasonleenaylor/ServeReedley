@@ -25,9 +25,13 @@ import {
   CardHeader,
   Checkbox,
   Container,
+  FormControl,
   FormControlLabel,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   TextField,
 } from "@material-ui/core";
 import PhoneInput from "react-phone-input-2";
@@ -81,6 +85,36 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
       <DialogTitle>Update Request Information</DialogTitle>
       <Container>
         <Grid container direction="column" justifyContent="center" spacing={2}>
+          <Grid item>
+            <Card style={cardStyle}>
+              <CardHeader
+                title="Status"
+                titleTypographyProps={{ variant: "h6" }}
+              />
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="status-select"
+                  value={requestData.status}
+                  label="Status"
+                  onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+                    setRequestData({
+                      ...requestData,
+                      status: event.target.value as RequestStatus,
+                    });
+                  }}
+                >
+                  <MenuItem value={RequestStatus.NEW}>New</MenuItem>
+                  <MenuItem value={RequestStatus.INPROGRESS}>
+                    In Progress
+                  </MenuItem>
+                  <MenuItem value={RequestStatus.FULFILLED}>
+                    Fulfilled!
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Card>
+          </Grid>
           <Grid item>
             {nameCard(
               requestData.firstName,

@@ -58,7 +58,11 @@ function NeedRequestTable() {
     { title: "Preferred Contact Time", field: "preferredContactTime" },
     { title: "Lead Source", field: "leadSource" },
     { title: "Status", field: "status" },
-    { title: "Note", field: "note" },
+    {
+      title: "Note",
+      field: "note",
+      render: (rowData) => rowData.note?.join(", "),
+    },
     {
       title: "Need Reason(s)",
       field: "needReason",
@@ -312,6 +316,7 @@ function needUpdateFromNeedReqData(value: NeedRequestType): UpdateRequestInput {
     lastName: value.lastName,
     note: value.note,
     needTypes: value.needTypes,
+    status: value.status,
   };
 }
 
