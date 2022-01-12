@@ -20,6 +20,8 @@ import {
   NeedRequestType,
 } from "./needRequestTypes";
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
+import { Grid, IconButton, Paper, Typography } from "@material-ui/core";
+import theme from "./theme";
 
 function NeedRequestTable() {
   const [requests, setRequests] = useState([]);
@@ -45,6 +47,7 @@ function NeedRequestTable() {
         );
       },
     },
+    { title: "Status", field: "status" },
     { title: "Date Of Request", field: "dateOfRequest", type: "datetime" },
     { title: "First Name", field: "firstName" },
     { title: "Last Name", field: "lastName" },
@@ -57,12 +60,6 @@ function NeedRequestTable() {
     { title: "Specific Need", field: "specificNeed" },
     { title: "Preferred Contact Time", field: "preferredContactTime" },
     { title: "Lead Source", field: "leadSource" },
-    { title: "Status", field: "status" },
-    {
-      title: "Note",
-      field: "note",
-      render: (rowData) => rowData.note?.join(", "),
-    },
     {
       title: "Need Reason(s)",
       field: "needReason",
@@ -273,34 +270,48 @@ function NeedRequestTable() {
 
   return (
     <div className="App">
-      {
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="Add" />
-          <input type="submit" value="Submit" />
-        </form>
-      }
       <div>
         <MaterialTable<any>
           columns={columns}
           icons={tableIcons}
           data={requests}
+          detailPanel={[
+            {
+              tooltip: "Show Notes",
+              render: (row: any) => {
+                return (
+                  <div
+                    style={{
+                      textAlign: "left",
+                    }}
+                  >
+                    {
+                      <Grid container spacing={2}>
+                        {row.rowData.note?.map((note: any) => {
+                          return (
+                            <Grid item xs={12}>
+                              <Paper
+                                style={{
+                                  padding: theme.spacing(3),
+                                  width: 350,
+                                }}
+                              >
+                                <Typography>{note}</Typography>
+                              </Paper>
+                            </Grid>
+                          );
+                        })}
+                      </Grid>
+                    }
+                  </div>
+                );
+              },
+            },
+          ]}
           title="Need Requests"
-          options={{ filtering: true }}
-          // editable={{
-          //   onRowUpdate: (
-          //     newData: ListRequestsQuery,
-          //     oldData: ListRequestsQuery
-          //   ) =>
-          //     new Promise(async (resolve, reject) => {
-          //       await props
-          //         .onRowUpdate(newData, oldData)
-          //         .then(resolve)
-          //         .catch((reason) => {
-          //           alert(translate(reason));
-          //           reject(reason);
-          //         });
-          //     }),
-          // }}
+          options={{
+            filtering: true,
+          }}
         />
       </div>
       <span style={{ width: "20%" }} />
