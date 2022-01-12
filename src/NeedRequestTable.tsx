@@ -305,7 +305,14 @@ function NeedRequestTable() {
   );
 }
 
-export default withAuthenticator(NeedRequestTable);
 function needUpdateFromNeedReqData(value: NeedRequestType): UpdateRequestInput {
-  return { id: value.id, firstName: value.firstName, lastName: value.lastName };
+  return {
+    id: value.id,
+    firstName: value.firstName,
+    lastName: value.lastName,
+    note: value.note,
+    needTypes: value.needTypes,
+  };
 }
+
+export default withAuthenticator(NeedRequestTable);

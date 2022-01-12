@@ -27,6 +27,7 @@ import {
   Container,
   FormControlLabel,
   Grid,
+  Paper,
   TextField,
 } from "@material-ui/core";
 import PhoneInput from "react-phone-input-2";
@@ -47,6 +48,7 @@ import {
   needReasonCard,
   needRequestCard,
 } from "./needFormCards";
+import theme from "./theme";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -58,10 +60,19 @@ export interface SimpleDialogProps {
 
 function UpdateRequestDialog(props: SimpleDialogProps) {
   const [requestData, setRequestData] = React.useState(props.requestData);
+  const [currentNote, setCurrentNote] = React.useState("");
   const { onClose, open } = props;
 
   const handleClose = () => {
     onClose(requestData);
+  };
+
+  const handleNewNote = () => {
+    if (!requestData.note) {
+      requestData.note = [];
+    }
+    requestData.note.push(currentNote);
+    setCurrentNote("");
   };
   const cardStyle = { padding: 12 };
 
@@ -103,7 +114,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                 })
             )}
           </Grid>
-          <Grid>
+          <Grid item>
             {forYouOrOtherCard(
               requestData.selfOrOtherInfo.forSelf
                 ? RadioButtonState.YES
@@ -111,7 +122,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               (value: RadioButtonState) => {}
             )}
           </Grid>
-          <Grid>
+          <Grid item>
             {requestData.selfOrOtherInfo.forSelf &&
               forSelfDetailsCard(
                 requestData.selfOrOtherInfo.usedOtherResources
@@ -122,7 +133,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                 (value: string) => {}
               )}
           </Grid>
-          <Grid>
+          <Grid item>
             {!requestData.selfOrOtherInfo.forSelf &&
               forOtherDetailsCard(
                 requestData.selfOrOtherInfo.requestFor!,
@@ -140,7 +151,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                 (value: RadioButtonState) => {}
               )}
           </Grid>
-          <Grid>
+          <Grid item>
             {needReasonCard(
               {
                 illness: requestData.needReason.includes(NeedReason.ILLNESS),
@@ -152,35 +163,38 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               (value: React.ChangeEvent<HTMLInputElement>) => {}
             )}
           </Grid>
-          <Grid>
+          <Grid item>
             {needRequestCard(
               needTypeArrayToBooleans(requestData),
               (event: React.ChangeEvent<HTMLInputElement>) => {
-                requestData.needTypes = getNeedTypes({
-                  ...needTypeArrayToBooleans(requestData),
-                  [event.target.name]: event.target.checked,
+                setRequestData({
+                  ...requestData,
+                  needTypes: getNeedTypes({
+                    ...needTypeArrayToBooleans(requestData),
+                    [event.target.name]: event.target.checked,
+                  }),
                 });
               }
             )}
           </Grid>
-          <Grid>
-            {requestData.needTypes?.includes(NeedType.MEALS) ||
-              (requestData.needTypes?.includes(NeedType.GROCERIES) &&
-                foodInfoCard(
-                  requestData.needTypes?.includes(NeedType.MEALS) ||
-                    requestData.needTypes?.includes(NeedType.GROCERIES),
-                  {
-                    familyMembers: requestData.foodRequest?.familyMembers!,
-                    children: requestData.foodRequest?.children || "",
-                    haveAllergies: requestData.foodRequest?.haveAllergies
-                      ? RadioButtonState.YES
-                      : RadioButtonState.NO,
-                    allergies: requestData.foodRequest?.allergies || "",
-                  },
-                  (newFoodInfo: {}) => {}
-                ))}{" "}
+          <Grid item>
+            {(requestData.needTypes?.includes(NeedType.GROCERIES) ||
+              requestData.needTypes?.includes(NeedType.MEALS)) &&
+              foodInfoCard(
+                requestData.needTypes?.includes(NeedType.MEALS) ||
+                  requestData.needTypes?.includes(NeedType.GROCERIES),
+                {
+                  familyMembers: requestData.foodRequest?.familyMembers!,
+                  children: requestData.foodRequest?.children || "",
+                  haveAllergies: requestData.foodRequest?.haveAllergies
+                    ? RadioButtonState.YES
+                    : RadioButtonState.NO,
+                  allergies: requestData.foodRequest?.allergies || "",
+                },
+                (newFoodInfo: {}) => {}
+              )}{" "}
           </Grid>
-          <Grid>
+          <Grid item>
             {requestData.needTypes.includes(NeedType.GROCERIES) &&
               groceriesCard(
                 (requestData.foodRequest?.groceries as IGroceriesType) ||
@@ -284,6 +298,38 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               )}
             </Grid>
           )}
+          <Grid item>
+            <Card style={cardStyle}>
+              <CardHeader
+                title="Notes"
+                titleTypographyProps={{ variant: "h6" }}
+              />
+
+              <Grid container spacing={2}>
+                {requestData.note?.map((note, index) => {
+                  return (
+                    <Grid item xs={12}>
+                      <Paper style={{ padding: theme.spacing(3) }}>
+                        <Typography>{note}</Typography>
+                      </Paper>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+              <Grid xs={12}>
+                <TextField
+                  fullWidth
+                  value={currentNote}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setCurrentNote(e.currentTarget.value);
+                  }}
+                />
+                <Button variant="outlined" onClick={handleNewNote}>
+                  Add Note
+                </Button>
+              </Grid>
+            </Card>
+          </Grid>
         </Grid>
       </Container>
     </Dialog>
