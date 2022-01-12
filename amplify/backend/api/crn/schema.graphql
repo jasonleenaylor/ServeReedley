@@ -28,6 +28,7 @@ type Request @model {
   needTypes: [NeedType]!
   status: RequestStatus!
   note: [String]
+  otherNeeds: String
   needFulfiller: String
   dateFulfilled: String
   followUp: String

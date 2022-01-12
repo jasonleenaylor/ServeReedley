@@ -95,6 +95,7 @@ export const createRequest = /* GraphQL */ `
       needTypes
       status
       note
+      otherNeeds
       needFulfiller
       dateFulfilled
       followUp
@@ -196,6 +197,7 @@ export const updateRequest = /* GraphQL */ `
       needTypes
       status
       note
+      otherNeeds
       needFulfiller
       dateFulfilled
       followUp
@@ -297,6 +299,7 @@ export const deleteRequest = /* GraphQL */ `
       needTypes
       status
       note
+      otherNeeds
       needFulfiller
       dateFulfilled
       followUp

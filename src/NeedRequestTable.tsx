@@ -154,6 +154,10 @@ function NeedRequestTable() {
       title: "Furniture Dimensions",
       field: "furnitureSize",
     },
+    {
+      title: "Other Needs",
+      field: "otherNeeds",
+    },
     { title: "Need Fulfiller", field: "needFulfiller" },
     { title: "Date Fulfilled", field: "dateFulfilled", type: "datetime" },
     { title: "Follow Up", field: "followUp" },

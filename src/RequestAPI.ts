@@ -28,6 +28,7 @@ export type CreateRequestInput = {
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
   note?: Array< string | null > | null,
+  otherNeeds?: string | null,
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
@@ -98,6 +99,7 @@ export type ModelRequestConditionInput = {
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
   note?: ModelStringInput | null,
+  otherNeeds?: ModelStringInput | null,
   needFulfiller?: ModelStringInput | null,
   dateFulfilled?: ModelStringInput | null,
   followUp?: ModelStringInput | null,
@@ -220,6 +222,7 @@ export type Request = {
   needTypes: Array< NeedType | null >,
   status: RequestStatus,
   note?: Array< string | null > | null,
+  otherNeeds?: string | null,
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
@@ -326,6 +329,7 @@ export type UpdateRequestInput = {
   needTypes?: Array< NeedType | null > | null,
   status?: RequestStatus | null,
   note?: Array< string | null > | null,
+  otherNeeds?: string | null,
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
@@ -360,6 +364,7 @@ export type ModelSelfOrOtherInfoConditionInput = {
 };
 
 export type UpdateSelfOrOtherInfoInput = {
+  id: string,
   forSelf?: boolean | null,
   usedOtherResources?: boolean | null,
   otherResources?: string | null,
@@ -391,6 +396,7 @@ export type ModelFoodInfoConditionInput = {
 };
 
 export type UpdateFoodInfoInput = {
+  id: string,
   familyMembers?: number | null,
   children?: string | null,
   haveAllergies?: boolean | null,
@@ -429,6 +435,7 @@ export type ModelMovingInfoConditionInput = {
 };
 
 export type UpdateMovingInfoInput = {
+  id: string,
   items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
@@ -482,6 +489,7 @@ export type ModelGroceriesConditionInput = {
 };
 
 export type UpdateGroceriesInput = {
+  id: string,
   milk?: boolean | null,
   eggs?: boolean | null,
   bread?: boolean | null,
@@ -525,6 +533,7 @@ export type ModelHomeRepairTypeConditionInput = {
 };
 
 export type UpdateHomeRepairTypeInput = {
+  id: string,
   plumbing?: boolean | null,
   electrical?: boolean | null,
   painting?: boolean | null,
@@ -563,6 +572,7 @@ export type ModelRequestFilterInput = {
   needTypes?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
   note?: ModelStringInput | null,
+  otherNeeds?: ModelStringInput | null,
   needFulfiller?: ModelStringInput | null,
   dateFulfilled?: ModelStringInput | null,
   followUp?: ModelStringInput | null,
@@ -589,7 +599,7 @@ export type ModelIDInput = {
 
 export type ModelRequestConnection = {
   __typename: "ModelRequestConnection",
-  items:  Array<Request >,
+  items:  Array<Request | null >,
   nextToken?: string | null,
 };
 
@@ -606,7 +616,7 @@ export type ModelSelfOrOtherInfoFilterInput = {
 
 export type ModelSelfOrOtherInfoConnection = {
   __typename: "ModelSelfOrOtherInfoConnection",
-  items:  Array<SelfOrOtherInfo >,
+  items:  Array<SelfOrOtherInfo | null >,
   nextToken?: string | null,
 };
 
@@ -622,7 +632,7 @@ export type ModelFoodInfoFilterInput = {
 
 export type ModelFoodInfoConnection = {
   __typename: "ModelFoodInfoConnection",
-  items:  Array<FoodInfo >,
+  items:  Array<FoodInfo | null >,
   nextToken?: string | null,
 };
 
@@ -642,7 +652,7 @@ export type ModelMovingInfoFilterInput = {
 
 export type ModelMovingInfoConnection = {
   __typename: "ModelMovingInfoConnection",
-  items:  Array<MovingInfo >,
+  items:  Array<MovingInfo | null >,
   nextToken?: string | null,
 };
 
@@ -668,7 +678,7 @@ export type ModelGroceriesFilterInput = {
 
 export type ModelGroceriesConnection = {
   __typename: "ModelGroceriesConnection",
-  items:  Array<Groceries >,
+  items:  Array<Groceries | null >,
   nextToken?: string | null,
 };
 
@@ -686,7 +696,7 @@ export type ModelHomeRepairTypeFilterInput = {
 
 export type ModelHomeRepairTypeConnection = {
   __typename: "ModelHomeRepairTypeConnection",
-  items:  Array<HomeRepairType >,
+  items:  Array<HomeRepairType | null >,
   nextToken?: string | null,
 };
 
@@ -790,6 +800,7 @@ export type CreateRequestMutation = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
@@ -898,6 +909,7 @@ export type UpdateRequestMutation = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
@@ -1006,6 +1018,7 @@ export type DeleteRequestMutation = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
@@ -1494,6 +1507,7 @@ export type GetRequestQuery = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
@@ -1605,12 +1619,13 @@ export type ListRequestsQuery = {
       needTypes: Array< NeedType | null >,
       status: RequestStatus,
       note?: Array< string | null > | null,
+      otherNeeds?: string | null,
       needFulfiller?: string | null,
       dateFulfilled?: string | null,
       followUp?: string | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -1652,7 +1667,7 @@ export type ListSelfOrOtherInfosQuery = {
       requestIsKnown?: boolean | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -1732,7 +1747,7 @@ export type ListFoodInfosQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -1780,7 +1795,7 @@ export type ListMovingInfosQuery = {
       liabilityAck?: boolean | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -1840,7 +1855,7 @@ export type ListGroceriessQuery = {
       jelly?: boolean | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -1884,7 +1899,7 @@ export type ListHomeRepairTypesQuery = {
       details?: string | null,
       createdAt: string,
       updatedAt: string,
-    } >,
+    } | null >,
     nextToken?: string | null,
   } | null,
 };
@@ -1984,6 +1999,7 @@ export type OnCreateRequestSubscription = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
@@ -2087,6 +2103,7 @@ export type OnUpdateRequestSubscription = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
@@ -2190,6 +2207,7 @@ export type OnDeleteRequestSubscription = {
     needTypes: Array< NeedType | null >,
     status: RequestStatus,
     note?: Array< string | null > | null,
+    otherNeeds?: string | null,
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,

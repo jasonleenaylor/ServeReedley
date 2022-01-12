@@ -1136,3 +1136,24 @@ export function homeRepairCard(
     </Card>
   );
 }
+
+export function otherNeedCard(
+  other: string,
+  setOther: (other: string) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader title="Other" titleTypographyProps={{ variant: "h6" }} />
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <TextField
+            label="Discribe your other needs"
+            onChange={(changeEvent: any) => setOther(changeEvent.target.value)}
+            value={other}
+            required
+          ></TextField>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+}

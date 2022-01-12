@@ -51,6 +51,7 @@ import {
   nameCard,
   needReasonCard,
   needRequestCard,
+  otherNeedCard,
 } from "./needFormCards";
 import theme from "./theme";
 
@@ -329,6 +330,14 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               {furnitureCard(
                 requestData.furnitureType || "",
                 (type) => (requestData.furnitureType = type)
+              )}
+            </Grid>
+          )}
+          {requestData.needTypes.includes(NeedType.OTHER) && (
+            <Grid item>
+              {otherNeedCard(
+                requestData.otherNeeds || "",
+                (otherNeeds) => (requestData.otherNeeds = otherNeeds)
               )}
             </Grid>
           )}

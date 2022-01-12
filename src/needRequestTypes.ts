@@ -210,6 +210,7 @@ export interface NeedRequestGQL {
   needTypes: Array<NeedType | null>;
   status: RequestStatus;
   note?: Array<string | null> | null;
+  otherNeeds?: string | null;
   needFulfiller?: string | null;
   dateFulfilled?: string | null;
   followUp?: string | null;
@@ -318,6 +319,7 @@ export interface NeedRequestType {
   needReason: Array<NeedReason | null>;
   needTypes: Array<NeedType | null>;
   status: RequestStatus;
+  otherNeeds?: string | null;
   note?: Array<string> | null;
   needFulfiller?: string | null;
   dateFulfilled?: string | null;

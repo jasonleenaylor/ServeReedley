@@ -5,23 +5,13 @@ import {
   CardHeader,
   Checkbox,
   Container,
-  createStyles,
-  FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
-  Paper,
-  Radio,
-  RadioGroup,
-  TextField,
-  Theme,
   Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@mui/material";
 import { API, graphqlOperation } from "aws-amplify";
 import { FormEvent, useState } from "react";
 import "react-phone-input-2/lib/material.css";
-import PhoneInput from "react-phone-input-2";
 import {
   createFoodInfo,
   createGroceries,
@@ -30,15 +20,8 @@ import {
   createRequest,
   createSelfOrOtherInfo,
 } from "./graphql/mutations";
+import { LeadSource, NeedReason, RequestStatus } from "./RequestAPI";
 import {
-  FoodInfo,
-  LeadSource,
-  NeedReason,
-  NeedType,
-  RequestStatus,
-} from "./RequestAPI";
-import {
-  IGroceriesType,
   defaultGroceries,
   defaultMoving,
   RadioButtonState,
@@ -72,6 +55,7 @@ import {
   nameCard,
   needReasonCard,
   needRequestCard,
+  otherNeedCard,
 } from "./needFormCards";
 
 export const NeedRequestForm = () => {
@@ -110,6 +94,7 @@ export const NeedRequestForm = () => {
   const [housingHelp, setHousingHelp] = useState<RadioButtonState>(
     RadioButtonState.UNSET
   );
+  const [otherNeeds, setOtherNeeds] = useState("");
 
   const handleNeedReasonChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -245,6 +230,7 @@ export const NeedRequestForm = () => {
       status: RequestStatus.NEW,
       housingHelp: housingHelp == RadioButtonState.YES,
       note: [],
+      otherNeeds: otherNeeds,
       needFulfiller: "",
       dateFulfilled: "",
       followUp: "",
@@ -458,7 +444,6 @@ export const NeedRequestForm = () => {
     </Card>
   );
 
-  const otherNeedCard = <Card style={cardStyle}>Other</Card>;
   return (
     <Container>
       <form onSubmit={handleSubmit}>
@@ -548,7 +533,9 @@ export const NeedRequestForm = () => {
           {needType.furniture && (
             <Grid item>{furnitureCard(furnitureType, setFurnitureType)}</Grid>
           )}
-          {needType.other && <Grid item>{otherNeedCard}</Grid>}
+          {needType.other && (
+            <Grid item>{otherNeedCard(otherNeeds, setOtherNeeds)}</Grid>
+          )}
           <Grid item>
             <Button type="submit">Submit</Button>
           </Grid>{" "}
