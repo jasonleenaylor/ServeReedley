@@ -1,16 +1,12 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import {
-  LeadSource,
-  ListRequestsQuery,
-  NeedReason,
-  NeedType,
-  RequestStatus,
-} from "./RequestAPI";
+import { NeedReason, NeedType, RequestStatus } from "./RequestAPI";
+import SaveIcon from "@mui/icons-material/Save";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Typography from "@mui/material/Typography";
-import { blue } from "@mui/material/colors";
 import {
   defaultGroceries,
   getNeedTypes,
@@ -21,20 +17,21 @@ import {
   RadioButtonState,
 } from "./needRequestTypes";
 import {
+  Box,
   Card,
   CardHeader,
   Checkbox,
   Container,
+  Fab,
   FormControl,
   FormControlLabel,
   Grid,
-  InputLabel,
+  IconButton,
   MenuItem,
   Paper,
   Select,
   TextField,
 } from "@material-ui/core";
-import PhoneInput from "react-phone-input-2";
 import {
   carRepairCard,
   clothingCard,
@@ -60,16 +57,24 @@ const emails = ["username@gmail.com", "user02@gmail.com"];
 export interface SimpleDialogProps {
   open: boolean;
   requestData: NeedRequestType;
-  onClose: (value: NeedRequestType) => void;
+  onClose: () => void;
+  onSave: (value: NeedRequestType) => void;
 }
 
 function UpdateRequestDialog(props: SimpleDialogProps) {
   const [requestData, setRequestData] = React.useState(props.requestData);
   const [currentNote, setCurrentNote] = React.useState("");
-  const { onClose, open } = props;
+  const { onClose, onSave, open } = props;
 
   const handleClose = () => {
-    onClose(requestData);
+    onClose();
+  };
+  const handleDlgClose = (event: any, reason: string) => {
+    if (reason && reason == "backdropClick") return;
+    handleClose();
+  };
+  const handleSave = () => {
+    onSave(requestData);
   };
 
   const handleNewNote = () => {
@@ -82,9 +87,26 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
   const cardStyle = { padding: 12 };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Update Request Information</DialogTitle>
+    <Dialog onClose={handleDlgClose} open={open}>
+      <DialogTitle id="id">
+        <Box display="flex" alignItems="center">
+          <Box flexGrow={1}>Update Need Request</Box>
+          <Box>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </DialogTitle>
       <Container>
+        <Fab
+          color="primary"
+          aria-label="add"
+          style={{ position: "fixed", top: 10, right: 10 }}
+          onClick={handleSave}
+        >
+          <SaveIcon />
+        </Fab>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
             <Card style={cardStyle}>
@@ -424,20 +446,25 @@ export default function UpdateRequestDialogButton(props: SimpleDialogProps) {
     setOpen(true);
   };
 
-  const handleClose = (value: NeedRequestType) => {
+  const handleSave = (value: NeedRequestType) => {
     setOpen(false);
-    props.onClose(value);
+    props.onSave(value);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    props.onClose();
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Edit
-      </Button>
+      <IconButton onClick={handleClickOpen}>
+        <EditIcon />
+      </IconButton>
       <UpdateRequestDialog
         requestData={props.requestData}
         open={open}
         onClose={handleClose}
+        onSave={handleSave}
       />
     </div>
   );

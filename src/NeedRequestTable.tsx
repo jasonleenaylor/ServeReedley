@@ -20,10 +20,17 @@ import {
   NeedRequestType,
 } from "./needRequestTypes";
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
-import { Grid, IconButton, Paper, Typography } from "@material-ui/core";
+import {
+  Grid,
+  IconButton,
+  Paper,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
 import theme from "./theme";
 
 function NeedRequestTable() {
+  const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [requests, setRequests] = useState([]);
   const columns: Column<any>[] = [
     // Vernacular column
@@ -35,7 +42,10 @@ function NeedRequestTable() {
           <UpdateRequestDialogButton
             requestData={rowData}
             open={false}
-            onClose={async function (value: NeedRequestType) {
+            onClose={function () {
+              setSnackBarOpen(true);
+            }}
+            onSave={async function (value: NeedRequestType) {
               await API.graphql(
                 graphqlOperation(updateRequest, {
                   input: needUpdateFromNeedReqData(value),
@@ -243,35 +253,6 @@ function NeedRequestTable() {
     setRequests(apiData.data.listRequests.items);
   }
 
-  async function addNotes() {
-    let request = {
-      dateOfRequest: "12/06/2020",
-      firstName: "Teresa",
-      lastName: "Pulido",
-      address: "138 n Sunset Ave",
-      city: "Reedley",
-      zipCode: 93654,
-      phone: "(559) 213-5203",
-      email: null,
-      spanishOnly: true,
-      preferredContactTime: null,
-      request: "Clothing",
-      leadSource: LeadSource.OTHER,
-      leadOtherDetails: "I heard it on the grapevine",
-      needReason: [NeedReason.FINANCIAL, NeedReason.ILLNESS],
-      needTypes: [NeedType.GROCERIES],
-      status: RequestStatus.NEW,
-      note: "Testing api",
-    };
-    await API.graphql(graphqlOperation(createRequest, { input: request }));
-  }
-
-  const handleSubmit = async (event: any) => {
-    //  alert("need submitted: " + event.currentTarget.elements[0].value);
-    addNotes();
-    event.preventDefault();
-  };
-
   return (
     <div className="App">
       <div>
@@ -319,6 +300,12 @@ function NeedRequestTable() {
         />
       </div>
       <span style={{ width: "20%" }} />
+      <Snackbar
+        autoHideDuration={4000}
+        message="No changes made"
+        open={snackBarOpen}
+        onClose={() => setSnackBarOpen(false)}
+      />
       <AmplifySignOut />
     </div>
   );
