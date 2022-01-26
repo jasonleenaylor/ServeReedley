@@ -67,7 +67,9 @@ export function contactCard(
     <Card style={cardStyle}>
       <PhoneInput
         value={phone}
-        onChange={(changeEvent: any) => setPhone(changeEvent.value)}
+        onChange={(phone: any) => {
+          setPhone(phone);
+        }}
         disableCountryCode={true}
         disableCountryGuess={true}
         disableDropdown={true}
