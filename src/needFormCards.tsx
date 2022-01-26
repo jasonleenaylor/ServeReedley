@@ -72,7 +72,7 @@ export function contactCard(
         disableCountryGuess={true}
         disableDropdown={true}
         country={"us"}
-        placeholder={"(559) 555-5555"}
+        placeholder={""}
         inputProps={{
           autoComplete: "tel",
           required: true,
@@ -530,9 +530,17 @@ export function foodInfoCard(
 
 export function movingCard(
   moving: IMovingType,
-  handleMovingChange: (newMovingInfo: {}) => void,
-  handleMovingConditions: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleMovingChange: (newMovingInfo: IMovingType) => void
 ) {
+  const handleMovingConditions = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleMovingChange({
+      ...moving,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
   return (
     <Card style={cardStyle}>
       <CardHeader title="Moving" titleTypographyProps={{ variant: "h6" }} />
@@ -547,7 +555,10 @@ export function movingCard(
               required
               value={moving.items}
               onChange={(changeEvent: any) =>
-                handleMovingChange({ items: changeEvent.target.value })
+                handleMovingChange({
+                  ...moving,
+                  items: changeEvent.target.value,
+                })
               }
             ></TextField>
           </FormControl>
@@ -560,6 +571,7 @@ export function movingCard(
             value={moving.haveTransportation}
             onChange={(changeEvent: any) =>
               handleMovingChange({
+                ...moving,
                 haveTransportation: changeEvent.target.value,
               })
             }
@@ -583,6 +595,7 @@ export function movingCard(
               value={moving.withinRange}
               onChange={(changeEvent: any) => {
                 handleMovingChange({
+                  ...moving,
                   withinRange: changeEvent.target.value,
                 });
                 if (changeEvent.target.value.toLowerCase() !== "yes") {
@@ -614,6 +627,7 @@ export function movingCard(
             value={moving.haveSpecialConditions}
             onChange={(changeEvent: any) =>
               handleMovingChange({
+                ...moving,
                 haveSpecialConditions: changeEvent.target.value,
               })
             }
@@ -624,7 +638,7 @@ export function movingCard(
               label="Yes"
             />
             <FormControlLabel
-              value="No"
+              value="no"
               control={<Radio required={true} />}
               label="No"
             />
@@ -637,9 +651,9 @@ export function movingCard(
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={moving.driveway}
+                      checked={moving.steepDriveway}
                       onChange={handleMovingConditions}
-                      name="driveway"
+                      name="steepDriveway"
                     />
                   }
                   label="Steep Driveway"
@@ -683,6 +697,7 @@ export function movingCard(
                     value={moving.otherDetails}
                     onChange={(changeEvent: any) =>
                       handleMovingChange({
+                        ...moving,
                         otherDetails: changeEvent.target.value,
                       })
                     }
@@ -1147,7 +1162,7 @@ export function otherNeedCard(
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <TextField
-            label="Discribe your other needs"
+            label="Describe your other needs"
             onChange={(changeEvent: any) => setOther(changeEvent.target.value)}
             value={other}
             required

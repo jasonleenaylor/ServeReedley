@@ -3,21 +3,31 @@ import "./App.css";
 import { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { listRequests } from "./graphql/queries";
-import { createRequest, updateRequest } from "./graphql/mutations";
+import {
+  createMovingInfo,
+  createRequest,
+  updateMovingInfo,
+  updateRequest,
+} from "./graphql/mutations";
 import MaterialTable, { Column } from "@material-table/core";
 import tableIcons from "./tableIcons";
 import {
+  CreateMovingInfoInput,
   LeadSource,
   ListRequestsQuery,
   NeedReason,
   NeedType,
-  RequestStatus,
+  UpdateMovingInfoInput,
   UpdateRequestInput,
 } from "./RequestAPI";
 import {
+  CREATE_TABLE,
+  IGraphQLTable,
   IHomeRepairType,
+  IMovingType,
   MovingInfoGQL,
   NeedRequestType,
+  RadioButtonState,
 } from "./needRequestTypes";
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
 import {
@@ -48,7 +58,7 @@ function NeedRequestTable() {
             onSave={async function (value: NeedRequestType) {
               await API.graphql(
                 graphqlOperation(updateRequest, {
-                  input: needUpdateFromNeedReqData(value),
+                  input: await needUpdateFromNeedReqData(value),
                 })
               );
               fetchNotes();
@@ -311,7 +321,60 @@ function NeedRequestTable() {
   );
 }
 
-function needUpdateFromNeedReqData(value: NeedRequestType): UpdateRequestInput {
+function movingInfoCreateFromReqData(
+  value: IMovingType
+): CreateMovingInfoInput {
+  return {
+    items: value.items,
+    haveTransportation: value.haveTransportation == RadioButtonState.YES,
+    other: value.other,
+    otherDetails: value.otherDetails,
+    liabilityAck: value.liabilityAck,
+    stairs: value.stairs,
+    steepDriveway: value.steepDriveway,
+    unpavedRoad: value.unpavedRoad,
+  };
+}
+
+function movingInfoUpdateFromReqData(
+  value: IMovingType & IGraphQLTable
+): UpdateMovingInfoInput {
+  return {
+    id: value.id,
+    items: value.items,
+    haveTransportation: value.haveTransportation == RadioButtonState.YES,
+    other: value.other,
+    otherDetails: value.otherDetails,
+    liabilityAck: value.liabilityAck,
+    stairs: value.stairs,
+    steepDriveway: value.steepDriveway,
+    unpavedRoad: value.unpavedRoad,
+  };
+}
+
+async function needUpdateFromNeedReqData(
+  value: NeedRequestType
+): Promise<UpdateRequestInput> {
+  if (value.movingRequest) {
+    if (value.movingRequest.id == CREATE_TABLE) {
+      let newRow: any = await API.graphql(
+        graphqlOperation(createMovingInfo, {
+          input: movingInfoCreateFromReqData(value.movingRequest),
+        })
+      );
+      value.movingRequest.id = newRow.data.createMovingInfo.id;
+    } else if (value.movingRequest.id == "DELETE_TABLE") {
+      // delete the row from the table and set value.movingRequest to null
+    } else {
+      // update the row in the table
+      await API.graphql(
+        graphqlOperation(updateMovingInfo, {
+          input: movingInfoUpdateFromReqData(value.movingRequest),
+        })
+      );
+    }
+  }
+
   return {
     id: value.id,
     firstName: value.firstName,
@@ -319,6 +382,7 @@ function needUpdateFromNeedReqData(value: NeedRequestType): UpdateRequestInput {
     note: value.note,
     needTypes: value.needTypes,
     status: value.status,
+    requestMovingRequestId: value.movingRequest?.id,
   };
 }
 

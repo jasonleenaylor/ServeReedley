@@ -12,9 +12,12 @@ import {
   getNeedTypes,
   IGroceriesType,
   IHomeRepairType,
+  IMovingType,
   INeedTypes,
   NeedRequestType,
   RadioButtonState,
+  IGraphQLTable,
+  CREATE_TABLE,
 } from "./needRequestTypes";
 import {
   Box,
@@ -256,7 +259,10 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               groceriesCard(
                 (requestData.foodRequest?.groceries as IGroceriesType) ||
                   defaultGroceries,
-                (event: React.ChangeEvent<HTMLInputElement>) => {}
+                (event: React.ChangeEvent<HTMLInputElement>) => {
+                  if (!requestData.foodRequest) {
+                  }
+                }
               )}{" "}
           </Grid>
           {requestData.needTypes.includes(NeedType.MOVING) && (
@@ -269,16 +275,25 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                     ?.haveTransportation
                     ? RadioButtonState.YES
                     : RadioButtonState.NO,
-                  haveSpecialConditions: RadioButtonState.YES,
-                  driveway: requestData.movingRequest?.steepDriveway!,
+                  haveSpecialConditions: requestData.movingRequest
+                    ?.haveSpecialConditions
+                    ? RadioButtonState.YES
+                    : RadioButtonState.NO,
+                  steepDriveway: requestData.movingRequest?.steepDriveway!,
                   stairs: requestData.movingRequest?.stairs!,
                   unpavedRoad: requestData.movingRequest?.unpavedRoad!,
                   other: requestData.movingRequest?.other!,
                   otherDetails: requestData.movingRequest?.otherDetails!,
                   liabilityAck: true,
                 },
-                () => {},
-                () => {}
+                (newMovingInfo: IMovingType) => {
+                  let newInfo = editOrCreateMovingReq(
+                    newMovingInfo,
+                    requestData.movingRequest
+                  );
+                  let newRequest = { ...requestData, movingRequest: newInfo };
+                  setRequestData(newRequest);
+                }
               )}
             </Grid>
           )}
@@ -468,4 +483,26 @@ export default function UpdateRequestDialogButton(props: SimpleDialogProps) {
       />
     </div>
   );
+}
+function editOrCreateMovingReq(
+  newMovingInfo: IMovingType,
+  existingTable: IGraphQLTable | null | undefined
+): (IGraphQLTable & IMovingType) | null | undefined {
+  if (existingTable) {
+    return {
+      ...newMovingInfo,
+      __typename: existingTable.__typename,
+      createdAt: existingTable.createdAt,
+      updatedAt: existingTable.updatedAt,
+      id: existingTable.id,
+    };
+  } else {
+    return {
+      ...newMovingInfo,
+      __typename: "",
+      createdAt: "",
+      updatedAt: "",
+      id: CREATE_TABLE,
+    };
+  }
 }

@@ -37,6 +37,7 @@ import {
   getNeedTypes,
   defaultFoodInfo,
   IJobTraining,
+  IMovingType,
 } from "./needRequestTypes";
 import {
   carRepairCard,
@@ -114,15 +115,6 @@ export const NeedRequestForm = () => {
     });
   };
 
-  const handleMovingConditions = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setMoving({
-      ...moving,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
   const handleHomeRepair = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHomeRepairDetails({
       ...homeRepairDetails,
@@ -146,7 +138,7 @@ export const NeedRequestForm = () => {
     });
   };
 
-  const handleMovingChange = (newMovingInfo: {}) => {
+  const handleMovingChange = (newMovingInfo: IMovingType) => {
     setMoving({
       ...moving,
       ...newMovingInfo,
@@ -191,7 +183,7 @@ export const NeedRequestForm = () => {
     let movingInfo: MovingInfoGQL = {
       items: moving.items,
       haveTransportation: moving.haveTransportation === RadioButtonState.YES,
-      steepDriveway: moving.driveway,
+      steepDriveway: moving.steepDriveway,
       stairs: moving.stairs,
       unpavedRoad: moving.unpavedRoad,
       other: moving.other,
@@ -500,9 +492,7 @@ export const NeedRequestForm = () => {
             <Grid item>{groceriesCard(groceries, handleGroceriesChange)}</Grid>
           )}
           {needType.moving && (
-            <Grid item>
-              {movingCard(moving, handleMovingChange, handleMovingConditions)}
-            </Grid>
+            <Grid item>{movingCard(moving, handleMovingChange)}</Grid>
           )}
           {needType.jobTraining && (
             <Grid item>{jobTrainingCard(jobTraining, setJobTraining)}</Grid>

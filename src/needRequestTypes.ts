@@ -33,8 +33,8 @@ export interface IMovingType {
   withinRange: RadioButtonState;
   items: string;
   haveTransportation: RadioButtonState;
-  haveSpecialConditions: string;
-  driveway: boolean;
+  haveSpecialConditions: RadioButtonState;
+  steepDriveway: boolean;
   stairs: boolean;
   unpavedRoad: boolean;
   other: boolean;
@@ -120,8 +120,8 @@ export const defaultMoving: IMovingType = {
   withinRange: RadioButtonState.UNSET,
   items: "",
   haveTransportation: RadioButtonState.UNSET,
-  haveSpecialConditions: "",
-  driveway: false,
+  haveSpecialConditions: RadioButtonState.NO,
+  steepDriveway: false,
   stairs: false,
   unpavedRoad: false,
   other: false,
@@ -283,35 +283,11 @@ export interface NeedRequestType {
     createdAt: string;
     updatedAt: string;
   } | null;
-  movingRequest?: {
-    __typename: "MovingInfo";
-    id: string;
-    items?: string | null;
-    haveTransportation?: boolean | null;
-    steepDriveway?: boolean | null;
-    stairs?: boolean | null;
-    unpavedRoad?: boolean | null;
-    other?: boolean | null;
-    otherDetails?: string | null;
-    liabilityAck?: boolean | null;
-    createdAt: string;
-    updatedAt: string;
-  } | null;
+  movingRequest?: IMovingReqType | null;
   resumeHelp?: boolean | null;
   coverLetterHelp?: boolean | null;
   carRepairDetails?: string | null;
-  homeRepairType?: {
-    __typename: "HomeRepairType";
-    id: string;
-    plumbing?: boolean | null;
-    electrical?: boolean | null;
-    painting?: boolean | null;
-    yardwork?: boolean | null;
-    other?: boolean | null;
-    details?: string | null;
-    createdAt: string;
-    updatedAt: string;
-  } | null;
+  homeRepairType?: IHomeRepairReqType | null;
   clothingType?: string | null;
   clothingSize?: string | null;
   furnitureType?: string | null;
@@ -327,6 +303,19 @@ export interface NeedRequestType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IGraphQLTable {
+  __typename: string;
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type IHomeRepairReqType = IGraphQLTable & IHomeRepairType;
+
+type IMovingReqType = IGraphQLTable & IMovingType;
+
+export const CREATE_TABLE = "NEW_TABLE_NEEDED";
 
 export function getNeedTypes(needType: {
   meals: boolean;
