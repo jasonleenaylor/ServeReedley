@@ -322,11 +322,11 @@ function NeedRequestTable() {
 }
 
 function movingInfoCreateFromReqData(
-  value: IMovingType
+  value: MovingInfoGQL
 ): CreateMovingInfoInput {
   return {
     items: value.items,
-    haveTransportation: value.haveTransportation == RadioButtonState.YES,
+    haveTransportation: value.haveTransportation,
     other: value.other,
     otherDetails: value.otherDetails,
     liabilityAck: value.liabilityAck,
@@ -337,12 +337,12 @@ function movingInfoCreateFromReqData(
 }
 
 function movingInfoUpdateFromReqData(
-  value: IMovingType & IGraphQLTable
+  value: MovingInfoGQL & IGraphQLTable
 ): UpdateMovingInfoInput {
   return {
     id: value.id,
     items: value.items,
-    haveTransportation: value.haveTransportation == RadioButtonState.YES,
+    haveTransportation: value.haveTransportation,
     other: value.other,
     otherDetails: value.otherDetails,
     liabilityAck: value.liabilityAck,

@@ -18,6 +18,7 @@ import {
   RadioButtonState,
   IGraphQLTable,
   CREATE_TABLE,
+  IMovingReqType,
 } from "./needRequestTypes";
 import {
   Box,
@@ -67,6 +68,7 @@ export interface SimpleDialogProps {
 function UpdateRequestDialog(props: SimpleDialogProps) {
   const [requestData, setRequestData] = React.useState(props.requestData);
   const [currentNote, setCurrentNote] = React.useState("");
+  const [movingConditions, setMovingConditions] = React.useState(true);
   const { onClose, onSave, open } = props;
 
   const handleClose = () => {
@@ -275,8 +277,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                     ?.haveTransportation
                     ? RadioButtonState.YES
                     : RadioButtonState.NO,
-                  haveSpecialConditions: requestData.movingRequest
-                    ?.haveSpecialConditions
+                  haveSpecialConditions: movingConditions
                     ? RadioButtonState.YES
                     : RadioButtonState.NO,
                   steepDriveway: requestData.movingRequest?.steepDriveway!,
@@ -287,6 +288,9 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                   liabilityAck: true,
                 },
                 (newMovingInfo: IMovingType) => {
+                  setMovingConditions(
+                    newMovingInfo.haveSpecialConditions == RadioButtonState.YES
+                  );
                   let newInfo = editOrCreateMovingReq(
                     newMovingInfo,
                     requestData.movingRequest
@@ -487,10 +491,28 @@ export default function UpdateRequestDialogButton(props: SimpleDialogProps) {
 function editOrCreateMovingReq(
   newMovingInfo: IMovingType,
   existingTable: IGraphQLTable | null | undefined
-): (IGraphQLTable & IMovingType) | null | undefined {
+): IMovingReqType | null | undefined {
   if (existingTable) {
     return {
-      ...newMovingInfo,
+      items: newMovingInfo.items,
+      haveTransportation:
+        newMovingInfo.haveTransportation === RadioButtonState.YES,
+      unpavedRoad:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.unpavedRoad,
+      stairs:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.stairs,
+      steepDriveway:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.steepDriveway,
+      other:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.other,
+      otherDetails:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES
+          ? newMovingInfo.otherDetails
+          : "",
       __typename: existingTable.__typename,
       createdAt: existingTable.createdAt,
       updatedAt: existingTable.updatedAt,
@@ -498,7 +520,25 @@ function editOrCreateMovingReq(
     };
   } else {
     return {
-      ...newMovingInfo,
+      items: newMovingInfo.items,
+      haveTransportation:
+        newMovingInfo.haveTransportation === RadioButtonState.YES,
+      unpavedRoad:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.unpavedRoad,
+      stairs:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.stairs,
+      steepDriveway:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.steepDriveway,
+      other:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+        newMovingInfo.other,
+      otherDetails:
+        newMovingInfo.haveSpecialConditions === RadioButtonState.YES
+          ? newMovingInfo.otherDetails
+          : "",
       __typename: "",
       createdAt: "",
       updatedAt: "",

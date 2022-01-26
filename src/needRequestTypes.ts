@@ -313,7 +313,7 @@ export interface IGraphQLTable {
 
 type IHomeRepairReqType = IGraphQLTable & IHomeRepairType;
 
-type IMovingReqType = IGraphQLTable & IMovingType;
+export type IMovingReqType = IGraphQLTable & MovingInfoGQL;
 
 export const CREATE_TABLE = "NEW_TABLE_NEEDED";
 
