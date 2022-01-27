@@ -1,4 +1,3 @@
-import { isNonModelFieldType } from "@aws-amplify/datastore";
 import {
   Button,
   Card,
@@ -10,7 +9,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { API, graphqlOperation } from "aws-amplify";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import "react-phone-input-2/lib/material.css";
 import {
   createFoodInfo,
@@ -115,13 +114,6 @@ export const NeedRequestForm = () => {
     });
   };
 
-  const handleHomeRepair = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHomeRepairDetails({
-      ...homeRepairDetails,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
   const handleGroceriesChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -206,7 +198,7 @@ export const NeedRequestForm = () => {
       lastName: lastName,
       address: address,
       city: city,
-      zipCode: parseInt(zip) === NaN ? parseInt(zip) : null,
+      zipCode: isNaN(parseInt(zip)) ? parseInt(zip) : null,
       phone: phone,
       email: email,
       spanishOnly: true,
@@ -222,7 +214,7 @@ export const NeedRequestForm = () => {
       needReason: getReasons(needReason),
       needTypes: getNeedTypes(needType),
       status: RequestStatus.NEW,
-      housingHelp: housingHelp == RadioButtonState.YES,
+      housingHelp: housingHelp === RadioButtonState.YES,
       note: [],
       otherNeeds: otherNeeds,
       needFulfiller: "",
@@ -420,7 +412,7 @@ export const NeedRequestForm = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={housingHelp == RadioButtonState.YES}
+                checked={housingHelp === RadioButtonState.YES}
                 onChange={(event) =>
                   setHousingHelp(
                     event.target.checked
@@ -504,11 +496,7 @@ export const NeedRequestForm = () => {
           )}
           {needType.homeRepair && (
             <Grid item>
-              {homeRepairCard(
-                homeRepairDetails,
-                handleHomeRepair,
-                setHomeRepairDetails
-              )}
+              {homeRepairCard(homeRepairDetails, setHomeRepairDetails)}
             </Grid>
           )}
           {needType.housing && <Grid item>{housingCard}</Grid>}

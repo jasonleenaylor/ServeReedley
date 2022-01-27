@@ -4,25 +4,31 @@ import { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { listRequests } from "./graphql/queries";
 import {
+  createHomeRepairType,
   createMovingInfo,
   createRequest,
+  updateHomeRepairType,
   updateMovingInfo,
   updateRequest,
 } from "./graphql/mutations";
 import MaterialTable, { Column } from "@material-table/core";
 import tableIcons from "./tableIcons";
 import {
+  CreateHomeRepairTypeInput,
   CreateMovingInfoInput,
+  HomeRepairType,
   LeadSource,
   ListRequestsQuery,
   NeedReason,
   NeedType,
+  UpdateHomeRepairTypeInput,
   UpdateMovingInfoInput,
   UpdateRequestInput,
 } from "./RequestAPI";
 import {
   CREATE_TABLE,
   IGraphQLTable,
+  IHomeRepairReqType,
   IHomeRepairType,
   IMovingType,
   MovingInfoGQL,
@@ -336,6 +342,19 @@ function movingInfoCreateFromReqData(
   };
 }
 
+function homeRepairCreateFromReqData(
+  value: IHomeRepairReqType
+): CreateHomeRepairTypeInput {
+  return {
+    other: value.other,
+    painting: value.painting,
+    plumbing: value.plumbing,
+    yardwork: value.yardwork,
+    electrical: value.electrical,
+    details: value.details,
+  };
+}
+
 function movingInfoUpdateFromReqData(
   value: MovingInfoGQL & IGraphQLTable
 ): UpdateMovingInfoInput {
@@ -352,27 +371,46 @@ function movingInfoUpdateFromReqData(
   };
 }
 
+function homeRepairUpdateFromReqData(
+  value: IHomeRepairReqType
+): UpdateHomeRepairTypeInput {
+  return {
+    id: value.id,
+    other: value.other,
+    painting: value.painting,
+    plumbing: value.plumbing,
+    yardwork: value.yardwork,
+    electrical: value.electrical,
+    details: value.details,
+  };
+}
+
 async function needUpdateFromNeedReqData(
   value: NeedRequestType
 ): Promise<UpdateRequestInput> {
   if (value.movingRequest) {
-    if (value.movingRequest.id == CREATE_TABLE) {
-      let newRow: any = await API.graphql(
-        graphqlOperation(createMovingInfo, {
-          input: movingInfoCreateFromReqData(value.movingRequest),
-        })
-      );
-      value.movingRequest.id = newRow.data.createMovingInfo.id;
-    } else if (value.movingRequest.id == "DELETE_TABLE") {
-      // delete the row from the table and set value.movingRequest to null
-    } else {
-      // update the row in the table
-      await API.graphql(
-        graphqlOperation(updateMovingInfo, {
-          input: movingInfoUpdateFromReqData(value.movingRequest),
-        })
-      );
-    }
+    value.movingRequest = await createOrUpdate(
+      value.movingRequest,
+      createMovingInfo,
+      movingInfoCreateFromReqData,
+      updateMovingInfo,
+      movingInfoUpdateFromReqData,
+      (newRowData: any) => {
+        return newRowData.createMovingInfo.id;
+      }
+    );
+  }
+  if (value.homeRepairType) {
+    value.homeRepairType = await createOrUpdate(
+      value.homeRepairType,
+      createHomeRepairType,
+      homeRepairCreateFromReqData,
+      updateHomeRepairType,
+      homeRepairUpdateFromReqData,
+      (newRowData: any) => {
+        return newRowData.createHomeRepairType.id;
+      }
+    );
   }
 
   return {
@@ -383,7 +421,57 @@ async function needUpdateFromNeedReqData(
     needTypes: value.needTypes,
     status: value.status,
     requestMovingRequestId: value.movingRequest?.id,
+    requestHomeRepairTypeId: value.homeRepairType?.id,
+    clothingSize: value.clothingSize,
+    clothingType: value.clothingType,
+    housingHelp: value.housingHelp,
+    resumeHelp: value.resumeHelp,
+    coverLetterHelp: value.coverLetterHelp,
+    carRepairDetails: value.carRepairDetails,
+    furnitureType: value.furnitureType,
+    otherNeeds: value.otherNeeds,
+    phone: value.phone,
+    address: value.address,
+    city: value.city,
+    email: value.email,
+    dateFulfilled: value.dateFulfilled,
+    leadSource: value.leadSource,
+    zipCode: value.zipCode,
+    spanishOnly: value.spanishOnly,
+    needFulfiller: value.needFulfiller,
+    followUp: value.followUp,
+    leadOtherDetails: value.followUp,
+    needReason: value.needReason,
   };
+
+  async function createOrUpdate<TableType extends IGraphQLTable>(
+    requestTable: TableType,
+    createOperation: string,
+    tableCreateFromReqData: (reqData: TableType) => any,
+    updateOperation: string,
+    tableUpdateFromReqData: (reqData: TableType) => any,
+    getIdFromCreate: (newRowData: any) => string
+  ): Promise<TableType> {
+    if (requestTable.id == CREATE_TABLE) {
+      alert(JSON.stringify(tableCreateFromReqData(requestTable)));
+      let newRow: any = await API.graphql(
+        graphqlOperation(createOperation, {
+          input: tableCreateFromReqData(requestTable),
+        })
+      );
+      requestTable.id = getIdFromCreate(newRow.data);
+    } else if (requestTable.id == "DELETE_TABLE") {
+      // delete the row from the table and set requestTable to null
+    } else {
+      // update the row in the table
+      await API.graphql(
+        graphqlOperation(updateOperation, {
+          input: tableUpdateFromReqData(requestTable),
+        })
+      );
+    }
+    return requestTable;
+  }
 }
 
 export default withAuthenticator(NeedRequestTable);

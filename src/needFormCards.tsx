@@ -1061,9 +1061,13 @@ export function carRepairCard(
 
 export function homeRepairCard(
   homeRepairDetails: IHomeRepairType,
-  handleHomeRepair: (event: React.ChangeEvent<HTMLInputElement>) => void,
   setHomeRepairDetails: (details: IHomeRepairType) => void
 ) {
+  const handleHomeRepair = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setHomeRepairDetails({
+      ...homeRepairDetails,
+      [event.target.name]: event.target.checked,
+    });
   return (
     <Card style={cardStyle}>
       <CardHeader

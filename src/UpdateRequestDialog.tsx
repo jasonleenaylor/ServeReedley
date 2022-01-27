@@ -19,6 +19,7 @@ import {
   IGraphQLTable,
   CREATE_TABLE,
   IMovingReqType,
+  IHomeRepairReqType,
 } from "./needRequestTypes";
 import {
   Box,
@@ -325,9 +326,14 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
             <Grid item>
               {homeRepairCard(
                 homeRepairRequestToInterface(requestData.homeRepairType!),
-                () => {},
                 (homeRepair) => {
-                  requestData.homeRepairType!.details = homeRepair.details;
+                  setRequestData({
+                    ...requestData,
+                    homeRepairType: editOrCreateHomeRepairReq(
+                      homeRepair,
+                      requestData.homeRepairType
+                    ),
+                  });
                 }
               )}
             </Grid>
@@ -346,6 +352,12 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                       control={
                         <Checkbox
                           checked={requestData.housingHelp!!}
+                          onChange={(_event, checked) =>
+                            setRequestData({
+                              ...requestData,
+                              housingHelp: checked,
+                            })
+                          }
                           name="housingHelp"
                         />
                       }
@@ -361,24 +373,23 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               {clothingCard(
                 requestData.clothingType || "",
                 requestData.clothingSize || "",
-                (type) => (requestData.clothingType = type),
-                (size) => (requestData.clothingSize = size)
+                (type) =>
+                  setRequestData({ ...requestData, clothingType: type }),
+                (size) => setRequestData({ ...requestData, clothingSize: size })
               )}
             </Grid>
           )}
           {requestData.needTypes.includes(NeedType.FURNITURE) && (
             <Grid item>
-              {furnitureCard(
-                requestData.furnitureType || "",
-                (type) => (requestData.furnitureType = type)
+              {furnitureCard(requestData.furnitureType || "", (type) =>
+                setRequestData({ ...requestData, furnitureType: type })
               )}
             </Grid>
           )}
           {requestData.needTypes.includes(NeedType.OTHER) && (
             <Grid item>
-              {otherNeedCard(
-                requestData.otherNeeds || "",
-                (otherNeeds) => (requestData.otherNeeds = otherNeeds)
+              {otherNeedCard(requestData.otherNeeds || "", (otherNeeds) =>
+                setRequestData({ ...requestData, otherNeeds: otherNeeds })
               )}
             </Grid>
           )}
@@ -389,7 +400,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                 titleTypographyProps={{ variant: "h6" }}
               />
 
-              <Grid container spacing={2} style={{ padding: 4 }}>
+              <Grid container spacing={3} style={{ padding: 4 }}>
                 {requestData.note?.map((note, index) => {
                   return (
                     <Grid item xs={12}>
@@ -399,9 +410,11 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                     </Grid>
                   );
                 })}
-                <Grid xs={12}>
+                <Grid xs={12} spacing={3} style={{ padding: 4 }}>
                   <TextField
                     fullWidth
+                    label="New note"
+                    variant="outlined"
                     value={currentNote}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       setCurrentNote(e.currentTarget.value);
@@ -449,12 +462,12 @@ function homeRepairRequestToInterface(homeRepairType: {
   details?: string | null;
 }): IHomeRepairType {
   return {
-    electrical: homeRepairType.electrical!!,
-    painting: homeRepairType.painting!!,
-    plumbing: homeRepairType.plumbing!!,
-    yardwork: homeRepairType.yardwork!!,
-    other: homeRepairType.other!!,
-    details: homeRepairType.details || "",
+    electrical: homeRepairType?.electrical!!,
+    painting: homeRepairType?.painting!!,
+    plumbing: homeRepairType?.plumbing!!,
+    yardwork: homeRepairType?.yardwork!!,
+    other: homeRepairType?.other!!,
+    details: homeRepairType?.details || "",
   };
 }
 
@@ -488,61 +501,61 @@ export default function UpdateRequestDialogButton(props: SimpleDialogProps) {
     </div>
   );
 }
-function editOrCreateMovingReq(
-  newMovingInfo: IMovingType,
+
+function getTableFields(
   existingTable: IGraphQLTable | null | undefined
-): IMovingReqType | null | undefined {
+): IGraphQLTable {
   if (existingTable) {
     return {
-      items: newMovingInfo.items,
-      haveTransportation:
-        newMovingInfo.haveTransportation === RadioButtonState.YES,
-      unpavedRoad:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.unpavedRoad,
-      stairs:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.stairs,
-      steepDriveway:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.steepDriveway,
-      other:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.other,
-      otherDetails:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES
-          ? newMovingInfo.otherDetails
-          : "",
       __typename: existingTable.__typename,
       createdAt: existingTable.createdAt,
       updatedAt: existingTable.updatedAt,
       id: existingTable.id,
     };
   } else {
-    return {
-      items: newMovingInfo.items,
-      haveTransportation:
-        newMovingInfo.haveTransportation === RadioButtonState.YES,
-      unpavedRoad:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.unpavedRoad,
-      stairs:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.stairs,
-      steepDriveway:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.steepDriveway,
-      other:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
-        newMovingInfo.other,
-      otherDetails:
-        newMovingInfo.haveSpecialConditions === RadioButtonState.YES
-          ? newMovingInfo.otherDetails
-          : "",
-      __typename: "",
-      createdAt: "",
-      updatedAt: "",
-      id: CREATE_TABLE,
-    };
+    return { __typename: "", createdAt: "", updatedAt: "", id: CREATE_TABLE };
   }
+}
+
+function editOrCreateHomeRepairReq(
+  newHomeRepair: IHomeRepairType,
+  existingTable: IGraphQLTable | null | undefined
+): IHomeRepairReqType {
+  return {
+    ...getTableFields(existingTable),
+    details: newHomeRepair.details,
+    electrical: newHomeRepair.electrical,
+    plumbing: newHomeRepair.plumbing,
+    painting: newHomeRepair.painting,
+    yardwork: newHomeRepair.yardwork,
+    other: newHomeRepair.other,
+  };
+}
+
+function editOrCreateMovingReq(
+  newMovingInfo: IMovingType,
+  existingTable: IGraphQLTable | null | undefined
+): IMovingReqType | null | undefined {
+  return {
+    ...getTableFields(existingTable),
+    items: newMovingInfo.items,
+    haveTransportation:
+      newMovingInfo.haveTransportation === RadioButtonState.YES,
+    unpavedRoad:
+      newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+      newMovingInfo.unpavedRoad,
+    stairs:
+      newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+      newMovingInfo.stairs,
+    steepDriveway:
+      newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+      newMovingInfo.steepDriveway,
+    other:
+      newMovingInfo.haveSpecialConditions === RadioButtonState.YES &&
+      newMovingInfo.other,
+    otherDetails:
+      newMovingInfo.haveSpecialConditions === RadioButtonState.YES
+        ? newMovingInfo.otherDetails
+        : "",
+  };
 }

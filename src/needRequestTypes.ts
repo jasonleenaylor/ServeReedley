@@ -1,9 +1,9 @@
 import {
-  HomeRepairType,
   LeadSource,
   NeedReason,
   NeedType,
   RequestStatus,
+  UpdateHomeRepairTypeInput,
 } from "./RequestAPI";
 
 export enum RadioButtonState {
@@ -311,7 +311,7 @@ export interface IGraphQLTable {
   updatedAt: string;
 }
 
-type IHomeRepairReqType = IGraphQLTable & IHomeRepairType;
+export type IHomeRepairReqType = IGraphQLTable & UpdateHomeRepairTypeInput;
 
 export type IMovingReqType = IGraphQLTable & MovingInfoGQL;
 
