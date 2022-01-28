@@ -13,7 +13,6 @@ import { useState } from "react";
 import "react-phone-input-2/lib/material.css";
 import {
   createFoodInfo,
-  createGroceries,
   createHomeRepairType,
   createMovingInfo,
   createRequest,
@@ -26,7 +25,6 @@ import {
   RadioButtonState,
   SelfOrOtherGQL,
   FoodInfoGQL,
-  GroceriesGQL,
   MovingInfoGQL,
   NeedRequestGQL,
   IHomeRepairType,
@@ -153,10 +151,6 @@ export const NeedRequestForm = () => {
       children: foodInfo.children,
       haveAllergies: foodInfo.haveAllergies === RadioButtonState.YES,
       allergies: foodInfo.allergies,
-      foodInfoGroceriesId: "",
-    };
-
-    let groceriesInfo: GroceriesGQL = {
       milk: groceries.milk,
       eggs: groceries.eggs,
       bread: groceries.bread,
@@ -215,7 +209,6 @@ export const NeedRequestForm = () => {
       needTypes: getNeedTypes(needType),
       status: RequestStatus.NEW,
       housingHelp: housingHelp === RadioButtonState.YES,
-      note: [],
       otherNeeds: otherNeeds,
       needFulfiller: "",
       dateFulfilled: "",
@@ -227,20 +220,8 @@ export const NeedRequestForm = () => {
         graphqlOperation(createSelfOrOtherInfo, { input: selfOrOther })
       );
       request.requestSelfOrOtherInfoId = result.data.createSelfOrOtherInfo.id;
-      let groceriesId = "";
-      if (needType.groceries) {
-        try {
-          result = await API.graphql(
-            graphqlOperation(createGroceries, { input: groceriesInfo })
-          );
-          groceriesId = result.data.createGroceries.id;
-        } catch (err) {
-          alert("groceries error: " + JSON.stringify(err));
-        }
-      }
       if (needType.meals || needType.groceries) {
         try {
-          food.foodInfoGroceriesId = groceriesId;
           result = await API.graphql(
             graphqlOperation(createFoodInfo, { input: food })
           );

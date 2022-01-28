@@ -56,6 +56,7 @@ import {
   otherNeedCard,
 } from "./needFormCards";
 import theme from "./theme";
+import Auth from "@aws-amplify/auth";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -83,11 +84,21 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
     onSave(requestData);
   };
 
-  const handleNewNote = () => {
-    if (!requestData.note) {
-      requestData.note = [];
+  const handleNewNote = async () => {
+    if (!requestData.note?.items) {
+      requestData.note!.items = [];
     }
-    requestData.note.push(currentNote);
+    let userInfo = await Auth.currentUserInfo();
+    requestData.note?.items.push({
+      id: CREATE_TABLE,
+      content: currentNote,
+      author: userInfo.username,
+      requestID: requestData.id,
+      dateCreated: new Date().toUTCString(),
+      createdAt: "",
+      updatedAt: "",
+      __typename: "NoteType",
+    });
     setCurrentNote("");
   };
   const cardStyle = { padding: 12 };
@@ -260,8 +271,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
           <Grid item>
             {requestData.needTypes.includes(NeedType.GROCERIES) &&
               groceriesCard(
-                (requestData.foodRequest?.groceries as IGroceriesType) ||
-                  defaultGroceries,
+                (requestData.foodRequest as IGroceriesType) || defaultGroceries,
                 (event: React.ChangeEvent<HTMLInputElement>) => {
                   if (!requestData.foodRequest) {
                   }
@@ -401,11 +411,13 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               />
 
               <Grid container spacing={3} style={{ padding: 4 }}>
-                {requestData.note?.map((note, index) => {
+                {requestData.note?.items.map((note, index) => {
                   return (
                     <Grid item xs={12}>
                       <Paper style={{ padding: theme.spacing(3) }}>
-                        <Typography>{note}</Typography>
+                        <Typography>{note!.createdAt}</Typography>
+                        <Typography>{note!.author}</Typography>
+                        <Typography>{note!.content}</Typography>
                       </Paper>
                     </Grid>
                   );

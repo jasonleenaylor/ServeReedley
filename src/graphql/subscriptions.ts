@@ -35,25 +35,20 @@ export const onCreateRequest = /* GraphQL */ `
         children
         haveAllergies
         allergies
-        groceries {
-          id
-          milk
-          eggs
-          bread
-          butter
-          tortillas
-          rice
-          beans
-          cheese
-          beef
-          hotdogs
-          lunchMeat
-          fruit
-          peanutButter
-          jelly
-          createdAt
-          updatedAt
-        }
+        milk
+        eggs
+        bread
+        butter
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
         createdAt
         updatedAt
       }
@@ -91,7 +86,18 @@ export const onCreateRequest = /* GraphQL */ `
       needReason
       needTypes
       status
-      note
+      note {
+        items {
+          id
+          requestID
+          dateCreated
+          author
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       otherNeeds
       needFulfiller
       dateFulfilled
@@ -134,25 +140,20 @@ export const onUpdateRequest = /* GraphQL */ `
         children
         haveAllergies
         allergies
-        groceries {
-          id
-          milk
-          eggs
-          bread
-          butter
-          tortillas
-          rice
-          beans
-          cheese
-          beef
-          hotdogs
-          lunchMeat
-          fruit
-          peanutButter
-          jelly
-          createdAt
-          updatedAt
-        }
+        milk
+        eggs
+        bread
+        butter
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
         createdAt
         updatedAt
       }
@@ -190,7 +191,18 @@ export const onUpdateRequest = /* GraphQL */ `
       needReason
       needTypes
       status
-      note
+      note {
+        items {
+          id
+          requestID
+          dateCreated
+          author
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       otherNeeds
       needFulfiller
       dateFulfilled
@@ -233,25 +245,20 @@ export const onDeleteRequest = /* GraphQL */ `
         children
         haveAllergies
         allergies
-        groceries {
-          id
-          milk
-          eggs
-          bread
-          butter
-          tortillas
-          rice
-          beans
-          cheese
-          beef
-          hotdogs
-          lunchMeat
-          fruit
-          peanutButter
-          jelly
-          createdAt
-          updatedAt
-        }
+        milk
+        eggs
+        bread
+        butter
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
         createdAt
         updatedAt
       }
@@ -289,11 +296,61 @@ export const onDeleteRequest = /* GraphQL */ `
       needReason
       needTypes
       status
-      note
+      note {
+        items {
+          id
+          requestID
+          dateCreated
+          author
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       otherNeeds
       needFulfiller
       dateFulfilled
       followUp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateNoteType = /* GraphQL */ `
+  subscription OnCreateNoteType {
+    onCreateNoteType {
+      id
+      requestID
+      dateCreated
+      author
+      content
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateNoteType = /* GraphQL */ `
+  subscription OnUpdateNoteType {
+    onUpdateNoteType {
+      id
+      requestID
+      dateCreated
+      author
+      content
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteNoteType = /* GraphQL */ `
+  subscription OnDeleteNoteType {
+    onDeleteNoteType {
+      id
+      requestID
+      dateCreated
+      author
+      content
       createdAt
       updatedAt
     }
@@ -349,25 +406,20 @@ export const onCreateFoodInfo = /* GraphQL */ `
       children
       haveAllergies
       allergies
-      groceries {
-        id
-        milk
-        eggs
-        bread
-        butter
-        tortillas
-        rice
-        beans
-        cheese
-        beef
-        hotdogs
-        lunchMeat
-        fruit
-        peanutButter
-        jelly
-        createdAt
-        updatedAt
-      }
+      milk
+      eggs
+      bread
+      butter
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
       createdAt
       updatedAt
     }
@@ -381,25 +433,20 @@ export const onUpdateFoodInfo = /* GraphQL */ `
       children
       haveAllergies
       allergies
-      groceries {
-        id
-        milk
-        eggs
-        bread
-        butter
-        tortillas
-        rice
-        beans
-        cheese
-        beef
-        hotdogs
-        lunchMeat
-        fruit
-        peanutButter
-        jelly
-        createdAt
-        updatedAt
-      }
+      milk
+      eggs
+      bread
+      butter
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
       createdAt
       updatedAt
     }
@@ -413,25 +460,20 @@ export const onDeleteFoodInfo = /* GraphQL */ `
       children
       haveAllergies
       allergies
-      groceries {
-        id
-        milk
-        eggs
-        bread
-        butter
-        tortillas
-        rice
-        beans
-        cheese
-        beef
-        hotdogs
-        lunchMeat
-        fruit
-        peanutButter
-        jelly
-        createdAt
-        updatedAt
-      }
+      milk
+      eggs
+      bread
+      butter
+      tortillas
+      rice
+      beans
+      cheese
+      beef
+      hotdogs
+      lunchMeat
+      fruit
+      peanutButter
+      jelly
       createdAt
       updatedAt
     }
@@ -483,75 +525,6 @@ export const onDeleteMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateGroceries = /* GraphQL */ `
-  subscription OnCreateGroceries {
-    onCreateGroceries {
-      id
-      milk
-      eggs
-      bread
-      butter
-      tortillas
-      rice
-      beans
-      cheese
-      beef
-      hotdogs
-      lunchMeat
-      fruit
-      peanutButter
-      jelly
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateGroceries = /* GraphQL */ `
-  subscription OnUpdateGroceries {
-    onUpdateGroceries {
-      id
-      milk
-      eggs
-      bread
-      butter
-      tortillas
-      rice
-      beans
-      cheese
-      beef
-      hotdogs
-      lunchMeat
-      fruit
-      peanutButter
-      jelly
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteGroceries = /* GraphQL */ `
-  subscription OnDeleteGroceries {
-    onDeleteGroceries {
-      id
-      milk
-      eggs
-      bread
-      butter
-      tortillas
-      rice
-      beans
-      cheese
-      beef
-      hotdogs
-      lunchMeat
-      fruit
-      peanutButter
-      jelly
       createdAt
       updatedAt
     }

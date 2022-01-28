@@ -4,45 +4,41 @@ import { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { listRequests } from "./graphql/queries";
 import {
+  createFoodInfo,
   createHomeRepairType,
   createMovingInfo,
-  createRequest,
+  createNoteType,
+  updateFoodInfo,
   updateHomeRepairType,
   updateMovingInfo,
+  updateNoteType,
   updateRequest,
 } from "./graphql/mutations";
 import MaterialTable, { Column } from "@material-table/core";
 import tableIcons from "./tableIcons";
 import {
+  CreateFoodInfoInput,
   CreateHomeRepairTypeInput,
   CreateMovingInfoInput,
-  HomeRepairType,
-  LeadSource,
-  ListRequestsQuery,
-  NeedReason,
-  NeedType,
+  CreateNoteTypeInput,
+  NoteType,
+  UpdateFoodInfoInput,
   UpdateHomeRepairTypeInput,
   UpdateMovingInfoInput,
+  UpdateNoteTypeInput,
   UpdateRequestInput,
 } from "./RequestAPI";
 import {
   CREATE_TABLE,
+  IFoodInfoReqType,
   IGraphQLTable,
   IHomeRepairReqType,
   IHomeRepairType,
-  IMovingType,
   MovingInfoGQL,
   NeedRequestType,
-  RadioButtonState,
 } from "./needRequestTypes";
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
-import {
-  Grid,
-  IconButton,
-  Paper,
-  Snackbar,
-  Typography,
-} from "@material-ui/core";
+import { Grid, Paper, Snackbar, Typography } from "@material-ui/core";
 import theme from "./theme";
 
 function NeedRequestTable() {
@@ -121,7 +117,7 @@ function NeedRequestTable() {
     {
       title: "Groceries",
       field: "foodRequest.groceries",
-      render: (rowData) => printGroceryList(rowData.foodRequest?.groceries), // JSON.stringify(rowData.foodRequest.groceries);
+      render: (rowData) => printGroceryList(rowData.foodRequest), // JSON.stringify(rowData.foodRequest.groceries);
     },
     {
       title: "Moving: Items",
@@ -288,7 +284,7 @@ function NeedRequestTable() {
                   >
                     {
                       <Grid container spacing={2}>
-                        {row.rowData.note?.map((note: any) => {
+                        {row.rowData.note?.items?.map((note: NoteType) => {
                           return (
                             <Grid item xs={12}>
                               <Paper
@@ -297,7 +293,9 @@ function NeedRequestTable() {
                                   width: 350,
                                 }}
                               >
-                                <Typography>{note}</Typography>
+                                <Typography>{note.createdAt}</Typography>
+                                <Typography>{note.author}</Typography>
+                                <Typography>{note.content}</Typography>
                               </Paper>
                             </Grid>
                           );
@@ -327,6 +325,15 @@ function NeedRequestTable() {
   );
 }
 
+function noteCreateFromReqData(value: NoteType): CreateNoteTypeInput {
+  return {
+    author: value.author,
+    content: value.content,
+    dateCreated: value.dateCreated,
+    requestID: value.requestID,
+  };
+}
+
 function movingInfoCreateFromReqData(
   value: MovingInfoGQL
 ): CreateMovingInfoInput {
@@ -352,6 +359,41 @@ function homeRepairCreateFromReqData(
     yardwork: value.yardwork,
     electrical: value.electrical,
     details: value.details,
+  };
+}
+
+function foodInfoCreateFromReqData(
+  value: IFoodInfoReqType
+): CreateFoodInfoInput {
+  return {
+    allergies: value.allergies,
+    children: value.children,
+    haveAllergies: value.haveAllergies,
+    familyMembers: value.familyMembers,
+    milk: value.milk,
+    eggs: value.eggs,
+    beans: value.beans,
+    beef: value.beef,
+    bread: value.bread,
+    butter: value.butter,
+    peanutButter: value.peanutButter,
+    cheese: value.cheese,
+    fruit: value.fruit,
+    hotdogs: value.hotdogs,
+    jelly: value.jelly,
+    lunchMeat: value.lunchMeat,
+    rice: value.rice,
+    tortillas: value.tortillas,
+  };
+}
+
+function noteUpdateFromReqData(value: NoteType): UpdateNoteTypeInput {
+  return {
+    id: value.id,
+    author: value.author,
+    content: value.content,
+    dateCreated: value.dateCreated,
+    requestID: value.requestID,
   };
 }
 
@@ -385,9 +427,52 @@ function homeRepairUpdateFromReqData(
   };
 }
 
+function foodInfoUpdateFromReqData(
+  value: IFoodInfoReqType
+): UpdateFoodInfoInput {
+  return {
+    id: value.id,
+    allergies: value.allergies,
+    children: value.children,
+    haveAllergies: value.haveAllergies,
+    familyMembers: value.familyMembers,
+    milk: value.milk,
+    eggs: value.eggs,
+    beans: value.beans,
+    beef: value.beef,
+    bread: value.bread,
+    butter: value.butter,
+    peanutButter: value.peanutButter,
+    cheese: value.cheese,
+    fruit: value.fruit,
+    hotdogs: value.hotdogs,
+    jelly: value.jelly,
+    lunchMeat: value.lunchMeat,
+    rice: value.rice,
+    tortillas: value.tortillas,
+  };
+}
+
 async function needUpdateFromNeedReqData(
   value: NeedRequestType
 ): Promise<UpdateRequestInput> {
+  if (value.note?.items) {
+    value.note?.items
+      .filter((n) => n !== null)
+      .forEach(async function (note) {
+        await createOrUpdate(
+          note!,
+          createNoteType,
+          noteCreateFromReqData,
+          updateNoteType,
+          noteUpdateFromReqData,
+          (newRowData: any) => {
+            // no id needed, notes have the request ID because it is a one to many relationship
+            return "";
+          }
+        );
+      });
+  }
   if (value.movingRequest) {
     value.movingRequest = await createOrUpdate(
       value.movingRequest,
@@ -412,16 +497,28 @@ async function needUpdateFromNeedReqData(
       }
     );
   }
+  if (value.foodRequest) {
+    value.foodRequest = await createOrUpdate(
+      value.foodRequest,
+      createFoodInfo,
+      foodInfoCreateFromReqData,
+      updateFoodInfo,
+      foodInfoUpdateFromReqData,
+      (newRowData: any) => {
+        return newRowData.createFoodInfo.id;
+      }
+    );
+  }
 
   return {
     id: value.id,
     firstName: value.firstName,
     lastName: value.lastName,
-    note: value.note,
     needTypes: value.needTypes,
     status: value.status,
     requestMovingRequestId: value.movingRequest?.id,
     requestHomeRepairTypeId: value.homeRepairType?.id,
+    requestFoodRequestId: value.foodRequest?.id,
     clothingSize: value.clothingSize,
     clothingType: value.clothingType,
     housingHelp: value.housingHelp,
@@ -452,7 +549,7 @@ async function needUpdateFromNeedReqData(
     tableUpdateFromReqData: (reqData: TableType) => any,
     getIdFromCreate: (newRowData: any) => string
   ): Promise<TableType> {
-    if (requestTable.id == CREATE_TABLE) {
+    if (requestTable.id === CREATE_TABLE) {
       alert(JSON.stringify(tableCreateFromReqData(requestTable)));
       let newRow: any = await API.graphql(
         graphqlOperation(createOperation, {
@@ -460,7 +557,7 @@ async function needUpdateFromNeedReqData(
         })
       );
       requestTable.id = getIdFromCreate(newRow.data);
-    } else if (requestTable.id == "DELETE_TABLE") {
+    } else if (requestTable.id === "DELETE_TABLE") {
       // delete the row from the table and set requestTable to null
     } else {
       // update the row in the table

@@ -27,11 +27,21 @@ type Request @model {
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
-  note: [String]
+  note: [NoteType] @connection(keyName: "forRequest", fields: ["id"])
   otherNeeds: String
   needFulfiller: String
   dateFulfilled: String
   followUp: String
+}
+
+type NoteType
+  @model
+  @key(name: "forRequest", fields: ["requestID", "content"]) {
+  id: ID!
+  requestID: ID!
+  dateCreated: String!
+  author: String!
+  content: String!
 }
 
 type SelfOrOtherInfo @model {
@@ -47,21 +57,6 @@ type FoodInfo @model {
   children: String
   haveAllergies: Boolean
   allergies: String
-  groceries: Groceries @connection
-}
-
-type MovingInfo @model {
-  items: String
-  haveTransportation: Boolean
-  steepDriveway: Boolean
-  stairs: Boolean
-  unpavedRoad: Boolean
-  other: Boolean
-  otherDetails: String
-  liabilityAck: Boolean
-}
-
-type Groceries @model {
   milk: Boolean
   eggs: Boolean
   bread: Boolean
@@ -76,6 +71,17 @@ type Groceries @model {
   fruit: Boolean
   peanutButter: Boolean
   jelly: Boolean
+}
+
+type MovingInfo @model {
+  items: String
+  haveTransportation: Boolean
+  steepDriveway: Boolean
+  stairs: Boolean
+  unpavedRoad: Boolean
+  other: Boolean
+  otherDetails: String
+  liabilityAck: Boolean
 }
 
 type HomeRepairType @model {

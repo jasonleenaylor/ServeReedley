@@ -2,6 +2,7 @@ import {
   LeadSource,
   NeedReason,
   NeedType,
+  NoteType,
   RequestStatus,
   UpdateHomeRepairTypeInput,
 } from "./RequestAPI";
@@ -146,7 +147,11 @@ export interface SelfOrOtherGQL {
   requestIsKnown?: boolean | null;
 }
 
-export interface GroceriesGQL {
+export interface FoodInfoGQL {
+  familyMembers?: number | null;
+  children?: string | null;
+  haveAllergies?: boolean | null;
+  allergies?: string | null;
   milk?: boolean | null;
   eggs?: boolean | null;
   bread?: boolean | null;
@@ -160,14 +165,6 @@ export interface GroceriesGQL {
   fruit?: boolean | null;
   peanutButter?: boolean | null;
   jelly?: boolean | null;
-}
-
-export interface FoodInfoGQL {
-  familyMembers?: number | null;
-  children?: string | null;
-  haveAllergies?: boolean | null;
-  allergies?: string | null;
-  foodInfoGroceriesId?: string | null;
 }
 
 export interface MovingInfoGQL {
@@ -253,36 +250,7 @@ export interface NeedRequestType {
     createdAt: string;
     updatedAt: string;
   };
-  foodRequest?: {
-    __typename: "FoodInfo";
-    id: string;
-    familyMembers?: number | null;
-    children?: string | null;
-    haveAllergies?: boolean | null;
-    allergies?: string | null;
-    groceries?: {
-      __typename: "Groceries";
-      id: string;
-      milk?: boolean | null;
-      eggs?: boolean | null;
-      bread?: boolean | null;
-      butter?: boolean | null;
-      tortillas?: boolean | null;
-      rice?: boolean | null;
-      beans?: boolean | null;
-      cheese?: boolean | null;
-      beef?: boolean | null;
-      hotdogs?: boolean | null;
-      lunchMeat?: boolean | null;
-      fruit?: boolean | null;
-      peanutButter?: boolean | null;
-      jelly?: boolean | null;
-      createdAt: string;
-      updatedAt: string;
-    } | null;
-    createdAt: string;
-    updatedAt: string;
-  } | null;
+  foodRequest?: IFoodInfoReqType | null;
   movingRequest?: IMovingReqType | null;
   resumeHelp?: boolean | null;
   coverLetterHelp?: boolean | null;
@@ -296,7 +264,20 @@ export interface NeedRequestType {
   needTypes: Array<NeedType | null>;
   status: RequestStatus;
   otherNeeds?: string | null;
-  note?: Array<string> | null;
+  note?: {
+    __typename: "ModelNoteTypeConnection";
+    items: Array<{
+      __typename: "NoteType";
+      id: string;
+      requestID: string;
+      dateCreated: string;
+      author: string;
+      content: string;
+      createdAt: string;
+      updatedAt: string;
+    } | null>;
+    nextToken?: string | null;
+  } | null;
   needFulfiller?: string | null;
   dateFulfilled?: string | null;
   followUp?: string | null;
@@ -314,6 +295,31 @@ export interface IGraphQLTable {
 export type IHomeRepairReqType = IGraphQLTable & UpdateHomeRepairTypeInput;
 
 export type IMovingReqType = IGraphQLTable & MovingInfoGQL;
+
+export type IFoodInfoReqType = {
+  __typename: "FoodInfo";
+  id: string;
+  familyMembers?: number | null;
+  children?: string | null;
+  haveAllergies?: boolean | null;
+  allergies?: string | null;
+  milk?: boolean | null;
+  eggs?: boolean | null;
+  bread?: boolean | null;
+  butter?: boolean | null;
+  tortillas?: boolean | null;
+  rice?: boolean | null;
+  beans?: boolean | null;
+  cheese?: boolean | null;
+  beef?: boolean | null;
+  hotdogs?: boolean | null;
+  lunchMeat?: boolean | null;
+  fruit?: boolean | null;
+  peanutButter?: boolean | null;
+  jelly?: boolean | null;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export const CREATE_TABLE = "NEW_TABLE_NEEDED";
 
