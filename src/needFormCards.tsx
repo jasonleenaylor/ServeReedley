@@ -440,7 +440,7 @@ export function needReasonCard(
 export function foodInfoCard(
   mealsOrGroceries: boolean,
   foodInfo: IFoodInfo,
-  handleFoodInfoChange: (newFoodInfo: {}) => void
+  handleFoodInfoChange: (newFoodInfo: IFoodInfo) => void
 ) {
   return (
     <Card style={cardStyle}>
@@ -462,7 +462,10 @@ export function foodInfoCard(
               maxLength: 2,
             }}
             onChange={(changeEvent: any) =>
-              handleFoodInfoChange({ familyMembers: changeEvent.target.value })
+              handleFoodInfoChange({
+                ...foodInfo,
+                familyMembers: changeEvent.target.value,
+              })
             }
             value={foodInfo.familyMembers}
             required
@@ -481,6 +484,7 @@ export function foodInfoCard(
               value={foodInfo.children}
               onChange={(changeEvent: any) =>
                 handleFoodInfoChange({
+                  ...foodInfo,
                   children: changeEvent.target.value,
                 })
               }
@@ -493,6 +497,7 @@ export function foodInfoCard(
             value={foodInfo.haveAllergies}
             onChange={(changeEvent: any) =>
               handleFoodInfoChange({
+                ...foodInfo,
                 haveAllergies: changeEvent.target.value,
               })
             }
@@ -509,7 +514,7 @@ export function foodInfoCard(
             />
           </RadioGroup>
         </Grid>
-        {foodInfo.haveAllergies && (
+        {foodInfo.haveAllergies === RadioButtonState.YES && (
           <Grid item xs={12}>
             <FormControl>
               <Typography>Please list allergies</Typography>
@@ -517,6 +522,7 @@ export function foodInfoCard(
                 value={foodInfo.allergies}
                 onChange={(changeEvent: any) =>
                   handleFoodInfoChange({
+                    ...foodInfo,
                     allergies: changeEvent.target.value,
                   })
                 }

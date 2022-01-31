@@ -56,7 +56,7 @@ export interface INeedTypes {
   other: boolean;
 }
 
-export interface IFoodInfo {
+export interface IFoodInfo extends IGroceriesType {
   familyMembers?: number;
   children: string;
   haveAllergies: RadioButtonState;
@@ -115,6 +115,7 @@ export const defaultFoodInfo: IFoodInfo = {
   children: "",
   haveAllergies: RadioButtonState.UNSET,
   allergies: "",
+  ...defaultGroceries,
 };
 
 export const defaultMoving: IMovingType = {
@@ -297,7 +298,7 @@ export type IHomeRepairReqType = IGraphQLTable & UpdateHomeRepairTypeInput;
 export type IMovingReqType = IGraphQLTable & MovingInfoGQL;
 
 export type IFoodInfoReqType = {
-  __typename: "FoodInfo";
+  __typename: string;
   id: string;
   familyMembers?: number | null;
   children?: string | null;

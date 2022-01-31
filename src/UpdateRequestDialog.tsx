@@ -20,6 +20,9 @@ import {
   CREATE_TABLE,
   IMovingReqType,
   IHomeRepairReqType,
+  defaultFoodInfo,
+  IFoodInfo,
+  IFoodInfoReqType,
 } from "./needRequestTypes";
 import {
   Box,
@@ -257,15 +260,16 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               foodInfoCard(
                 requestData.needTypes?.includes(NeedType.MEALS) ||
                   requestData.needTypes?.includes(NeedType.GROCERIES),
-                {
-                  familyMembers: requestData.foodRequest?.familyMembers!,
-                  children: requestData.foodRequest?.children || "",
-                  haveAllergies: requestData.foodRequest?.haveAllergies
-                    ? RadioButtonState.YES
-                    : RadioButtonState.NO,
-                  allergies: requestData.foodRequest?.allergies || "",
-                },
-                (newFoodInfo: {}) => {}
+                getFoodInfoFromFoodRequest(requestData.foodRequest),
+                (newFoodInfo: IFoodInfo) => {
+                  setRequestData({
+                    ...requestData,
+                    foodRequest: editOrCreateFoodInfoReq(
+                      newFoodInfo,
+                      requestData.foodRequest
+                    ),
+                  });
+                }
               )}{" "}
           </Grid>
           <Grid item>
@@ -273,8 +277,18 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               groceriesCard(
                 (requestData.foodRequest as IGroceriesType) || defaultGroceries,
                 (event: React.ChangeEvent<HTMLInputElement>) => {
-                  if (!requestData.foodRequest) {
-                  }
+                  // build foodinfo from existing with event data for grocery type
+                  let newFoodInfo = {
+                    ...getFoodInfoFromFoodRequest(requestData.foodRequest),
+                    [event.target.name]: event.target.checked,
+                  };
+                  setRequestData({
+                    ...requestData,
+                    foodRequest: editOrCreateFoodInfoReq(
+                      newFoodInfo,
+                      requestData.foodRequest
+                    ),
+                  });
                 }
               )}{" "}
           </Grid>
@@ -329,7 +343,9 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
           )}
           {requestData.needTypes.includes(NeedType.CARREPAIR) && (
             <Grid item>
-              {carRepairCard(requestData.carRepairDetails!, () => {})}
+              {carRepairCard(requestData.carRepairDetails!, (details) => {
+                setRequestData({ ...requestData, carRepairDetails: details });
+              })}
             </Grid>
           )}
           {requestData.needTypes.includes(NeedType.HOMEREPAIR) && (
@@ -450,6 +466,44 @@ export interface RequestDialogButtonProps {
   onClose: (value: NeedRequestType) => void;
 }
 
+function getFoodInfoFromFoodRequest(
+  foodRequest: IFoodInfoReqType | null | undefined
+): IFoodInfo {
+  if (!foodRequest) {
+    return {
+      familyMembers: 0,
+      children: "",
+      allergies: "",
+      haveAllergies: RadioButtonState.NO,
+      ...defaultGroceries,
+    };
+  }
+  return {
+    // Convert foodinfo type
+    ...foodRequest,
+    familyMembers: foodRequest?.familyMembers!,
+    children: foodRequest?.children || "",
+    haveAllergies: foodRequest?.haveAllergies
+      ? RadioButtonState.YES
+      : RadioButtonState.NO,
+    allergies: foodRequest?.allergies || "",
+    beans: foodRequest.beans!!,
+    beef: foodRequest.beef!!,
+    bread: foodRequest.bread!!,
+    butter: foodRequest.butter!!,
+    cheese: foodRequest.cheese!!,
+    eggs: foodRequest.eggs!!,
+    fruit: foodRequest.fruit!!,
+    hotdogs: foodRequest.hotdogs!!,
+    jelly: foodRequest.jelly!!,
+    lunchMeat: foodRequest.lunchMeat!!,
+    milk: foodRequest.milk!!,
+    peanutButter: foodRequest.peanutButter!!,
+    rice: foodRequest.rice!!,
+    tortillas: foodRequest.tortillas!!,
+  };
+}
+
 function needTypeArrayToBooleans(requestData: NeedRequestType): INeedTypes {
   return {
     carRepair: requestData.needTypes.includes(NeedType.CARREPAIR),
@@ -527,6 +581,32 @@ function getTableFields(
   } else {
     return { __typename: "", createdAt: "", updatedAt: "", id: CREATE_TABLE };
   }
+}
+
+function editOrCreateFoodInfoReq(
+  newFoodInfo: IFoodInfo,
+  existingTable: IGraphQLTable | null | undefined
+): IFoodInfoReqType {
+  return {
+    ...getTableFields(existingTable),
+    haveAllergies: newFoodInfo.haveAllergies === RadioButtonState.YES,
+    allergies: newFoodInfo.allergies,
+    familyMembers: newFoodInfo.familyMembers,
+    children: newFoodInfo.children,
+    beans: newFoodInfo.beans,
+    beef: newFoodInfo.beef,
+    bread: newFoodInfo.bread,
+    butter: newFoodInfo.butter,
+    eggs: newFoodInfo.butter,
+    fruit: newFoodInfo.fruit,
+    hotdogs: newFoodInfo.hotdogs,
+    jelly: newFoodInfo.jelly,
+    lunchMeat: newFoodInfo.lunchMeat,
+    milk: newFoodInfo.milk,
+    peanutButter: newFoodInfo.peanutButter,
+    rice: newFoodInfo.rice,
+    tortillas: newFoodInfo.tortillas,
+  };
 }
 
 function editOrCreateHomeRepairReq(
