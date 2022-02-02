@@ -287,7 +287,7 @@ function NeedRequestTable() {
                         {row.rowData.note?.items
                           ?.sort((a: NoteType, b: NoteType) => {
                             return (
-                              Date.parse(a.createdAt) - Date.parse(b.createdAt)
+                              Date.parse(b.createdAt) - Date.parse(a.createdAt)
                             );
                           })
                           ?.map((note: NoteType) => {
