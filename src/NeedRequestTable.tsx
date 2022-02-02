@@ -63,7 +63,7 @@ function NeedRequestTable() {
                   input: await needUpdateFromNeedReqData(value),
                 })
               );
-              fetchNotes();
+              fetchNeedRequests();
             }}
           />
         );
@@ -186,7 +186,7 @@ function NeedRequestTable() {
   ];
 
   useEffect(() => {
-    fetchNotes();
+    fetchNeedRequests();
   }, []);
 
   function printGroceryList(groceries: {
@@ -260,7 +260,7 @@ function NeedRequestTable() {
     return homeRepairs.substring(2);
   }
 
-  async function fetchNotes() {
+  async function fetchNeedRequests() {
     const apiData: any = await API.graphql({ query: listRequests });
     setRequests(apiData.data.listRequests.items);
   }
@@ -284,22 +284,28 @@ function NeedRequestTable() {
                   >
                     {
                       <Grid container spacing={2}>
-                        {row.rowData.note?.items?.map((note: NoteType) => {
-                          return (
-                            <Grid item xs={12}>
-                              <Paper
-                                style={{
-                                  padding: theme.spacing(3),
-                                  width: 350,
-                                }}
-                              >
-                                <Typography>{note.createdAt}</Typography>
-                                <Typography>{note.author}</Typography>
-                                <Typography>{note.content}</Typography>
-                              </Paper>
-                            </Grid>
-                          );
-                        })}
+                        {row.rowData.note?.items
+                          ?.sort((a: NoteType, b: NoteType) => {
+                            return (
+                              Date.parse(a.createdAt) - Date.parse(b.createdAt)
+                            );
+                          })
+                          ?.map((note: NoteType) => {
+                            return (
+                              <Grid item xs={12}>
+                                <Paper
+                                  style={{
+                                    padding: theme.spacing(3),
+                                    width: 350,
+                                  }}
+                                >
+                                  <Typography>{note.createdAt}</Typography>
+                                  <Typography>{note.author}</Typography>
+                                  <Typography>{note.content}</Typography>
+                                </Paper>
+                              </Grid>
+                            );
+                          })}
                       </Grid>
                     }
                   </div>
@@ -466,7 +472,7 @@ async function needUpdateFromNeedReqData(
           noteCreateFromReqData,
           updateNoteType,
           noteUpdateFromReqData,
-          (newRowData: any) => {
+          (_newRowData: any) => {
             // no id needed, notes have the request ID because it is a one to many relationship
             return "";
           }
@@ -550,7 +556,6 @@ async function needUpdateFromNeedReqData(
     getIdFromCreate: (newRowData: any) => string
   ): Promise<TableType> {
     if (requestTable.id === CREATE_TABLE) {
-      alert(JSON.stringify(tableCreateFromReqData(requestTable)));
       let newRow: any = await API.graphql(
         graphqlOperation(createOperation, {
           input: tableCreateFromReqData(requestTable),

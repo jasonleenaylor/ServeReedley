@@ -25,6 +25,7 @@ import {
   IFoodInfoReqType,
   IHouseholdItemsReqType,
   HouseholdItemsGQL,
+  IJobTraining,
 } from "./needRequestTypes";
 import {
   Box,
@@ -340,7 +341,14 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                     ? RadioButtonState.YES
                     : RadioButtonState.NO,
                 },
-                () => {}
+                (jt: IJobTraining) => {
+                  setRequestData({
+                    ...requestData,
+                    resumeHelp: jt.resumeHelp === RadioButtonState.YES,
+                    coverLetterHelp:
+                      jt.coverLetterHelp === RadioButtonState.YES,
+                  });
+                }
               )}
             </Grid>
           )}

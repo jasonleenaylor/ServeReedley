@@ -248,7 +248,7 @@ export const NeedRequestForm = () => {
           );
           request.requestHouseholdItemsId = result.data.createHouseholdItems.id;
         } catch (err) {
-          alert("home maintenance error: " + JSON.stringify(err));
+          alert("household items error: " + JSON.stringify(err));
         }
       }
       if (needType.clothing) {
