@@ -83,6 +83,26 @@ export const getRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -193,6 +213,26 @@ export const listRequests = /* GraphQL */ `
         clothingSize
         furnitureType
         housingHelp
+        householdItems {
+          id
+          shampoo
+          bathSoap
+          toothpaste
+          toothbrush
+          deodorant
+          toiletPaper
+          handSoap
+          sanitaryPads
+          tampons
+          bleach
+          lysolSpray
+          lysolWipes
+          dishsoap
+          sponges
+          pinesol
+          createdAt
+          updatedAt
+        }
         needReason
         needTypes
         status
@@ -284,6 +324,61 @@ export const listSelfOrOtherInfos = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getHouseholdItems = /* GraphQL */ `
+  query GetHouseholdItems($id: ID!) {
+    getHouseholdItems(id: $id) {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listHouseholdItemss = /* GraphQL */ `
+  query ListHouseholdItemss(
+    $filter: ModelHouseholdItemsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listHouseholdItemss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
         createdAt
         updatedAt
       }

@@ -9,11 +9,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import { API, graphqlOperation } from "aws-amplify";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import "react-phone-input-2/lib/material.css";
 import {
   createFoodInfo,
   createHomeRepairType,
+  createHouseholdItems,
   createMovingInfo,
   createRequest,
   createSelfOrOtherInfo,
@@ -35,6 +36,8 @@ import {
   defaultFoodInfo,
   IJobTraining,
   IMovingType,
+  HouseholdItemsGQL,
+  IHouseholdItemsReqType,
 } from "./needRequestTypes";
 import {
   carRepairCard,
@@ -47,6 +50,7 @@ import {
   furnitureCard,
   groceriesCard,
   homeRepairCard,
+  householdItemsCard,
   jobTrainingCard,
   leadTracingCard,
   movingCard,
@@ -95,31 +99,15 @@ export const NeedRequestForm = () => {
     RadioButtonState.UNSET
   );
   const [otherNeeds, setOtherNeeds] = useState("");
+  const [householdItems, setHouseholdItems] = useState<HouseholdItemsGQL>({});
 
-  const handleNeedReasonChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setNeedReason({
-      ...needReason,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const handleNeedTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNeedType({
-      ...needType,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const handleGroceriesChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setGroceries({
-      ...groceries,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  function handleCheckboxChange<T>(
+    event: React.ChangeEvent<HTMLInputElement>,
+    setter: (value: SetStateAction<T>) => void,
+    currentValue: T
+  ) {
+    setter({ ...currentValue, [event.target.name]: event.target.checked });
+  }
 
   const handleFoodInfoChange = (newFoodInfo: {}) => {
     setFoodInfo({
@@ -249,6 +237,16 @@ export const NeedRequestForm = () => {
             graphqlOperation(createHomeRepairType, { input: homeRepairInfo })
           );
           request.requestHomeRepairTypeId = result.data.createHomeRepairType.id;
+        } catch (err) {
+          alert("home maintenance error: " + JSON.stringify(err));
+        }
+      }
+      if (needType.householdItems) {
+        try {
+          result = await API.graphql(
+            graphqlOperation(createHouseholdItems, { input: householdItems })
+          );
+          request.requestHouseholdItemsId = result.data.createHouseholdItems.id;
         } catch (err) {
           alert("home maintenance error: " + JSON.stringify(err));
         }
@@ -453,16 +451,26 @@ export const NeedRequestForm = () => {
             {leadTracingCard(lead, setLead, leadOther, setLeadOther)}
           </Grid>
           <Grid item xs={12}>
-            {needReasonCard(needReason, handleNeedReasonChange)}
+            {needReasonCard(needReason, (event) =>
+              handleCheckboxChange(event, setNeedReason, needReason)
+            )}
           </Grid>
-          <Grid item>{needRequestCard(needType, handleNeedTypeChange)}</Grid>
+          <Grid item>
+            {needRequestCard(needType, (event) =>
+              handleCheckboxChange(event, setNeedType, needType)
+            )}
+          </Grid>
           {(needType.meals || needType.groceries) && (
             <Grid item>
               {foodInfoCard(needType.meals, foodInfo, handleFoodInfoChange)}
             </Grid>
           )}
           {needType.groceries && (
-            <Grid item>{groceriesCard(groceries, handleGroceriesChange)}</Grid>
+            <Grid item>
+              {groceriesCard(groceries, (event) =>
+                handleCheckboxChange(event, setGroceries, groceries)
+              )}
+            </Grid>
           )}
           {needType.moving && (
             <Grid item>{movingCard(moving, handleMovingChange)}</Grid>
@@ -481,6 +489,13 @@ export const NeedRequestForm = () => {
             </Grid>
           )}
           {needType.housing && <Grid item>{housingCard}</Grid>}
+          {needType.householdItems && (
+            <Grid item>
+              {householdItemsCard(householdItems, (event) =>
+                handleCheckboxChange(event, setHouseholdItems, householdItems)
+              )}
+            </Grid>
+          )}
           {needType.clothing && (
             <Grid item>
               {clothingCard(

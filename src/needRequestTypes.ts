@@ -51,6 +51,7 @@ export interface INeedTypes {
   homeRepair: boolean;
   carRepair: boolean;
   housing: boolean;
+  householdItems: boolean;
   clothing: boolean;
   furniture: boolean;
   other: boolean;
@@ -105,6 +106,7 @@ export const defaultNeedType: INeedTypes = {
   homeRepair: false,
   carRepair: false,
   housing: false,
+  householdItems: false,
   clothing: false,
   furniture: false,
   other: false,
@@ -200,6 +202,7 @@ export interface NeedRequestGQL {
   coverLetterHelp?: boolean | null;
   carRepairDetails?: string;
   requestHomeRepairTypeId?: string | null;
+  requestHouseholdItemsId?: string | null;
   clothingType?: string | null;
   clothingSize?: string | null;
   furnitureType?: string | null;
@@ -257,6 +260,7 @@ export interface NeedRequestType {
   coverLetterHelp?: boolean | null;
   carRepairDetails?: string | null;
   homeRepairType?: IHomeRepairReqType | null;
+  householdItems?: IHouseholdItemsReqType | null;
   clothingType?: string | null;
   clothingSize?: string | null;
   furnitureType?: string | null;
@@ -297,6 +301,26 @@ export type IHomeRepairReqType = IGraphQLTable & UpdateHomeRepairTypeInput;
 
 export type IMovingReqType = IGraphQLTable & MovingInfoGQL;
 
+export type IHouseholdItemsReqType = IGraphQLTable & HouseholdItemsGQL;
+
+export type HouseholdItemsGQL = {
+  shampoo?: boolean | null;
+  bathSoap?: boolean | null;
+  toothpaste?: boolean | null;
+  toothbrush?: boolean | null;
+  deodorant?: boolean | null;
+  toiletPaper?: boolean | null;
+  handSoap?: boolean | null;
+  sanitaryPads?: boolean | null;
+  tampons?: boolean | null;
+  bleach?: boolean | null;
+  lysolSpray?: boolean | null;
+  lysolWipes?: boolean | null;
+  dishsoap?: boolean | null;
+  sponges?: boolean | null;
+  pinesol?: boolean | null;
+};
+
 export type IFoodInfoReqType = {
   __typename: string;
   id: string;
@@ -330,6 +354,7 @@ export function getNeedTypes(needType: {
   moving: boolean;
   jobTraining: boolean;
   homeRepair: boolean;
+  householdItems: boolean;
   carRepair: boolean;
   housing: boolean;
   clothing: boolean;
@@ -343,6 +368,7 @@ export function getNeedTypes(needType: {
   if (needType.carRepair) types.push(NeedType.CARREPAIR);
   if (needType.housing) types.push(NeedType.HOUSING);
   if (needType.homeRepair) types.push(NeedType.HOMEREPAIR);
+  if (needType.householdItems) types.push(NeedType.HOUSEHOLDITEMS);
   if (needType.jobTraining) types.push(NeedType.JOBTRAINING);
   if (needType.clothing) types.push(NeedType.CLOTHING);
   if (needType.furniture) types.push(NeedType.FURNITURE);

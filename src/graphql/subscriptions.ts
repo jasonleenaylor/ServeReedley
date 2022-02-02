@@ -83,6 +83,26 @@ export const onCreateRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -188,6 +208,26 @@ export const onUpdateRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -293,6 +333,26 @@ export const onDeleteRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -393,6 +453,78 @@ export const onDeleteSelfOrOtherInfo = /* GraphQL */ `
       otherResources
       requestFor
       requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateHouseholdItems = /* GraphQL */ `
+  subscription OnCreateHouseholdItems {
+    onCreateHouseholdItems {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateHouseholdItems = /* GraphQL */ `
+  subscription OnUpdateHouseholdItems {
+    onUpdateHouseholdItems {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteHouseholdItems = /* GraphQL */ `
+  subscription OnDeleteHouseholdItems {
+    onDeleteHouseholdItems {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
       createdAt
       updatedAt
     }

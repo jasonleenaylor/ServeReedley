@@ -86,6 +86,26 @@ export const createRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -194,6 +214,26 @@ export const updateRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -302,6 +342,26 @@ export const deleteRequest = /* GraphQL */ `
       clothingSize
       furnitureType
       housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
       needReason
       needTypes
       status
@@ -420,6 +480,87 @@ export const deleteSelfOrOtherInfo = /* GraphQL */ `
       otherResources
       requestFor
       requestIsKnown
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createHouseholdItems = /* GraphQL */ `
+  mutation CreateHouseholdItems(
+    $input: CreateHouseholdItemsInput!
+    $condition: ModelHouseholdItemsConditionInput
+  ) {
+    createHouseholdItems(input: $input, condition: $condition) {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateHouseholdItems = /* GraphQL */ `
+  mutation UpdateHouseholdItems(
+    $input: UpdateHouseholdItemsInput!
+    $condition: ModelHouseholdItemsConditionInput
+  ) {
+    updateHouseholdItems(input: $input, condition: $condition) {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteHouseholdItems = /* GraphQL */ `
+  mutation DeleteHouseholdItems(
+    $input: DeleteHouseholdItemsInput!
+    $condition: ModelHouseholdItemsConditionInput
+  ) {
+    deleteHouseholdItems(input: $input, condition: $condition) {
+      id
+      shampoo
+      bathSoap
+      toothpaste
+      toothbrush
+      deodorant
+      toiletPaper
+      handSoap
+      sanitaryPads
+      tampons
+      bleach
+      lysolSpray
+      lysolWipes
+      dishsoap
+      sponges
+      pinesol
       createdAt
       updatedAt
     }

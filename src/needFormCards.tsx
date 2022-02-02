@@ -14,6 +14,7 @@ import {
 import PhoneInput from "react-phone-input-2";
 import { cardStyle } from "./needRequestForm";
 import {
+  HouseholdItemsGQL,
   IFoodInfo,
   IGroceriesType,
   IHomeRepairType,
@@ -353,6 +354,16 @@ export function needRequestCard(
               />
             }
             label="Housing"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={needType.householdItems}
+                onChange={handleNeedTypeChange}
+                name="householdItems"
+              />
+            }
+            label="Household Items"
           />
           <FormControlLabel
             control={
@@ -1160,6 +1171,178 @@ export function homeRepairCard(
           </FormControl>
         </Grid>
       </Grid>
+    </Card>
+  );
+}
+
+export function householdItemsCard(
+  items: HouseholdItemsGQL,
+  handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+): JSX.Element {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title="Household Items"
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <FormControl required>
+        <FormGroup>
+          <Typography>
+            Below is a list of items that we can provide. Please check the items
+            you would use.
+          </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.bathSoap}
+                onChange={handleItemsChange}
+                name="bathSoap"
+              />
+            }
+            label="Bath Soap"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.bleach}
+                onChange={handleItemsChange}
+                name="bleach"
+              />
+            }
+            label="Bleach"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.deodorant}
+                onChange={handleItemsChange}
+                name="deodorant"
+              />
+            }
+            label="Deodorant"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.dishsoap}
+                onChange={handleItemsChange}
+                name="dishsoap"
+              />
+            }
+            label="Dish Soap"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.handSoap}
+                onChange={handleItemsChange}
+                name="handSoap"
+              />
+            }
+            label="Hand Soap"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.lysolSpray}
+                onChange={handleItemsChange}
+                name="lysolSpray"
+              />
+            }
+            label="Lysol Spray"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.lysolWipes}
+                onChange={handleItemsChange}
+                name="lysolWipes"
+              />
+            }
+            label="Lysol Wipes"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.pinesol}
+                onChange={handleItemsChange}
+                name="pinesol"
+              />
+            }
+            label="Pine-Sol"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.sanitaryPads}
+                onChange={handleItemsChange}
+                name="sanitaryPads"
+              />
+            }
+            label="Sanitary Pads"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.shampoo}
+                onChange={handleItemsChange}
+                name="shampoo"
+              />
+            }
+            label="Shampoo"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.sponges}
+                onChange={handleItemsChange}
+                name="sponges"
+              />
+            }
+            label="Sponges"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.tampons}
+                onChange={handleItemsChange}
+                name="tampons"
+              />
+            }
+            label="Tampons"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.toiletPaper}
+                onChange={handleItemsChange}
+                name="toiletPaper"
+              />
+            }
+            label="Toilet Paper"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.toothbrush}
+                onChange={handleItemsChange}
+                name="toothbrush"
+              />
+            }
+            label="Toothbrush"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.toothpaste}
+                onChange={handleItemsChange}
+                name="toothpaste"
+              />
+            }
+            label="Toothpaste"
+          />
+        </FormGroup>
+      </FormControl>
     </Card>
   );
 }

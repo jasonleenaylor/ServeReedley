@@ -24,6 +24,7 @@ type Request @model {
   clothingSize: String
   furnitureType: String
   housingHelp: Boolean
+  householdItems: HouseholdItems @connection
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
@@ -50,6 +51,24 @@ type SelfOrOtherInfo @model {
   otherResources: String
   requestFor: String
   requestIsKnown: Boolean
+}
+
+type HouseholdItems @model {
+  shampoo: Boolean
+  bathSoap: Boolean
+  toothpaste: Boolean
+  toothbrush: Boolean
+  deodorant: Boolean
+  toiletPaper: Boolean
+  handSoap: Boolean
+  sanitaryPads: Boolean
+  tampons: Boolean
+  bleach: Boolean
+  lysolSpray: Boolean
+  lysolWipes: Boolean
+  dishsoap: Boolean
+  sponges: Boolean
+  pinesol: Boolean
 }
 
 type FoodInfo @model {
@@ -107,6 +126,7 @@ enum NeedType {
   HOMEREPAIR
   CARREPAIR
   HOUSING
+  HOUSEHOLDITEMS
   CLOTHING
   FURNITURE
   OTHER
