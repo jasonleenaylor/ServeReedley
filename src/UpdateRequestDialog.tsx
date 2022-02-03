@@ -630,7 +630,7 @@ function editOrCreateFoodInfoReq(
     beef: newFoodInfo.beef,
     bread: newFoodInfo.bread,
     butter: newFoodInfo.butter,
-    eggs: newFoodInfo.butter,
+    eggs: newFoodInfo.eggs,
     fruit: newFoodInfo.fruit,
     hotdogs: newFoodInfo.hotdogs,
     jelly: newFoodInfo.jelly,
