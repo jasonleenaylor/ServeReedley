@@ -1,6 +1,6 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import { NeedReason, NeedType, RequestStatus } from "./RequestAPI";
+import { NeedReason, NeedType, NoteType, RequestStatus } from "./RequestAPI";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -87,7 +87,8 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
     if (reason && reason == "backdropClick") return;
     handleClose();
   };
-  const handleSave = () => {
+  const handleSave = async () => {
+    await handleNewNote();
     onSave(requestData);
   };
 
@@ -102,7 +103,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
       author: userInfo.username,
       requestID: requestData.id,
       dateCreated: new Date().toUTCString(),
-      createdAt: "",
+      createdAt: new Date().toUTCString(),
       updatedAt: "",
       __typename: "NoteType",
     });
@@ -459,31 +460,38 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               />
 
               <Grid container spacing={3} style={{ padding: 4 }}>
-                {requestData.note?.items.map((note, index) => {
-                  return (
-                    <Grid item xs={12}>
-                      <Paper style={{ padding: theme.spacing(3) }}>
-                        <Typography>{note!.createdAt}</Typography>
-                        <Typography>{note!.author}</Typography>
-                        <Typography>{note!.content}</Typography>
-                      </Paper>
-                    </Grid>
-                  );
-                })}
-                <Grid xs={12} spacing={3} style={{ padding: 4 }}>
-                  <TextField
-                    fullWidth
-                    label="New note"
-                    variant="outlined"
-                    value={currentNote}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      setCurrentNote(e.currentTarget.value);
-                    }}
-                  />
-                  <Button variant="outlined" onClick={handleNewNote}>
-                    Add Note
-                  </Button>
+                <Grid item xs={12}>
+                  <Paper style={{ padding: theme.spacing(3) }}>
+                    <TextField
+                      fullWidth
+                      label="New note"
+                      variant="outlined"
+                      value={currentNote}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setCurrentNote(e.currentTarget.value);
+                      }}
+                    />
+                  </Paper>
                 </Grid>
+                {requestData.note?.items
+                  ?.sort((a: NoteType | null, b: NoteType | null) => {
+                    if (a === null || b === null) {
+                      if (a === null) return b === null ? 0 : -1;
+                      return 1;
+                    }
+                    return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+                  })
+                  .map((note, index) => {
+                    return (
+                      <Grid item xs={12}>
+                        <Paper style={{ padding: theme.spacing(3) }}>
+                          <Typography>{note!.createdAt}</Typography>
+                          <Typography>{note!.author}</Typography>
+                          <Typography>{note!.content}</Typography>
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
               </Grid>
             </Card>
           </Grid>
