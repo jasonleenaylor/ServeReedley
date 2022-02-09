@@ -1,5 +1,4 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import { NeedReason, NeedType, NoteType, RequestStatus } from "./RequestAPI";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
@@ -93,6 +92,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
   };
 
   const handleNewNote = async () => {
+    if (!currentNote) return;
     if (!requestData.note?.items) {
       requestData.note!.items = [];
     }

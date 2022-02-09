@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import { API, graphqlOperation } from "aws-amplify";
 import { SetStateAction, useState } from "react";
-import "react-phone-input-2/lib/material.css";
 import {
   createFoodInfo,
   createHomeRepairType,

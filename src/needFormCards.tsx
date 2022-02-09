@@ -11,7 +11,12 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import PhoneInput from "react-phone-input-2";
+import parsePhoneNumber, {
+  AsYouType,
+  isPossiblePhoneNumber,
+  parseIncompletePhoneNumber,
+} from "libphonenumber-js";
+
 import { cardStyle } from "./needRequestForm";
 import {
   HouseholdItemsGQL,
@@ -64,22 +69,32 @@ export function contactCard(
   zip: string,
   setZip: (value: string) => void
 ): JSX.Element {
+  const formatter = new AsYouType("US");
   return (
     <Card style={cardStyle}>
-      <PhoneInput
-        value={phone}
-        onChange={(phone: any) => {
-          setPhone(phone);
+      <TextField
+        label="Phone Number"
+        value={
+          isPossiblePhoneNumber(phone)
+            ? parsePhoneNumber(phone, "US")!.number
+            : phone
+        }
+        onChange={(changeEvent: any) => {
+          let newValue = parseIncompletePhoneNumber(changeEvent.target.value);
+
+          // By default, if a value is something like `"(123)"`
+          // then Backspace would only erase the rightmost brace
+          // becoming something like `"(123"`
+          // which would give the same `"123"` value
+          // which would then be formatted back to `"(123)"`
+          // and so a user wouldn't be able to erase the phone number.
+          // Working around this issue with this simple hack.
+          if (changeEvent.target.value?.length !== 4)
+            setPhone(formatter.input(newValue));
+          else setPhone(changeEvent.target.value);
         }}
-        disableCountryCode={true}
-        disableCountryGuess={true}
-        disableDropdown={true}
-        country={"us"}
-        placeholder={""}
-        inputProps={{
-          autoComplete: "tel",
-          required: true,
-        }}
+        autoComplete="phone"
+        fullWidth
       />
       <TextField
         label="Email Address"
