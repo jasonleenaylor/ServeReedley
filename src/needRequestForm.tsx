@@ -271,7 +271,7 @@ export const NeedRequestForm = () => {
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>HOPE Sanger</Typography>
@@ -288,7 +288,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>Marjaree Mason Center</Typography>
@@ -301,7 +301,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>Faith House</Typography>
@@ -314,7 +314,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>River Harvest Community Center</Typography>
@@ -331,7 +331,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>Map Point</Typography>
@@ -344,7 +344,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>Evangel Home</Typography>
@@ -357,7 +357,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>Fresno Housing Authority</Typography>
@@ -374,7 +374,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <Typography>
@@ -386,7 +386,7 @@ export const NeedRequestForm = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <FormControlLabel
             control={
               <Checkbox
