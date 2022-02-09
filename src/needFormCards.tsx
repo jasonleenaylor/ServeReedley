@@ -95,6 +95,7 @@ export function contactCard(
         }}
         autoComplete="phone"
         fullWidth
+        required
       />
       <TextField
         label="Email Address"
