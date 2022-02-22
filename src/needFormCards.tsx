@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { t } from "i18next";
 import parsePhoneNumber, {
   AsYouType,
   isPossiblePhoneNumber,
@@ -40,14 +41,14 @@ export function nameCard(
   return (
     <Card style={cardStyle}>
       <TextField
-        label="First Name"
+        label={t("first_name")}
         value={firstName}
         onChange={(changeEvent: any) => setFirstName(changeEvent.target.value)}
         fullWidth
         required
       />
       <TextField
-        label="Last Name"
+        label={t("last_name")}
         value={lastName}
         onChange={(changeEvent: any) => setLastName(changeEvent.target.value)}
         fullWidth
@@ -73,7 +74,7 @@ export function contactCard(
   return (
     <Card style={cardStyle}>
       <TextField
-        label="Phone Number"
+        label={t("phone_number")}
         value={
           isPossiblePhoneNumber(phone)
             ? parsePhoneNumber(phone, "US")!.number
@@ -98,14 +99,14 @@ export function contactCard(
         required
       />
       <TextField
-        label="Email Address"
+        label={t("email")}
         value={email}
         onChange={(changeEvent: any) => setEmail(changeEvent.target.value)}
         autoComplete="email"
         fullWidth
       />
       <TextField
-        label="Street Address"
+        label={t("street_address")}
         value={address}
         onChange={(changeEvent: any) => setAddress(changeEvent.target.value)}
         autoComplete="address-line1"
@@ -113,14 +114,14 @@ export function contactCard(
         fullWidth
       />
       <TextField
-        label="City"
+        label={t("city")}
         value={city}
         onChange={(changeEvent: any) => setCity(changeEvent.target.value)}
         fullWidth
         required
       />
       <TextField
-        label="Zip Code"
+        label={t("zip")}
         value={zip}
         onChange={(changeEvent: any) => setZip(changeEvent.target.value)}
         inputProps={{
@@ -142,21 +143,21 @@ export function forYouOrOtherCard(
 ): JSX.Element {
   return (
     <Card style={cardStyle}>
-      <Typography>Is this request for you?</Typography>
+      <Typography>{t("for_you")}</Typography>
       <RadioGroup
-        aria-label="Is this request for you?"
+        aria-label={t("for_you")}
         value={agent}
         onChange={(changeEvent: any) => setAgent(changeEvent.target.value)}
       >
         <FormControlLabel
           value="yes"
           control={<Radio required={true} />}
-          label="Yes"
+          label={t("yes")}
         />
         <FormControlLabel
           value="no"
           control={<Radio required={true} />}
-          label="No"
+          label={t("no")}
         />
       </RadioGroup>
     </Card>
@@ -167,14 +168,15 @@ export function forSelfDetailsCard(
   usedOtherResources: RadioButtonState,
   setUsedOtherResources: (value: RadioButtonState) => void,
   otherResources: string,
-  setOtherResources: (value: string) => void
+  setOtherResources: (value: string) => void,
+  t: (s: string) => string
 ) {
   return (
     <Card style={cardStyle}>
       {" "}
-      <Typography>Have you used any other resources?</Typography>
+      <Typography>{t("have_used_other_resources")}</Typography>
       <RadioGroup
-        aria-label="Have you used any other resources?"
+        aria-label={t("have_used_other_resources")}
         value={usedOtherResources}
         onChange={(changeEvent: any) =>
           setUsedOtherResources(changeEvent.target.value)
@@ -183,17 +185,17 @@ export function forSelfDetailsCard(
         <FormControlLabel
           value="yes"
           control={<Radio required={true} />}
-          label="Yes"
+          label={t("yes")}
         />
         <FormControlLabel
           value="no"
           control={<Radio required={true} />}
-          label="No"
+          label={t("no")}
         />
       </RadioGroup>
       {usedOtherResources === "yes" && (
         <TextField
-          label="Please list resources"
+          label={t("list_other_resources")}
           value={otherResources}
           onChange={(changeEvent: any) =>
             setOtherResources(changeEvent.target.value)
@@ -212,31 +214,37 @@ export function forOtherDetailsCard(
 ) {
   return (
     <Card style={cardStyle}>
-      <TextField
-        label="Who is the request for?"
-        value={referee}
-        onChange={(changeEvent: any) => setReferee(changeEvent.target.value)}
-      />
-      <Typography>
-        Does the person know you are submitting this for them?
-      </Typography>{" "}
-      <RadioGroup
-        value={refereeKnows}
-        onChange={(changeEvent: any) =>
-          setRefereeKnows(changeEvent.target.value)
-        }
-      >
-        <FormControlLabel
-          value="yes"
-          control={<Radio required={true} />}
-          label="Yes"
-        />
-        <FormControlLabel
-          value="no"
-          control={<Radio required={true} />}
-          label="No"
-        />
-      </RadioGroup>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <TextField
+            label={t("request_is_for")}
+            value={referee}
+            onChange={(changeEvent: any) =>
+              setReferee(changeEvent.target.value)
+            }
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>{t("do_they_know")}</Typography>{" "}
+          <RadioGroup
+            value={refereeKnows}
+            onChange={(changeEvent: any) =>
+              setRefereeKnows(changeEvent.target.value)
+            }
+          >
+            <FormControlLabel
+              value="yes"
+              control={<Radio required={true} />}
+              label={t("yes")}
+            />
+            <FormControlLabel
+              value="no"
+              control={<Radio required={true} />}
+              label={t("no")}
+            />
+          </RadioGroup>
+        </Grid>
+      </Grid>
     </Card>
   );
 }
@@ -245,12 +253,13 @@ export function leadTracingCard(
   lead: LeadSource | null,
   setLead: (leadSource: LeadSource) => void,
   leadOther: string,
-  setLeadOther: (leadOther: string) => void
+  setLeadOther: (leadOther: string) => void,
+  t: (s: string) => string
 ) {
   return (
     <Card style={cardStyle}>
       <FormControl>
-        <Typography>How did you hear about us?</Typography>
+        <Typography>{t("how_did_you_hear")}</Typography>
         <RadioGroup
           value={lead}
           onChange={(changeEvent: any) => setLead(changeEvent.target.value)}
@@ -258,22 +267,22 @@ export function leadTracingCard(
           <FormControlLabel
             value={LeadSource.REDEEMERS}
             control={<Radio required={true} />}
-            label="Redeemer's Church"
+            label={t("heard_redeemers")}
           />
           <FormControlLabel
             value={LeadSource.FAMILY}
             control={<Radio required={true} />}
-            label="Family Member"
+            label={t("heard_family")}
           />
           <FormControlLabel
             value={LeadSource.FRIEND}
             control={<Radio required={true} />}
-            label="Friend"
+            label={t("heard_friend")}
           />
           <FormControlLabel
             value={LeadSource.OTHER}
             control={<Radio required={true} />}
-            label="Other"
+            label={t("other")}
           />
         </RadioGroup>
         {lead === LeadSource.OTHER && (
@@ -282,6 +291,7 @@ export function leadTracingCard(
             onChange={(changeEvent: any) =>
               setLeadOther(changeEvent.target.value)
             }
+            required
           />
         )}
       </FormControl>
@@ -298,9 +308,7 @@ export function needRequestCard(
       {" "}
       <FormControl required>
         <FormGroup>
-          <Typography>
-            Please select the type(s) of assistance needed.
-          </Typography>
+          <Typography>{t("assistance_type")}</Typography>
           <FormControlLabel
             control={
               <Checkbox
@@ -309,7 +317,7 @@ export function needRequestCard(
                 name="meals"
               />
             }
-            label="Meals"
+            label={t("meals")}
           />
           <FormControlLabel
             control={
@@ -319,7 +327,7 @@ export function needRequestCard(
                 name="groceries"
               />
             }
-            label="Groceries"
+            label={t("groceries")}
           />
           <FormControlLabel
             control={
@@ -329,7 +337,7 @@ export function needRequestCard(
                 name="moving"
               />
             }
-            label="Moving Assistance"
+            label={t("moving_assistance")}
           />
           <FormControlLabel
             control={
@@ -339,7 +347,7 @@ export function needRequestCard(
                 name="jobTraining"
               />
             }
-            label="Job Preparedness"
+            label={t("job_prep")}
           />
           <FormControlLabel
             control={
@@ -349,7 +357,7 @@ export function needRequestCard(
                 name="carRepair"
               />
             }
-            label="Car Repair or Maintenance"
+            label={t("car_repair")}
           />
           <FormControlLabel
             control={
@@ -359,7 +367,7 @@ export function needRequestCard(
                 name="homeRepair"
               />
             }
-            label="Home Repair or Maintenance"
+            label={t("home_repair")}
           />
           <FormControlLabel
             control={
@@ -369,7 +377,7 @@ export function needRequestCard(
                 name="housing"
               />
             }
-            label="Housing"
+            label={t("housing")}
           />
           <FormControlLabel
             control={
@@ -379,7 +387,17 @@ export function needRequestCard(
                 name="householdItems"
               />
             }
-            label="Household Items"
+            label={t("household_items")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={needType.hygeneItems}
+                onChange={handleNeedTypeChange}
+                name="hygeneItems"
+              />
+            }
+            label={t("hygene_items")}
           />
           <FormControlLabel
             control={
@@ -389,7 +407,7 @@ export function needRequestCard(
                 name="clothing"
               />
             }
-            label="Clothing"
+            label={t("clothing")}
           />
           <FormControlLabel
             control={
@@ -399,7 +417,7 @@ export function needRequestCard(
                 name="furniture"
               />
             }
-            label="Furniture"
+            label={t("furniture")}
           />
           <FormControlLabel
             control={
@@ -409,7 +427,7 @@ export function needRequestCard(
                 name="other"
               />
             }
-            label="Other"
+            label={t("other")}
           />
         </FormGroup>
       </FormControl>
@@ -425,9 +443,7 @@ export function needReasonCard(
     <Card style={cardStyle}>
       <FormControl required error={false}>
         <FormGroup>
-          <Typography>
-            Why do you need assistance? (Select all that apply)
-          </Typography>
+          <Typography>{t("reason_for_need")}</Typography>
           <FormControlLabel
             control={
               <Checkbox
@@ -436,7 +452,7 @@ export function needReasonCard(
                 name="covid"
               />
             }
-            label="Loss of loved one due to Covid-19 or other complications"
+            label={t("covid_loss")}
           />
           <FormControlLabel
             control={
@@ -446,7 +462,7 @@ export function needReasonCard(
                 name="illness"
               />
             }
-            label="Sick or recovering from sickness"
+            label={t("illness")}
           />
           <FormControlLabel
             control={
@@ -456,7 +472,7 @@ export function needReasonCard(
                 name="financial"
               />
             }
-            label="Financially struggling"
+            label={t("financial")}
           />
         </FormGroup>
       </FormControl>
@@ -472,17 +488,13 @@ export function foodInfoCard(
   return (
     <Card style={cardStyle}>
       <CardHeader
-        title={
-          mealsOrGroceries
-            ? "Family info for meals"
-            : "Family info for groceries"
-        }
+        title={mealsOrGroceries ? t("family_meals") : t("family_groceries")}
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <TextField
-            label="Number of family members"
+            label={t("family_size")}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9][0-9]?",
@@ -500,9 +512,7 @@ export function foodInfoCard(
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <Typography>
-              Please list ages of children under the age of 18
-            </Typography>
+            <Typography>{t("minors")}</Typography>
             <TextField
               inputProps={{
                 pattern: "([0-9][0-8]?[ -,]?[ ]?)*",
@@ -519,7 +529,7 @@ export function foodInfoCard(
           </FormControl>
         </Grid>
         <Grid item>
-          <Typography>Are there any food allergies?</Typography>
+          <Typography>{t("have_allergies")}</Typography>
           <RadioGroup
             value={foodInfo.haveAllergies}
             onChange={(changeEvent: any) =>
@@ -532,19 +542,19 @@ export function foodInfoCard(
             <FormControlLabel
               value="yes"
               control={<Radio required={true} />}
-              label="Yes"
+              label={t("yes")}
             />
             <FormControlLabel
               value="no"
               control={<Radio required={true} />}
-              label="No"
+              label={t("no")}
             />
           </RadioGroup>
         </Grid>
         {foodInfo.haveAllergies === RadioButtonState.YES && (
           <Grid item xs={12}>
             <FormControl>
-              <Typography>Please list allergies</Typography>
+              <Typography>{t("allergy_list")}</Typography>
               <TextField
                 value={foodInfo.allergies}
                 onChange={(changeEvent: any) =>
@@ -578,14 +588,15 @@ export function movingCard(
 
   return (
     <Card style={cardStyle}>
-      <CardHeader title="Moving" titleTypographyProps={{ variant: "h6" }} />
+      <CardHeader
+        title={t("moving")}
+        titleTypographyProps={{ variant: "h6" }}
+      />
       <Grid container spacing={4}>
         <Grid item>
           {" "}
           <FormControl>
-            <Typography>
-              What items need to be moved (couch, appliance, whole household)?
-            </Typography>
+            <Typography>{t("moving_items")}</Typography>
             <TextField
               required
               value={moving.items}
@@ -599,9 +610,7 @@ export function movingCard(
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography>
-            Do you have transportation such as your own truck or a rented UHaul?
-          </Typography>
+          <Typography>{t("have_transportation")}</Typography>
           <RadioGroup
             value={moving.haveTransportation}
             onChange={(changeEvent: any) =>
@@ -614,18 +623,18 @@ export function movingCard(
             <FormControlLabel
               value="yes"
               control={<Radio required={true} />}
-              label="Yes"
+              label={t("yes")}
             />
             <FormControlLabel
               value="no"
               control={<Radio required={true} />}
-              label="No"
+              label={t("no")}
             />
           </RadioGroup>
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <Typography>Is this move within 30 miles of Reedley?</Typography>
+            <Typography>{t("near_reedley")}</Typography>
             <RadioGroup
               value={moving.withinRange}
               onChange={(changeEvent: any) => {
@@ -634,30 +643,25 @@ export function movingCard(
                   withinRange: changeEvent.target.value,
                 });
                 if (changeEvent.target.value.toLowerCase() !== "yes") {
-                  alert(
-                    "We can only help with moves within 30 miles of Reedley."
-                  );
+                  alert(t("move_too_far"));
                 }
               }}
             >
               <FormControlLabel
                 value="yes"
                 control={<Radio required={true} />}
-                label="Yes"
+                label={t("yes")}
               />
               <FormControlLabel
                 value="no"
                 control={<Radio required={true} />}
-                label="No"
+                label={t("no")}
               />
             </RadioGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography>
-            Any conditions that need to be taken into consideration? (Steep
-            driveway, dirt roads, stairs, etc.)
-          </Typography>
+          <Typography>{t("special_conditions")}</Typography>
           <RadioGroup
             value={moving.haveSpecialConditions}
             onChange={(changeEvent: any) =>
@@ -670,12 +674,12 @@ export function movingCard(
             <FormControlLabel
               value="yes"
               control={<Radio required={true} />}
-              label="Yes"
+              label={t("yes")}
             />
             <FormControlLabel
               value="no"
               control={<Radio required={true} />}
-              label="No"
+              label={t("no")}
             />
           </RadioGroup>
         </Grid>
@@ -691,7 +695,7 @@ export function movingCard(
                       name="steepDriveway"
                     />
                   }
-                  label="Steep Driveway"
+                  label={t("steep_driveway")}
                 />
                 <FormControlLabel
                   control={
@@ -701,7 +705,7 @@ export function movingCard(
                       name="stairs"
                     />
                   }
-                  label="Stairs"
+                  label={t("stairs")}
                 />
                 <FormControlLabel
                   control={
@@ -711,7 +715,7 @@ export function movingCard(
                       name="unpavedRoad"
                     />
                   }
-                  label="Unpaved Road"
+                  label={t("unpaved_road")}
                 />
                 <FormControlLabel
                   control={
@@ -721,13 +725,13 @@ export function movingCard(
                       name="other"
                     />
                   }
-                  label="Other?"
+                  label={t("other")}
                 />
               </FormGroup>
 
               {moving.other && (
                 <FormControl>
-                  <Typography>What other things should we know?</Typography>
+                  <Typography>{t("other_considerations")}</Typography>
                   <TextField
                     value={moving.otherDetails}
                     onChange={(changeEvent: any) =>
@@ -748,17 +752,17 @@ export function movingCard(
             <FormControlLabel
               value="false"
               control={<Checkbox required={true} />}
-              label="I understand that I'm responsible for packing and wrapping."
+              label={t("packing_wrapping")}
             />
             <FormControlLabel
               value="false"
               control={<Checkbox required={true} />}
-              label="I understand that this is a volunteer operation and that I am responsible for any damage."
+              label={t("volunteer_liability")}
             />
             <FormControlLabel
               value="false"
               control={<Checkbox required={true} />}
-              label="If the move is to a storage unit I agree to make all arrangements prior to the move."
+              label={t("storage_unit")}
             />
           </Grid>
         )}
@@ -773,13 +777,13 @@ export function groceriesCard(
 ): JSX.Element {
   return (
     <Card style={cardStyle}>
-      <CardHeader title="Groceries" titleTypographyProps={{ variant: "h6" }} />
+      <CardHeader
+        title={t("groceries")}
+        titleTypographyProps={{ variant: "h6" }}
+      />
       <FormControl required>
         <FormGroup>
-          <Typography>
-            Below is a list of items that we can provide. Please check the items
-            you would use.
-          </Typography>
+          <Typography>{t("groceries_list")}</Typography>
           <FormControlLabel
             control={
               <Checkbox
@@ -788,7 +792,7 @@ export function groceriesCard(
                 name="milk"
               />
             }
-            label="Gallon of milk"
+            label={t("milk")}
           />
           <FormControlLabel
             control={
@@ -798,7 +802,7 @@ export function groceriesCard(
                 name="eggs"
               />
             }
-            label="Dozen eggs"
+            label={t("eggs")}
           />
           <FormControlLabel
             control={
@@ -808,7 +812,7 @@ export function groceriesCard(
                 name="bread"
               />
             }
-            label="Bread"
+            label={t("bread")}
           />
           <FormControlLabel
             control={
@@ -818,7 +822,7 @@ export function groceriesCard(
                 name="tortillas"
               />
             }
-            label="20 count flour tortillas"
+            label={t("tortillas")}
           />
           <FormControlLabel
             control={
@@ -828,7 +832,7 @@ export function groceriesCard(
                 name="rice"
               />
             }
-            label="Pound of long grain rice"
+            label={t("rice")}
           />
           <FormControlLabel
             control={
@@ -838,7 +842,7 @@ export function groceriesCard(
                 name="beans"
               />
             }
-            label="2 Pounds of pinto beans"
+            label={t("beans")}
           />
           <FormControlLabel
             control={
@@ -848,7 +852,7 @@ export function groceriesCard(
                 name="cheese"
               />
             }
-            label="12oz American cheese singles"
+            label={t("cheese")}
           />
           <FormControlLabel
             control={
@@ -858,7 +862,7 @@ export function groceriesCard(
                 name="beef"
               />
             }
-            label="Pound of ground beef"
+            label={t("beef")}
           />
           <FormControlLabel
             control={
@@ -868,7 +872,7 @@ export function groceriesCard(
                 name="hotdogs"
               />
             }
-            label="8 count hot dogs"
+            label={t("hotdogs")}
           />
           <FormControlLabel
             control={
@@ -878,7 +882,7 @@ export function groceriesCard(
                 name="lunchMeat"
               />
             }
-            label="Turkey lunch meat"
+            label={t("lunch_meat")}
           />
           <FormControlLabel
             control={
@@ -888,7 +892,7 @@ export function groceriesCard(
                 name="fruit"
               />
             }
-            label="Fresh or canned fruit"
+            label={t("fruit")}
           />
           <FormControlLabel
             control={
@@ -898,7 +902,7 @@ export function groceriesCard(
                 name="butter"
               />
             }
-            label="Pound of unsalted butter"
+            label={t("butter")}
           />
           <FormControlLabel
             control={
@@ -908,7 +912,7 @@ export function groceriesCard(
                 name="peanutButter"
               />
             }
-            label="Peanut butter"
+            label={t("peanut_butter")}
           />
           <FormControlLabel
             control={
@@ -918,7 +922,7 @@ export function groceriesCard(
                 name="jelly"
               />
             }
-            label="Jelly"
+            label={t("jelly")}
           />
         </FormGroup>
       </FormControl>
@@ -935,12 +939,15 @@ export function clothingCard(
   return (
     <Card style={cardStyle}>
       {" "}
-      <CardHeader title="Clothing" titleTypographyProps={{ variant: "h6" }} />
+      <CardHeader
+        title={t("clothing")}
+        titleTypographyProps={{ variant: "h6" }}
+      />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           {" "}
           <FormControl>
-            <Typography>What type of clothing do you need?</Typography>
+            <Typography>{t("clothing_type")}</Typography>
             <TextField
               required
               value={clothingType}
@@ -953,7 +960,7 @@ export function clothingCard(
         <Grid item xs={12}>
           {" "}
           <FormControl>
-            <Typography>What size clothing do you need?</Typography>
+            <Typography>{t("clothing_size")}</Typography>
             <TextField
               required
               value={clothingSize}
@@ -975,12 +982,15 @@ export function furnitureCard(
   return (
     <Card style={cardStyle}>
       {" "}
-      <CardHeader title="Furniture" titleTypographyProps={{ variant: "h6" }} />
+      <CardHeader
+        title={t("furniture")}
+        titleTypographyProps={{ variant: "h6" }}
+      />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           {" "}
           <FormControl>
-            <Typography>What type of furniture do you need?</Typography>
+            <Typography>{t("furniture_type")}</Typography>
             <TextField
               required
               value={furnitureType}
@@ -1002,12 +1012,12 @@ export function jobTrainingCard(
   return (
     <Card style={cardStyle}>
       <CardHeader
-        title="Job Training"
+        title={t("job_prep")}
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Typography>Do you need help with your resume?</Typography>
+          <Typography>{t("resume_help")}</Typography>
           <RadioGroup
             value={jobTraining.resumeHelp}
             onChange={(changeEvent: any) =>
@@ -1020,17 +1030,17 @@ export function jobTrainingCard(
             <FormControlLabel
               value="yes"
               control={<Radio required={true} />}
-              label="Yes"
+              label={t("yes")}
             />
             <FormControlLabel
               value="no"
               control={<Radio required={true} />}
-              label="No"
+              label={t("no")}
             />
           </RadioGroup>
         </Grid>
         <Grid item xs={12}>
-          <Typography>Do you need help writing a cover letter?</Typography>
+          <Typography>{t("cover_letter_help")}</Typography>
           <RadioGroup
             value={jobTraining.coverLetterHelp}
             onChange={(changeEvent: any) =>
@@ -1043,12 +1053,12 @@ export function jobTrainingCard(
             <FormControlLabel
               value="yes"
               control={<Radio required={true} />}
-              label="Yes"
+              label={t("yes")}
             />
             <FormControlLabel
               value="no"
               control={<Radio required={true} />}
-              label="No"
+              label={t("no")}
             />
           </RadioGroup>
         </Grid>
@@ -1064,20 +1074,16 @@ export function carRepairCard(
   return (
     <Card style={cardStyle}>
       <CardHeader
-        title="Car Maintenence/Repair"
+        title={t("car_repair")}
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Typography>
-            Serve Reedley can only help with minor maintenance and repairs.
-          </Typography>
+          <Typography>{t("repair_limits")}</Typography>
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <Typography>
-              Please describe the work needed on your vehicle.
-            </Typography>
+            <Typography>{t("car_repair_details")}</Typography>
             <TextField
               value={carRepairDetails}
               onChange={(changeEvent: any) =>
@@ -1104,14 +1110,12 @@ export function homeRepairCard(
   return (
     <Card style={cardStyle}>
       <CardHeader
-        title="Home Maintenance/Repair"
+        title={t("home_repair")}
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Typography>
-            Serve Reedley can only help with minor maintenance and repairs.
-          </Typography>
+          <Typography>{t("repair_limits")}</Typography>
         </Grid>
         <Grid item xs={12}>
           <FormControl>
@@ -1124,7 +1128,7 @@ export function homeRepairCard(
                     name="plumbing"
                   />
                 }
-                label="Plumbing"
+                label={t("plumbing")}
               />
               <FormControlLabel
                 control={
@@ -1134,7 +1138,7 @@ export function homeRepairCard(
                     name="electrical"
                   />
                 }
-                label="Electrical"
+                label={t("electrical")}
               />
               <FormControlLabel
                 control={
@@ -1144,7 +1148,7 @@ export function homeRepairCard(
                     name="painting"
                   />
                 }
-                label="Painting"
+                label={t("painting")}
               />
               <FormControlLabel
                 control={
@@ -1154,7 +1158,7 @@ export function homeRepairCard(
                     name="yardwork"
                   />
                 }
-                label="Yard Work"
+                label={t("yard_work")}
               />
               <FormControlLabel
                 control={
@@ -1164,16 +1168,14 @@ export function homeRepairCard(
                     name="other"
                   />
                 }
-                label="Other?"
+                label={t("other")}
               />
             </FormGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl>
-            <Typography>
-              Please describe the work needed on your home.
-            </Typography>
+            <Typography>{t("home_repair_details")}</Typography>
             <TextField
               value={homeRepairDetails.details}
               onChange={(changeEvent: any) =>
@@ -1198,15 +1200,12 @@ export function householdItemsCard(
   return (
     <Card style={cardStyle}>
       <CardHeader
-        title="Household Items"
+        title={t("household_items")}
         titleTypographyProps={{ variant: "h6" }}
       />
       <FormControl required>
         <FormGroup>
-          <Typography>
-            Below is a list of items that we can provide. Please check the items
-            you would use.
-          </Typography>
+          <Typography>{t("household_items_list")}</Typography>
           <FormControlLabel
             control={
               <Checkbox
@@ -1215,7 +1214,7 @@ export function householdItemsCard(
                 name="bathSoap"
               />
             }
-            label="Bath Soap"
+            label={t("bath_soap")}
           />
           <FormControlLabel
             control={
@@ -1225,7 +1224,7 @@ export function householdItemsCard(
                 name="bleach"
               />
             }
-            label="Bleach"
+            label={t("bleach")}
           />
           <FormControlLabel
             control={
@@ -1235,7 +1234,7 @@ export function householdItemsCard(
                 name="deodorant"
               />
             }
-            label="Deodorant"
+            label={t("deoderant")}
           />
           <FormControlLabel
             control={
@@ -1245,7 +1244,7 @@ export function householdItemsCard(
                 name="dishsoap"
               />
             }
-            label="Dish Soap"
+            label={t("dish_soap")}
           />
           <FormControlLabel
             control={
@@ -1255,7 +1254,7 @@ export function householdItemsCard(
                 name="handSoap"
               />
             }
-            label="Hand Soap"
+            label={t("hand_soap")}
           />
           <FormControlLabel
             control={
@@ -1265,7 +1264,7 @@ export function householdItemsCard(
                 name="lysolSpray"
               />
             }
-            label="Lysol Spray"
+            label={t("lysol_spray")}
           />
           <FormControlLabel
             control={
@@ -1275,7 +1274,7 @@ export function householdItemsCard(
                 name="lysolWipes"
               />
             }
-            label="Lysol Wipes"
+            label={t("lysol_wipes")}
           />
           <FormControlLabel
             control={
@@ -1285,7 +1284,7 @@ export function householdItemsCard(
                 name="pinesol"
               />
             }
-            label="Pine-Sol"
+            label={t("pine-sol")}
           />
           <FormControlLabel
             control={
@@ -1295,7 +1294,7 @@ export function householdItemsCard(
                 name="sanitaryPads"
               />
             }
-            label="Sanitary Pads"
+            label={t("sanitary_pads")}
           />
           <FormControlLabel
             control={
@@ -1305,7 +1304,7 @@ export function householdItemsCard(
                 name="shampoo"
               />
             }
-            label="Shampoo"
+            label={t("shampoo")}
           />
           <FormControlLabel
             control={
@@ -1315,7 +1314,7 @@ export function householdItemsCard(
                 name="sponges"
               />
             }
-            label="Sponges"
+            label={t("sponges")}
           />
           <FormControlLabel
             control={
@@ -1325,7 +1324,7 @@ export function householdItemsCard(
                 name="tampons"
               />
             }
-            label="Tampons"
+            label={t("tampons")}
           />
           <FormControlLabel
             control={
@@ -1335,7 +1334,7 @@ export function householdItemsCard(
                 name="toiletPaper"
               />
             }
-            label="Toilet Paper"
+            label={t("toilet_paper")}
           />
           <FormControlLabel
             control={
@@ -1345,7 +1344,7 @@ export function householdItemsCard(
                 name="toothbrush"
               />
             }
-            label="Toothbrush"
+            label={t("toothbrush")}
           />
           <FormControlLabel
             control={
@@ -1355,7 +1354,7 @@ export function householdItemsCard(
                 name="toothpaste"
               />
             }
-            label="Toothpaste"
+            label={t("toothpaste")}
           />
         </FormGroup>
       </FormControl>
@@ -1369,11 +1368,11 @@ export function otherNeedCard(
 ) {
   return (
     <Card style={cardStyle}>
-      <CardHeader title="Other" titleTypographyProps={{ variant: "h6" }} />
+      <CardHeader title={t("Other")} titleTypographyProps={{ variant: "h6" }} />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <TextField
-            label="Describe your other needs"
+            label={t("other_needs")}
             onChange={(changeEvent: any) => setOther(changeEvent.target.value)}
             value={other}
             required

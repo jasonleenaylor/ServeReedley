@@ -52,6 +52,7 @@ export interface INeedTypes {
   carRepair: boolean;
   housing: boolean;
   householdItems: boolean;
+  hygeneItems: boolean;
   clothing: boolean;
   furniture: boolean;
   other: boolean;
@@ -107,6 +108,7 @@ export const defaultNeedType: INeedTypes = {
   carRepair: false,
   housing: false,
   householdItems: false,
+  hygeneItems: false,
   clothing: false,
   furniture: false,
   other: false,
@@ -298,6 +300,10 @@ export interface IGraphQLTable {
 }
 
 export type IHomeRepairReqType = IGraphQLTable & UpdateHomeRepairTypeInput;
+
+export interface ILocalizeProps {
+  t: (s: string) => string;
+}
 
 export type IMovingReqType = IGraphQLTable & MovingInfoGQL;
 

@@ -6,8 +6,11 @@ import NeedRequestTable from "./NeedRequestTable";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import theme from "./theme";
 import NeedSubmitted from "./NeedSubmitted";
+import "./i18n";
+import { useTranslation } from "react-i18next";
 
 export default function App() {
+  const { t } = useTranslation();
   return (
     <ThemeProvider theme={theme}>
       <LocalizeProvider>
@@ -16,7 +19,7 @@ export default function App() {
             <nav>
               <ul>
                 <li>
-                  <Link to="/">Home</Link>
+                  <Link to="/">{t("home")}</Link>
                 </li>
                 <li>
                   <Link to="/request-need">Need Help?</Link>
@@ -34,13 +37,13 @@ export default function App() {
             renders the first one that matches the current URL. */}
             <Switch>
               <Route path="/request-need">
-                <NeedRequestForm />
+                <NeedRequestForm t={t} />
               </Route>
               <Route path="/need-submitted">
                 <NeedSubmitted />
               </Route>
               <Route path="/requests">
-                <NeedRequestTable />
+                <NeedRequestTable t={t} />
               </Route>
               <Route path="/">
                 <Home />

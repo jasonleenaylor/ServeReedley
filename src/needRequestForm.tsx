@@ -1,15 +1,22 @@
+import parsePhoneNumber from "libphonenumber-js";
 import {
+  AppBar,
   Button,
   Card,
   CardHeader,
   Checkbox,
   Container,
+  FormControl,
   FormControlLabel,
   Grid,
+  MenuItem,
+  Select,
+  Toolbar,
   Typography,
 } from "@material-ui/core";
 import { API, graphqlOperation } from "aws-amplify";
-import { SetStateAction, useState } from "react";
+import React, { SetStateAction, useState } from "react";
+import { t } from "i18next";
 import {
   createFoodInfo,
   createHomeRepairType,
@@ -36,7 +43,7 @@ import {
   IJobTraining,
   IMovingType,
   HouseholdItemsGQL,
-  IHouseholdItemsReqType,
+  ILocalizeProps,
 } from "./needRequestTypes";
 import {
   carRepairCard,
@@ -59,8 +66,10 @@ import {
   otherNeedCard,
 } from "./needFormCards";
 import { useHistory } from "react-router-dom";
+import { Trans, useTranslation } from "react-i18next";
 
-export const NeedRequestForm = () => {
+export const NeedRequestForm = (props: ILocalizeProps) => {
+  const { i18n } = useTranslation();
   const history = useHistory();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -264,10 +273,20 @@ export const NeedRequestForm = () => {
     }
   };
 
+  function housingPhone(phone: string) {
+    let formattedPhone = parsePhoneNumber(phone, "US")?.formatNational();
+    let phoneUri = parsePhoneNumber(phone, "US")?.getURI();
+    return (
+      <Trans i18nKey="housing_phone_field">
+        Phone: <a href={phoneUri}>{{ formattedPhone }}</a>
+      </Trans>
+    );
+  }
+
   const housingCard = (
     <Card style={cardStyle}>
       <CardHeader
-        title="Housing Referrals"
+        title={t("housing")}
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
@@ -277,14 +296,15 @@ export const NeedRequestForm = () => {
               <Typography>HOPE Sanger</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5598757677">(559) 875-7677</a>
+              {housingPhone("5598757677")}
             </Grid>
             <Grid item xs={12}>
-              Address: 502 L Street, Sanger, CA 93657
+              {t("address_label", {
+                address: "502 L Street, Sanger, CA 93657",
+              })}
             </Grid>
             <Grid item xs={12}>
-              Criteria: 17 rooms at a renovated hotel for homeless individuals,
-              families, and single parents with children.
+              {t("housing_hope_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -294,10 +314,10 @@ export const NeedRequestForm = () => {
               <Typography>Marjaree Mason Center</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5592334357">(559) 233-4357</a>
+              {housingPhone("5592334357")}
             </Grid>
             <Grid item xs={12}>
-              Criteria: victims of domestic violence, male or female, families
+              {t("housing_marjaree_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -307,10 +327,10 @@ export const NeedRequestForm = () => {
               <Typography>Faith House</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5594034342">(559) 403-4342</a>
+              {housingPhone("5594034342")}
             </Grid>
             <Grid item xs={12}>
-              Criteria: 30-60 day stay for displaced families.
+              {t("housing_faithhouse_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -320,14 +340,15 @@ export const NeedRequestForm = () => {
               <Typography>River Harvest Community Center</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5596388882">(559) 638-8882</a>
+              {housingPhone("5596388882")}
             </Grid>
             <Grid item xs={12}>
-              Address: 856 S. Reed Ave. Reedley, CA 93654
+              {t("address_label", {
+                address: "856 S. Reed Ave. Reedley, CA 93654",
+              })}
             </Grid>
             <Grid item xs={12}>
-              Criteria: sober living accommodations for male, female, or
-              families
+              {t("housing_riverharvest_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -337,10 +358,10 @@ export const NeedRequestForm = () => {
               <Typography>Map Point</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5595126777">(559) 512-6777</a>
+              {housingPhone("5595126777")}
             </Grid>
             <Grid item xs={12}>
-              Criteria: Low income housing
+              {t("housing_mappoint_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -350,10 +371,10 @@ export const NeedRequestForm = () => {
               <Typography>Evangel Home</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5592644714">(559) 264-4714</a>
+              {housingPhone("5592644714")}
             </Grid>
             <Grid item xs={12}>
-              Criteria: Emergency shelter in Fresno; possible long term housing
+              {t("housing_evangel_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -363,14 +384,18 @@ export const NeedRequestForm = () => {
               <Typography>Fresno Housing Authority</Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:18558328082">1-855-832-8082</a> and/or{" "}
-              <a href="tel:5594438400">(559) 443-8400</a> x 4475
+              {housingPhone("18558328082")}
             </Grid>
             <Grid item xs={12}>
-              Address: 1331 Fulton Street, Fresno, CA
+              {housingPhone("5592644714ext.4475")}
             </Grid>
             <Grid item xs={12}>
-              Criteria: Emergency Housing
+              {t("address_label", {
+                address: "1331 Fulton Street, Fresno, CA",
+              })}
+            </Grid>
+            <Grid item xs={12}>
+              {t("housing_fha_criteria")}
             </Grid>
           </Grid>
         </Grid>
@@ -382,7 +407,7 @@ export const NeedRequestForm = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              Phone: <a href="tel:5592654800">(559) 265-4800</a>
+              {housingPhone("5592654800")}
             </Grid>
           </Grid>
         </Grid>
@@ -401,7 +426,7 @@ export const NeedRequestForm = () => {
                 name="housingHelp"
               />
             }
-            label="I would like additional help with housing"
+            label={t("housing_help")}
           />
         </Grid>
       </Grid>
@@ -410,6 +435,34 @@ export const NeedRequestForm = () => {
 
   return (
     <Container>
+      <Toolbar>
+        <Grid container>
+          <Grid item xs={1}>
+            <FormControl variant="outlined">
+              <Select
+                labelId="lng-label"
+                id="lng"
+                value={i18n.language}
+                onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+                  i18n.changeLanguage(e.target.value as string);
+                }}
+              >
+                <MenuItem value="en">English</MenuItem>
+                <MenuItem value="es">Español</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={11} style={{ textAlign: "center" }}>
+            <Typography>Community Resource Network</Typography>
+          </Grid>
+        </Grid>
+      </Toolbar>
+      <Grid container style={{ textAlign: "center" }}>
+        <Typography>
+          Please note that we only serve the greater Reedley area (within a 15
+          mile radius of the city of Reedley, CA)
+        </Typography>
+      </Grid>
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
@@ -436,7 +489,8 @@ export const NeedRequestForm = () => {
                 usedOtherResources,
                 setUsedOtherResources,
                 otherResoources,
-                setOtherResources
+                setOtherResources,
+                props.t
               )}
             {agent === "no" &&
               forOtherDetailsCard(
@@ -447,7 +501,7 @@ export const NeedRequestForm = () => {
               )}
           </Grid>
           <Grid item xs={12}>
-            {leadTracingCard(lead, setLead, leadOther, setLeadOther)}
+            {leadTracingCard(lead, setLead, leadOther, setLeadOther, props.t)}
           </Grid>
           <Grid item xs={12}>
             {needReasonCard(needReason, (event) =>
@@ -519,6 +573,7 @@ export const NeedRequestForm = () => {
     </Container>
   );
 };
+
 function getReasons(needReason: {
   covid: boolean;
   illness: boolean;

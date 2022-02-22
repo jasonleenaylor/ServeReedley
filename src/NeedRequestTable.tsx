@@ -34,6 +34,7 @@ import {
   IGraphQLTable,
   IHomeRepairReqType,
   IHomeRepairType,
+  ILocalizeProps,
   MovingInfoGQL,
   NeedRequestType,
 } from "./needRequestTypes";
@@ -41,7 +42,7 @@ import UpdateRequestDialogButton from "./UpdateRequestDialog";
 import { Grid, Paper, Snackbar, Typography } from "@material-ui/core";
 import theme from "./theme";
 
-function NeedRequestTable() {
+function NeedRequestTable(props: ILocalizeProps) {
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [requests, setRequests] = useState([]);
   const columns: Column<any>[] = [
@@ -65,6 +66,7 @@ function NeedRequestTable() {
               );
               fetchNeedRequests();
             }}
+            t={props.t}
           />
         );
       },

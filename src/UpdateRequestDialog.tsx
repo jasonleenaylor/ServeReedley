@@ -25,6 +25,7 @@ import {
   IHouseholdItemsReqType,
   HouseholdItemsGQL,
   IJobTraining,
+  ILocalizeProps,
 } from "./needRequestTypes";
 import {
   Box,
@@ -73,7 +74,7 @@ export interface SimpleDialogProps {
   onSave: (value: NeedRequestType) => void;
 }
 
-function UpdateRequestDialog(props: SimpleDialogProps) {
+function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
   const [requestData, setRequestData] = React.useState(props.requestData);
   const [currentNote, setCurrentNote] = React.useState("");
   const [movingConditions, setMovingConditions] = React.useState(true);
@@ -141,7 +142,7 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
               />
               <FormControl fullWidth>
                 <Select
-                  labelId="demo-simple-select-label"
+                  labelId="status-select-label"
                   id="status-select"
                   value={requestData.status}
                   label="Status"
@@ -212,7 +213,8 @@ function UpdateRequestDialog(props: SimpleDialogProps) {
                   : RadioButtonState.NO,
                 (value: RadioButtonState) => {},
                 requestData.selfOrOtherInfo.otherResources!,
-                (value: string) => {}
+                (value: string) => {},
+                props.t
               )}
           </Grid>
           <Grid item>
@@ -550,6 +552,7 @@ function needTypeArrayToBooleans(requestData: NeedRequestType): INeedTypes {
     housing: requestData.needTypes.includes(NeedType.HOUSING),
     homeRepair: requestData.needTypes.includes(NeedType.HOMEREPAIR),
     householdItems: requestData.needTypes.includes(NeedType.HOUSEHOLDITEMS),
+    hygeneItems: requestData.needTypes.includes(NeedType.HOUSEHOLDITEMS),
     meals: requestData.needTypes.includes(NeedType.MEALS),
     furniture: requestData.needTypes.includes(NeedType.FURNITURE),
     groceries: requestData.needTypes.includes(NeedType.GROCERIES),
@@ -578,7 +581,9 @@ function homeRepairRequestToInterface(homeRepairType: {
   };
 }
 
-export default function UpdateRequestDialogButton(props: SimpleDialogProps) {
+export default function UpdateRequestDialogButton(
+  props: SimpleDialogProps & ILocalizeProps
+) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -604,6 +609,7 @@ export default function UpdateRequestDialogButton(props: SimpleDialogProps) {
         open={open}
         onClose={handleClose}
         onSave={handleSave}
+        t={props.t}
       />
     </div>
   );
