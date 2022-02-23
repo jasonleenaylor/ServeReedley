@@ -1,6 +1,5 @@
 import parsePhoneNumber from "libphonenumber-js";
 import {
-  AppBar,
   Button,
   Card,
   CardHeader,
@@ -458,10 +457,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
         </Grid>
       </Toolbar>
       <Grid container style={{ textAlign: "center" }}>
-        <Typography>
-          Please note that we only serve the greater Reedley area (within a 15
-          mile radius of the city of Reedley, CA)
-        </Typography>
+        <Typography>{t("crn_limitations")}</Typography>
       </Grid>
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
