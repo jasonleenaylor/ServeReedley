@@ -14,11 +14,6 @@
     "categories": {
       "auth": {
         "communityresourcenet1f61b8bc": {}
-      },
-      "function": {
-        "communityresourcenet5d8d81f5": {
-          "deploymentBucketName": "amplify-communityresourcenet-staging-215638-deployment",
-        }
       }
     }
   }
