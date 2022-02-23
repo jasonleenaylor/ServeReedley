@@ -43,5 +43,22 @@
         }
       }
     }
+  },
+  "function": {
+    "communityresourcenet5d8d81f5": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "crn",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ]
+        }
+      ]
+    }
   }
 }
