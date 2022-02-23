@@ -309,16 +309,7 @@ export function needRequestCard(
       <FormControl required>
         <FormGroup>
           <Typography>{t("assistance_type")}</Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.meals}
-                onChange={handleNeedTypeChange}
-                name="meals"
-              />
-            }
-            label={t("meals")}
-          />
+
           <FormControlLabel
             control={
               <Checkbox
@@ -332,52 +323,22 @@ export function needRequestCard(
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.moving}
+                checked={needType.meals}
                 onChange={handleNeedTypeChange}
-                name="moving"
+                name="meals"
               />
             }
-            label={t("moving_assistance")}
+            label={t("meals")}
           />
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.jobTraining}
+                checked={needType.clothing}
                 onChange={handleNeedTypeChange}
-                name="jobTraining"
+                name="clothing"
               />
             }
-            label={t("job_prep")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.carRepair}
-                onChange={handleNeedTypeChange}
-                name="carRepair"
-              />
-            }
-            label={t("car_repair")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.homeRepair}
-                onChange={handleNeedTypeChange}
-                name="homeRepair"
-              />
-            }
-            label={t("home_repair")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.housing}
-                onChange={handleNeedTypeChange}
-                name="housing"
-              />
-            }
-            label={t("housing")}
+            label={t("clothing")}
           />
           <FormControlLabel
             control={
@@ -402,12 +363,12 @@ export function needRequestCard(
           <FormControlLabel
             control={
               <Checkbox
-                checked={needType.clothing}
+                checked={needType.moving}
                 onChange={handleNeedTypeChange}
-                name="clothing"
+                name="moving"
               />
             }
-            label={t("clothing")}
+            label={t("moving_assistance")}
           />
           <FormControlLabel
             control={
@@ -418,6 +379,46 @@ export function needRequestCard(
               />
             }
             label={t("furniture")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={needType.homeRepair}
+                onChange={handleNeedTypeChange}
+                name="homeRepair"
+              />
+            }
+            label={t("home_repair")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={needType.carRepair}
+                onChange={handleNeedTypeChange}
+                name="carRepair"
+              />
+            }
+            label={t("car_repair")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={needType.jobTraining}
+                onChange={handleNeedTypeChange}
+                name="jobTraining"
+              />
+            }
+            label={t("job_prep")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={needType.housing}
+                onChange={handleNeedTypeChange}
+                name="housing"
+              />
+            }
+            label={t("housing")}
           />
           <FormControlLabel
             control={
