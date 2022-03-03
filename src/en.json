@@ -97,7 +97,6 @@
   "toothbrush": "Toothbrush",
   "toothpaste": "Toothpaste",
   "other_needs": "Describe your other needs",
-  "hope_phone": "Phone: <1>(559) 875-7677</1>",
   "housing_help": "I would like additional help with housing",
   "address_label": "Address: {{address}}",
   "housing_phone_field": "Phone: <1>{{formattedPhone}}</1>",

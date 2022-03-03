@@ -309,7 +309,6 @@ export function needRequestCard(
       <FormControl required>
         <FormGroup>
           <Typography>{t("assistance_type")}</Typography>
-
           <FormControlLabel
             control={
               <Checkbox

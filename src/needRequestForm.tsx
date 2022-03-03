@@ -451,13 +451,19 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={11} style={{ textAlign: "center" }}>
-            <Typography>Community Resource Network</Typography>
+          <Grid
+            item
+            xs={11}
+            style={{ textAlign: "center", verticalAlign: "center" }}
+          >
+            <Typography>COMMUNITY RESOURCE NETWORK</Typography>
           </Grid>
         </Grid>
       </Toolbar>
-      <Grid container style={{ textAlign: "center" }}>
-        <Typography>{t("crn_limitations")}</Typography>
+      <Grid container>
+        <Grid item xs={12} style={{ textAlign: "center" }}>
+          <Typography>{t("crn_limitations")}</Typography>
+        </Grid>
       </Grid>
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
