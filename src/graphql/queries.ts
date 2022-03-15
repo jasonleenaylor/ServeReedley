@@ -124,6 +124,7 @@ export const getRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -254,6 +255,7 @@ export const listRequests = /* GraphQL */ `
         followUp
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }

@@ -229,6 +229,7 @@ export type Request = {
   followUp?: string | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type SelfOrOtherInfo = {
@@ -964,6 +965,7 @@ export type CreateRequestMutation = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1101,6 +1103,7 @@ export type UpdateRequestMutation = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1238,6 +1241,7 @@ export type DeleteRequestMutation = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1794,6 +1798,7 @@ export type GetRequestQuery = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1934,6 +1939,7 @@ export type ListRequestsQuery = {
       followUp?: string | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2243,6 +2249,10 @@ export type ListHomeRepairTypesQuery = {
   } | null,
 };
 
+export type OnCreateRequestSubscriptionVariables = {
+  owner?: string | null,
+};
+
 export type OnCreateRequestSubscription = {
   onCreateRequest?:  {
     __typename: "Request",
@@ -2372,7 +2382,12 @@ export type OnCreateRequestSubscription = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnUpdateRequestSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateRequestSubscription = {
@@ -2504,7 +2519,12 @@ export type OnUpdateRequestSubscription = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnDeleteRequestSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteRequestSubscription = {
@@ -2636,6 +2656,7 @@ export type OnDeleteRequestSubscription = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 

@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateRequest = /* GraphQL */ `
-  subscription OnCreateRequest {
-    onCreateRequest {
+  subscription OnCreateRequest($owner: String) {
+    onCreateRequest(owner: $owner) {
       id
       dateOfRequest
       firstName
@@ -124,12 +124,13 @@ export const onCreateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateRequest = /* GraphQL */ `
-  subscription OnUpdateRequest {
-    onUpdateRequest {
+  subscription OnUpdateRequest($owner: String) {
+    onUpdateRequest(owner: $owner) {
       id
       dateOfRequest
       firstName
@@ -249,12 +250,13 @@ export const onUpdateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteRequest = /* GraphQL */ `
-  subscription OnDeleteRequest {
-    onDeleteRequest {
+  subscription OnDeleteRequest($owner: String) {
+    onDeleteRequest(owner: $owner) {
       id
       dateOfRequest
       firstName
@@ -374,6 +376,7 @@ export const onDeleteRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;

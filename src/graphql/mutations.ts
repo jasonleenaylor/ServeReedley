@@ -127,6 +127,7 @@ export const createRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -255,6 +256,7 @@ export const updateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -383,6 +385,7 @@ export const deleteRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      owner
     }
   }
 `;
