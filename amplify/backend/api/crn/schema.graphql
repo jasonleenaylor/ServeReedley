@@ -1,4 +1,8 @@
-type Request @model {
+type Request
+  @model
+  @auth(
+    rules: [{ allow: owner }, { allow: groups, groups: ["Coordinators"] }]
+  ) {
   id: ID!
   dateOfRequest: String!
   firstName: String!
