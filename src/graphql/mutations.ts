@@ -2,135 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createRequest = /* GraphQL */ `
-  mutation CreateRequest(
-    $input: CreateRequestInput!
-    $condition: ModelRequestConditionInput
-  ) {
-    createRequest(input: $input, condition: $condition) {
-      id
-      dateOfRequest
-      firstName
-      lastName
-      address
-      city
-      zipCode
-      phone
-      email
-      spanishOnly
-      preferredContactTime
-      request
-      leadSource
-      leadOtherDetails
-      selfOrOtherInfo {
-        id
-        forSelf
-        usedOtherResources
-        otherResources
-        requestFor
-        requestIsKnown
-        createdAt
-        updatedAt
-      }
-      foodRequest {
-        id
-        familyMembers
-        children
-        haveAllergies
-        allergies
-        milk
-        eggs
-        bread
-        butter
-        tortillas
-        rice
-        beans
-        cheese
-        beef
-        hotdogs
-        lunchMeat
-        fruit
-        peanutButter
-        jelly
-        createdAt
-        updatedAt
-      }
-      movingRequest {
-        id
-        items
-        haveTransportation
-        steepDriveway
-        stairs
-        unpavedRoad
-        other
-        otherDetails
-        liabilityAck
-        createdAt
-        updatedAt
-      }
-      resumeHelp
-      coverLetterHelp
-      carRepairDetails
-      homeRepairType {
-        id
-        plumbing
-        electrical
-        painting
-        yardwork
-        other
-        details
-        createdAt
-        updatedAt
-      }
-      clothingType
-      clothingSize
-      furnitureType
-      housingHelp
-      householdItems {
-        id
-        shampoo
-        bathSoap
-        toothpaste
-        toothbrush
-        deodorant
-        toiletPaper
-        handSoap
-        sanitaryPads
-        tampons
-        bleach
-        lysolSpray
-        lysolWipes
-        dishsoap
-        sponges
-        pinesol
-        createdAt
-        updatedAt
-      }
-      needReason
-      needTypes
-      status
-      note {
-        items {
-          id
-          requestID
-          dateCreated
-          author
-          content
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      otherNeeds
-      needFulfiller
-      dateFulfilled
-      followUp
-      createdAt
-      updatedAt
-      owner
-    }
-  }
-`;
 export const updateRequest = /* GraphQL */ `
   mutation UpdateRequest(
     $input: UpdateRequestInput!
@@ -256,7 +127,6 @@ export const updateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -385,7 +255,6 @@ export const deleteRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -768,6 +637,134 @@ export const deleteHomeRepairType = /* GraphQL */ `
       yardwork
       other
       details
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createRequest = /* GraphQL */ `
+  mutation CreateRequest(
+    $input: CreateRequestInput!
+    $condition: ModelRequestConditionInput
+  ) {
+    createRequest(input: $input, condition: $condition) {
+      id
+      dateOfRequest
+      firstName
+      lastName
+      address
+      city
+      zipCode
+      phone
+      email
+      spanishOnly
+      preferredContactTime
+      request
+      leadSource
+      leadOtherDetails
+      selfOrOtherInfo {
+        id
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        createdAt
+        updatedAt
+      }
+      foodRequest {
+        id
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        milk
+        eggs
+        bread
+        butter
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
+        createdAt
+        updatedAt
+      }
+      movingRequest {
+        id
+        items
+        haveTransportation
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
+        liabilityAck
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        id
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      housingHelp
+      householdItems {
+        id
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        createdAt
+        updatedAt
+      }
+      needReason
+      needTypes
+      status
+      note {
+        items {
+          id
+          requestID
+          dateCreated
+          author
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      otherNeeds
+      needFulfiller
+      dateFulfilled
+      followUp
       createdAt
       updatedAt
     }

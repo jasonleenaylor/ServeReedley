@@ -38,7 +38,11 @@
               "userPoolId": "authcommunityresourcenet1f61b8bc"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }
