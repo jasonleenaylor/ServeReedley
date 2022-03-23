@@ -2,20 +2,20 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type UpdateRequestInput = {
-  id: string,
-  dateOfRequest?: string | null,
-  firstName?: string | null,
-  lastName?: string | null,
+export type CreateRequestInput = {
+  id?: string | null,
+  dateOfRequest: string,
+  firstName: string,
+  lastName: string,
   address?: string | null,
-  city?: string | null,
+  city: string,
   zipCode?: number | null,
   phone?: string | null,
   email?: string | null,
   spanishOnly?: boolean | null,
   preferredContactTime?: string | null,
   request?: string | null,
-  leadSource?: LeadSource | null,
+  leadSource: LeadSource,
   leadOtherDetails?: string | null,
   resumeHelp?: boolean | null,
   coverLetterHelp?: boolean | null,
@@ -24,14 +24,14 @@ export type UpdateRequestInput = {
   clothingSize?: string | null,
   furnitureType?: string | null,
   housingHelp?: boolean | null,
-  needReason?: Array< NeedReason | null > | null,
-  needTypes?: Array< NeedType | null > | null,
-  status?: RequestStatus | null,
+  needReason: Array< NeedReason | null >,
+  needTypes: Array< NeedType | null >,
+  status: RequestStatus,
   otherNeeds?: string | null,
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
-  requestSelfOrOtherInfoId?: string | null,
+  requestSelfOrOtherInfoId: string,
   requestFoodRequestId?: string | null,
   requestMovingRequestId?: string | null,
   requestHomeRepairTypeId?: string | null,
@@ -96,8 +96,8 @@ export type ModelRequestConditionInput = {
   clothingSize?: ModelStringInput | null,
   furnitureType?: ModelStringInput | null,
   housingHelp?: ModelBooleanInput | null,
-  needReason?: ModelNeedReasonListInput | null,
-  needTypes?: ModelNeedTypeListInput | null,
+  needReason?: ModelNeedReasonInput | null,
+  needTypes?: ModelNeedTypeInput | null,
   status?: ModelRequestStatusInput | null,
   otherNeeds?: ModelStringInput | null,
   needFulfiller?: ModelStringInput | null,
@@ -106,6 +106,11 @@ export type ModelRequestConditionInput = {
   and?: Array< ModelRequestConditionInput | null > | null,
   or?: Array< ModelRequestConditionInput | null > | null,
   not?: ModelRequestConditionInput | null,
+  requestSelfOrOtherInfoId?: ModelIDInput | null,
+  requestFoodRequestId?: ModelIDInput | null,
+  requestMovingRequestId?: ModelIDInput | null,
+  requestHomeRepairTypeId?: ModelIDInput | null,
+  requestHouseholdItemsId?: ModelIDInput | null,
 };
 
 export type ModelStringInput = {
@@ -172,23 +177,35 @@ export type ModelLeadSourceInput = {
   ne?: LeadSource | null,
 };
 
-export type ModelNeedReasonListInput = {
-  eq?: Array< NeedReason | null > | null,
-  ne?: Array< NeedReason | null > | null,
-  contains?: NeedReason | null,
-  notContains?: NeedReason | null,
+export type ModelNeedReasonInput = {
+  eq?: NeedReason | null,
+  ne?: NeedReason | null,
 };
 
-export type ModelNeedTypeListInput = {
-  eq?: Array< NeedType | null > | null,
-  ne?: Array< NeedType | null > | null,
-  contains?: NeedType | null,
-  notContains?: NeedType | null,
+export type ModelNeedTypeInput = {
+  eq?: NeedType | null,
+  ne?: NeedType | null,
 };
 
 export type ModelRequestStatusInput = {
   eq?: RequestStatus | null,
   ne?: RequestStatus | null,
+};
+
+export type ModelIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
 };
 
 export type Request = {
@@ -229,23 +246,27 @@ export type Request = {
   followUp?: string | null,
   createdAt: string,
   updatedAt: string,
+  requestSelfOrOtherInfoId: string,
+  requestFoodRequestId?: string | null,
+  requestMovingRequestId?: string | null,
+  requestHomeRepairTypeId?: string | null,
+  requestHouseholdItemsId?: string | null,
 };
 
 export type SelfOrOtherInfo = {
   __typename: "SelfOrOtherInfo",
-  id: string,
   forSelf?: boolean | null,
   usedOtherResources?: boolean | null,
   otherResources?: string | null,
   requestFor?: string | null,
   requestIsKnown?: boolean | null,
+  id: string,
   createdAt: string,
   updatedAt: string,
 };
 
 export type FoodInfo = {
   __typename: "FoodInfo",
-  id: string,
   familyMembers?: number | null,
   children?: string | null,
   haveAllergies?: boolean | null,
@@ -264,13 +285,13 @@ export type FoodInfo = {
   fruit?: boolean | null,
   peanutButter?: boolean | null,
   jelly?: boolean | null,
+  id: string,
   createdAt: string,
   updatedAt: string,
 };
 
 export type MovingInfo = {
   __typename: "MovingInfo",
-  id: string,
   items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
@@ -279,26 +300,26 @@ export type MovingInfo = {
   other?: boolean | null,
   otherDetails?: string | null,
   liabilityAck?: boolean | null,
+  id: string,
   createdAt: string,
   updatedAt: string,
 };
 
 export type HomeRepairType = {
   __typename: "HomeRepairType",
-  id: string,
   plumbing?: boolean | null,
   electrical?: boolean | null,
   painting?: boolean | null,
   yardwork?: boolean | null,
   other?: boolean | null,
   details?: string | null,
+  id: string,
   createdAt: string,
   updatedAt: string,
 };
 
 export type HouseholdItems = {
   __typename: "HouseholdItems",
-  id: string,
   shampoo?: boolean | null,
   bathSoap?: boolean | null,
   toothpaste?: boolean | null,
@@ -314,6 +335,7 @@ export type HouseholdItems = {
   dishsoap?: boolean | null,
   sponges?: boolean | null,
   pinesol?: boolean | null,
+  id: string,
   createdAt: string,
   updatedAt: string,
 };
@@ -333,6 +355,43 @@ export type NoteType = {
   content: string,
   createdAt: string,
   updatedAt: string,
+  requestNoteId?: string | null,
+};
+
+export type UpdateRequestInput = {
+  id: string,
+  dateOfRequest?: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
+  address?: string | null,
+  city?: string | null,
+  zipCode?: number | null,
+  phone?: string | null,
+  email?: string | null,
+  spanishOnly?: boolean | null,
+  preferredContactTime?: string | null,
+  request?: string | null,
+  leadSource?: LeadSource | null,
+  leadOtherDetails?: string | null,
+  resumeHelp?: boolean | null,
+  coverLetterHelp?: boolean | null,
+  carRepairDetails?: string | null,
+  clothingType?: string | null,
+  clothingSize?: string | null,
+  furnitureType?: string | null,
+  housingHelp?: boolean | null,
+  needReason?: Array< NeedReason | null > | null,
+  needTypes?: Array< NeedType | null > | null,
+  status?: RequestStatus | null,
+  otherNeeds?: string | null,
+  needFulfiller?: string | null,
+  dateFulfilled?: string | null,
+  followUp?: string | null,
+  requestSelfOrOtherInfoId?: string | null,
+  requestFoodRequestId?: string | null,
+  requestMovingRequestId?: string | null,
+  requestHomeRepairTypeId?: string | null,
+  requestHouseholdItemsId?: string | null,
 };
 
 export type DeleteRequestInput = {
@@ -345,6 +404,7 @@ export type CreateNoteTypeInput = {
   dateCreated: string,
   author: string,
   content: string,
+  requestNoteId?: string | null,
 };
 
 export type ModelNoteTypeConditionInput = {
@@ -355,22 +415,7 @@ export type ModelNoteTypeConditionInput = {
   and?: Array< ModelNoteTypeConditionInput | null > | null,
   or?: Array< ModelNoteTypeConditionInput | null > | null,
   not?: ModelNoteTypeConditionInput | null,
-};
-
-export type ModelIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
+  requestNoteId?: ModelIDInput | null,
 };
 
 export type UpdateNoteTypeInput = {
@@ -379,6 +424,7 @@ export type UpdateNoteTypeInput = {
   dateCreated?: string | null,
   author?: string | null,
   content?: string | null,
+  requestNoteId?: string | null,
 };
 
 export type DeleteNoteTypeInput = {
@@ -386,12 +432,12 @@ export type DeleteNoteTypeInput = {
 };
 
 export type CreateSelfOrOtherInfoInput = {
-  id?: string | null,
   forSelf?: boolean | null,
   usedOtherResources?: boolean | null,
   otherResources?: string | null,
   requestFor?: string | null,
   requestIsKnown?: boolean | null,
+  id?: string | null,
 };
 
 export type ModelSelfOrOtherInfoConditionInput = {
@@ -406,12 +452,12 @@ export type ModelSelfOrOtherInfoConditionInput = {
 };
 
 export type UpdateSelfOrOtherInfoInput = {
-  id: string,
   forSelf?: boolean | null,
   usedOtherResources?: boolean | null,
   otherResources?: string | null,
   requestFor?: string | null,
   requestIsKnown?: boolean | null,
+  id: string,
 };
 
 export type DeleteSelfOrOtherInfoInput = {
@@ -419,7 +465,6 @@ export type DeleteSelfOrOtherInfoInput = {
 };
 
 export type CreateHouseholdItemsInput = {
-  id?: string | null,
   shampoo?: boolean | null,
   bathSoap?: boolean | null,
   toothpaste?: boolean | null,
@@ -435,6 +480,7 @@ export type CreateHouseholdItemsInput = {
   dishsoap?: boolean | null,
   sponges?: boolean | null,
   pinesol?: boolean | null,
+  id?: string | null,
 };
 
 export type ModelHouseholdItemsConditionInput = {
@@ -459,7 +505,6 @@ export type ModelHouseholdItemsConditionInput = {
 };
 
 export type UpdateHouseholdItemsInput = {
-  id: string,
   shampoo?: boolean | null,
   bathSoap?: boolean | null,
   toothpaste?: boolean | null,
@@ -475,6 +520,7 @@ export type UpdateHouseholdItemsInput = {
   dishsoap?: boolean | null,
   sponges?: boolean | null,
   pinesol?: boolean | null,
+  id: string,
 };
 
 export type DeleteHouseholdItemsInput = {
@@ -482,7 +528,6 @@ export type DeleteHouseholdItemsInput = {
 };
 
 export type CreateFoodInfoInput = {
-  id?: string | null,
   familyMembers?: number | null,
   children?: string | null,
   haveAllergies?: boolean | null,
@@ -501,6 +546,7 @@ export type CreateFoodInfoInput = {
   fruit?: boolean | null,
   peanutButter?: boolean | null,
   jelly?: boolean | null,
+  id?: string | null,
 };
 
 export type ModelFoodInfoConditionInput = {
@@ -528,7 +574,6 @@ export type ModelFoodInfoConditionInput = {
 };
 
 export type UpdateFoodInfoInput = {
-  id: string,
   familyMembers?: number | null,
   children?: string | null,
   haveAllergies?: boolean | null,
@@ -547,6 +592,7 @@ export type UpdateFoodInfoInput = {
   fruit?: boolean | null,
   peanutButter?: boolean | null,
   jelly?: boolean | null,
+  id: string,
 };
 
 export type DeleteFoodInfoInput = {
@@ -554,7 +600,6 @@ export type DeleteFoodInfoInput = {
 };
 
 export type CreateMovingInfoInput = {
-  id?: string | null,
   items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
@@ -563,6 +608,7 @@ export type CreateMovingInfoInput = {
   other?: boolean | null,
   otherDetails?: string | null,
   liabilityAck?: boolean | null,
+  id?: string | null,
 };
 
 export type ModelMovingInfoConditionInput = {
@@ -580,7 +626,6 @@ export type ModelMovingInfoConditionInput = {
 };
 
 export type UpdateMovingInfoInput = {
-  id: string,
   items?: string | null,
   haveTransportation?: boolean | null,
   steepDriveway?: boolean | null,
@@ -589,6 +634,7 @@ export type UpdateMovingInfoInput = {
   other?: boolean | null,
   otherDetails?: string | null,
   liabilityAck?: boolean | null,
+  id: string,
 };
 
 export type DeleteMovingInfoInput = {
@@ -596,13 +642,13 @@ export type DeleteMovingInfoInput = {
 };
 
 export type CreateHomeRepairTypeInput = {
-  id?: string | null,
   plumbing?: boolean | null,
   electrical?: boolean | null,
   painting?: boolean | null,
   yardwork?: boolean | null,
   other?: boolean | null,
   details?: string | null,
+  id?: string | null,
 };
 
 export type ModelHomeRepairTypeConditionInput = {
@@ -618,53 +664,17 @@ export type ModelHomeRepairTypeConditionInput = {
 };
 
 export type UpdateHomeRepairTypeInput = {
-  id: string,
   plumbing?: boolean | null,
   electrical?: boolean | null,
   painting?: boolean | null,
   yardwork?: boolean | null,
   other?: boolean | null,
   details?: string | null,
+  id: string,
 };
 
 export type DeleteHomeRepairTypeInput = {
   id: string,
-};
-
-export type CreateRequestInput = {
-  id?: string | null,
-  dateOfRequest: string,
-  firstName: string,
-  lastName: string,
-  address?: string | null,
-  city: string,
-  zipCode?: number | null,
-  phone?: string | null,
-  email?: string | null,
-  spanishOnly?: boolean | null,
-  preferredContactTime?: string | null,
-  request?: string | null,
-  leadSource: LeadSource,
-  leadOtherDetails?: string | null,
-  resumeHelp?: boolean | null,
-  coverLetterHelp?: boolean | null,
-  carRepairDetails?: string | null,
-  clothingType?: string | null,
-  clothingSize?: string | null,
-  furnitureType?: string | null,
-  housingHelp?: boolean | null,
-  needReason: Array< NeedReason | null >,
-  needTypes: Array< NeedType | null >,
-  status: RequestStatus,
-  otherNeeds?: string | null,
-  needFulfiller?: string | null,
-  dateFulfilled?: string | null,
-  followUp?: string | null,
-  requestSelfOrOtherInfoId: string,
-  requestFoodRequestId?: string | null,
-  requestMovingRequestId?: string | null,
-  requestHomeRepairTypeId?: string | null,
-  requestHouseholdItemsId?: string | null,
 };
 
 export type ModelRequestFilterInput = {
@@ -689,8 +699,8 @@ export type ModelRequestFilterInput = {
   clothingSize?: ModelStringInput | null,
   furnitureType?: ModelStringInput | null,
   housingHelp?: ModelBooleanInput | null,
-  needReason?: ModelNeedReasonListInput | null,
-  needTypes?: ModelNeedTypeListInput | null,
+  needReason?: ModelNeedReasonInput | null,
+  needTypes?: ModelNeedTypeInput | null,
   status?: ModelRequestStatusInput | null,
   otherNeeds?: ModelStringInput | null,
   needFulfiller?: ModelStringInput | null,
@@ -699,6 +709,11 @@ export type ModelRequestFilterInput = {
   and?: Array< ModelRequestFilterInput | null > | null,
   or?: Array< ModelRequestFilterInput | null > | null,
   not?: ModelRequestFilterInput | null,
+  requestSelfOrOtherInfoId?: ModelIDInput | null,
+  requestFoodRequestId?: ModelIDInput | null,
+  requestMovingRequestId?: ModelIDInput | null,
+  requestHomeRepairTypeId?: ModelIDInput | null,
+  requestHouseholdItemsId?: ModelIDInput | null,
 };
 
 export type ModelRequestConnection = {
@@ -716,6 +731,7 @@ export type ModelNoteTypeFilterInput = {
   and?: Array< ModelNoteTypeFilterInput | null > | null,
   or?: Array< ModelNoteTypeFilterInput | null > | null,
   not?: ModelNoteTypeFilterInput | null,
+  requestNoteId?: ModelIDInput | null,
 };
 
 export type ModelSelfOrOtherInfoFilterInput = {
@@ -830,6 +846,149 @@ export type ModelHomeRepairTypeConnection = {
   nextToken?: string | null,
 };
 
+export type CreateRequestMutationVariables = {
+  input: CreateRequestInput,
+  condition?: ModelRequestConditionInput | null,
+};
+
+export type CreateRequestMutation = {
+  createRequest?:  {
+    __typename: "Request",
+    id: string,
+    dateOfRequest: string,
+    firstName: string,
+    lastName: string,
+    address?: string | null,
+    city: string,
+    zipCode?: number | null,
+    phone?: string | null,
+    email?: string | null,
+    spanishOnly?: boolean | null,
+    preferredContactTime?: string | null,
+    request?: string | null,
+    leadSource: LeadSource,
+    leadOtherDetails?: string | null,
+    selfOrOtherInfo:  {
+      __typename: "SelfOrOtherInfo",
+      forSelf?: boolean | null,
+      usedOtherResources?: boolean | null,
+      otherResources?: string | null,
+      requestFor?: string | null,
+      requestIsKnown?: boolean | null,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    },
+    foodRequest?:  {
+      __typename: "FoodInfo",
+      familyMembers?: number | null,
+      children?: string | null,
+      haveAllergies?: boolean | null,
+      allergies?: string | null,
+      milk?: boolean | null,
+      eggs?: boolean | null,
+      bread?: boolean | null,
+      butter?: boolean | null,
+      tortillas?: boolean | null,
+      rice?: boolean | null,
+      beans?: boolean | null,
+      cheese?: boolean | null,
+      beef?: boolean | null,
+      hotdogs?: boolean | null,
+      lunchMeat?: boolean | null,
+      fruit?: boolean | null,
+      peanutButter?: boolean | null,
+      jelly?: boolean | null,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    movingRequest?:  {
+      __typename: "MovingInfo",
+      items?: string | null,
+      haveTransportation?: boolean | null,
+      steepDriveway?: boolean | null,
+      stairs?: boolean | null,
+      unpavedRoad?: boolean | null,
+      other?: boolean | null,
+      otherDetails?: string | null,
+      liabilityAck?: boolean | null,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    resumeHelp?: boolean | null,
+    coverLetterHelp?: boolean | null,
+    carRepairDetails?: string | null,
+    homeRepairType?:  {
+      __typename: "HomeRepairType",
+      plumbing?: boolean | null,
+      electrical?: boolean | null,
+      painting?: boolean | null,
+      yardwork?: boolean | null,
+      other?: boolean | null,
+      details?: string | null,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    clothingType?: string | null,
+    clothingSize?: string | null,
+    furnitureType?: string | null,
+    housingHelp?: boolean | null,
+    householdItems?:  {
+      __typename: "HouseholdItems",
+      shampoo?: boolean | null,
+      bathSoap?: boolean | null,
+      toothpaste?: boolean | null,
+      toothbrush?: boolean | null,
+      deodorant?: boolean | null,
+      toiletPaper?: boolean | null,
+      handSoap?: boolean | null,
+      sanitaryPads?: boolean | null,
+      tampons?: boolean | null,
+      bleach?: boolean | null,
+      lysolSpray?: boolean | null,
+      lysolWipes?: boolean | null,
+      dishsoap?: boolean | null,
+      sponges?: boolean | null,
+      pinesol?: boolean | null,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    needReason: Array< NeedReason | null >,
+    needTypes: Array< NeedType | null >,
+    status: RequestStatus,
+    note?:  {
+      __typename: "ModelNoteTypeConnection",
+      items:  Array< {
+        __typename: "NoteType",
+        id: string,
+        requestID: string,
+        dateCreated: string,
+        author: string,
+        content: string,
+        createdAt: string,
+        updatedAt: string,
+        requestNoteId?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    otherNeeds?: string | null,
+    needFulfiller?: string | null,
+    dateFulfilled?: string | null,
+    followUp?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
+  } | null,
+};
+
 export type UpdateRequestMutationVariables = {
   input: UpdateRequestInput,
   condition?: ModelRequestConditionInput | null,
@@ -854,18 +1013,17 @@ export type UpdateRequestMutation = {
     leadOtherDetails?: string | null,
     selfOrOtherInfo:  {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     },
     foodRequest?:  {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -884,12 +1042,12 @@ export type UpdateRequestMutation = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
     movingRequest?:  {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -898,6 +1056,7 @@ export type UpdateRequestMutation = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -906,13 +1065,13 @@ export type UpdateRequestMutation = {
     carRepairDetails?: string | null,
     homeRepairType?:  {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -922,7 +1081,6 @@ export type UpdateRequestMutation = {
     housingHelp?: boolean | null,
     householdItems?:  {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -938,6 +1096,7 @@ export type UpdateRequestMutation = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -955,6 +1114,7 @@ export type UpdateRequestMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -964,6 +1124,11 @@ export type UpdateRequestMutation = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
   } | null,
 };
 
@@ -991,18 +1156,17 @@ export type DeleteRequestMutation = {
     leadOtherDetails?: string | null,
     selfOrOtherInfo:  {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     },
     foodRequest?:  {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -1021,12 +1185,12 @@ export type DeleteRequestMutation = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
     movingRequest?:  {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -1035,6 +1199,7 @@ export type DeleteRequestMutation = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1043,13 +1208,13 @@ export type DeleteRequestMutation = {
     carRepairDetails?: string | null,
     homeRepairType?:  {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1059,7 +1224,6 @@ export type DeleteRequestMutation = {
     housingHelp?: boolean | null,
     householdItems?:  {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -1075,6 +1239,7 @@ export type DeleteRequestMutation = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1092,6 +1257,7 @@ export type DeleteRequestMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1101,6 +1267,11 @@ export type DeleteRequestMutation = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
   } | null,
 };
 
@@ -1119,6 +1290,7 @@ export type CreateNoteTypeMutation = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1137,6 +1309,7 @@ export type UpdateNoteTypeMutation = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1155,6 +1328,7 @@ export type DeleteNoteTypeMutation = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1166,12 +1340,12 @@ export type CreateSelfOrOtherInfoMutationVariables = {
 export type CreateSelfOrOtherInfoMutation = {
   createSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1185,12 +1359,12 @@ export type UpdateSelfOrOtherInfoMutationVariables = {
 export type UpdateSelfOrOtherInfoMutation = {
   updateSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1204,12 +1378,12 @@ export type DeleteSelfOrOtherInfoMutationVariables = {
 export type DeleteSelfOrOtherInfoMutation = {
   deleteSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1223,7 +1397,6 @@ export type CreateHouseholdItemsMutationVariables = {
 export type CreateHouseholdItemsMutation = {
   createHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -1239,6 +1412,7 @@ export type CreateHouseholdItemsMutation = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1252,7 +1426,6 @@ export type UpdateHouseholdItemsMutationVariables = {
 export type UpdateHouseholdItemsMutation = {
   updateHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -1268,6 +1441,7 @@ export type UpdateHouseholdItemsMutation = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1281,7 +1455,6 @@ export type DeleteHouseholdItemsMutationVariables = {
 export type DeleteHouseholdItemsMutation = {
   deleteHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -1297,6 +1470,7 @@ export type DeleteHouseholdItemsMutation = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1310,7 +1484,6 @@ export type CreateFoodInfoMutationVariables = {
 export type CreateFoodInfoMutation = {
   createFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -1329,6 +1502,7 @@ export type CreateFoodInfoMutation = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1342,7 +1516,6 @@ export type UpdateFoodInfoMutationVariables = {
 export type UpdateFoodInfoMutation = {
   updateFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -1361,6 +1534,7 @@ export type UpdateFoodInfoMutation = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1374,7 +1548,6 @@ export type DeleteFoodInfoMutationVariables = {
 export type DeleteFoodInfoMutation = {
   deleteFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -1393,6 +1566,7 @@ export type DeleteFoodInfoMutation = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1406,7 +1580,6 @@ export type CreateMovingInfoMutationVariables = {
 export type CreateMovingInfoMutation = {
   createMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -1415,6 +1588,7 @@ export type CreateMovingInfoMutation = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1428,7 +1602,6 @@ export type UpdateMovingInfoMutationVariables = {
 export type UpdateMovingInfoMutation = {
   updateMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -1437,6 +1610,7 @@ export type UpdateMovingInfoMutation = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1450,7 +1624,6 @@ export type DeleteMovingInfoMutationVariables = {
 export type DeleteMovingInfoMutation = {
   deleteMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -1459,6 +1632,7 @@ export type DeleteMovingInfoMutation = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1472,13 +1646,13 @@ export type CreateHomeRepairTypeMutationVariables = {
 export type CreateHomeRepairTypeMutation = {
   createHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1492,13 +1666,13 @@ export type UpdateHomeRepairTypeMutationVariables = {
 export type UpdateHomeRepairTypeMutation = {
   updateHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1512,150 +1686,13 @@ export type DeleteHomeRepairTypeMutationVariables = {
 export type DeleteHomeRepairTypeMutation = {
   deleteHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateRequestMutationVariables = {
-  input: CreateRequestInput,
-  condition?: ModelRequestConditionInput | null,
-};
-
-export type CreateRequestMutation = {
-  createRequest?:  {
-    __typename: "Request",
     id: string,
-    dateOfRequest: string,
-    firstName: string,
-    lastName: string,
-    address?: string | null,
-    city: string,
-    zipCode?: number | null,
-    phone?: string | null,
-    email?: string | null,
-    spanishOnly?: boolean | null,
-    preferredContactTime?: string | null,
-    request?: string | null,
-    leadSource: LeadSource,
-    leadOtherDetails?: string | null,
-    selfOrOtherInfo:  {
-      __typename: "SelfOrOtherInfo",
-      id: string,
-      forSelf?: boolean | null,
-      usedOtherResources?: boolean | null,
-      otherResources?: string | null,
-      requestFor?: string | null,
-      requestIsKnown?: boolean | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    foodRequest?:  {
-      __typename: "FoodInfo",
-      id: string,
-      familyMembers?: number | null,
-      children?: string | null,
-      haveAllergies?: boolean | null,
-      allergies?: string | null,
-      milk?: boolean | null,
-      eggs?: boolean | null,
-      bread?: boolean | null,
-      butter?: boolean | null,
-      tortillas?: boolean | null,
-      rice?: boolean | null,
-      beans?: boolean | null,
-      cheese?: boolean | null,
-      beef?: boolean | null,
-      hotdogs?: boolean | null,
-      lunchMeat?: boolean | null,
-      fruit?: boolean | null,
-      peanutButter?: boolean | null,
-      jelly?: boolean | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    movingRequest?:  {
-      __typename: "MovingInfo",
-      id: string,
-      items?: string | null,
-      haveTransportation?: boolean | null,
-      steepDriveway?: boolean | null,
-      stairs?: boolean | null,
-      unpavedRoad?: boolean | null,
-      other?: boolean | null,
-      otherDetails?: string | null,
-      liabilityAck?: boolean | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    resumeHelp?: boolean | null,
-    coverLetterHelp?: boolean | null,
-    carRepairDetails?: string | null,
-    homeRepairType?:  {
-      __typename: "HomeRepairType",
-      id: string,
-      plumbing?: boolean | null,
-      electrical?: boolean | null,
-      painting?: boolean | null,
-      yardwork?: boolean | null,
-      other?: boolean | null,
-      details?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    clothingType?: string | null,
-    clothingSize?: string | null,
-    furnitureType?: string | null,
-    housingHelp?: boolean | null,
-    householdItems?:  {
-      __typename: "HouseholdItems",
-      id: string,
-      shampoo?: boolean | null,
-      bathSoap?: boolean | null,
-      toothpaste?: boolean | null,
-      toothbrush?: boolean | null,
-      deodorant?: boolean | null,
-      toiletPaper?: boolean | null,
-      handSoap?: boolean | null,
-      sanitaryPads?: boolean | null,
-      tampons?: boolean | null,
-      bleach?: boolean | null,
-      lysolSpray?: boolean | null,
-      lysolWipes?: boolean | null,
-      dishsoap?: boolean | null,
-      sponges?: boolean | null,
-      pinesol?: boolean | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    needReason: Array< NeedReason | null >,
-    needTypes: Array< NeedType | null >,
-    status: RequestStatus,
-    note?:  {
-      __typename: "ModelNoteTypeConnection",
-      items:  Array< {
-        __typename: "NoteType",
-        id: string,
-        requestID: string,
-        dateCreated: string,
-        author: string,
-        content: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    otherNeeds?: string | null,
-    needFulfiller?: string | null,
-    dateFulfilled?: string | null,
-    followUp?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1684,18 +1721,17 @@ export type GetRequestQuery = {
     leadOtherDetails?: string | null,
     selfOrOtherInfo:  {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     },
     foodRequest?:  {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -1714,12 +1750,12 @@ export type GetRequestQuery = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
     movingRequest?:  {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -1728,6 +1764,7 @@ export type GetRequestQuery = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1736,13 +1773,13 @@ export type GetRequestQuery = {
     carRepairDetails?: string | null,
     homeRepairType?:  {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1752,7 +1789,6 @@ export type GetRequestQuery = {
     housingHelp?: boolean | null,
     householdItems?:  {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -1768,6 +1804,7 @@ export type GetRequestQuery = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1785,6 +1822,7 @@ export type GetRequestQuery = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1794,6 +1832,11 @@ export type GetRequestQuery = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
   } | null,
 };
 
@@ -1824,18 +1867,17 @@ export type ListRequestsQuery = {
       leadOtherDetails?: string | null,
       selfOrOtherInfo:  {
         __typename: "SelfOrOtherInfo",
-        id: string,
         forSelf?: boolean | null,
         usedOtherResources?: boolean | null,
         otherResources?: string | null,
         requestFor?: string | null,
         requestIsKnown?: boolean | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       },
       foodRequest?:  {
         __typename: "FoodInfo",
-        id: string,
         familyMembers?: number | null,
         children?: string | null,
         haveAllergies?: boolean | null,
@@ -1854,12 +1896,12 @@ export type ListRequestsQuery = {
         fruit?: boolean | null,
         peanutButter?: boolean | null,
         jelly?: boolean | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null,
       movingRequest?:  {
         __typename: "MovingInfo",
-        id: string,
         items?: string | null,
         haveTransportation?: boolean | null,
         steepDriveway?: boolean | null,
@@ -1868,6 +1910,7 @@ export type ListRequestsQuery = {
         other?: boolean | null,
         otherDetails?: string | null,
         liabilityAck?: boolean | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1876,13 +1919,13 @@ export type ListRequestsQuery = {
       carRepairDetails?: string | null,
       homeRepairType?:  {
         __typename: "HomeRepairType",
-        id: string,
         plumbing?: boolean | null,
         electrical?: boolean | null,
         painting?: boolean | null,
         yardwork?: boolean | null,
         other?: boolean | null,
         details?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1892,7 +1935,6 @@ export type ListRequestsQuery = {
       housingHelp?: boolean | null,
       householdItems?:  {
         __typename: "HouseholdItems",
-        id: string,
         shampoo?: boolean | null,
         bathSoap?: boolean | null,
         toothpaste?: boolean | null,
@@ -1908,6 +1950,7 @@ export type ListRequestsQuery = {
         dishsoap?: boolean | null,
         sponges?: boolean | null,
         pinesol?: boolean | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1925,6 +1968,7 @@ export type ListRequestsQuery = {
           content: string,
           createdAt: string,
           updatedAt: string,
+          requestNoteId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -1934,6 +1978,11 @@ export type ListRequestsQuery = {
       followUp?: string | null,
       createdAt: string,
       updatedAt: string,
+      requestSelfOrOtherInfoId: string,
+      requestFoodRequestId?: string | null,
+      requestMovingRequestId?: string | null,
+      requestHomeRepairTypeId?: string | null,
+      requestHouseholdItemsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1953,6 +2002,7 @@ export type GetNoteTypeQuery = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1974,6 +2024,7 @@ export type ListNoteTypesQuery = {
       content: string,
       createdAt: string,
       updatedAt: string,
+      requestNoteId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1986,12 +2037,12 @@ export type GetSelfOrOtherInfoQueryVariables = {
 export type GetSelfOrOtherInfoQuery = {
   getSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2008,12 +2059,12 @@ export type ListSelfOrOtherInfosQuery = {
     __typename: "ModelSelfOrOtherInfoConnection",
     items:  Array< {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2028,7 +2079,6 @@ export type GetHouseholdItemsQueryVariables = {
 export type GetHouseholdItemsQuery = {
   getHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -2044,23 +2094,23 @@ export type GetHouseholdItemsQuery = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListHouseholdItemssQueryVariables = {
+export type ListHouseholdItemsQueryVariables = {
   filter?: ModelHouseholdItemsFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListHouseholdItemssQuery = {
-  listHouseholdItemss?:  {
+export type ListHouseholdItemsQuery = {
+  listHouseholdItems?:  {
     __typename: "ModelHouseholdItemsConnection",
     items:  Array< {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -2076,6 +2126,7 @@ export type ListHouseholdItemssQuery = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2090,7 +2141,6 @@ export type GetFoodInfoQueryVariables = {
 export type GetFoodInfoQuery = {
   getFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -2109,6 +2159,7 @@ export type GetFoodInfoQuery = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2125,7 +2176,6 @@ export type ListFoodInfosQuery = {
     __typename: "ModelFoodInfoConnection",
     items:  Array< {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -2144,6 +2194,7 @@ export type ListFoodInfosQuery = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2158,7 +2209,6 @@ export type GetMovingInfoQueryVariables = {
 export type GetMovingInfoQuery = {
   getMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -2167,6 +2217,7 @@ export type GetMovingInfoQuery = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2183,7 +2234,6 @@ export type ListMovingInfosQuery = {
     __typename: "ModelMovingInfoConnection",
     items:  Array< {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -2192,6 +2242,7 @@ export type ListMovingInfosQuery = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2206,13 +2257,13 @@ export type GetHomeRepairTypeQueryVariables = {
 export type GetHomeRepairTypeQuery = {
   getHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2229,13 +2280,13 @@ export type ListHomeRepairTypesQuery = {
     __typename: "ModelHomeRepairTypeConnection",
     items:  Array< {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2262,18 +2313,17 @@ export type OnCreateRequestSubscription = {
     leadOtherDetails?: string | null,
     selfOrOtherInfo:  {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     },
     foodRequest?:  {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -2292,12 +2342,12 @@ export type OnCreateRequestSubscription = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
     movingRequest?:  {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -2306,6 +2356,7 @@ export type OnCreateRequestSubscription = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2314,13 +2365,13 @@ export type OnCreateRequestSubscription = {
     carRepairDetails?: string | null,
     homeRepairType?:  {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2330,7 +2381,6 @@ export type OnCreateRequestSubscription = {
     housingHelp?: boolean | null,
     householdItems?:  {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -2346,6 +2396,7 @@ export type OnCreateRequestSubscription = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2363,6 +2414,7 @@ export type OnCreateRequestSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2372,6 +2424,11 @@ export type OnCreateRequestSubscription = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
   } | null,
 };
 
@@ -2394,18 +2451,17 @@ export type OnUpdateRequestSubscription = {
     leadOtherDetails?: string | null,
     selfOrOtherInfo:  {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     },
     foodRequest?:  {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -2424,12 +2480,12 @@ export type OnUpdateRequestSubscription = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
     movingRequest?:  {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -2438,6 +2494,7 @@ export type OnUpdateRequestSubscription = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2446,13 +2503,13 @@ export type OnUpdateRequestSubscription = {
     carRepairDetails?: string | null,
     homeRepairType?:  {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2462,7 +2519,6 @@ export type OnUpdateRequestSubscription = {
     housingHelp?: boolean | null,
     householdItems?:  {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -2478,6 +2534,7 @@ export type OnUpdateRequestSubscription = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2495,6 +2552,7 @@ export type OnUpdateRequestSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2504,6 +2562,11 @@ export type OnUpdateRequestSubscription = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
   } | null,
 };
 
@@ -2526,18 +2589,17 @@ export type OnDeleteRequestSubscription = {
     leadOtherDetails?: string | null,
     selfOrOtherInfo:  {
       __typename: "SelfOrOtherInfo",
-      id: string,
       forSelf?: boolean | null,
       usedOtherResources?: boolean | null,
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     },
     foodRequest?:  {
       __typename: "FoodInfo",
-      id: string,
       familyMembers?: number | null,
       children?: string | null,
       haveAllergies?: boolean | null,
@@ -2556,12 +2618,12 @@ export type OnDeleteRequestSubscription = {
       fruit?: boolean | null,
       peanutButter?: boolean | null,
       jelly?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
     movingRequest?:  {
       __typename: "MovingInfo",
-      id: string,
       items?: string | null,
       haveTransportation?: boolean | null,
       steepDriveway?: boolean | null,
@@ -2570,6 +2632,7 @@ export type OnDeleteRequestSubscription = {
       other?: boolean | null,
       otherDetails?: string | null,
       liabilityAck?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2578,13 +2641,13 @@ export type OnDeleteRequestSubscription = {
     carRepairDetails?: string | null,
     homeRepairType?:  {
       __typename: "HomeRepairType",
-      id: string,
       plumbing?: boolean | null,
       electrical?: boolean | null,
       painting?: boolean | null,
       yardwork?: boolean | null,
       other?: boolean | null,
       details?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2594,7 +2657,6 @@ export type OnDeleteRequestSubscription = {
     housingHelp?: boolean | null,
     householdItems?:  {
       __typename: "HouseholdItems",
-      id: string,
       shampoo?: boolean | null,
       bathSoap?: boolean | null,
       toothpaste?: boolean | null,
@@ -2610,6 +2672,7 @@ export type OnDeleteRequestSubscription = {
       dishsoap?: boolean | null,
       sponges?: boolean | null,
       pinesol?: boolean | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -2627,6 +2690,7 @@ export type OnDeleteRequestSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2636,6 +2700,11 @@ export type OnDeleteRequestSubscription = {
     followUp?: string | null,
     createdAt: string,
     updatedAt: string,
+    requestSelfOrOtherInfoId: string,
+    requestFoodRequestId?: string | null,
+    requestMovingRequestId?: string | null,
+    requestHomeRepairTypeId?: string | null,
+    requestHouseholdItemsId?: string | null,
   } | null,
 };
 
@@ -2649,6 +2718,7 @@ export type OnCreateNoteTypeSubscription = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
@@ -2662,6 +2732,7 @@ export type OnUpdateNoteTypeSubscription = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
@@ -2675,18 +2746,19 @@ export type OnDeleteNoteTypeSubscription = {
     content: string,
     createdAt: string,
     updatedAt: string,
+    requestNoteId?: string | null,
   } | null,
 };
 
 export type OnCreateSelfOrOtherInfoSubscription = {
   onCreateSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2695,12 +2767,12 @@ export type OnCreateSelfOrOtherInfoSubscription = {
 export type OnUpdateSelfOrOtherInfoSubscription = {
   onUpdateSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2709,12 +2781,12 @@ export type OnUpdateSelfOrOtherInfoSubscription = {
 export type OnDeleteSelfOrOtherInfoSubscription = {
   onDeleteSelfOrOtherInfo?:  {
     __typename: "SelfOrOtherInfo",
-    id: string,
     forSelf?: boolean | null,
     usedOtherResources?: boolean | null,
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2723,7 +2795,6 @@ export type OnDeleteSelfOrOtherInfoSubscription = {
 export type OnCreateHouseholdItemsSubscription = {
   onCreateHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -2739,6 +2810,7 @@ export type OnCreateHouseholdItemsSubscription = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2747,7 +2819,6 @@ export type OnCreateHouseholdItemsSubscription = {
 export type OnUpdateHouseholdItemsSubscription = {
   onUpdateHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -2763,6 +2834,7 @@ export type OnUpdateHouseholdItemsSubscription = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2771,7 +2843,6 @@ export type OnUpdateHouseholdItemsSubscription = {
 export type OnDeleteHouseholdItemsSubscription = {
   onDeleteHouseholdItems?:  {
     __typename: "HouseholdItems",
-    id: string,
     shampoo?: boolean | null,
     bathSoap?: boolean | null,
     toothpaste?: boolean | null,
@@ -2787,6 +2858,7 @@ export type OnDeleteHouseholdItemsSubscription = {
     dishsoap?: boolean | null,
     sponges?: boolean | null,
     pinesol?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2795,7 +2867,6 @@ export type OnDeleteHouseholdItemsSubscription = {
 export type OnCreateFoodInfoSubscription = {
   onCreateFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -2814,6 +2885,7 @@ export type OnCreateFoodInfoSubscription = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2822,7 +2894,6 @@ export type OnCreateFoodInfoSubscription = {
 export type OnUpdateFoodInfoSubscription = {
   onUpdateFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -2841,6 +2912,7 @@ export type OnUpdateFoodInfoSubscription = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2849,7 +2921,6 @@ export type OnUpdateFoodInfoSubscription = {
 export type OnDeleteFoodInfoSubscription = {
   onDeleteFoodInfo?:  {
     __typename: "FoodInfo",
-    id: string,
     familyMembers?: number | null,
     children?: string | null,
     haveAllergies?: boolean | null,
@@ -2868,6 +2939,7 @@ export type OnDeleteFoodInfoSubscription = {
     fruit?: boolean | null,
     peanutButter?: boolean | null,
     jelly?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2876,7 +2948,6 @@ export type OnDeleteFoodInfoSubscription = {
 export type OnCreateMovingInfoSubscription = {
   onCreateMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -2885,6 +2956,7 @@ export type OnCreateMovingInfoSubscription = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2893,7 +2965,6 @@ export type OnCreateMovingInfoSubscription = {
 export type OnUpdateMovingInfoSubscription = {
   onUpdateMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -2902,6 +2973,7 @@ export type OnUpdateMovingInfoSubscription = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2910,7 +2982,6 @@ export type OnUpdateMovingInfoSubscription = {
 export type OnDeleteMovingInfoSubscription = {
   onDeleteMovingInfo?:  {
     __typename: "MovingInfo",
-    id: string,
     items?: string | null,
     haveTransportation?: boolean | null,
     steepDriveway?: boolean | null,
@@ -2919,6 +2990,7 @@ export type OnDeleteMovingInfoSubscription = {
     other?: boolean | null,
     otherDetails?: string | null,
     liabilityAck?: boolean | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2927,13 +2999,13 @@ export type OnDeleteMovingInfoSubscription = {
 export type OnCreateHomeRepairTypeSubscription = {
   onCreateHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2942,13 +3014,13 @@ export type OnCreateHomeRepairTypeSubscription = {
 export type OnUpdateHomeRepairTypeSubscription = {
   onUpdateHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2957,13 +3029,13 @@ export type OnUpdateHomeRepairTypeSubscription = {
 export type OnDeleteHomeRepairTypeSubscription = {
   onDeleteHomeRepairType?:  {
     __typename: "HomeRepairType",
-    id: string,
     plumbing?: boolean | null,
     electrical?: boolean | null,
     painting?: boolean | null,
     yardwork?: boolean | null,
     other?: boolean | null,
     details?: string | null,
+    id: string,
     createdAt: string,
     updatedAt: string,
   } | null,

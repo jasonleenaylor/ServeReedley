@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { API, graphqlOperation } from "aws-amplify";
-import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
+import { Amplify, API, graphqlOperation } from "aws-amplify";
+import {
+  withAuthenticator,
+  AmplifySignOut,
+  AmplifyAuthenticator,
+  AmplifySignIn,
+} from "@aws-amplify/ui-react";
 import { listRequests } from "./graphql/queries";
 import {
   createFoodInfo,
@@ -41,6 +46,9 @@ import {
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
 import { Grid, Paper, Snackbar, Typography } from "@material-ui/core";
 import theme from "./theme";
+import awsExports from "./aws-exports";
+
+Amplify.configure(awsExports);
 
 function NeedRequestTable(props: ILocalizeProps) {
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
@@ -268,70 +276,74 @@ function NeedRequestTable(props: ILocalizeProps) {
   }
 
   return (
-    <div className="App">
-      <div>
-        <MaterialTable<any>
-          columns={columns}
-          icons={tableIcons}
-          data={requests}
-          detailPanel={[
-            {
-              tooltip: "Show Notes",
-              render: (row: any) => {
-                return (
-                  <div
-                    style={{
-                      textAlign: "left",
-                    }}
-                  >
-                    {
-                      <Grid container spacing={2}>
-                        {row.rowData.note?.items
-                          ?.sort((a: NoteType, b: NoteType) => {
-                            return (
-                              Date.parse(b.createdAt) - Date.parse(a.createdAt)
-                            );
-                          })
-                          ?.map((note: NoteType) => {
-                            return (
-                              <Grid item xs={12}>
-                                <Paper
-                                  style={{
-                                    padding: theme.spacing(3),
-                                    width: 350,
-                                  }}
-                                >
-                                  <Typography>{note.createdAt}</Typography>
-                                  <Typography>{note.author}</Typography>
-                                  <Typography>{note.content}</Typography>
-                                </Paper>
-                              </Grid>
-                            );
-                          })}
-                      </Grid>
-                    }
-                  </div>
-                );
+    <AmplifyAuthenticator>
+      <AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
+      <div className="App">
+        <div>
+          <MaterialTable<any>
+            columns={columns}
+            icons={tableIcons}
+            data={requests}
+            detailPanel={[
+              {
+                tooltip: "Show Notes",
+                render: (row: any) => {
+                  return (
+                    <div
+                      style={{
+                        textAlign: "left",
+                      }}
+                    >
+                      {
+                        <Grid container spacing={2}>
+                          {row.rowData.note?.items
+                            ?.sort((a: NoteType, b: NoteType) => {
+                              return (
+                                Date.parse(b.createdAt) -
+                                Date.parse(a.createdAt)
+                              );
+                            })
+                            ?.map((note: NoteType) => {
+                              return (
+                                <Grid item xs={12}>
+                                  <Paper
+                                    style={{
+                                      padding: theme.spacing(3),
+                                      width: 350,
+                                    }}
+                                  >
+                                    <Typography>{note.createdAt}</Typography>
+                                    <Typography>{note.author}</Typography>
+                                    <Typography>{note.content}</Typography>
+                                  </Paper>
+                                </Grid>
+                              );
+                            })}
+                        </Grid>
+                      }
+                    </div>
+                  );
+                },
               },
-            },
-          ]}
-          title="Need Requests"
-          options={{
-            filtering: true,
-          }}
+            ]}
+            title="Need Requests"
+            options={{
+              filtering: true,
+            }}
+          />
+        </div>
+        <span style={{ width: "20%" }} />
+        <Snackbar
+          autoHideDuration={4000}
+          message="No changes made"
+          open={snackBarOpen}
+          onClose={() => setSnackBarOpen(false)}
         />
+        <AmplifySignOut />
       </div>
-      <span style={{ width: "20%" }} />
-      <Snackbar
-        autoHideDuration={4000}
-        message="No changes made"
-        open={snackBarOpen}
-        onClose={() => setSnackBarOpen(false)}
-      />
-      <AmplifySignOut />
-    </div>
+    </AmplifyAuthenticator>
   );
-}
+} // NoteRequestTable
 
 function noteCreateFromReqData(value: NoteType): CreateNoteTypeInput {
   return {
@@ -578,4 +590,4 @@ async function needUpdateFromNeedReqData(
   }
 }
 
-export default withAuthenticator(NeedRequestTable);
+export default NeedRequestTable;

@@ -2,6 +2,140 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createRequest = /* GraphQL */ `
+  mutation CreateRequest(
+    $input: CreateRequestInput!
+    $condition: ModelRequestConditionInput
+  ) {
+    createRequest(input: $input, condition: $condition) {
+      id
+      dateOfRequest
+      firstName
+      lastName
+      address
+      city
+      zipCode
+      phone
+      email
+      spanishOnly
+      preferredContactTime
+      request
+      leadSource
+      leadOtherDetails
+      selfOrOtherInfo {
+        forSelf
+        usedOtherResources
+        otherResources
+        requestFor
+        requestIsKnown
+        id
+        createdAt
+        updatedAt
+      }
+      foodRequest {
+        familyMembers
+        children
+        haveAllergies
+        allergies
+        milk
+        eggs
+        bread
+        butter
+        tortillas
+        rice
+        beans
+        cheese
+        beef
+        hotdogs
+        lunchMeat
+        fruit
+        peanutButter
+        jelly
+        id
+        createdAt
+        updatedAt
+      }
+      movingRequest {
+        items
+        haveTransportation
+        steepDriveway
+        stairs
+        unpavedRoad
+        other
+        otherDetails
+        liabilityAck
+        id
+        createdAt
+        updatedAt
+      }
+      resumeHelp
+      coverLetterHelp
+      carRepairDetails
+      homeRepairType {
+        plumbing
+        electrical
+        painting
+        yardwork
+        other
+        details
+        id
+        createdAt
+        updatedAt
+      }
+      clothingType
+      clothingSize
+      furnitureType
+      housingHelp
+      householdItems {
+        shampoo
+        bathSoap
+        toothpaste
+        toothbrush
+        deodorant
+        toiletPaper
+        handSoap
+        sanitaryPads
+        tampons
+        bleach
+        lysolSpray
+        lysolWipes
+        dishsoap
+        sponges
+        pinesol
+        id
+        createdAt
+        updatedAt
+      }
+      needReason
+      needTypes
+      status
+      note {
+        items {
+          id
+          requestID
+          dateCreated
+          author
+          content
+          createdAt
+          updatedAt
+          requestNoteId
+        }
+        nextToken
+      }
+      otherNeeds
+      needFulfiller
+      dateFulfilled
+      followUp
+      createdAt
+      updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
+    }
+  }
+`;
 export const updateRequest = /* GraphQL */ `
   mutation UpdateRequest(
     $input: UpdateRequestInput!
@@ -23,17 +157,16 @@ export const updateRequest = /* GraphQL */ `
       leadSource
       leadOtherDetails
       selfOrOtherInfo {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
       foodRequest {
-        id
         familyMembers
         children
         haveAllergies
@@ -52,11 +185,11 @@ export const updateRequest = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
       movingRequest {
-        id
         items
         haveTransportation
         steepDriveway
@@ -65,6 +198,7 @@ export const updateRequest = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -72,13 +206,13 @@ export const updateRequest = /* GraphQL */ `
       coverLetterHelp
       carRepairDetails
       homeRepairType {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }
@@ -87,7 +221,6 @@ export const updateRequest = /* GraphQL */ `
       furnitureType
       housingHelp
       householdItems {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -103,6 +236,7 @@ export const updateRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -118,6 +252,7 @@ export const updateRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          requestNoteId
         }
         nextToken
       }
@@ -127,6 +262,11 @@ export const updateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
     }
   }
 `;
@@ -151,17 +291,16 @@ export const deleteRequest = /* GraphQL */ `
       leadSource
       leadOtherDetails
       selfOrOtherInfo {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
       foodRequest {
-        id
         familyMembers
         children
         haveAllergies
@@ -180,11 +319,11 @@ export const deleteRequest = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
       movingRequest {
-        id
         items
         haveTransportation
         steepDriveway
@@ -193,6 +332,7 @@ export const deleteRequest = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -200,13 +340,13 @@ export const deleteRequest = /* GraphQL */ `
       coverLetterHelp
       carRepairDetails
       homeRepairType {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }
@@ -215,7 +355,6 @@ export const deleteRequest = /* GraphQL */ `
       furnitureType
       housingHelp
       householdItems {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -231,6 +370,7 @@ export const deleteRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -246,6 +386,7 @@ export const deleteRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          requestNoteId
         }
         nextToken
       }
@@ -255,6 +396,11 @@ export const deleteRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
     }
   }
 `;
@@ -271,6 +417,7 @@ export const createNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
@@ -287,6 +434,7 @@ export const updateNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
@@ -303,6 +451,7 @@ export const deleteNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
@@ -312,12 +461,12 @@ export const createSelfOrOtherInfo = /* GraphQL */ `
     $condition: ModelSelfOrOtherInfoConditionInput
   ) {
     createSelfOrOtherInfo(input: $input, condition: $condition) {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -329,12 +478,12 @@ export const updateSelfOrOtherInfo = /* GraphQL */ `
     $condition: ModelSelfOrOtherInfoConditionInput
   ) {
     updateSelfOrOtherInfo(input: $input, condition: $condition) {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -346,12 +495,12 @@ export const deleteSelfOrOtherInfo = /* GraphQL */ `
     $condition: ModelSelfOrOtherInfoConditionInput
   ) {
     deleteSelfOrOtherInfo(input: $input, condition: $condition) {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -363,7 +512,6 @@ export const createHouseholdItems = /* GraphQL */ `
     $condition: ModelHouseholdItemsConditionInput
   ) {
     createHouseholdItems(input: $input, condition: $condition) {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -379,6 +527,7 @@ export const createHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
@@ -390,7 +539,6 @@ export const updateHouseholdItems = /* GraphQL */ `
     $condition: ModelHouseholdItemsConditionInput
   ) {
     updateHouseholdItems(input: $input, condition: $condition) {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -406,6 +554,7 @@ export const updateHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
@@ -417,7 +566,6 @@ export const deleteHouseholdItems = /* GraphQL */ `
     $condition: ModelHouseholdItemsConditionInput
   ) {
     deleteHouseholdItems(input: $input, condition: $condition) {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -433,6 +581,7 @@ export const deleteHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
@@ -444,7 +593,6 @@ export const createFoodInfo = /* GraphQL */ `
     $condition: ModelFoodInfoConditionInput
   ) {
     createFoodInfo(input: $input, condition: $condition) {
-      id
       familyMembers
       children
       haveAllergies
@@ -463,6 +611,7 @@ export const createFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -474,7 +623,6 @@ export const updateFoodInfo = /* GraphQL */ `
     $condition: ModelFoodInfoConditionInput
   ) {
     updateFoodInfo(input: $input, condition: $condition) {
-      id
       familyMembers
       children
       haveAllergies
@@ -493,6 +641,7 @@ export const updateFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -504,7 +653,6 @@ export const deleteFoodInfo = /* GraphQL */ `
     $condition: ModelFoodInfoConditionInput
   ) {
     deleteFoodInfo(input: $input, condition: $condition) {
-      id
       familyMembers
       children
       haveAllergies
@@ -523,6 +671,7 @@ export const deleteFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -534,7 +683,6 @@ export const createMovingInfo = /* GraphQL */ `
     $condition: ModelMovingInfoConditionInput
   ) {
     createMovingInfo(input: $input, condition: $condition) {
-      id
       items
       haveTransportation
       steepDriveway
@@ -543,6 +691,7 @@ export const createMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -554,7 +703,6 @@ export const updateMovingInfo = /* GraphQL */ `
     $condition: ModelMovingInfoConditionInput
   ) {
     updateMovingInfo(input: $input, condition: $condition) {
-      id
       items
       haveTransportation
       steepDriveway
@@ -563,6 +711,7 @@ export const updateMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -574,7 +723,6 @@ export const deleteMovingInfo = /* GraphQL */ `
     $condition: ModelMovingInfoConditionInput
   ) {
     deleteMovingInfo(input: $input, condition: $condition) {
-      id
       items
       haveTransportation
       steepDriveway
@@ -583,6 +731,7 @@ export const deleteMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -594,13 +743,13 @@ export const createHomeRepairType = /* GraphQL */ `
     $condition: ModelHomeRepairTypeConditionInput
   ) {
     createHomeRepairType(input: $input, condition: $condition) {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
+      id
       createdAt
       updatedAt
     }
@@ -612,13 +761,13 @@ export const updateHomeRepairType = /* GraphQL */ `
     $condition: ModelHomeRepairTypeConditionInput
   ) {
     updateHomeRepairType(input: $input, condition: $condition) {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
+      id
       createdAt
       updatedAt
     }
@@ -630,141 +779,13 @@ export const deleteHomeRepairType = /* GraphQL */ `
     $condition: ModelHomeRepairTypeConditionInput
   ) {
     deleteHomeRepairType(input: $input, condition: $condition) {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createRequest = /* GraphQL */ `
-  mutation CreateRequest(
-    $input: CreateRequestInput!
-    $condition: ModelRequestConditionInput
-  ) {
-    createRequest(input: $input, condition: $condition) {
       id
-      dateOfRequest
-      firstName
-      lastName
-      address
-      city
-      zipCode
-      phone
-      email
-      spanishOnly
-      preferredContactTime
-      request
-      leadSource
-      leadOtherDetails
-      selfOrOtherInfo {
-        id
-        forSelf
-        usedOtherResources
-        otherResources
-        requestFor
-        requestIsKnown
-        createdAt
-        updatedAt
-      }
-      foodRequest {
-        id
-        familyMembers
-        children
-        haveAllergies
-        allergies
-        milk
-        eggs
-        bread
-        butter
-        tortillas
-        rice
-        beans
-        cheese
-        beef
-        hotdogs
-        lunchMeat
-        fruit
-        peanutButter
-        jelly
-        createdAt
-        updatedAt
-      }
-      movingRequest {
-        id
-        items
-        haveTransportation
-        steepDriveway
-        stairs
-        unpavedRoad
-        other
-        otherDetails
-        liabilityAck
-        createdAt
-        updatedAt
-      }
-      resumeHelp
-      coverLetterHelp
-      carRepairDetails
-      homeRepairType {
-        id
-        plumbing
-        electrical
-        painting
-        yardwork
-        other
-        details
-        createdAt
-        updatedAt
-      }
-      clothingType
-      clothingSize
-      furnitureType
-      housingHelp
-      householdItems {
-        id
-        shampoo
-        bathSoap
-        toothpaste
-        toothbrush
-        deodorant
-        toiletPaper
-        handSoap
-        sanitaryPads
-        tampons
-        bleach
-        lysolSpray
-        lysolWipes
-        dishsoap
-        sponges
-        pinesol
-        createdAt
-        updatedAt
-      }
-      needReason
-      needTypes
-      status
-      note {
-        items {
-          id
-          requestID
-          dateCreated
-          author
-          content
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      otherNeeds
-      needFulfiller
-      dateFulfilled
-      followUp
       createdAt
       updatedAt
     }

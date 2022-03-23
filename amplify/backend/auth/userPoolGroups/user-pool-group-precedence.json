@@ -1,0 +1,10 @@
+[
+  {
+    "groupName": "SysOps",
+    "precedence": 1
+  },
+  {
+    "groupName": "Coordinators",
+    "precedence": 2
+  }
+]

@@ -211,9 +211,14 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
     };
 
     try {
-      let result: any = await API.graphql(
-        graphqlOperation(createSelfOrOtherInfo, { input: selfOrOther })
-      );
+      var result: any;
+      try {
+        result = await API.graphql(
+          graphqlOperation(createSelfOrOtherInfo, { input: selfOrOther })
+        );
+      } catch (err) {
+        alert("home maintenance error: " + JSON.stringify(err));
+      }
       request.requestSelfOrOtherInfoId = result.data.createSelfOrOtherInfo.id;
       if (needType.meals || needType.groceries) {
         try {
