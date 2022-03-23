@@ -55,6 +55,7 @@ import {
   groceriesCard,
   homeRepairCard,
   householdItemsCard,
+  hygeneItemsCard,
   jobTrainingCard,
   movingCard,
   nameCard,
@@ -429,6 +430,28 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
               )}
             </Grid>
           )}
+
+          {requestData.needTypes.includes(NeedType.HYGENEITEMS) && (
+            <Grid item>
+              {hygeneItemsCard(
+                requestData.householdItems || {},
+                (event: React.ChangeEvent<HTMLInputElement>) => {
+                  // build foodinfo from existing with event data for grocery type
+                  let newItems = {
+                    ...requestData.householdItems,
+                    [event.target.name]: event.target.checked,
+                  };
+                  setRequestData({
+                    ...requestData,
+                    householdItems: editOrCreateHouseholdItems(
+                      newItems,
+                      requestData.householdItems
+                    ),
+                  });
+                }
+              )}
+            </Grid>
+          )}
           {requestData.needTypes.includes(NeedType.CLOTHING) && (
             <Grid item>
               {clothingCard(
@@ -552,7 +575,7 @@ function needTypeArrayToBooleans(requestData: NeedRequestType): INeedTypes {
     housing: requestData.needTypes.includes(NeedType.HOUSING),
     homeRepair: requestData.needTypes.includes(NeedType.HOMEREPAIR),
     householdItems: requestData.needTypes.includes(NeedType.HOUSEHOLDITEMS),
-    hygeneItems: requestData.needTypes.includes(NeedType.HOUSEHOLDITEMS),
+    hygeneItems: requestData.needTypes.includes(NeedType.HYGENEITEMS),
     meals: requestData.needTypes.includes(NeedType.MEALS),
     furniture: requestData.needTypes.includes(NeedType.FURNITURE),
     groceries: requestData.needTypes.includes(NeedType.GROCERIES),

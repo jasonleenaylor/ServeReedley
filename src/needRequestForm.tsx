@@ -56,6 +56,7 @@ import {
   groceriesCard,
   homeRepairCard,
   householdItemsCard,
+  hygeneItemsCard,
   jobTrainingCard,
   leadTracingCard,
   movingCard,
@@ -253,7 +254,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
           alert("home maintenance error: " + JSON.stringify(err));
         }
       }
-      if (needType.householdItems) {
+      if (needType.householdItems || needType.hygeneItems) {
         try {
           result = await API.graphql(
             graphqlOperation(createHouseholdItems, { input: householdItems })
@@ -549,6 +550,13 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
             </Grid>
           )}
           {needType.housing && <Grid item>{housingCard}</Grid>}
+          {needType.hygeneItems && (
+            <Grid item>
+              {hygeneItemsCard(householdItems, (event) =>
+                handleCheckboxChange(event, setHouseholdItems, householdItems)
+              )}
+            </Grid>
+          )}
           {needType.householdItems && (
             <Grid item>
               {householdItemsCard(householdItems, (event) =>

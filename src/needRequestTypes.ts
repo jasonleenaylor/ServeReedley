@@ -361,6 +361,7 @@ export function getNeedTypes(needType: {
   jobTraining: boolean;
   homeRepair: boolean;
   householdItems: boolean;
+  hygeneItems: boolean;
   carRepair: boolean;
   housing: boolean;
   clothing: boolean;
@@ -375,6 +376,7 @@ export function getNeedTypes(needType: {
   if (needType.housing) types.push(NeedType.HOUSING);
   if (needType.homeRepair) types.push(NeedType.HOMEREPAIR);
   if (needType.householdItems) types.push(NeedType.HOUSEHOLDITEMS);
+  if (needType.hygeneItems) types.push(NeedType.HYGENEITEMS);
   if (needType.jobTraining) types.push(NeedType.JOBTRAINING);
   if (needType.clothing) types.push(NeedType.CLOTHING);
   if (needType.furniture) types.push(NeedType.FURNITURE);
