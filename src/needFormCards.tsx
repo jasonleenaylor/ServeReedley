@@ -1229,32 +1229,12 @@ export function householdItemsCard(
           <FormControlLabel
             control={
               <Checkbox
-                checked={!!items.deodorant}
-                onChange={handleItemsChange}
-                name="deodorant"
-              />
-            }
-            label={t("deodorant")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
                 checked={!!items.dishsoap}
                 onChange={handleItemsChange}
                 name="dishsoap"
               />
             }
             label={t("dish_soap")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={!!items.handSoap}
-                onChange={handleItemsChange}
-                name="handSoap"
-              />
-            }
-            label={t("hand_soap")}
           />
           <FormControlLabel
             control={
@@ -1289,6 +1269,65 @@ export function householdItemsCard(
           <FormControlLabel
             control={
               <Checkbox
+                checked={!!items.sponges}
+                onChange={handleItemsChange}
+                name="sponges"
+              />
+            }
+            label={t("sponges")}
+          />
+        </FormGroup>
+      </FormControl>
+    </Card>
+  );
+}
+
+export function hygeneItemsCard(
+  items: HouseholdItemsGQL,
+  handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+): JSX.Element {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title={t("hygene_items")}
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <FormControl required>
+        <FormGroup>
+          <Typography>{t("household_items_list")}</Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.bathSoap}
+                onChange={handleItemsChange}
+                name="bathSoap"
+              />
+            }
+            label={t("bath_soap")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.deodorant}
+                onChange={handleItemsChange}
+                name="deodorant"
+              />
+            }
+            label={t("deodorant")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.handSoap}
+                onChange={handleItemsChange}
+                name="handSoap"
+              />
+            }
+            label={t("hand_soap")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
                 checked={!!items.sanitaryPads}
                 onChange={handleItemsChange}
                 name="sanitaryPads"
@@ -1305,16 +1344,6 @@ export function householdItemsCard(
               />
             }
             label={t("shampoo")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={!!items.sponges}
-                onChange={handleItemsChange}
-                name="sponges"
-              />
-            }
-            label={t("sponges")}
           />
           <FormControlLabel
             control={
