@@ -2,8 +2,8 @@ type Request
   @model
   @auth(
     rules: [
-      { allow: public, provider: iam, operations: [create] }
-      { allow: groups, groups: ["Coordinators"] }
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
     ]
   ) {
   id: ID!
@@ -20,22 +20,22 @@ type Request
   request: String
   leadSource: LeadSource!
   leadOtherDetails: String
-  selfOrOtherInfo: SelfOrOtherInfo! @connection
-  foodRequest: FoodInfo @connection
-  movingRequest: MovingInfo @connection
+  selfOrOtherInfo: SelfOrOtherInfo! @hasOne
+  foodRequest: FoodInfo @hasOne
+  movingRequest: MovingInfo @hasOne
   resumeHelp: Boolean
   coverLetterHelp: Boolean
   carRepairDetails: String
-  homeRepairType: HomeRepairType @connection
+  homeRepairType: HomeRepairType @hasOne
   clothingType: String
   clothingSize: String
   furnitureType: String
   housingHelp: Boolean
-  householdItems: HouseholdItems @connection
+  householdItems: HouseholdItems @hasOne
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
-  note: [NoteType] @connection(keyName: "forRequest", fields: ["id"])
+  note: [NoteType] @hasMany
   otherNeeds: String
   needFulfiller: String
   dateFulfilled: String
@@ -44,7 +44,12 @@ type Request
 
 type NoteType
   @model
-  @key(name: "forRequest", fields: ["requestID", "content"]) {
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
   id: ID!
   requestID: ID!
   dateCreated: String!
@@ -52,7 +57,14 @@ type NoteType
   content: String!
 }
 
-type SelfOrOtherInfo @model {
+type SelfOrOtherInfo
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
   forSelf: Boolean
   usedOtherResources: Boolean
   otherResources: String
@@ -60,7 +72,14 @@ type SelfOrOtherInfo @model {
   requestIsKnown: Boolean
 }
 
-type HouseholdItems @model {
+type HouseholdItems
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
   shampoo: Boolean
   bathSoap: Boolean
   toothpaste: Boolean
@@ -78,7 +97,14 @@ type HouseholdItems @model {
   pinesol: Boolean
 }
 
-type FoodInfo @model {
+type FoodInfo
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
   familyMembers: Int
   children: String
   haveAllergies: Boolean
@@ -99,7 +125,14 @@ type FoodInfo @model {
   jelly: Boolean
 }
 
-type MovingInfo @model {
+type MovingInfo
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
   items: String
   haveTransportation: Boolean
   steepDriveway: Boolean
@@ -110,7 +143,14 @@ type MovingInfo @model {
   liabilityAck: Boolean
 }
 
-type HomeRepairType @model {
+type HomeRepairType
+  @model
+  @auth(
+    rules: [
+      { allow: public, operations: [create, read] }
+      { allow: groups, groups: ["Admin"] }
+    ]
+  ) {
   plumbing: Boolean
   electrical: Boolean
   painting: Boolean

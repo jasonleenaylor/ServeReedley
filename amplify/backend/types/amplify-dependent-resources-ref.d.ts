@@ -1,6 +1,17 @@
 export type AmplifyDependentResourcesAttributes = {
+    "api": {
+        "crn": {
+            "GraphQLAPIKeyOutput": "string",
+            "GraphQLAPIIdOutput": "string",
+            "GraphQLAPIEndpointOutput": "string"
+        }
+    },
     "auth": {
-        "communityresourcenet1f61b8bc": {
+        "userPoolGroups": {
+            "SysOpsGroupRole": "string",
+            "CoordinatorsGroupRole": "string"
+        },
+        "crnAuth": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
@@ -8,12 +19,6 @@ export type AmplifyDependentResourcesAttributes = {
             "UserPoolName": "string",
             "AppClientIDWeb": "string",
             "AppClientID": "string"
-        }
-    },
-    "api": {
-        "crn": {
-            "GraphQLAPIIdOutput": "string",
-            "GraphQLAPIEndpointOutput": "string"
         }
     }
 }

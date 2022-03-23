@@ -20,17 +20,16 @@ export const getRequest = /* GraphQL */ `
       leadSource
       leadOtherDetails
       selfOrOtherInfo {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
       foodRequest {
-        id
         familyMembers
         children
         haveAllergies
@@ -49,11 +48,11 @@ export const getRequest = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
       movingRequest {
-        id
         items
         haveTransportation
         steepDriveway
@@ -62,6 +61,7 @@ export const getRequest = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -69,13 +69,13 @@ export const getRequest = /* GraphQL */ `
       coverLetterHelp
       carRepairDetails
       homeRepairType {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }
@@ -84,7 +84,6 @@ export const getRequest = /* GraphQL */ `
       furnitureType
       housingHelp
       householdItems {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -100,6 +99,7 @@ export const getRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -115,6 +115,7 @@ export const getRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          requestNoteId
         }
         nextToken
       }
@@ -124,6 +125,11 @@ export const getRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
     }
   }
 `;
@@ -150,17 +156,16 @@ export const listRequests = /* GraphQL */ `
         leadSource
         leadOtherDetails
         selfOrOtherInfo {
-          id
           forSelf
           usedOtherResources
           otherResources
           requestFor
           requestIsKnown
+          id
           createdAt
           updatedAt
         }
         foodRequest {
-          id
           familyMembers
           children
           haveAllergies
@@ -179,11 +184,11 @@ export const listRequests = /* GraphQL */ `
           fruit
           peanutButter
           jelly
+          id
           createdAt
           updatedAt
         }
         movingRequest {
-          id
           items
           haveTransportation
           steepDriveway
@@ -192,6 +197,7 @@ export const listRequests = /* GraphQL */ `
           other
           otherDetails
           liabilityAck
+          id
           createdAt
           updatedAt
         }
@@ -199,13 +205,13 @@ export const listRequests = /* GraphQL */ `
         coverLetterHelp
         carRepairDetails
         homeRepairType {
-          id
           plumbing
           electrical
           painting
           yardwork
           other
           details
+          id
           createdAt
           updatedAt
         }
@@ -214,7 +220,6 @@ export const listRequests = /* GraphQL */ `
         furnitureType
         housingHelp
         householdItems {
-          id
           shampoo
           bathSoap
           toothpaste
@@ -230,6 +235,7 @@ export const listRequests = /* GraphQL */ `
           dishsoap
           sponges
           pinesol
+          id
           createdAt
           updatedAt
         }
@@ -245,6 +251,7 @@ export const listRequests = /* GraphQL */ `
             content
             createdAt
             updatedAt
+            requestNoteId
           }
           nextToken
         }
@@ -254,6 +261,11 @@ export const listRequests = /* GraphQL */ `
         followUp
         createdAt
         updatedAt
+        requestSelfOrOtherInfoId
+        requestFoodRequestId
+        requestMovingRequestId
+        requestHomeRepairTypeId
+        requestHouseholdItemsId
       }
       nextToken
     }
@@ -269,6 +281,7 @@ export const getNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
@@ -287,6 +300,7 @@ export const listNoteTypes = /* GraphQL */ `
         content
         createdAt
         updatedAt
+        requestNoteId
       }
       nextToken
     }
@@ -295,12 +309,12 @@ export const listNoteTypes = /* GraphQL */ `
 export const getSelfOrOtherInfo = /* GraphQL */ `
   query GetSelfOrOtherInfo($id: ID!) {
     getSelfOrOtherInfo(id: $id) {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -318,12 +332,12 @@ export const listSelfOrOtherInfos = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
@@ -334,7 +348,6 @@ export const listSelfOrOtherInfos = /* GraphQL */ `
 export const getHouseholdItems = /* GraphQL */ `
   query GetHouseholdItems($id: ID!) {
     getHouseholdItems(id: $id) {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -350,20 +363,20 @@ export const getHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
   }
 `;
-export const listHouseholdItemss = /* GraphQL */ `
-  query ListHouseholdItemss(
+export const listHouseholdItems = /* GraphQL */ `
+  query ListHouseholdItems(
     $filter: ModelHouseholdItemsFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listHouseholdItemss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listHouseholdItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -379,6 +392,7 @@ export const listHouseholdItemss = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -389,7 +403,6 @@ export const listHouseholdItemss = /* GraphQL */ `
 export const getFoodInfo = /* GraphQL */ `
   query GetFoodInfo($id: ID!) {
     getFoodInfo(id: $id) {
-      id
       familyMembers
       children
       haveAllergies
@@ -408,6 +421,7 @@ export const getFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -421,7 +435,6 @@ export const listFoodInfos = /* GraphQL */ `
   ) {
     listFoodInfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        id
         familyMembers
         children
         haveAllergies
@@ -440,6 +453,7 @@ export const listFoodInfos = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
@@ -450,7 +464,6 @@ export const listFoodInfos = /* GraphQL */ `
 export const getMovingInfo = /* GraphQL */ `
   query GetMovingInfo($id: ID!) {
     getMovingInfo(id: $id) {
-      id
       items
       haveTransportation
       steepDriveway
@@ -459,6 +472,7 @@ export const getMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -472,7 +486,6 @@ export const listMovingInfos = /* GraphQL */ `
   ) {
     listMovingInfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        id
         items
         haveTransportation
         steepDriveway
@@ -481,6 +494,7 @@ export const listMovingInfos = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -491,13 +505,13 @@ export const listMovingInfos = /* GraphQL */ `
 export const getHomeRepairType = /* GraphQL */ `
   query GetHomeRepairType($id: ID!) {
     getHomeRepairType(id: $id) {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
+      id
       createdAt
       updatedAt
     }
@@ -511,13 +525,13 @@ export const listHomeRepairTypes = /* GraphQL */ `
   ) {
     listHomeRepairTypes(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }

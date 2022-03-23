@@ -20,17 +20,16 @@ export const onCreateRequest = /* GraphQL */ `
       leadSource
       leadOtherDetails
       selfOrOtherInfo {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
       foodRequest {
-        id
         familyMembers
         children
         haveAllergies
@@ -49,11 +48,11 @@ export const onCreateRequest = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
       movingRequest {
-        id
         items
         haveTransportation
         steepDriveway
@@ -62,6 +61,7 @@ export const onCreateRequest = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -69,13 +69,13 @@ export const onCreateRequest = /* GraphQL */ `
       coverLetterHelp
       carRepairDetails
       homeRepairType {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }
@@ -84,7 +84,6 @@ export const onCreateRequest = /* GraphQL */ `
       furnitureType
       housingHelp
       householdItems {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -100,6 +99,7 @@ export const onCreateRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -115,6 +115,7 @@ export const onCreateRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          requestNoteId
         }
         nextToken
       }
@@ -124,6 +125,11 @@ export const onCreateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
     }
   }
 `;
@@ -145,17 +151,16 @@ export const onUpdateRequest = /* GraphQL */ `
       leadSource
       leadOtherDetails
       selfOrOtherInfo {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
       foodRequest {
-        id
         familyMembers
         children
         haveAllergies
@@ -174,11 +179,11 @@ export const onUpdateRequest = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
       movingRequest {
-        id
         items
         haveTransportation
         steepDriveway
@@ -187,6 +192,7 @@ export const onUpdateRequest = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -194,13 +200,13 @@ export const onUpdateRequest = /* GraphQL */ `
       coverLetterHelp
       carRepairDetails
       homeRepairType {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }
@@ -209,7 +215,6 @@ export const onUpdateRequest = /* GraphQL */ `
       furnitureType
       housingHelp
       householdItems {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -225,6 +230,7 @@ export const onUpdateRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -240,6 +246,7 @@ export const onUpdateRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          requestNoteId
         }
         nextToken
       }
@@ -249,6 +256,11 @@ export const onUpdateRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
     }
   }
 `;
@@ -270,17 +282,16 @@ export const onDeleteRequest = /* GraphQL */ `
       leadSource
       leadOtherDetails
       selfOrOtherInfo {
-        id
         forSelf
         usedOtherResources
         otherResources
         requestFor
         requestIsKnown
+        id
         createdAt
         updatedAt
       }
       foodRequest {
-        id
         familyMembers
         children
         haveAllergies
@@ -299,11 +310,11 @@ export const onDeleteRequest = /* GraphQL */ `
         fruit
         peanutButter
         jelly
+        id
         createdAt
         updatedAt
       }
       movingRequest {
-        id
         items
         haveTransportation
         steepDriveway
@@ -312,6 +323,7 @@ export const onDeleteRequest = /* GraphQL */ `
         other
         otherDetails
         liabilityAck
+        id
         createdAt
         updatedAt
       }
@@ -319,13 +331,13 @@ export const onDeleteRequest = /* GraphQL */ `
       coverLetterHelp
       carRepairDetails
       homeRepairType {
-        id
         plumbing
         electrical
         painting
         yardwork
         other
         details
+        id
         createdAt
         updatedAt
       }
@@ -334,7 +346,6 @@ export const onDeleteRequest = /* GraphQL */ `
       furnitureType
       housingHelp
       householdItems {
-        id
         shampoo
         bathSoap
         toothpaste
@@ -350,6 +361,7 @@ export const onDeleteRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        id
         createdAt
         updatedAt
       }
@@ -365,6 +377,7 @@ export const onDeleteRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          requestNoteId
         }
         nextToken
       }
@@ -374,6 +387,11 @@ export const onDeleteRequest = /* GraphQL */ `
       followUp
       createdAt
       updatedAt
+      requestSelfOrOtherInfoId
+      requestFoodRequestId
+      requestMovingRequestId
+      requestHomeRepairTypeId
+      requestHouseholdItemsId
     }
   }
 `;
@@ -387,6 +405,7 @@ export const onCreateNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
@@ -400,6 +419,7 @@ export const onUpdateNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
@@ -413,18 +433,19 @@ export const onDeleteNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
+      requestNoteId
     }
   }
 `;
 export const onCreateSelfOrOtherInfo = /* GraphQL */ `
   subscription OnCreateSelfOrOtherInfo {
     onCreateSelfOrOtherInfo {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -433,12 +454,12 @@ export const onCreateSelfOrOtherInfo = /* GraphQL */ `
 export const onUpdateSelfOrOtherInfo = /* GraphQL */ `
   subscription OnUpdateSelfOrOtherInfo {
     onUpdateSelfOrOtherInfo {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -447,12 +468,12 @@ export const onUpdateSelfOrOtherInfo = /* GraphQL */ `
 export const onDeleteSelfOrOtherInfo = /* GraphQL */ `
   subscription OnDeleteSelfOrOtherInfo {
     onDeleteSelfOrOtherInfo {
-      id
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      id
       createdAt
       updatedAt
     }
@@ -461,7 +482,6 @@ export const onDeleteSelfOrOtherInfo = /* GraphQL */ `
 export const onCreateHouseholdItems = /* GraphQL */ `
   subscription OnCreateHouseholdItems {
     onCreateHouseholdItems {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -477,6 +497,7 @@ export const onCreateHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
@@ -485,7 +506,6 @@ export const onCreateHouseholdItems = /* GraphQL */ `
 export const onUpdateHouseholdItems = /* GraphQL */ `
   subscription OnUpdateHouseholdItems {
     onUpdateHouseholdItems {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -501,6 +521,7 @@ export const onUpdateHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
@@ -509,7 +530,6 @@ export const onUpdateHouseholdItems = /* GraphQL */ `
 export const onDeleteHouseholdItems = /* GraphQL */ `
   subscription OnDeleteHouseholdItems {
     onDeleteHouseholdItems {
-      id
       shampoo
       bathSoap
       toothpaste
@@ -525,6 +545,7 @@ export const onDeleteHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      id
       createdAt
       updatedAt
     }
@@ -533,7 +554,6 @@ export const onDeleteHouseholdItems = /* GraphQL */ `
 export const onCreateFoodInfo = /* GraphQL */ `
   subscription OnCreateFoodInfo {
     onCreateFoodInfo {
-      id
       familyMembers
       children
       haveAllergies
@@ -552,6 +572,7 @@ export const onCreateFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -560,7 +581,6 @@ export const onCreateFoodInfo = /* GraphQL */ `
 export const onUpdateFoodInfo = /* GraphQL */ `
   subscription OnUpdateFoodInfo {
     onUpdateFoodInfo {
-      id
       familyMembers
       children
       haveAllergies
@@ -579,6 +599,7 @@ export const onUpdateFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -587,7 +608,6 @@ export const onUpdateFoodInfo = /* GraphQL */ `
 export const onDeleteFoodInfo = /* GraphQL */ `
   subscription OnDeleteFoodInfo {
     onDeleteFoodInfo {
-      id
       familyMembers
       children
       haveAllergies
@@ -606,6 +626,7 @@ export const onDeleteFoodInfo = /* GraphQL */ `
       fruit
       peanutButter
       jelly
+      id
       createdAt
       updatedAt
     }
@@ -614,7 +635,6 @@ export const onDeleteFoodInfo = /* GraphQL */ `
 export const onCreateMovingInfo = /* GraphQL */ `
   subscription OnCreateMovingInfo {
     onCreateMovingInfo {
-      id
       items
       haveTransportation
       steepDriveway
@@ -623,6 +643,7 @@ export const onCreateMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -631,7 +652,6 @@ export const onCreateMovingInfo = /* GraphQL */ `
 export const onUpdateMovingInfo = /* GraphQL */ `
   subscription OnUpdateMovingInfo {
     onUpdateMovingInfo {
-      id
       items
       haveTransportation
       steepDriveway
@@ -640,6 +660,7 @@ export const onUpdateMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -648,7 +669,6 @@ export const onUpdateMovingInfo = /* GraphQL */ `
 export const onDeleteMovingInfo = /* GraphQL */ `
   subscription OnDeleteMovingInfo {
     onDeleteMovingInfo {
-      id
       items
       haveTransportation
       steepDriveway
@@ -657,6 +677,7 @@ export const onDeleteMovingInfo = /* GraphQL */ `
       other
       otherDetails
       liabilityAck
+      id
       createdAt
       updatedAt
     }
@@ -665,13 +686,13 @@ export const onDeleteMovingInfo = /* GraphQL */ `
 export const onCreateHomeRepairType = /* GraphQL */ `
   subscription OnCreateHomeRepairType {
     onCreateHomeRepairType {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
+      id
       createdAt
       updatedAt
     }
@@ -680,13 +701,13 @@ export const onCreateHomeRepairType = /* GraphQL */ `
 export const onUpdateHomeRepairType = /* GraphQL */ `
   subscription OnUpdateHomeRepairType {
     onUpdateHomeRepairType {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
+      id
       createdAt
       updatedAt
     }
@@ -695,13 +716,13 @@ export const onUpdateHomeRepairType = /* GraphQL */ `
 export const onDeleteHomeRepairType = /* GraphQL */ `
   subscription OnDeleteHomeRepairType {
     onDeleteHomeRepairType {
-      id
       plumbing
       electrical
       painting
       yardwork
       other
       details
+      id
       createdAt
       updatedAt
     }
