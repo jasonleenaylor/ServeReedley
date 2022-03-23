@@ -72,9 +72,9 @@
   "clothing_size": "¿Qué talla de ropa necesitas?",
   "furniture_type": "¿Qué tipo de muebles necesitas?",
   "resume_help": "¿Necesitas ayuda con tu currículum?",
-  "cover_letter_help": "Do you need help writing a cover letter?",
+  "cover_letter_help": "¿Necesita ayuda para escribir una carta de presentación?",
   "repair_limits": "Serve Reedley solo puede ayudar con mantenimiento y reparaciones menores.",
-  "car_repair_details": "Please describe the work needed on your vehicle.",
+  "car_repair_details": "Por favor, describa el trabajo necesario en su vehículo.",
   "plumbing": "Plomería",
   "electrical": "Eléctrico",
   "painting": "Pintar",
@@ -106,5 +106,7 @@
   "housing_riverharvest_criteria": "Criterios: acomodaciones de vida sobria para hombres, mujeres o familias",
   "housing_mappoint_criteria": "Criterios: Vivienda de bajos ingresos.",
   "housing_evangel_criteria": "Criterios : Refugio de emergencia en Fresno; posible vivienda a largo plazo",
-  "housing_fha_criteria": "Criterios: Refugio de emergencia."
+  "housing_fha_criteria": "Criterios: Refugio de emergencia.",
+  "form_complete_note": "Gracias por completar su solicitud. Alguien se comunicará con usted pronto. Community Resource Network se basa en voluntarios. Haremos todo lo posible para satisfacer su solicitud. Si no podemos satisfacer sus necesidades, se le proporcionarán más recursos si fuera aplicable.",
+  "submit": "Enviar"
 }

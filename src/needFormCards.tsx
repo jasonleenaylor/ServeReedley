@@ -1234,7 +1234,7 @@ export function householdItemsCard(
                 name="deodorant"
               />
             }
-            label={t("deoderant")}
+            label={t("deodorant")}
           />
           <FormControlLabel
             control={

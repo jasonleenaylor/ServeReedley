@@ -65,7 +65,7 @@ import {
   otherNeedCard,
 } from "./needFormCards";
 import { useHistory } from "react-router-dom";
-import { Trans, useTranslation } from "react-i18next";
+import { initReactI18next, Trans, useTranslation } from "react-i18next";
 
 export const NeedRequestForm = (props: ILocalizeProps) => {
   const { i18n } = useTranslation();
@@ -271,7 +271,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
         request.furnitureType = furnitureType;
       }
       await API.graphql(graphqlOperation(createRequest, { input: request }));
-      history.push("/need-submitted");
+      history.push("/need-submitted?lang=" + i18n.language);
     } catch (err) {
       alert("error: " + JSON.stringify(err));
     }
@@ -573,7 +573,9 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
             <Grid item>{otherNeedCard(otherNeeds, setOtherNeeds)}</Grid>
           )}
           <Grid item>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" variant="contained" color="primary">
+              {t("submit")}
+            </Button>
           </Grid>{" "}
         </Grid>
       </form>
