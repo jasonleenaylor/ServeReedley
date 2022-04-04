@@ -13,23 +13,6 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <div style={{ width: "100%" }}>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">{t("home")}</Link>
-              </li>
-              <li>
-                <Link to="/request-need">Need Help?</Link>
-              </li>
-              <li>
-                <Link to="/requests">View Current Needs</Link>
-              </li>
-              <li>
-                <Link to="/need-submitted">Form Completed</Link>
-              </li>
-            </ul>
-          </nav>
-
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
