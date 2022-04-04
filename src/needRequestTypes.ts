@@ -311,6 +311,7 @@ export type IHouseholdItemsReqType = IGraphQLTable & HouseholdItemsGQL;
 
 export type HouseholdItemsGQL = {
   shampoo?: boolean | null;
+  conditioner?: boolean | null;
   bathSoap?: boolean | null;
   toothpaste?: boolean | null;
   toothbrush?: boolean | null;
@@ -325,6 +326,8 @@ export type HouseholdItemsGQL = {
   dishsoap?: boolean | null;
   sponges?: boolean | null;
   pinesol?: boolean | null;
+  laundrySoap?: boolean | null;
+  paperTowels?: boolean | null;
 };
 
 export type IFoodInfoReqType = {

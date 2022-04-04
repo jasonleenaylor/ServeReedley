@@ -95,6 +95,9 @@ type HouseholdItems
   dishsoap: Boolean
   sponges: Boolean
   pinesol: Boolean
+  conditioner: Boolean
+  paperTowels: Boolean
+  laundrySoap: Boolean
 }
 
 type FoodInfo

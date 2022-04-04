@@ -27,7 +27,7 @@
   "home_repair": "Home Repair or Maintenance",
   "housing": "Housing",
   "household_items": "Household Items",
-  "hygene_items": "Personal Hygene Items",
+  "hygene_items": "Personal Hygene/Toiletries",
   "clothing": "Clothing",
   "furniture": "Furniture",
   "reason_for_need": "Why do you need assistance? (Select all that apply)",
@@ -109,5 +109,8 @@
   "housing_fha_criteria": "Criteria: Emergency Housing",
   "crn_limitations": "Please note that we only serve the greater Reedley area (within a 15 mile radius of the city of Reedley, CA)",
   "form_complete_note": "Thank you for completing your request. Someone will follow up with you soon. Community Resource Network is volunteer based. We will try our best to meet your request. If we are unable to meet your need, you will be provided with further resources if applicable.",
-  "submit": "Submit"
+  "submit": "Submit",
+  "conditioner": "Conditioner",
+  "laundry_detergent": "Laundry Detergent",
+  "paper_towels": "Paper Towels"
 }
