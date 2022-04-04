@@ -1209,16 +1209,6 @@ export function householdItemsCard(
           <FormControlLabel
             control={
               <Checkbox
-                checked={!!items.bathSoap}
-                onChange={handleItemsChange}
-                name="bathSoap"
-              />
-            }
-            label={t("bath_soap")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
                 checked={!!items.bleach}
                 onChange={handleItemsChange}
                 name="bleach"
@@ -1259,6 +1249,16 @@ export function householdItemsCard(
           <FormControlLabel
             control={
               <Checkbox
+                checked={!!items.laundrySoap}
+                onChange={handleItemsChange}
+                name="laundrySoap"
+              />
+            }
+            label={t("laundry_detergent")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
                 checked={!!items.pinesol}
                 onChange={handleItemsChange}
                 name="pinesol"
@@ -1275,6 +1275,16 @@ export function householdItemsCard(
               />
             }
             label={t("sponges")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.paperTowels}
+                onChange={handleItemsChange}
+                name="paperTowels"
+              />
+            }
+            label={t("paper_towels")}
           />
         </FormGroup>
       </FormControl>
@@ -1344,6 +1354,16 @@ export function hygeneItemsCard(
               />
             }
             label={t("shampoo")}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={!!items.conditioner}
+                onChange={handleItemsChange}
+                name="conditioner"
+              />
+            }
+            label={t("conditioner")}
           />
           <FormControlLabel
             control={

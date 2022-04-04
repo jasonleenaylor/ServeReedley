@@ -99,6 +99,9 @@ export const onCreateRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        conditioner
+        paperTowels
+        laundrySoap
         id
         createdAt
         updatedAt
@@ -230,6 +233,9 @@ export const onUpdateRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        conditioner
+        paperTowels
+        laundrySoap
         id
         createdAt
         updatedAt
@@ -361,6 +367,9 @@ export const onDeleteRequest = /* GraphQL */ `
         dishsoap
         sponges
         pinesol
+        conditioner
+        paperTowels
+        laundrySoap
         id
         createdAt
         updatedAt
@@ -497,6 +506,9 @@ export const onCreateHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      conditioner
+      paperTowels
+      laundrySoap
       id
       createdAt
       updatedAt
@@ -521,6 +533,9 @@ export const onUpdateHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      conditioner
+      paperTowels
+      laundrySoap
       id
       createdAt
       updatedAt
@@ -545,6 +560,9 @@ export const onDeleteHouseholdItems = /* GraphQL */ `
       dishsoap
       sponges
       pinesol
+      conditioner
+      paperTowels
+      laundrySoap
       id
       createdAt
       updatedAt

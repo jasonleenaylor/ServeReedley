@@ -1,12 +1,23 @@
-import { Typography } from "@material-ui/core";
+import { Card, CardMedia, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+import { cardStyle } from "./needRequestForm";
+import logo from "./ServeReedleyLogo.webp";
 
 function NeedSubmitted() {
   const { t } = useTranslation();
   return (
-    <div className="about">
-      <Typography>{t("form_complete_note")}</Typography>
-    </div>
+    <Card style={cardStyle}>
+      <CardMedia
+        component="img"
+        height="140"
+        image={logo}
+        alt="Serve Reedley"
+        style={{ width: "590px", height: "114px", justifyContent: "left" }}
+      />{" "}
+      <div className="about">
+        <Typography>{t("form_complete_note")}</Typography>
+      </div>
+    </Card>
   );
 }
 

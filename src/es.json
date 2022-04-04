@@ -27,7 +27,7 @@
   "home_repair": "Reparación en el Hogar o Mantenimiento",
   "housing": "Alojamient",
   "household_items": "Artículos Para El Hogar",
-  "hygene_items": "Artículos de Higiene Personal",
+  "hygene_items": "Higiene Personal/Artículos de aseo Personal",
   "clothing": "Ropa",
   "furniture": "Muebles",
   "reason_for_need": "Porque necesitas asistencia? (Selecione Todas las que correspondan)",
@@ -108,5 +108,8 @@
   "housing_evangel_criteria": "Criterios : Refugio de emergencia en Fresno; posible vivienda a largo plazo",
   "housing_fha_criteria": "Criterios: Refugio de emergencia.",
   "form_complete_note": "Gracias por completar su solicitud. Alguien se comunicará con usted pronto. Community Resource Network se basa en voluntarios. Haremos todo lo posible para satisfacer su solicitud. Si no podemos satisfacer sus necesidades, se le proporcionarán más recursos si fuera aplicable.",
-  "submit": "Enviar"
+  "submit": "Enviar",
+  "conditioner": "Acondicionador",
+  "laundry_detergent": "Detergente Para Ropa",
+  "paper_towels": "Toallas de Papel"
 }
