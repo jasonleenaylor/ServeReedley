@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "crnAuth": {}
+      },
+      "function": {
+        "NotifyCoordinators": {
+          "deploymentBucketName": "amplify-crn-prod-155021-deployment",
+          "s3Key": "amplify-builds/NotifyCoordinators-61374f68326953594666-build.zip"
+        }
       }
     }
   }
