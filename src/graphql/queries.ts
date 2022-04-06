@@ -118,7 +118,6 @@ export const getRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
-          requestNoteId
         }
         nextToken
       }
@@ -257,7 +256,6 @@ export const listRequests = /* GraphQL */ `
             content
             createdAt
             updatedAt
-            requestNoteId
           }
           nextToken
         }
@@ -287,7 +285,6 @@ export const getNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
-      requestNoteId
     }
   }
 `;
@@ -306,7 +303,6 @@ export const listNoteTypes = /* GraphQL */ `
         content
         createdAt
         updatedAt
-        requestNoteId
       }
       nextToken
     }

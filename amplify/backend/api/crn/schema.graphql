@@ -1,10 +1,7 @@
 type Request
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   id: ID!
   dateOfRequest: String!
@@ -35,7 +32,7 @@ type Request
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
-  note: [NoteType] @hasMany
+  note: [NoteType] @hasMany(indexName: "byRequest", fields: ["id"])
   otherNeeds: String
   needFulfiller: String
   dateFulfilled: String
@@ -45,13 +42,10 @@ type Request
 type NoteType
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   id: ID!
-  requestID: ID!
+  requestID: ID! @index(name: "byRequest")
   dateCreated: String!
   author: String!
   content: String!
@@ -60,10 +54,7 @@ type NoteType
 type SelfOrOtherInfo
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   forSelf: Boolean
   usedOtherResources: Boolean
@@ -75,10 +66,7 @@ type SelfOrOtherInfo
 type HouseholdItems
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   shampoo: Boolean
   bathSoap: Boolean
@@ -103,10 +91,7 @@ type HouseholdItems
 type FoodInfo
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   familyMembers: Int
   children: String
@@ -131,10 +116,7 @@ type FoodInfo
 type MovingInfo
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   items: String
   haveTransportation: Boolean
@@ -149,10 +131,7 @@ type MovingInfo
 type HomeRepairType
   @model
   @auth(
-    rules: [
-      { allow: public, operations: [create, read] }
-      { allow: groups, groups: ["Admin"] }
-    ]
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   plumbing: Boolean
   electrical: Boolean

@@ -43,13 +43,14 @@
     "usernameAttributes": [
       "email"
     ],
-    "userPoolGroups": false,
+    "userPoolGroups": true,
     "adminQueries": false,
     "triggers": {},
     "hostedUI": false,
     "userPoolGroupList": [
       "SysOps",
-      "Coordinators"
+      "Coordinators",
+      "Observer"
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,

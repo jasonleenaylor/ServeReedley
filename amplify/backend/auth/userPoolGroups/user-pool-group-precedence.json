@@ -6,5 +6,9 @@
   {
     "groupName": "Coordinators",
     "precedence": 2
+  },
+  {
+    "groupName": "Observer",
+    "precedence": 3
   }
 ]

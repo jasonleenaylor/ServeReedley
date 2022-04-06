@@ -359,7 +359,6 @@ export type NoteType = {
   content: string,
   createdAt: string,
   updatedAt: string,
-  requestNoteId?: string | null,
 };
 
 export type UpdateRequestInput = {
@@ -408,7 +407,6 @@ export type CreateNoteTypeInput = {
   dateCreated: string,
   author: string,
   content: string,
-  requestNoteId?: string | null,
 };
 
 export type ModelNoteTypeConditionInput = {
@@ -419,7 +417,6 @@ export type ModelNoteTypeConditionInput = {
   and?: Array< ModelNoteTypeConditionInput | null > | null,
   or?: Array< ModelNoteTypeConditionInput | null > | null,
   not?: ModelNoteTypeConditionInput | null,
-  requestNoteId?: ModelIDInput | null,
 };
 
 export type UpdateNoteTypeInput = {
@@ -428,7 +425,6 @@ export type UpdateNoteTypeInput = {
   dateCreated?: string | null,
   author?: string | null,
   content?: string | null,
-  requestNoteId?: string | null,
 };
 
 export type DeleteNoteTypeInput = {
@@ -744,7 +740,6 @@ export type ModelNoteTypeFilterInput = {
   and?: Array< ModelNoteTypeFilterInput | null > | null,
   or?: Array< ModelNoteTypeFilterInput | null > | null,
   not?: ModelNoteTypeFilterInput | null,
-  requestNoteId?: ModelIDInput | null,
 };
 
 export type ModelSelfOrOtherInfoFilterInput = {
@@ -990,7 +985,6 @@ export type CreateRequestMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1136,7 +1130,6 @@ export type UpdateRequestMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1282,7 +1275,6 @@ export type DeleteRequestMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1315,7 +1307,6 @@ export type CreateNoteTypeMutation = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1334,7 +1325,6 @@ export type UpdateNoteTypeMutation = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1353,7 +1343,6 @@ export type DeleteNoteTypeMutation = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 
@@ -1859,7 +1848,6 @@ export type GetRequestQuery = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2008,7 +1996,6 @@ export type ListRequestsQuery = {
           content: string,
           createdAt: string,
           updatedAt: string,
-          requestNoteId?: string | null,
         } | null >,
         nextToken?: string | null,
       } | null,
@@ -2042,7 +2029,6 @@ export type GetNoteTypeQuery = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 
@@ -2064,7 +2050,6 @@ export type ListNoteTypesQuery = {
       content: string,
       createdAt: string,
       updatedAt: string,
-      requestNoteId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2463,7 +2448,6 @@ export type OnCreateRequestSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2604,7 +2588,6 @@ export type OnUpdateRequestSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2745,7 +2728,6 @@ export type OnDeleteRequestSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
-        requestNoteId?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -2773,7 +2755,6 @@ export type OnCreateNoteTypeSubscription = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 
@@ -2787,7 +2768,6 @@ export type OnUpdateNoteTypeSubscription = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 
@@ -2801,7 +2781,6 @@ export type OnDeleteNoteTypeSubscription = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    requestNoteId?: string | null,
   } | null,
 };
 

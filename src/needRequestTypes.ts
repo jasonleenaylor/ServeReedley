@@ -2,7 +2,6 @@ import {
   LeadSource,
   NeedReason,
   NeedType,
-  NoteType,
   RequestStatus,
   UpdateHomeRepairTypeInput,
 } from "./RequestAPI";
