@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Amplify, API, graphqlOperation } from "aws-amplify";
 import {
-  withAuthenticator,
   AmplifySignOut,
   AmplifyAuthenticator,
   AmplifySignIn,
@@ -27,6 +26,7 @@ import {
   CreateMovingInfoInput,
   CreateNoteTypeInput,
   NoteType,
+  RequestStatus,
   UpdateFoodInfoInput,
   UpdateHomeRepairTypeInput,
   UpdateMovingInfoInput,
@@ -67,11 +67,13 @@ function NeedRequestTable(props: ILocalizeProps) {
               setSnackBarOpen(true);
             }}
             onSave={async function (value: NeedRequestType) {
-              await API.graphql(
-                graphqlOperation(updateRequest, {
+              await API.graphql({
+                query: updateRequest,
+                variables: {
                   input: await needUpdateFromNeedReqData(value),
-                })
-              );
+                },
+                authMode: "AMAZON_COGNITO_USER_POOLS",
+              });
               fetchNeedRequests();
             }}
             t={props.t}
@@ -80,7 +82,14 @@ function NeedRequestTable(props: ILocalizeProps) {
       },
     },
     { title: "Status", field: "status" },
-    { title: "Date Of Request", field: "dateOfRequest", type: "datetime" },
+    {
+      title: "Date Of Request",
+      field: "dateOfRequest",
+      type: "datetime",
+      customSort: (a, b) =>
+        new Date(b.dateOfRequest).getTime() -
+        new Date(a.dateOfRequest).getTime(),
+    },
     { title: "First Name", field: "firstName" },
     { title: "Last Name", field: "lastName" },
     { title: "Address", field: "address" },
@@ -275,6 +284,23 @@ function NeedRequestTable(props: ILocalizeProps) {
     setRequests(apiData.data.listRequests.items);
   }
 
+  const sortByStatusThenDate = (a: any, b: any): number => {
+    if (a.status == b.status) {
+      return (
+        new Date(b.dateOfRequest).getTime() -
+        new Date(a.dateOfRequest).getTime()
+      );
+    } else {
+      // statuses are not equal
+      if (a.status == RequestStatus.NEW) return -1; // A is new sort above B
+      if (b.status == RequestStatus.NEW) return 1; // B is new, sort above A
+      if (a.status == RequestStatus.INPROGRESS) return -1; // A is In Progress sort above B
+      if (b.status == RequestStatus.INPROGRESS) return 1; // B is In Progress sort above A
+      alert("Your logic is flawed.");
+      return 1;
+    }
+  };
+
   return (
     <AmplifyAuthenticator>
       <AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
@@ -283,7 +309,7 @@ function NeedRequestTable(props: ILocalizeProps) {
           <MaterialTable<any>
             columns={columns}
             icons={tableIcons}
-            data={requests}
+            data={requests.sort(sortByStatusThenDate)}
             detailPanel={[
               {
                 tooltip: "Show Notes",
@@ -312,7 +338,11 @@ function NeedRequestTable(props: ILocalizeProps) {
                                       width: 350,
                                     }}
                                   >
-                                    <Typography>{note.createdAt}</Typography>
+                                    <Typography>
+                                      {new Date(
+                                        note.createdAt
+                                      ).toLocaleDateString()}
+                                    </Typography>
                                     <Typography>{note.author}</Typography>
                                     <Typography>{note.content}</Typography>
                                   </Paper>
@@ -329,6 +359,9 @@ function NeedRequestTable(props: ILocalizeProps) {
             title="Need Requests"
             options={{
               filtering: true,
+              pageSize: 20,
+              pageSizeOptions: [20, 40, 100],
+              thirdSortClick: false,
             }}
           />
         </div>
@@ -580,11 +613,13 @@ async function needUpdateFromNeedReqData(
       // delete the row from the table and set requestTable to null
     } else {
       // update the row in the table
-      await API.graphql(
-        graphqlOperation(updateOperation, {
+      await API.graphql({
+        query: updateOperation,
+        variables: {
           input: tableUpdateFromReqData(requestTable),
-        })
-      );
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
     }
     return requestTable;
   }

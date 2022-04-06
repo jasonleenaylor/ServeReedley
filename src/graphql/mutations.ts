@@ -121,7 +121,6 @@ export const createRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
-          requestNoteId
         }
         nextToken
       }
@@ -258,7 +257,6 @@ export const updateRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
-          requestNoteId
         }
         nextToken
       }
@@ -395,7 +393,6 @@ export const deleteRequest = /* GraphQL */ `
           content
           createdAt
           updatedAt
-          requestNoteId
         }
         nextToken
       }
@@ -426,7 +423,6 @@ export const createNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
-      requestNoteId
     }
   }
 `;
@@ -443,7 +439,6 @@ export const updateNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
-      requestNoteId
     }
   }
 `;
@@ -460,7 +455,6 @@ export const deleteNoteType = /* GraphQL */ `
       content
       createdAt
       updatedAt
-      requestNoteId
     }
   }
 `;

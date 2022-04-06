@@ -9,7 +9,8 @@ export type AmplifyDependentResourcesAttributes = {
     "auth": {
         "userPoolGroups": {
             "SysOpsGroupRole": "string",
-            "CoordinatorsGroupRole": "string"
+            "CoordinatorsGroupRole": "string",
+            "ObserverGroupRole": "string"
         },
         "crnAuth": {
             "IdentityPoolId": "string",
