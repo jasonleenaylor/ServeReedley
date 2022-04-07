@@ -89,13 +89,26 @@ function NeedRequestTable(props: ILocalizeProps) {
       customSort: (a, b) =>
         new Date(b.dateOfRequest).getTime() -
         new Date(a.dateOfRequest).getTime(),
+      render: (rowData) =>
+        new Date(rowData.dateOfRequest).toLocaleDateString("en-US", {
+          weekday: undefined,
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        }),
+      cellStyle: { minWidth: 175 },
     },
     { title: "First Name", field: "firstName" },
     { title: "Last Name", field: "lastName" },
+    {
+      title: "Phone",
+      field: "phone",
+      cellStyle: { minWidth: 150 },
+      render: (rowData) => <a href={"tel:" + rowData.phone}>{rowData.phone}</a>,
+    },
     { title: "Address", field: "address" },
     { title: "City", field: "city" },
     { title: "Zip Code", field: "zipCode", type: "numeric" },
-    { title: "Phone", field: "phone" },
     { title: "Email", field: "email" },
     { title: "Spanish Only", field: "spanishOnly", type: "boolean" },
     { title: "Specific Need", field: "specificNeed" },
@@ -109,6 +122,7 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Need Type(s)",
       field: "needTypes",
+      cellStyle: { minWidth: 250 },
       render: (rowData) => rowData.needTypes.join(", "),
     },
     { title: "Own Need", field: "selfOrOtherInfo.forSelf" },
@@ -136,6 +150,7 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Groceries",
       field: "foodRequest.groceries",
+      cellStyle: { minWidth: 250 },
       render: (rowData) => printGroceryList(rowData.foodRequest), // JSON.stringify(rowData.foodRequest.groceries);
     },
     {
@@ -169,10 +184,12 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Car Repair Details",
       field: "carRepairDetails",
+      cellStyle: { minWidth: 250 },
     },
     {
       title: "Home Repair Details",
       field: "homeRepairType.details",
+      cellStyle: { minWidth: 250 },
     },
     {
       title: "Home Repair Categories",
