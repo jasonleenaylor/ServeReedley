@@ -64,8 +64,6 @@ import {
 import theme from "./theme";
 import Auth from "@aws-amplify/auth";
 
-const emails = ["username@gmail.com", "user02@gmail.com"];
-
 export interface SimpleDialogProps {
   open: boolean;
   requestData: NeedRequestType;
@@ -83,7 +81,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
     onClose();
   };
   const handleDlgClose = (event: any, reason: string) => {
-    if (reason && reason == "backdropClick") return;
+    if (reason && reason === "backdropClick") return;
     handleClose();
   };
   const handleSave = async () => {
@@ -320,7 +318,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                 },
                 (newMovingInfo: IMovingType) => {
                   setMovingConditions(
-                    newMovingInfo.haveSpecialConditions == RadioButtonState.YES
+                    newMovingInfo.haveSpecialConditions === RadioButtonState.YES
                   );
                   let newInfo = editOrCreateMovingReq(
                     newMovingInfo,

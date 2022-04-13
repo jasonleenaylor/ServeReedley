@@ -1,11 +1,4 @@
-import {
-  blue,
-  green,
-  grey,
-  orange,
-  red,
-  yellow,
-} from "@material-ui/core/colors";
+import { green, grey, orange, red, yellow } from "@material-ui/core/colors";
 import { createTheme, responsiveFontSizes } from "@material-ui/core/styles";
 import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 
