@@ -302,17 +302,17 @@ function NeedRequestTable(props: ILocalizeProps) {
   }
 
   const sortByStatusThenDate = (a: any, b: any): number => {
-    if (a.status == b.status) {
+    if (a.status === b.status) {
       return (
         new Date(b.dateOfRequest).getTime() -
         new Date(a.dateOfRequest).getTime()
       );
     } else {
       // statuses are not equal
-      if (a.status == RequestStatus.NEW) return -1; // A is new sort above B
-      if (b.status == RequestStatus.NEW) return 1; // B is new, sort above A
-      if (a.status == RequestStatus.INPROGRESS) return -1; // A is In Progress sort above B
-      if (b.status == RequestStatus.INPROGRESS) return 1; // B is In Progress sort above A
+      if (a.status === RequestStatus.NEW) return -1; // A is new sort above B
+      if (b.status === RequestStatus.NEW) return 1; // B is new, sort above A
+      if (a.status === RequestStatus.INPROGRESS) return -1; // A is In Progress sort above B
+      if (b.status === RequestStatus.INPROGRESS) return 1; // B is In Progress sort above A
       alert("Your logic is flawed.");
       return 1;
     }

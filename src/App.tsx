@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { NeedRequestForm } from "./needRequestForm";
 import NeedRequestTable from "./NeedRequestTable";
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
@@ -36,5 +36,6 @@ export default function App() {
 }
 
 function Home() {
-  return <h2>Home</h2>;
+  window.location.href = "https://www.servereedley.org";
+  return null;
 }

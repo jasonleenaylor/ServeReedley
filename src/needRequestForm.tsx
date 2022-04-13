@@ -66,7 +66,7 @@ import {
   otherNeedCard,
 } from "./needFormCards";
 import { useHistory } from "react-router-dom";
-import { initReactI18next, Trans, useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 export const NeedRequestForm = (props: ILocalizeProps) => {
   const { i18n } = useTranslation();
