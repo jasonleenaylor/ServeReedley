@@ -191,7 +191,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       zipCode: isNaN(parseInt(zip)) ? parseInt(zip) : null,
       phone: phone,
       email: email,
-      spanishOnly: true,
+      spanishOnly: i18n.language === "es",
       requestSelfOrOtherInfoId: "",
       requestFoodRequestId: "",
       requestMovingRequestId: "",

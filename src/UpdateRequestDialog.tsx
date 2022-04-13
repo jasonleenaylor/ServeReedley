@@ -172,6 +172,26 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
             )}
           </Grid>
           <Grid item>
+            <Card style={cardStyle}>
+              <CardHeader
+                title="Spanish Speaking"
+                titleTypographyProps={{ variant: "h6" }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={!!requestData.spanishOnly}
+                    onChange={(_event, checked) =>
+                      setRequestData({ ...requestData, spanishOnly: checked })
+                    }
+                    name="spanishPreferred"
+                  />
+                }
+                label="Spanish Preferred"
+              />
+            </Card>
+          </Grid>
+          <Grid item>
             {contactCard(
               requestData.phone!,
               (value: string) => {

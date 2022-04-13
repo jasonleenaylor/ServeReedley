@@ -13,6 +13,9 @@ exports.handler = async (event) => {
       const lastName = streamedItem.dynamodb.NewImage.lastName.S;
       const needTypes = streamedItem.dynamodb.NewImage.needTypes.L;
       const emailInfo = JSON.parse(secretInfo.SecretString);
+      const spanishInfo = streamedItem.dynamodb.NewImage.spanishOnly.BOOL
+        ? "They filled out the form in Spanish"
+        : "";
       const prettyNeedTypes = {
         MEALS: "Meals",
         GROCERIES: "Groceries",
@@ -34,7 +37,9 @@ exports.handler = async (event) => {
           },
           Source: emailInfo.fromAddress,
           Message: {
-            Subject: { Data: "Serve Reedley: New Need Submitted" },
+            Subject: {
+              Data: `Serve Reedley: New Need for ${firstName} ${lastName}`,
+            },
             Body: {
               Text: {
                 Data: `${firstName} ${lastName} needs some help with ${
@@ -42,7 +47,7 @@ exports.handler = async (event) => {
                     ? needTypes.map((x) => prettyNeedTypes[x.S]).join()
                     : JSON.stringify(streamedItem.dynamodb.NewImage.needTypes)
                 }
-                
+${spanishInfo}                
 View this and other requests https://crn.servereedley.org/requests`,
               },
             },
