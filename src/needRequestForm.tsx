@@ -272,7 +272,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
         request.furnitureType = furnitureType;
       }
       await API.graphql(graphqlOperation(createRequest, { input: request }));
-      history.push("/need-submitted?lang=" + i18n.language);
+      history.push("/need-submitted?lng=" + i18n.language);
     } catch (err) {
       alert("error: " + JSON.stringify(err));
     }
