@@ -122,7 +122,7 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Need Type(s)",
       field: "needTypes",
-      cellStyle: { minWidth: 250 },
+      cellStyle: { minWidth: 350 },
       render: (rowData) => rowData.needTypes.join(", "),
     },
     { title: "Own Need", field: "selfOrOtherInfo.forSelf" },
@@ -150,12 +150,24 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Groceries",
       field: "foodRequest.groceries",
-      cellStyle: { minWidth: 250 },
+      cellStyle: {
+        minWidth: 250,
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
       render: (rowData) => printGroceryList(rowData.foodRequest), // JSON.stringify(rowData.foodRequest.groceries);
     },
     {
       title: "Moving: Items",
       field: "movingRequest.items",
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Moving: Has Vehicle",
@@ -184,12 +196,22 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Car Repair Details",
       field: "carRepairDetails",
-      cellStyle: { minWidth: 250 },
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Home Repair Details",
       field: "homeRepairType.details",
-      cellStyle: { minWidth: 250 },
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Home Repair Categories",
@@ -199,10 +221,22 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Clothing Type",
       field: "clothingType",
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Clothing Size",
       field: "clothingSize",
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Furniture",
@@ -215,6 +249,12 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Other Needs",
       field: "otherNeeds",
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     { title: "Need Fulfiller", field: "needFulfiller" },
     { title: "Date Fulfilled", field: "dateFulfilled", type: "datetime" },
