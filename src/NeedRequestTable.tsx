@@ -422,11 +422,10 @@ function NeedRequestTable(props: ILocalizeProps) {
             ]}
             title="Need Requests"
             options={{
-              maxBodyHeight: "300px",
               filtering: true,
-              paging: false,
+              pageSize: 20,
+              pageSizeOptions: [20, 40, 100],
               thirdSortClick: false,
-              headerStyle: { position: "sticky" },
             }}
           />
         </div>
