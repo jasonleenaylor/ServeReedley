@@ -362,7 +362,14 @@ function NeedRequestTable(props: ILocalizeProps) {
     <AmplifyAuthenticator>
       <AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
       <div className="App">
-        <div>
+        <div
+          style={{
+            width: "auto",
+            height: "auto",
+            overflow: "auto",
+            margin: "auto",
+          }}
+        >
           <MaterialTable<any>
             columns={columns}
             icons={tableIcons}
@@ -415,10 +422,11 @@ function NeedRequestTable(props: ILocalizeProps) {
             ]}
             title="Need Requests"
             options={{
+              maxBodyHeight: "300px",
               filtering: true,
-              pageSize: 20,
-              pageSizeOptions: [20, 40, 100],
+              paging: false,
               thirdSortClick: false,
+              headerStyle: { position: "sticky" },
             }}
           />
         </div>

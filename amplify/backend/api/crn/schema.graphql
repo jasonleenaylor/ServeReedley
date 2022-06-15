@@ -4,6 +4,7 @@ type Request
     rules: [{ allow: public, operations: [create, read] }, { allow: private }]
   ) {
   id: ID!
+  createdAt: AWSDateTime
   dateOfRequest: String!
   firstName: String!
   lastName: String!
@@ -32,6 +33,7 @@ type Request
   needReason: [NeedReason]!
   needTypes: [NeedType]!
   status: RequestStatus!
+    @index(name: "requestsByDate", sortKeyFields: ["createdAt"])
   note: [NoteType] @hasMany(indexName: "byRequest", fields: ["id"])
   otherNeeds: String
   needFulfiller: String

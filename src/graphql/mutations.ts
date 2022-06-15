@@ -9,6 +9,7 @@ export const createRequest = /* GraphQL */ `
   ) {
     createRequest(input: $input, condition: $condition) {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -128,7 +129,6 @@ export const createRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId
@@ -145,6 +145,7 @@ export const updateRequest = /* GraphQL */ `
   ) {
     updateRequest(input: $input, condition: $condition) {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -264,7 +265,6 @@ export const updateRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId
@@ -281,6 +281,7 @@ export const deleteRequest = /* GraphQL */ `
   ) {
     deleteRequest(input: $input, condition: $condition) {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -400,7 +401,6 @@ export const deleteRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId

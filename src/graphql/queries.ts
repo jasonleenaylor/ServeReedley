@@ -6,6 +6,7 @@ export const getRequest = /* GraphQL */ `
   query GetRequest($id: ID!) {
     getRequest(id: $id) {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -125,7 +126,6 @@ export const getRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId
@@ -144,6 +144,7 @@ export const listRequests = /* GraphQL */ `
     listRequests(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        createdAt
         dateOfRequest
         firstName
         lastName
@@ -263,7 +264,6 @@ export const listRequests = /* GraphQL */ `
         needFulfiller
         dateFulfilled
         followUp
-        createdAt
         updatedAt
         requestSelfOrOtherInfoId
         requestFoodRequestId
