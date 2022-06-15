@@ -13,12 +13,17 @@
     },
     "categories": {
       "auth": {
-        "crnAuth": {}
+        "crnAuth": {},
+        "userPoolGroups": {}
       },
       "function": {
         "NotifyCoordinators": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
           "s3Key": "amplify-builds/NotifyCoordinators-4b535557515648475347-build.zip"
+        },
+        "sendReminders": {
+          "deploymentBucketName": "amplify-crn-prod-155021-deployment",
+          "s3Key": "amplify-builds/sendReminders-3648324e4d4f395a6167-build.zip"
         }
       }
     }

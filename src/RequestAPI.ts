@@ -4,6 +4,7 @@
 
 export type CreateRequestInput = {
   id?: string | null,
+  createdAt?: string | null,
   dateOfRequest: string,
   firstName: string,
   lastName: string,
@@ -77,6 +78,7 @@ export enum RequestStatus {
 
 
 export type ModelRequestConditionInput = {
+  createdAt?: ModelStringInput | null,
   dateOfRequest?: ModelStringInput | null,
   firstName?: ModelStringInput | null,
   lastName?: ModelStringInput | null,
@@ -212,6 +214,7 @@ export type ModelIDInput = {
 export type Request = {
   __typename: "Request",
   id: string,
+  createdAt?: string | null,
   dateOfRequest: string,
   firstName: string,
   lastName: string,
@@ -245,7 +248,6 @@ export type Request = {
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
-  createdAt: string,
   updatedAt: string,
   requestSelfOrOtherInfoId: string,
   requestFoodRequestId?: string | null,
@@ -363,6 +365,7 @@ export type NoteType = {
 
 export type UpdateRequestInput = {
   id: string,
+  createdAt?: string | null,
   dateOfRequest?: string | null,
   firstName?: string | null,
   lastName?: string | null,
@@ -688,6 +691,7 @@ export type DeleteHomeRepairTypeInput = {
 
 export type ModelRequestFilterInput = {
   id?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
   dateOfRequest?: ModelStringInput | null,
   firstName?: ModelStringInput | null,
   lastName?: ModelStringInput | null,
@@ -866,6 +870,7 @@ export type CreateRequestMutation = {
   createRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -992,7 +997,6 @@ export type CreateRequestMutation = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,
@@ -1011,6 +1015,7 @@ export type UpdateRequestMutation = {
   updateRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -1137,7 +1142,6 @@ export type UpdateRequestMutation = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,
@@ -1156,6 +1160,7 @@ export type DeleteRequestMutation = {
   deleteRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -1282,7 +1287,6 @@ export type DeleteRequestMutation = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,
@@ -1729,6 +1733,7 @@ export type GetRequestQuery = {
   getRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -1855,7 +1860,6 @@ export type GetRequestQuery = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,
@@ -1877,6 +1881,7 @@ export type ListRequestsQuery = {
     items:  Array< {
       __typename: "Request",
       id: string,
+      createdAt?: string | null,
       dateOfRequest: string,
       firstName: string,
       lastName: string,
@@ -2003,7 +2008,6 @@ export type ListRequestsQuery = {
       needFulfiller?: string | null,
       dateFulfilled?: string | null,
       followUp?: string | null,
-      createdAt: string,
       updatedAt: string,
       requestSelfOrOtherInfoId: string,
       requestFoodRequestId?: string | null,
@@ -2329,6 +2333,7 @@ export type OnCreateRequestSubscription = {
   onCreateRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -2455,7 +2460,6 @@ export type OnCreateRequestSubscription = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,
@@ -2469,6 +2473,7 @@ export type OnUpdateRequestSubscription = {
   onUpdateRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -2595,7 +2600,6 @@ export type OnUpdateRequestSubscription = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,
@@ -2609,6 +2613,7 @@ export type OnDeleteRequestSubscription = {
   onDeleteRequest?:  {
     __typename: "Request",
     id: string,
+    createdAt?: string | null,
     dateOfRequest: string,
     firstName: string,
     lastName: string,
@@ -2735,7 +2740,6 @@ export type OnDeleteRequestSubscription = {
     needFulfiller?: string | null,
     dateFulfilled?: string | null,
     followUp?: string | null,
-    createdAt: string,
     updatedAt: string,
     requestSelfOrOtherInfoId: string,
     requestFoodRequestId?: string | null,

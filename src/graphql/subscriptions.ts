@@ -6,6 +6,7 @@ export const onCreateRequest = /* GraphQL */ `
   subscription OnCreateRequest {
     onCreateRequest {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -125,7 +126,6 @@ export const onCreateRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId
@@ -139,6 +139,7 @@ export const onUpdateRequest = /* GraphQL */ `
   subscription OnUpdateRequest {
     onUpdateRequest {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -258,7 +259,6 @@ export const onUpdateRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId
@@ -272,6 +272,7 @@ export const onDeleteRequest = /* GraphQL */ `
   subscription OnDeleteRequest {
     onDeleteRequest {
       id
+      createdAt
       dateOfRequest
       firstName
       lastName
@@ -391,7 +392,6 @@ export const onDeleteRequest = /* GraphQL */ `
       needFulfiller
       dateFulfilled
       followUp
-      createdAt
       updatedAt
       requestSelfOrOtherInfoId
       requestFoodRequestId

@@ -946,10 +946,11 @@ export function clothingCard(
       <Grid container spacing={4}>
         <Grid item xs={12}>
           {" "}
-          <FormControl>
+          <FormControl fullWidth>
             <Typography>{t("clothing_type")}</Typography>
             <TextField
               required
+              multiline
               value={clothingType}
               onChange={(changeEvent: any) =>
                 setClothingType(changeEvent.target.value)
@@ -959,10 +960,11 @@ export function clothingCard(
         </Grid>
         <Grid item xs={12}>
           {" "}
-          <FormControl>
+          <FormControl fullWidth>
             <Typography>{t("clothing_size")}</Typography>
             <TextField
               required
+              multiline
               value={clothingSize}
               onChange={(changeEvent: any) =>
                 setClothingSize(changeEvent.target.value)
@@ -989,10 +991,11 @@ export function furnitureCard(
       <Grid container spacing={4}>
         <Grid item xs={12}>
           {" "}
-          <FormControl>
+          <FormControl fullWidth>
             <Typography>{t("furniture_type")}</Typography>
             <TextField
               required
+              multiline
               value={furnitureType}
               onChange={(changeEvent: any) =>
                 setFurnitureType(changeEvent.target.value)
@@ -1082,9 +1085,11 @@ export function carRepairCard(
           <Typography>{t("repair_limits")}</Typography>
         </Grid>
         <Grid item xs={12}>
-          <FormControl>
+          <FormControl fullWidth>
             <Typography>{t("car_repair_details")}</Typography>
             <TextField
+              fullWidth
+              multiline
               value={carRepairDetails}
               onChange={(changeEvent: any) =>
                 setCarRepairDetails(changeEvent.target.value)
@@ -1174,9 +1179,11 @@ export function homeRepairCard(
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <FormControl>
+          <FormControl fullWidth>
             <Typography>{t("home_repair_details")}</Typography>
             <TextField
+              fullWidth
+              multiline
               value={homeRepairDetails.details}
               onChange={(changeEvent: any) =>
                 setHomeRepairDetails({
@@ -1421,6 +1428,8 @@ export function otherNeedCard(
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <TextField
+            fullWidth
+            multiline
             label={t("other_needs")}
             onChange={(changeEvent: any) => setOther(changeEvent.target.value)}
             value={other}
