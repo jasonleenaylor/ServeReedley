@@ -151,6 +151,14 @@
                 "dynamodb:GetItem",
                 "dynamodb:Query"
               ],
+              "Resource": "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod/index/requestsByDate"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Query"
+              ],
               "Resource": "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod"
             },
             {
@@ -202,7 +210,10 @@
                 "dynamodb:GetItem",
                 "dynamodb:Query"
               ],
-              "Resource": "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod"
+              "Resource": [
+                "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod/index/requestsByDate",
+                "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod"
+              ]
             },
             {
               "Effect": "Allow",

@@ -23,7 +23,7 @@
         },
         "sendReminders": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/sendReminders-3648324e4d4f395a6167-build.zip"
+          "s3Key": "amplify-builds/sendReminders-7875696936556263484b-build.zip"
         }
       }
     }
