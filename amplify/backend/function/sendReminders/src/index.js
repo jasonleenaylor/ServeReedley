@@ -13,7 +13,7 @@ const params = {
   ExpressionAttributeNames: { "#status": "status" },
   ExpressionAttributeValues: {
     ":v_new_status": "NEW",
-    ":v_seven_days_old": d.toGMTString(),
+    ":v_seven_days_old": d.toISOString(),
   },
   ProjectionExpression: [
     "id",
