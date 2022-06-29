@@ -19,7 +19,7 @@
       "function": {
         "NotifyCoordinators": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/NotifyCoordinators-4b535557515648475347-build.zip"
+          "s3Key": "amplify-builds/NotifyCoordinators-4563564b537670717453-build.zip"
         },
         "sendReminders": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
