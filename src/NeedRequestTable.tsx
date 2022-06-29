@@ -53,6 +53,8 @@ Amplify.configure(awsExports);
 function NeedRequestTable(props: ILocalizeProps) {
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [requests, setRequests] = useState([]);
+  const requestId = new URLSearchParams(window.location.search).get("id");
+  const [editId, setEditId] = useState(requestId);
   const columns: Column<any>[] = [
     // Vernacular column
     {
@@ -428,6 +430,33 @@ function NeedRequestTable(props: ILocalizeProps) {
               thirdSortClick: false,
             }}
           />
+          {editId &&
+          requests.length > 0 &&
+          requests.findIndex((r: NeedRequestType) => r.id === editId) != -1 ? (
+            <UpdateRequestDialogButton
+              // Couldn't figure out how to make all the type safety happy so I short circut with any :(
+              requestData={
+                requests.find((r: NeedRequestType) => r.id === editId) as any
+              }
+              open={true}
+              onClose={function () {
+                setSnackBarOpen(true);
+                setEditId(null);
+              }}
+              onSave={async function (value: NeedRequestType) {
+                await API.graphql({
+                  query: updateRequest,
+                  variables: {
+                    input: await needUpdateFromNeedReqData(value),
+                  },
+                  authMode: "AMAZON_COGNITO_USER_POOLS",
+                });
+                setEditId(null);
+                fetchNeedRequests();
+              }}
+              t={props.t}
+            />
+          ) : null}
         </div>
         <span style={{ width: "20%" }} />
         <Snackbar

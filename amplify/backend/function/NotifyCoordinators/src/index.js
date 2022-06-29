@@ -9,6 +9,7 @@ exports.handler = async (event) => {
         .getSecretValue({ SecretId: "request-email-info" })
         .promise();
       //pull off items from stream
+      const requestId = streamedItem.dynamodb.NewImage.id.S;
       const firstName = streamedItem.dynamodb.NewImage.firstName.S;
       const lastName = streamedItem.dynamodb.NewImage.lastName.S;
       const needTypes = streamedItem.dynamodb.NewImage.needTypes.L;
@@ -48,7 +49,9 @@ exports.handler = async (event) => {
                     : JSON.stringify(streamedItem.dynamodb.NewImage.needTypes)
                 }
 ${spanishInfo}                
-View this and other requests https://crn.servereedley.org/requests`,
+View this and other requests https://crn.servereedley.org/requests${
+                  requestId ? "?id=" + requestId : ""
+                }`,
               },
             },
           },

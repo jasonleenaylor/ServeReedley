@@ -623,7 +623,7 @@ function homeRepairRequestToInterface(homeRepairType: {
 export default function UpdateRequestDialogButton(
   props: SimpleDialogProps & ILocalizeProps
 ) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(props.open);
 
   const handleClickOpen = () => {
     setOpen(true);
