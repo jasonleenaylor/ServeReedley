@@ -108,6 +108,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
   );
   const [otherNeeds, setOtherNeeds] = useState("");
   const [householdItems, setHouseholdItems] = useState<HouseholdItemsGQL>({});
+  const [submitting, setSubmitting] = useState(false);
 
   function handleCheckboxChange<T>(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -133,6 +134,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitting(true);
 
     let selfOrOther: SelfOrOtherGQL = {
       forSelf: agent === RadioButtonState.YES,
@@ -275,6 +277,8 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       history.push("/need-submitted?lng=" + i18n.language);
     } catch (err) {
       alert("error: " + JSON.stringify(err));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -581,7 +585,12 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
             <Grid item>{otherNeedCard(otherNeeds, setOtherNeeds)}</Grid>
           )}
           <Grid item>
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={submitting}
+            >
               {t("submit")}
             </Button>
           </Grid>{" "}
