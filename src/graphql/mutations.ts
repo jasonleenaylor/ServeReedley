@@ -112,6 +112,7 @@ export const createRequest = /* GraphQL */ `
       }
       needReason
       needTypes
+      fulfilledNeeds
       status
       note {
         items {
@@ -248,6 +249,7 @@ export const updateRequest = /* GraphQL */ `
       }
       needReason
       needTypes
+      fulfilledNeeds
       status
       note {
         items {
@@ -384,6 +386,7 @@ export const deleteRequest = /* GraphQL */ `
       }
       needReason
       needTypes
+      fulfilledNeeds
       status
       note {
         items {

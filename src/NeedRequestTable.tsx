@@ -351,8 +351,10 @@ function NeedRequestTable(props: ILocalizeProps) {
       );
     } else {
       // statuses are not equal
-      if (a.status === RequestStatus.NEW) return -1; // A is new sort above B
-      if (b.status === RequestStatus.NEW) return 1; // B is new, sort above A
+      if (a.status === RequestStatus.NEW) return -1; // A is New sort above B
+      if (b.status === RequestStatus.NEW) return 1; // B is New, sort above A
+      if (a.status === RequestStatus.VETTED) return -1; // A is Vetted sort above B
+      if (b.status === RequestStatus.VETTED) return 1; // B is Vetted sort above A
       if (a.status === RequestStatus.INPROGRESS) return -1; // A is In Progress sort above B
       if (b.status === RequestStatus.INPROGRESS) return 1; // B is In Progress sort above A
       alert("Your logic is flawed.");
@@ -432,7 +434,7 @@ function NeedRequestTable(props: ILocalizeProps) {
           />
           {editId &&
           requests.length > 0 &&
-          requests.findIndex((r: NeedRequestType) => r.id === editId) != -1 ? (
+          requests.findIndex((r: NeedRequestType) => r.id === editId) !== -1 ? (
             <UpdateRequestDialogButton
               // Couldn't figure out how to make all the type safety happy so I short circut with any :(
               requestData={
@@ -685,6 +687,7 @@ async function needUpdateFromNeedReqData(
     followUp: value.followUp,
     leadOtherDetails: value.followUp,
     needReason: value.needReason,
+    requestSelfOrOtherInfoId: value.selfOrOtherInfo.id,
   };
 
   async function createOrUpdate<TableType extends IGraphQLTable>(

@@ -132,36 +132,6 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
         </Fab>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
-            <Card style={cardStyle}>
-              <CardHeader
-                title="Status"
-                titleTypographyProps={{ variant: "h6" }}
-              />
-              <FormControl fullWidth>
-                <Select
-                  labelId="status-select-label"
-                  id="status-select"
-                  value={requestData.status}
-                  label="Status"
-                  onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
-                    setRequestData({
-                      ...requestData,
-                      status: event.target.value as RequestStatus,
-                    });
-                  }}
-                >
-                  <MenuItem value={RequestStatus.NEW}>New</MenuItem>
-                  <MenuItem value={RequestStatus.INPROGRESS}>
-                    In Progress
-                  </MenuItem>
-                  <MenuItem value={RequestStatus.FULFILLED}>
-                    Fulfilled!
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Card>
-          </Grid>
-          <Grid item>
             {nameCard(
               requestData.firstName,
               (value: string) =>
@@ -501,6 +471,39 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
               />
 
               <Grid container spacing={3} style={{ padding: 4 }}>
+                <Grid item xs={12}>
+                  <Card style={cardStyle}>
+                    <CardHeader
+                      title="Status"
+                      titleTypographyProps={{ variant: "h6" }}
+                    />
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="status-select-label"
+                        id="status-select"
+                        value={requestData.status}
+                        label="Status"
+                        onChange={(
+                          event: React.ChangeEvent<{ value: unknown }>
+                        ) => {
+                          setRequestData({
+                            ...requestData,
+                            status: event.target.value as RequestStatus,
+                          });
+                        }}
+                      >
+                        <MenuItem value={RequestStatus.NEW}>New</MenuItem>
+                        <MenuItem value={RequestStatus.VETTED}>Vetted</MenuItem>
+                        <MenuItem value={RequestStatus.INPROGRESS}>
+                          In Progress
+                        </MenuItem>
+                        <MenuItem value={RequestStatus.FULFILLED}>
+                          Fulfilled!
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Card>
+                </Grid>
                 <Grid item xs={12}>
                   <Paper style={{ padding: theme.spacing(3) }}>
                     <TextField
