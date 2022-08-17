@@ -109,6 +109,7 @@ export const getRequest = /* GraphQL */ `
       }
       needReason
       needTypes
+      fulfilledNeeds
       status
       note {
         items {
@@ -247,6 +248,7 @@ export const listRequests = /* GraphQL */ `
         }
         needReason
         needTypes
+        fulfilledNeeds
         status
         note {
           items {

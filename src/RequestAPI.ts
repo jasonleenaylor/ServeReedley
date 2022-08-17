@@ -27,6 +27,7 @@ export type CreateRequestInput = {
   housingHelp?: boolean | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
+  fulfilledNeeds?: Array< NeedType | null > | null,
   status: RequestStatus,
   otherNeeds?: string | null,
   needFulfiller?: string | null,
@@ -72,6 +73,7 @@ export enum NeedType {
 
 export enum RequestStatus {
   NEW = "NEW",
+  VETTED = "VETTED",
   INPROGRESS = "INPROGRESS",
   FULFILLED = "FULFILLED",
 }
@@ -101,6 +103,7 @@ export type ModelRequestConditionInput = {
   housingHelp?: ModelBooleanInput | null,
   needReason?: ModelNeedReasonInput | null,
   needTypes?: ModelNeedTypeInput | null,
+  fulfilledNeeds?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
   otherNeeds?: ModelStringInput | null,
   needFulfiller?: ModelStringInput | null,
@@ -190,6 +193,13 @@ export type ModelNeedTypeInput = {
   ne?: NeedType | null,
 };
 
+export type ModelNeedTypeListInput = {
+  eq?: Array< NeedType | null > | null,
+  ne?: Array< NeedType | null > | null,
+  contains?: NeedType | null,
+  notContains?: NeedType | null,
+};
+
 export type ModelRequestStatusInput = {
   eq?: RequestStatus | null,
   ne?: RequestStatus | null,
@@ -242,6 +252,7 @@ export type Request = {
   householdItems?: HouseholdItems | null,
   needReason: Array< NeedReason | null >,
   needTypes: Array< NeedType | null >,
+  fulfilledNeeds?: Array< NeedType | null > | null,
   status: RequestStatus,
   note?: ModelNoteTypeConnection | null,
   otherNeeds?: string | null,
@@ -388,12 +399,13 @@ export type UpdateRequestInput = {
   housingHelp?: boolean | null,
   needReason?: Array< NeedReason | null > | null,
   needTypes?: Array< NeedType | null > | null,
+  fulfilledNeeds?: Array< NeedType | null > | null,
   status?: RequestStatus | null,
   otherNeeds?: string | null,
   needFulfiller?: string | null,
   dateFulfilled?: string | null,
   followUp?: string | null,
-  requestSelfOrOtherInfoId?: string | null,
+  requestSelfOrOtherInfoId: string,
   requestFoodRequestId?: string | null,
   requestMovingRequestId?: string | null,
   requestHomeRepairTypeId?: string | null,
@@ -714,6 +726,7 @@ export type ModelRequestFilterInput = {
   housingHelp?: ModelBooleanInput | null,
   needReason?: ModelNeedReasonInput | null,
   needTypes?: ModelNeedTypeInput | null,
+  fulfilledNeeds?: ModelNeedTypeListInput | null,
   status?: ModelRequestStatusInput | null,
   otherNeeds?: ModelStringInput | null,
   needFulfiller?: ModelStringInput | null,
@@ -978,6 +991,7 @@ export type CreateRequestMutation = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",
@@ -1123,6 +1137,7 @@ export type UpdateRequestMutation = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",
@@ -1268,6 +1283,7 @@ export type DeleteRequestMutation = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",
@@ -1841,6 +1857,7 @@ export type GetRequestQuery = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",
@@ -1989,6 +2006,7 @@ export type ListRequestsQuery = {
       } | null,
       needReason: Array< NeedReason | null >,
       needTypes: Array< NeedType | null >,
+      fulfilledNeeds?: Array< NeedType | null > | null,
       status: RequestStatus,
       note?:  {
         __typename: "ModelNoteTypeConnection",
@@ -2441,6 +2459,7 @@ export type OnCreateRequestSubscription = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",
@@ -2581,6 +2600,7 @@ export type OnUpdateRequestSubscription = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",
@@ -2721,6 +2741,7 @@ export type OnDeleteRequestSubscription = {
     } | null,
     needReason: Array< NeedReason | null >,
     needTypes: Array< NeedType | null >,
+    fulfilledNeeds?: Array< NeedType | null > | null,
     status: RequestStatus,
     note?:  {
       __typename: "ModelNoteTypeConnection",

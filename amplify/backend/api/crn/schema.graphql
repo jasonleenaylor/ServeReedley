@@ -32,6 +32,7 @@ type Request
   householdItems: HouseholdItems @hasOne
   needReason: [NeedReason]!
   needTypes: [NeedType]!
+  fulfilledNeeds: [NeedType]
   status: RequestStatus!
     @index(name: "requestsByDate", sortKeyFields: ["createdAt"])
   note: [NoteType] @hasMany(indexName: "byRequest", fields: ["id"])
@@ -145,6 +146,7 @@ type HomeRepairType
 
 enum RequestStatus {
   NEW
+  VETTED
   INPROGRESS
   FULFILLED
 }

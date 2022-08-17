@@ -55,16 +55,17 @@ exports.handler = async (event, context) => {
   let dbItems = await listItems();
   if (dbItems.Count > 0) {
     var reminderMessages = dbItems.Items.map(function (request) {
-      return (
-        request.firstName +
+      return request.firstName +
         " " +
         request.lastName +
         " asked for help with " +
         request.needTypes.map((x) => prettyNeedTypes[x]).join() +
         " on " +
         new Date(request.createdAt).toDateString() +
-        "\r\n"
-      );
+        "https://servereedley.org/requests" +
+        request.id
+        ? "?id=" + request.id
+        : "" + "\r\n\r\n";
     });
     const vault = new aws.SecretsManager({ region: "us-west-1" });
     const secretInfo = await vault
