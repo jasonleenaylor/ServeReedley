@@ -268,6 +268,7 @@ export interface NeedRequestType {
   housingHelp?: boolean | null;
   needReason: Array<NeedReason | null>;
   needTypes: Array<NeedType | null>;
+  fulfilledNeeds?: Array<NeedType | null> | null;
   status: RequestStatus;
   otherNeeds?: string | null;
   note?: {

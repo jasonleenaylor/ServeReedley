@@ -236,12 +236,12 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
           </Grid>
           <Grid item>
             {needRequestCard(
-              needTypeArrayToBooleans(requestData),
+              needTypeArrayToBooleans(requestData.needTypes),
               (event: React.ChangeEvent<HTMLInputElement>) => {
                 setRequestData({
                   ...requestData,
                   needTypes: getNeedTypes({
-                    ...needTypeArrayToBooleans(requestData),
+                    ...needTypeArrayToBooleans(requestData.needTypes),
                     [event.target.name]: event.target.checked,
                   }),
                 });
@@ -466,7 +466,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
           <Grid item>
             <Card style={cardStyle}>
               <CardHeader
-                title="Notes"
+                title="Notes And Status"
                 titleTypographyProps={{ variant: "h6" }}
               />
 
@@ -503,6 +503,24 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                       </Select>
                     </FormControl>
                   </Card>
+                </Grid>{" "}
+                <Grid item xs={12}>
+                  {needRequestCard(
+                    needTypeArrayToBooleans(requestData.needTypes),
+                    (event: React.ChangeEvent<HTMLInputElement>) => {
+                      setRequestData({
+                        ...requestData,
+                        fulfilledNeeds: getNeedTypes({
+                          ...needTypeArrayToBooleans(
+                            requestData.fulfilledNeeds!
+                          ),
+                          [event.target.name]: event.target.checked,
+                        }),
+                      });
+                    },
+                    needTypeArrayToBooleans(requestData.fulfilledNeeds),
+                    false
+                  )}
                 </Grid>
                 <Grid item xs={12}>
                   <Paper style={{ padding: theme.spacing(3) }}>
@@ -588,20 +606,22 @@ function getFoodInfoFromFoodRequest(
   };
 }
 
-function needTypeArrayToBooleans(requestData: NeedRequestType): INeedTypes {
+function needTypeArrayToBooleans(
+  requestData: Array<NeedType | null> | null | undefined
+): INeedTypes {
   return {
-    carRepair: requestData.needTypes.includes(NeedType.CARREPAIR),
-    housing: requestData.needTypes.includes(NeedType.HOUSING),
-    homeRepair: requestData.needTypes.includes(NeedType.HOMEREPAIR),
-    householdItems: requestData.needTypes.includes(NeedType.HOUSEHOLDITEMS),
-    hygeneItems: requestData.needTypes.includes(NeedType.HYGENEITEMS),
-    meals: requestData.needTypes.includes(NeedType.MEALS),
-    furniture: requestData.needTypes.includes(NeedType.FURNITURE),
-    groceries: requestData.needTypes.includes(NeedType.GROCERIES),
-    moving: requestData.needTypes.includes(NeedType.MOVING),
-    jobTraining: requestData.needTypes.includes(NeedType.JOBTRAINING),
-    clothing: requestData.needTypes.includes(NeedType.CLOTHING),
-    other: requestData.needTypes.includes(NeedType.OTHER),
+    carRepair: !!requestData?.includes(NeedType.CARREPAIR),
+    housing: !!requestData?.includes(NeedType.HOUSING),
+    homeRepair: !!requestData?.includes(NeedType.HOMEREPAIR),
+    householdItems: !!requestData?.includes(NeedType.HOUSEHOLDITEMS),
+    hygeneItems: !!requestData?.includes(NeedType.HYGENEITEMS),
+    meals: !!requestData?.includes(NeedType.MEALS),
+    furniture: !!requestData?.includes(NeedType.FURNITURE),
+    groceries: !!requestData?.includes(NeedType.GROCERIES),
+    moving: !!requestData?.includes(NeedType.MOVING),
+    jobTraining: !!requestData?.includes(NeedType.JOBTRAINING),
+    clothing: !!requestData?.includes(NeedType.CLOTHING),
+    other: !!requestData?.includes(NeedType.OTHER),
   };
 }
 
