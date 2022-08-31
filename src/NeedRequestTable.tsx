@@ -664,6 +664,7 @@ async function needUpdateFromNeedReqData(
     lastName: value.lastName,
     needTypes: value.needTypes,
     status: value.status,
+    fulfilledNeeds: value.fulfilledNeeds,
     requestMovingRequestId: value.movingRequest?.id,
     requestHomeRepairTypeId: value.homeRepairType?.id,
     requestFoodRequestId: value.foodRequest?.id,

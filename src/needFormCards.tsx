@@ -17,6 +17,7 @@ import parsePhoneNumber, {
   isPossiblePhoneNumber,
   parseIncompletePhoneNumber,
 } from "libphonenumber-js";
+import { Fragment } from "react";
 
 import { cardStyle } from "./needRequestForm";
 import {
@@ -301,134 +302,209 @@ export function leadTracingCard(
 
 export function needRequestCard(
   needType: INeedTypes,
-  handleNeedTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleNeedTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  completed?: INeedTypes,
+  displayAll: boolean = true
 ) {
+  let groceriesCheck = displayAll ? needType.groceries : completed?.groceries;
+  let mealsCheck = displayAll ? needType.meals : completed?.meals;
+  let clothingCheck = displayAll ? needType.clothing : completed?.clothing;
+  let furnitureCheck = displayAll ? needType.furniture : completed?.furniture;
+  let carRepairCheck = displayAll ? needType.carRepair : completed?.carRepair;
+  let homeRepairCheck = displayAll
+    ? needType.homeRepair
+    : completed?.homeRepair;
+  let hygeneCheck = displayAll ? needType.hygeneItems : completed?.hygeneItems;
+  let otherCheck = displayAll ? needType.other : completed?.other;
+  let householdItemsCheck = displayAll
+    ? needType.householdItems
+    : completed?.householdItems;
+  let housingCheck = displayAll ? needType.housing : completed?.housing;
+  let jobTrainingCheck = displayAll
+    ? needType.jobTraining
+    : completed?.jobTraining;
+  let movingCheck = displayAll ? needType.moving : completed?.moving;
   return (
     <Card style={cardStyle}>
       {" "}
       <FormControl required>
         <FormGroup>
-          <Typography>{t("assistance_type")}</Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.groceries}
-                onChange={handleNeedTypeChange}
-                name="groceries"
+          {displayAll ? (
+            <Typography>{t("assistance_type")}</Typography>
+          ) : (
+            <Typography>
+              Assistance Requested: Check items when they are fulfilled
+            </Typography>
+          )}
+          {}
+          {(displayAll || needType.groceries) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={groceriesCheck}
+                    onChange={handleNeedTypeChange}
+                    name="groceries"
+                  />
+                }
+                label={t("groceries")}
               />
-            }
-            label={t("groceries")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.meals}
-                onChange={handleNeedTypeChange}
-                name="meals"
+            </Fragment>
+          )}
+          {(displayAll || needType.meals) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={mealsCheck}
+                    onChange={handleNeedTypeChange}
+                    name="meals"
+                  />
+                }
+                label={t("meals")}
               />
-            }
-            label={t("meals")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.clothing}
-                onChange={handleNeedTypeChange}
-                name="clothing"
+            </Fragment>
+          )}
+          {(displayAll || needType.clothing) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={clothingCheck}
+                    onChange={handleNeedTypeChange}
+                    name="clothing"
+                  />
+                }
+                label={t("clothing")}
               />
-            }
-            label={t("clothing")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.householdItems}
-                onChange={handleNeedTypeChange}
-                name="householdItems"
+            </Fragment>
+          )}
+          {(displayAll || needType.householdItems) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={householdItemsCheck}
+                    onChange={handleNeedTypeChange}
+                    name="householdItems"
+                  />
+                }
+                label={t("household_items")}
               />
-            }
-            label={t("household_items")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.hygeneItems}
-                onChange={handleNeedTypeChange}
-                name="hygeneItems"
+            </Fragment>
+          )}
+          {(displayAll || needType.hygeneItems) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={hygeneCheck}
+                    onChange={handleNeedTypeChange}
+                    name="hygeneItems"
+                  />
+                }
+                label={t("hygene_items")}
               />
-            }
-            label={t("hygene_items")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.moving}
-                onChange={handleNeedTypeChange}
-                name="moving"
+            </Fragment>
+          )}
+          {(displayAll || needType.moving) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={movingCheck}
+                    onChange={handleNeedTypeChange}
+                    name="moving"
+                  />
+                }
+                label={t("moving_assistance")}
               />
-            }
-            label={t("moving_assistance")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.furniture}
-                onChange={handleNeedTypeChange}
-                name="furniture"
+            </Fragment>
+          )}
+          {(displayAll || needType.furniture) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={furnitureCheck}
+                    onChange={handleNeedTypeChange}
+                    name="furniture"
+                  />
+                }
+                label={t("furniture")}
               />
-            }
-            label={t("furniture")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.homeRepair}
-                onChange={handleNeedTypeChange}
-                name="homeRepair"
+            </Fragment>
+          )}
+          {(displayAll || needType.homeRepair) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={homeRepairCheck}
+                    onChange={handleNeedTypeChange}
+                    name="homeRepair"
+                  />
+                }
+                label={t("home_repair")}
               />
-            }
-            label={t("home_repair")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.carRepair}
-                onChange={handleNeedTypeChange}
-                name="carRepair"
+            </Fragment>
+          )}
+          {(displayAll || needType.carRepair) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={carRepairCheck}
+                    onChange={handleNeedTypeChange}
+                    name="carRepair"
+                  />
+                }
+                label={t("car_repair")}
               />
-            }
-            label={t("car_repair")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.jobTraining}
-                onChange={handleNeedTypeChange}
-                name="jobTraining"
+            </Fragment>
+          )}
+          {(displayAll || needType.jobTraining) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={jobTrainingCheck}
+                    onChange={handleNeedTypeChange}
+                    name="jobTraining"
+                  />
+                }
+                label={t("job_prep")}
               />
-            }
-            label={t("job_prep")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.housing}
-                onChange={handleNeedTypeChange}
-                name="housing"
+            </Fragment>
+          )}
+          {(displayAll || needType.housing) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={housingCheck}
+                    onChange={handleNeedTypeChange}
+                    name="housing"
+                  />
+                }
+                label={t("housing")}
               />
-            }
-            label={t("housing")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={needType.other}
-                onChange={handleNeedTypeChange}
-                name="other"
+            </Fragment>
+          )}
+          {(displayAll || needType.other) && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={otherCheck}
+                    onChange={handleNeedTypeChange}
+                    name="other"
+                  />
+                }
+                label={t("other")}
               />
-            }
-            label={t("other")}
-          />
+            </Fragment>
+          )}
         </FormGroup>
       </FormControl>
     </Card>
