@@ -63,7 +63,7 @@ exports.handler = async (event, context) => {
         request.needTypes.map((x) => prettyNeedTypes[x]).join() +
         " on " +
         new Date(request.createdAt).toDateString() +
-        "https://servereedley.org/requests" +
+        ": https://crn.servereedley.org/requests" +
         (request.id ? "?id=" + request.id : "") +
         "\r\n\r\n"
       );

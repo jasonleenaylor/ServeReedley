@@ -111,7 +111,13 @@ function NeedRequestTable(props: ILocalizeProps) {
     { title: "Address", field: "address" },
     { title: "City", field: "city" },
     { title: "Zip Code", field: "zipCode", type: "numeric" },
-    { title: "Email", field: "email" },
+    {
+      title: "Email",
+      field: "email",
+      render: (rowData) => (
+        <a href={"mailto:" + rowData.email}>{rowData.email}</a>
+      ),
+    },
     { title: "Spanish Only", field: "spanishOnly", type: "boolean" },
     { title: "Specific Need", field: "specificNeed" },
     { title: "Preferred Contact Time", field: "preferredContactTime" },
