@@ -76,6 +76,7 @@ export enum RequestStatus {
   VETTED = "VETTED",
   INPROGRESS = "INPROGRESS",
   FULFILLED = "FULFILLED",
+  CANTFULFILL = "CANTFULFILL",
 }
 
 

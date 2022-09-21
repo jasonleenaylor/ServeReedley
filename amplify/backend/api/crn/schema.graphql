@@ -149,6 +149,7 @@ enum RequestStatus {
   VETTED
   INPROGRESS
   FULFILLED
+  CANTFULFILL
 }
 
 enum NeedType {
