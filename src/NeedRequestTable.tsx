@@ -363,6 +363,8 @@ function NeedRequestTable(props: ILocalizeProps) {
       if (b.status === RequestStatus.VETTED) return 1; // B is Vetted sort above A
       if (a.status === RequestStatus.INPROGRESS) return -1; // A is In Progress sort above B
       if (b.status === RequestStatus.INPROGRESS) return 1; // B is In Progress sort above A
+      if (a.status === RequestStatus.FULFILLED) return -1; // A is Fulfilled sort above B
+      if (b.status === RequestStatus.FULFILLED) return 1; // B is Fulfilled sort above A
       alert("Your logic is flawed.");
       return 1;
     }
