@@ -508,14 +508,14 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                   {needRequestCard(
                     needTypeArrayToBooleans(requestData.needTypes),
                     (event: React.ChangeEvent<HTMLInputElement>) => {
+                      let fullfilled = getNeedTypes({
+                        ...needTypeArrayToBooleans(requestData.fulfilledNeeds!),
+                        [event.target.name]: event.target.checked,
+                      });
                       setRequestData({
                         ...requestData,
-                        fulfilledNeeds: getNeedTypes({
-                          ...needTypeArrayToBooleans(
-                            requestData.fulfilledNeeds!
-                          ),
-                          [event.target.name]: event.target.checked,
-                        }),
+                        status: updateStatusFromData(requestData, fullfilled),
+                        fulfilledNeeds: fullfilled,
                       });
                     },
                     needTypeArrayToBooleans(requestData.fulfilledNeeds),
@@ -763,4 +763,19 @@ function editOrCreateMovingReq(
         ? newMovingInfo.otherDetails
         : "",
   };
+}
+
+function updateStatusFromData(
+  requestData: NeedRequestType,
+  fulfilled: NeedType[]
+): RequestStatus {
+  if (
+    requestData.needTypes.length === fulfilled.length &&
+    fulfilled.every((fulfilledItem) =>
+      requestData.needTypes.includes(fulfilledItem)
+    )
+  ) {
+    return RequestStatus.FULFILLED;
+  }
+  return RequestStatus.INPROGRESS;
 }
