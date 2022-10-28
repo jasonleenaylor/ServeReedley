@@ -157,6 +157,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       beans: groceries.beans,
       cheese: groceries.cheese,
       beef: groceries.beef,
+      butter: groceries.butter,
       hotdogs: groceries.hotdogs,
       lunchMeat: groceries.lunchMeat,
       fruit: groceries.fruit,

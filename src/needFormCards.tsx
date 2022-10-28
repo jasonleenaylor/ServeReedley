@@ -1042,6 +1042,7 @@ export function clothingCard(
               required
               multiline
               value={clothingSize}
+              helperText={t("clothing_size_hint")}
               onChange={(changeEvent: any) =>
                 setClothingSize(changeEvent.target.value)
               }
