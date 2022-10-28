@@ -70,6 +70,7 @@
   "jelly": "Mermelada",
   "clothing_type": "¿Qué tipo de ropa necesitas?",
   "clothing_size": "¿Qué talla de ropa necesitas?",
+  "clothing_size_hint": "ex. vaqueros 40x42; Pantalones 5T niñas",
   "furniture_type": "¿Qué tipo de muebles necesitas?",
   "resume_help": "¿Necesitas ayuda con tu currículum?",
   "cover_letter_help": "¿Necesita ayuda para escribir una carta de presentación?",

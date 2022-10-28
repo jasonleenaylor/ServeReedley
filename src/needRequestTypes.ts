@@ -167,6 +167,7 @@ export interface FoodInfoGQL {
   hotdogs?: boolean | null;
   lunchMeat?: boolean | null;
   fruit?: boolean | null;
+  butter?: boolean | null;
   peanutButter?: boolean | null;
   jelly?: boolean | null;
 }
