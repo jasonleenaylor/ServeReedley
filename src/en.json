@@ -40,6 +40,7 @@
   "minors": "Please list ages of children under the age of 18",
   "have_allergies": "Are there any food allergies?",
   "allergy_list": "Please list allergies",
+  "delivery_time": "Best time for delivery",
   "moving": "Moving",
   "moving_items": "What items need to be moved (couch, appliance, whole household)?",
   "have_transportation": "Do you have transportation such as your own truck or a rented UHaul?",

@@ -569,8 +569,8 @@ export function foodInfoCard(
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>
+          <Typography>{t("family_size")}</Typography>
           <TextField
-            label={t("family_size")}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9][0-9]?",
@@ -603,6 +603,18 @@ export function foodInfoCard(
               }
             ></TextField>
           </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>{t("delivery_time")}</Typography>
+          <TextField
+            value={foodInfo.deliveryTime}
+            onChange={(changeEvent: any) =>
+              handleFoodInfoChange({
+                ...foodInfo,
+                deliveryTime: changeEvent.target.value,
+              })
+            }
+          />
         </Grid>
         <Grid item>
           <Typography>{t("have_allergies")}</Typography>

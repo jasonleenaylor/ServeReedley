@@ -52,6 +52,7 @@ type NoteType
   dateCreated: String!
   author: String!
   content: String!
+  notable: Boolean
 }
 
 type SelfOrOtherInfo
@@ -64,6 +65,7 @@ type SelfOrOtherInfo
   otherResources: String
   requestFor: String
   requestIsKnown: Boolean
+  phoneNumber: String
 }
 
 type HouseholdItems
@@ -98,6 +100,7 @@ type FoodInfo
   ) {
   familyMembers: Int
   children: String
+  deliveryTime: String
   haveAllergies: Boolean
   allergies: String
   milk: Boolean

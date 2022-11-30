@@ -275,6 +275,7 @@ export type SelfOrOtherInfo = {
   otherResources?: string | null,
   requestFor?: string | null,
   requestIsKnown?: boolean | null,
+  phoneNumber?: string | null,
   id: string,
   createdAt: string,
   updatedAt: string,
@@ -284,6 +285,7 @@ export type FoodInfo = {
   __typename: "FoodInfo",
   familyMembers?: number | null,
   children?: string | null,
+  deliveryTime?: string | null,
   haveAllergies?: boolean | null,
   allergies?: string | null,
   milk?: boolean | null,
@@ -371,6 +373,7 @@ export type NoteType = {
   dateCreated: string,
   author: string,
   content: string,
+  notable?: boolean | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -423,6 +426,7 @@ export type CreateNoteTypeInput = {
   dateCreated: string,
   author: string,
   content: string,
+  notable?: boolean | null,
 };
 
 export type ModelNoteTypeConditionInput = {
@@ -430,6 +434,7 @@ export type ModelNoteTypeConditionInput = {
   dateCreated?: ModelStringInput | null,
   author?: ModelStringInput | null,
   content?: ModelStringInput | null,
+  notable?: ModelBooleanInput | null,
   and?: Array< ModelNoteTypeConditionInput | null > | null,
   or?: Array< ModelNoteTypeConditionInput | null > | null,
   not?: ModelNoteTypeConditionInput | null,
@@ -441,6 +446,7 @@ export type UpdateNoteTypeInput = {
   dateCreated?: string | null,
   author?: string | null,
   content?: string | null,
+  notable?: boolean | null,
 };
 
 export type DeleteNoteTypeInput = {
@@ -453,6 +459,7 @@ export type CreateSelfOrOtherInfoInput = {
   otherResources?: string | null,
   requestFor?: string | null,
   requestIsKnown?: boolean | null,
+  phoneNumber?: string | null,
   id?: string | null,
 };
 
@@ -462,6 +469,7 @@ export type ModelSelfOrOtherInfoConditionInput = {
   otherResources?: ModelStringInput | null,
   requestFor?: ModelStringInput | null,
   requestIsKnown?: ModelBooleanInput | null,
+  phoneNumber?: ModelStringInput | null,
   and?: Array< ModelSelfOrOtherInfoConditionInput | null > | null,
   or?: Array< ModelSelfOrOtherInfoConditionInput | null > | null,
   not?: ModelSelfOrOtherInfoConditionInput | null,
@@ -473,6 +481,7 @@ export type UpdateSelfOrOtherInfoInput = {
   otherResources?: string | null,
   requestFor?: string | null,
   requestIsKnown?: boolean | null,
+  phoneNumber?: string | null,
   id: string,
 };
 
@@ -555,6 +564,7 @@ export type DeleteHouseholdItemsInput = {
 export type CreateFoodInfoInput = {
   familyMembers?: number | null,
   children?: string | null,
+  deliveryTime?: string | null,
   haveAllergies?: boolean | null,
   allergies?: string | null,
   milk?: boolean | null,
@@ -577,6 +587,7 @@ export type CreateFoodInfoInput = {
 export type ModelFoodInfoConditionInput = {
   familyMembers?: ModelIntInput | null,
   children?: ModelStringInput | null,
+  deliveryTime?: ModelStringInput | null,
   haveAllergies?: ModelBooleanInput | null,
   allergies?: ModelStringInput | null,
   milk?: ModelBooleanInput | null,
@@ -601,6 +612,7 @@ export type ModelFoodInfoConditionInput = {
 export type UpdateFoodInfoInput = {
   familyMembers?: number | null,
   children?: string | null,
+  deliveryTime?: string | null,
   haveAllergies?: boolean | null,
   allergies?: string | null,
   milk?: boolean | null,
@@ -755,6 +767,7 @@ export type ModelNoteTypeFilterInput = {
   dateCreated?: ModelStringInput | null,
   author?: ModelStringInput | null,
   content?: ModelStringInput | null,
+  notable?: ModelBooleanInput | null,
   and?: Array< ModelNoteTypeFilterInput | null > | null,
   or?: Array< ModelNoteTypeFilterInput | null > | null,
   not?: ModelNoteTypeFilterInput | null,
@@ -766,6 +779,7 @@ export type ModelSelfOrOtherInfoFilterInput = {
   otherResources?: ModelStringInput | null,
   requestFor?: ModelStringInput | null,
   requestIsKnown?: ModelBooleanInput | null,
+  phoneNumber?: ModelStringInput | null,
   and?: Array< ModelSelfOrOtherInfoFilterInput | null > | null,
   or?: Array< ModelSelfOrOtherInfoFilterInput | null > | null,
   not?: ModelSelfOrOtherInfoFilterInput | null,
@@ -810,6 +824,7 @@ export type ModelHouseholdItemsConnection = {
 export type ModelFoodInfoFilterInput = {
   familyMembers?: ModelIntInput | null,
   children?: ModelStringInput | null,
+  deliveryTime?: ModelStringInput | null,
   haveAllergies?: ModelBooleanInput | null,
   allergies?: ModelStringInput | null,
   milk?: ModelBooleanInput | null,
@@ -875,6 +890,181 @@ export type ModelHomeRepairTypeConnection = {
   nextToken?: string | null,
 };
 
+export type ModelSubscriptionRequestFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  dateOfRequest?: ModelSubscriptionStringInput | null,
+  firstName?: ModelSubscriptionStringInput | null,
+  lastName?: ModelSubscriptionStringInput | null,
+  address?: ModelSubscriptionStringInput | null,
+  city?: ModelSubscriptionStringInput | null,
+  zipCode?: ModelSubscriptionIntInput | null,
+  phone?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  spanishOnly?: ModelSubscriptionBooleanInput | null,
+  preferredContactTime?: ModelSubscriptionStringInput | null,
+  request?: ModelSubscriptionStringInput | null,
+  leadSource?: ModelSubscriptionStringInput | null,
+  leadOtherDetails?: ModelSubscriptionStringInput | null,
+  resumeHelp?: ModelSubscriptionBooleanInput | null,
+  coverLetterHelp?: ModelSubscriptionBooleanInput | null,
+  carRepairDetails?: ModelSubscriptionStringInput | null,
+  clothingType?: ModelSubscriptionStringInput | null,
+  clothingSize?: ModelSubscriptionStringInput | null,
+  furnitureType?: ModelSubscriptionStringInput | null,
+  housingHelp?: ModelSubscriptionBooleanInput | null,
+  needReason?: ModelSubscriptionStringInput | null,
+  needTypes?: ModelSubscriptionStringInput | null,
+  fulfilledNeeds?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  otherNeeds?: ModelSubscriptionStringInput | null,
+  needFulfiller?: ModelSubscriptionStringInput | null,
+  dateFulfilled?: ModelSubscriptionStringInput | null,
+  followUp?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionRequestFilterInput | null > | null,
+  or?: Array< ModelSubscriptionRequestFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIDInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  in?: Array< string | null > | null,
+  notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  in?: Array< string | null > | null,
+  notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
+export type ModelSubscriptionNoteTypeFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  requestID?: ModelSubscriptionIDInput | null,
+  dateCreated?: ModelSubscriptionStringInput | null,
+  author?: ModelSubscriptionStringInput | null,
+  content?: ModelSubscriptionStringInput | null,
+  notable?: ModelSubscriptionBooleanInput | null,
+  and?: Array< ModelSubscriptionNoteTypeFilterInput | null > | null,
+  or?: Array< ModelSubscriptionNoteTypeFilterInput | null > | null,
+};
+
+export type ModelSubscriptionSelfOrOtherInfoFilterInput = {
+  forSelf?: ModelSubscriptionBooleanInput | null,
+  usedOtherResources?: ModelSubscriptionBooleanInput | null,
+  otherResources?: ModelSubscriptionStringInput | null,
+  requestFor?: ModelSubscriptionStringInput | null,
+  requestIsKnown?: ModelSubscriptionBooleanInput | null,
+  phoneNumber?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionSelfOrOtherInfoFilterInput | null > | null,
+  or?: Array< ModelSubscriptionSelfOrOtherInfoFilterInput | null > | null,
+};
+
+export type ModelSubscriptionHouseholdItemsFilterInput = {
+  shampoo?: ModelSubscriptionBooleanInput | null,
+  bathSoap?: ModelSubscriptionBooleanInput | null,
+  toothpaste?: ModelSubscriptionBooleanInput | null,
+  toothbrush?: ModelSubscriptionBooleanInput | null,
+  deodorant?: ModelSubscriptionBooleanInput | null,
+  toiletPaper?: ModelSubscriptionBooleanInput | null,
+  handSoap?: ModelSubscriptionBooleanInput | null,
+  sanitaryPads?: ModelSubscriptionBooleanInput | null,
+  tampons?: ModelSubscriptionBooleanInput | null,
+  bleach?: ModelSubscriptionBooleanInput | null,
+  lysolSpray?: ModelSubscriptionBooleanInput | null,
+  lysolWipes?: ModelSubscriptionBooleanInput | null,
+  dishsoap?: ModelSubscriptionBooleanInput | null,
+  sponges?: ModelSubscriptionBooleanInput | null,
+  pinesol?: ModelSubscriptionBooleanInput | null,
+  conditioner?: ModelSubscriptionBooleanInput | null,
+  paperTowels?: ModelSubscriptionBooleanInput | null,
+  laundrySoap?: ModelSubscriptionBooleanInput | null,
+  and?: Array< ModelSubscriptionHouseholdItemsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionHouseholdItemsFilterInput | null > | null,
+};
+
+export type ModelSubscriptionFoodInfoFilterInput = {
+  familyMembers?: ModelSubscriptionIntInput | null,
+  children?: ModelSubscriptionStringInput | null,
+  deliveryTime?: ModelSubscriptionStringInput | null,
+  haveAllergies?: ModelSubscriptionBooleanInput | null,
+  allergies?: ModelSubscriptionStringInput | null,
+  milk?: ModelSubscriptionBooleanInput | null,
+  eggs?: ModelSubscriptionBooleanInput | null,
+  bread?: ModelSubscriptionBooleanInput | null,
+  butter?: ModelSubscriptionBooleanInput | null,
+  tortillas?: ModelSubscriptionBooleanInput | null,
+  rice?: ModelSubscriptionBooleanInput | null,
+  beans?: ModelSubscriptionBooleanInput | null,
+  cheese?: ModelSubscriptionBooleanInput | null,
+  beef?: ModelSubscriptionBooleanInput | null,
+  hotdogs?: ModelSubscriptionBooleanInput | null,
+  lunchMeat?: ModelSubscriptionBooleanInput | null,
+  fruit?: ModelSubscriptionBooleanInput | null,
+  peanutButter?: ModelSubscriptionBooleanInput | null,
+  jelly?: ModelSubscriptionBooleanInput | null,
+  and?: Array< ModelSubscriptionFoodInfoFilterInput | null > | null,
+  or?: Array< ModelSubscriptionFoodInfoFilterInput | null > | null,
+};
+
+export type ModelSubscriptionMovingInfoFilterInput = {
+  items?: ModelSubscriptionStringInput | null,
+  haveTransportation?: ModelSubscriptionBooleanInput | null,
+  steepDriveway?: ModelSubscriptionBooleanInput | null,
+  stairs?: ModelSubscriptionBooleanInput | null,
+  unpavedRoad?: ModelSubscriptionBooleanInput | null,
+  other?: ModelSubscriptionBooleanInput | null,
+  otherDetails?: ModelSubscriptionStringInput | null,
+  liabilityAck?: ModelSubscriptionBooleanInput | null,
+  and?: Array< ModelSubscriptionMovingInfoFilterInput | null > | null,
+  or?: Array< ModelSubscriptionMovingInfoFilterInput | null > | null,
+};
+
+export type ModelSubscriptionHomeRepairTypeFilterInput = {
+  plumbing?: ModelSubscriptionBooleanInput | null,
+  electrical?: ModelSubscriptionBooleanInput | null,
+  painting?: ModelSubscriptionBooleanInput | null,
+  yardwork?: ModelSubscriptionBooleanInput | null,
+  other?: ModelSubscriptionBooleanInput | null,
+  details?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionHomeRepairTypeFilterInput | null > | null,
+  or?: Array< ModelSubscriptionHomeRepairTypeFilterInput | null > | null,
+};
+
 export type CreateRequestMutationVariables = {
   input: CreateRequestInput,
   condition?: ModelRequestConditionInput | null,
@@ -905,6 +1095,7 @@ export type CreateRequestMutation = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -913,6 +1104,7 @@ export type CreateRequestMutation = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -1003,6 +1195,7 @@ export type CreateRequestMutation = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1051,6 +1244,7 @@ export type UpdateRequestMutation = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -1059,6 +1253,7 @@ export type UpdateRequestMutation = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -1149,6 +1344,7 @@ export type UpdateRequestMutation = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1197,6 +1393,7 @@ export type DeleteRequestMutation = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -1205,6 +1402,7 @@ export type DeleteRequestMutation = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -1295,6 +1493,7 @@ export type DeleteRequestMutation = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1326,6 +1525,7 @@ export type CreateNoteTypeMutation = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1344,6 +1544,7 @@ export type UpdateNoteTypeMutation = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1362,6 +1563,7 @@ export type DeleteNoteTypeMutation = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1380,6 +1582,7 @@ export type CreateSelfOrOtherInfoMutation = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -1399,6 +1602,7 @@ export type UpdateSelfOrOtherInfoMutation = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -1418,6 +1622,7 @@ export type DeleteSelfOrOtherInfoMutation = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -1530,6 +1735,7 @@ export type CreateFoodInfoMutation = {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -1562,6 +1768,7 @@ export type UpdateFoodInfoMutation = {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -1594,6 +1801,7 @@ export type DeleteFoodInfoMutation = {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -1771,6 +1979,7 @@ export type GetRequestQuery = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -1779,6 +1988,7 @@ export type GetRequestQuery = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -1869,6 +2079,7 @@ export type GetRequestQuery = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1920,6 +2131,7 @@ export type ListRequestsQuery = {
         otherResources?: string | null,
         requestFor?: string | null,
         requestIsKnown?: boolean | null,
+        phoneNumber?: string | null,
         id: string,
         createdAt: string,
         updatedAt: string,
@@ -1928,6 +2140,7 @@ export type ListRequestsQuery = {
         __typename: "FoodInfo",
         familyMembers?: number | null,
         children?: string | null,
+        deliveryTime?: string | null,
         haveAllergies?: boolean | null,
         allergies?: string | null,
         milk?: boolean | null,
@@ -2018,6 +2231,7 @@ export type ListRequestsQuery = {
           dateCreated: string,
           author: string,
           content: string,
+          notable?: boolean | null,
           createdAt: string,
           updatedAt: string,
         } | null >,
@@ -2050,6 +2264,7 @@ export type GetNoteTypeQuery = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2071,6 +2286,7 @@ export type ListNoteTypesQuery = {
       dateCreated: string,
       author: string,
       content: string,
+      notable?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2090,6 +2306,7 @@ export type GetSelfOrOtherInfoQuery = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -2112,6 +2329,7 @@ export type ListSelfOrOtherInfosQuery = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -2197,6 +2415,7 @@ export type GetFoodInfoQuery = {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -2232,6 +2451,7 @@ export type ListFoodInfosQuery = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -2348,6 +2568,10 @@ export type ListHomeRepairTypesQuery = {
   } | null,
 };
 
+export type OnCreateRequestSubscriptionVariables = {
+  filter?: ModelSubscriptionRequestFilterInput | null,
+};
+
 export type OnCreateRequestSubscription = {
   onCreateRequest?:  {
     __typename: "Request",
@@ -2373,6 +2597,7 @@ export type OnCreateRequestSubscription = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -2381,6 +2606,7 @@ export type OnCreateRequestSubscription = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -2471,6 +2697,7 @@ export type OnCreateRequestSubscription = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2487,6 +2714,10 @@ export type OnCreateRequestSubscription = {
     requestHomeRepairTypeId?: string | null,
     requestHouseholdItemsId?: string | null,
   } | null,
+};
+
+export type OnUpdateRequestSubscriptionVariables = {
+  filter?: ModelSubscriptionRequestFilterInput | null,
 };
 
 export type OnUpdateRequestSubscription = {
@@ -2514,6 +2745,7 @@ export type OnUpdateRequestSubscription = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -2522,6 +2754,7 @@ export type OnUpdateRequestSubscription = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -2612,6 +2845,7 @@ export type OnUpdateRequestSubscription = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2628,6 +2862,10 @@ export type OnUpdateRequestSubscription = {
     requestHomeRepairTypeId?: string | null,
     requestHouseholdItemsId?: string | null,
   } | null,
+};
+
+export type OnDeleteRequestSubscriptionVariables = {
+  filter?: ModelSubscriptionRequestFilterInput | null,
 };
 
 export type OnDeleteRequestSubscription = {
@@ -2655,6 +2893,7 @@ export type OnDeleteRequestSubscription = {
       otherResources?: string | null,
       requestFor?: string | null,
       requestIsKnown?: boolean | null,
+      phoneNumber?: string | null,
       id: string,
       createdAt: string,
       updatedAt: string,
@@ -2663,6 +2902,7 @@ export type OnDeleteRequestSubscription = {
       __typename: "FoodInfo",
       familyMembers?: number | null,
       children?: string | null,
+      deliveryTime?: string | null,
       haveAllergies?: boolean | null,
       allergies?: string | null,
       milk?: boolean | null,
@@ -2753,6 +2993,7 @@ export type OnDeleteRequestSubscription = {
         dateCreated: string,
         author: string,
         content: string,
+        notable?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2771,6 +3012,10 @@ export type OnDeleteRequestSubscription = {
   } | null,
 };
 
+export type OnCreateNoteTypeSubscriptionVariables = {
+  filter?: ModelSubscriptionNoteTypeFilterInput | null,
+};
+
 export type OnCreateNoteTypeSubscription = {
   onCreateNoteType?:  {
     __typename: "NoteType",
@@ -2779,9 +3024,14 @@ export type OnCreateNoteTypeSubscription = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnUpdateNoteTypeSubscriptionVariables = {
+  filter?: ModelSubscriptionNoteTypeFilterInput | null,
 };
 
 export type OnUpdateNoteTypeSubscription = {
@@ -2792,9 +3042,14 @@ export type OnUpdateNoteTypeSubscription = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnDeleteNoteTypeSubscriptionVariables = {
+  filter?: ModelSubscriptionNoteTypeFilterInput | null,
 };
 
 export type OnDeleteNoteTypeSubscription = {
@@ -2805,9 +3060,14 @@ export type OnDeleteNoteTypeSubscription = {
     dateCreated: string,
     author: string,
     content: string,
+    notable?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnCreateSelfOrOtherInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionSelfOrOtherInfoFilterInput | null,
 };
 
 export type OnCreateSelfOrOtherInfoSubscription = {
@@ -2818,10 +3078,15 @@ export type OnCreateSelfOrOtherInfoSubscription = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnUpdateSelfOrOtherInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionSelfOrOtherInfoFilterInput | null,
 };
 
 export type OnUpdateSelfOrOtherInfoSubscription = {
@@ -2832,10 +3097,15 @@ export type OnUpdateSelfOrOtherInfoSubscription = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnDeleteSelfOrOtherInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionSelfOrOtherInfoFilterInput | null,
 };
 
 export type OnDeleteSelfOrOtherInfoSubscription = {
@@ -2846,10 +3116,15 @@ export type OnDeleteSelfOrOtherInfoSubscription = {
     otherResources?: string | null,
     requestFor?: string | null,
     requestIsKnown?: boolean | null,
+    phoneNumber?: string | null,
     id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnCreateHouseholdItemsSubscriptionVariables = {
+  filter?: ModelSubscriptionHouseholdItemsFilterInput | null,
 };
 
 export type OnCreateHouseholdItemsSubscription = {
@@ -2879,6 +3154,10 @@ export type OnCreateHouseholdItemsSubscription = {
   } | null,
 };
 
+export type OnUpdateHouseholdItemsSubscriptionVariables = {
+  filter?: ModelSubscriptionHouseholdItemsFilterInput | null,
+};
+
 export type OnUpdateHouseholdItemsSubscription = {
   onUpdateHouseholdItems?:  {
     __typename: "HouseholdItems",
@@ -2904,6 +3183,10 @@ export type OnUpdateHouseholdItemsSubscription = {
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnDeleteHouseholdItemsSubscriptionVariables = {
+  filter?: ModelSubscriptionHouseholdItemsFilterInput | null,
 };
 
 export type OnDeleteHouseholdItemsSubscription = {
@@ -2933,11 +3216,16 @@ export type OnDeleteHouseholdItemsSubscription = {
   } | null,
 };
 
+export type OnCreateFoodInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionFoodInfoFilterInput | null,
+};
+
 export type OnCreateFoodInfoSubscription = {
   onCreateFoodInfo?:  {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -2958,6 +3246,10 @@ export type OnCreateFoodInfoSubscription = {
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnUpdateFoodInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionFoodInfoFilterInput | null,
 };
 
 export type OnUpdateFoodInfoSubscription = {
@@ -2965,6 +3257,7 @@ export type OnUpdateFoodInfoSubscription = {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -2987,11 +3280,16 @@ export type OnUpdateFoodInfoSubscription = {
   } | null,
 };
 
+export type OnDeleteFoodInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionFoodInfoFilterInput | null,
+};
+
 export type OnDeleteFoodInfoSubscription = {
   onDeleteFoodInfo?:  {
     __typename: "FoodInfo",
     familyMembers?: number | null,
     children?: string | null,
+    deliveryTime?: string | null,
     haveAllergies?: boolean | null,
     allergies?: string | null,
     milk?: boolean | null,
@@ -3012,6 +3310,10 @@ export type OnDeleteFoodInfoSubscription = {
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnCreateMovingInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionMovingInfoFilterInput | null,
 };
 
 export type OnCreateMovingInfoSubscription = {
@@ -3031,6 +3333,10 @@ export type OnCreateMovingInfoSubscription = {
   } | null,
 };
 
+export type OnUpdateMovingInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionMovingInfoFilterInput | null,
+};
+
 export type OnUpdateMovingInfoSubscription = {
   onUpdateMovingInfo?:  {
     __typename: "MovingInfo",
@@ -3046,6 +3352,10 @@ export type OnUpdateMovingInfoSubscription = {
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnDeleteMovingInfoSubscriptionVariables = {
+  filter?: ModelSubscriptionMovingInfoFilterInput | null,
 };
 
 export type OnDeleteMovingInfoSubscription = {
@@ -3065,6 +3375,10 @@ export type OnDeleteMovingInfoSubscription = {
   } | null,
 };
 
+export type OnCreateHomeRepairTypeSubscriptionVariables = {
+  filter?: ModelSubscriptionHomeRepairTypeFilterInput | null,
+};
+
 export type OnCreateHomeRepairTypeSubscription = {
   onCreateHomeRepairType?:  {
     __typename: "HomeRepairType",
@@ -3080,6 +3394,10 @@ export type OnCreateHomeRepairTypeSubscription = {
   } | null,
 };
 
+export type OnUpdateHomeRepairTypeSubscriptionVariables = {
+  filter?: ModelSubscriptionHomeRepairTypeFilterInput | null,
+};
+
 export type OnUpdateHomeRepairTypeSubscription = {
   onUpdateHomeRepairType?:  {
     __typename: "HomeRepairType",
@@ -3093,6 +3411,10 @@ export type OnUpdateHomeRepairTypeSubscription = {
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnDeleteHomeRepairTypeSubscriptionVariables = {
+  filter?: ModelSubscriptionHomeRepairTypeFilterInput | null,
 };
 
 export type OnDeleteHomeRepairTypeSubscription = {

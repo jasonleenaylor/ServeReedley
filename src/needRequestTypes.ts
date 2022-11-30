@@ -62,6 +62,7 @@ export interface IFoodInfo extends IGroceriesType {
   children: string;
   haveAllergies: RadioButtonState;
   allergies: string;
+  deliveryTime: string;
 }
 
 export interface INeedReason {
@@ -118,6 +119,7 @@ export const defaultFoodInfo: IFoodInfo = {
   children: "",
   haveAllergies: RadioButtonState.UNSET,
   allergies: "",
+  deliveryTime: "",
   ...defaultGroceries,
 };
 
@@ -338,6 +340,7 @@ export type IFoodInfoReqType = {
   children?: string | null;
   haveAllergies?: boolean | null;
   allergies?: string | null;
+  deliveryTime?: string | null;
   milk?: boolean | null;
   eggs?: boolean | null;
   bread?: boolean | null;

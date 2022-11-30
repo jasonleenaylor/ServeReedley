@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateRequest = /* GraphQL */ `
-  subscription OnCreateRequest {
-    onCreateRequest {
+  subscription OnCreateRequest($filter: ModelSubscriptionRequestFilterInput) {
+    onCreateRequest(filter: $filter) {
       id
       createdAt
       dateOfRequest
@@ -26,6 +26,7 @@ export const onCreateRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -33,6 +34,7 @@ export const onCreateRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -118,6 +120,7 @@ export const onCreateRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -137,8 +140,8 @@ export const onCreateRequest = /* GraphQL */ `
   }
 `;
 export const onUpdateRequest = /* GraphQL */ `
-  subscription OnUpdateRequest {
-    onUpdateRequest {
+  subscription OnUpdateRequest($filter: ModelSubscriptionRequestFilterInput) {
+    onUpdateRequest(filter: $filter) {
       id
       createdAt
       dateOfRequest
@@ -160,6 +163,7 @@ export const onUpdateRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -167,6 +171,7 @@ export const onUpdateRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -252,6 +257,7 @@ export const onUpdateRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -271,8 +277,8 @@ export const onUpdateRequest = /* GraphQL */ `
   }
 `;
 export const onDeleteRequest = /* GraphQL */ `
-  subscription OnDeleteRequest {
-    onDeleteRequest {
+  subscription OnDeleteRequest($filter: ModelSubscriptionRequestFilterInput) {
+    onDeleteRequest(filter: $filter) {
       id
       createdAt
       dateOfRequest
@@ -294,6 +300,7 @@ export const onDeleteRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -301,6 +308,7 @@ export const onDeleteRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -386,6 +394,7 @@ export const onDeleteRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -405,52 +414,58 @@ export const onDeleteRequest = /* GraphQL */ `
   }
 `;
 export const onCreateNoteType = /* GraphQL */ `
-  subscription OnCreateNoteType {
-    onCreateNoteType {
+  subscription OnCreateNoteType($filter: ModelSubscriptionNoteTypeFilterInput) {
+    onCreateNoteType(filter: $filter) {
       id
       requestID
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
   }
 `;
 export const onUpdateNoteType = /* GraphQL */ `
-  subscription OnUpdateNoteType {
-    onUpdateNoteType {
+  subscription OnUpdateNoteType($filter: ModelSubscriptionNoteTypeFilterInput) {
+    onUpdateNoteType(filter: $filter) {
       id
       requestID
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
   }
 `;
 export const onDeleteNoteType = /* GraphQL */ `
-  subscription OnDeleteNoteType {
-    onDeleteNoteType {
+  subscription OnDeleteNoteType($filter: ModelSubscriptionNoteTypeFilterInput) {
+    onDeleteNoteType(filter: $filter) {
       id
       requestID
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
   }
 `;
 export const onCreateSelfOrOtherInfo = /* GraphQL */ `
-  subscription OnCreateSelfOrOtherInfo {
-    onCreateSelfOrOtherInfo {
+  subscription OnCreateSelfOrOtherInfo(
+    $filter: ModelSubscriptionSelfOrOtherInfoFilterInput
+  ) {
+    onCreateSelfOrOtherInfo(filter: $filter) {
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -458,13 +473,16 @@ export const onCreateSelfOrOtherInfo = /* GraphQL */ `
   }
 `;
 export const onUpdateSelfOrOtherInfo = /* GraphQL */ `
-  subscription OnUpdateSelfOrOtherInfo {
-    onUpdateSelfOrOtherInfo {
+  subscription OnUpdateSelfOrOtherInfo(
+    $filter: ModelSubscriptionSelfOrOtherInfoFilterInput
+  ) {
+    onUpdateSelfOrOtherInfo(filter: $filter) {
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -472,13 +490,16 @@ export const onUpdateSelfOrOtherInfo = /* GraphQL */ `
   }
 `;
 export const onDeleteSelfOrOtherInfo = /* GraphQL */ `
-  subscription OnDeleteSelfOrOtherInfo {
-    onDeleteSelfOrOtherInfo {
+  subscription OnDeleteSelfOrOtherInfo(
+    $filter: ModelSubscriptionSelfOrOtherInfoFilterInput
+  ) {
+    onDeleteSelfOrOtherInfo(filter: $filter) {
       forSelf
       usedOtherResources
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -486,8 +507,10 @@ export const onDeleteSelfOrOtherInfo = /* GraphQL */ `
   }
 `;
 export const onCreateHouseholdItems = /* GraphQL */ `
-  subscription OnCreateHouseholdItems {
-    onCreateHouseholdItems {
+  subscription OnCreateHouseholdItems(
+    $filter: ModelSubscriptionHouseholdItemsFilterInput
+  ) {
+    onCreateHouseholdItems(filter: $filter) {
       shampoo
       bathSoap
       toothpaste
@@ -513,8 +536,10 @@ export const onCreateHouseholdItems = /* GraphQL */ `
   }
 `;
 export const onUpdateHouseholdItems = /* GraphQL */ `
-  subscription OnUpdateHouseholdItems {
-    onUpdateHouseholdItems {
+  subscription OnUpdateHouseholdItems(
+    $filter: ModelSubscriptionHouseholdItemsFilterInput
+  ) {
+    onUpdateHouseholdItems(filter: $filter) {
       shampoo
       bathSoap
       toothpaste
@@ -540,8 +565,10 @@ export const onUpdateHouseholdItems = /* GraphQL */ `
   }
 `;
 export const onDeleteHouseholdItems = /* GraphQL */ `
-  subscription OnDeleteHouseholdItems {
-    onDeleteHouseholdItems {
+  subscription OnDeleteHouseholdItems(
+    $filter: ModelSubscriptionHouseholdItemsFilterInput
+  ) {
+    onDeleteHouseholdItems(filter: $filter) {
       shampoo
       bathSoap
       toothpaste
@@ -567,10 +594,11 @@ export const onDeleteHouseholdItems = /* GraphQL */ `
   }
 `;
 export const onCreateFoodInfo = /* GraphQL */ `
-  subscription OnCreateFoodInfo {
-    onCreateFoodInfo {
+  subscription OnCreateFoodInfo($filter: ModelSubscriptionFoodInfoFilterInput) {
+    onCreateFoodInfo(filter: $filter) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
@@ -594,10 +622,11 @@ export const onCreateFoodInfo = /* GraphQL */ `
   }
 `;
 export const onUpdateFoodInfo = /* GraphQL */ `
-  subscription OnUpdateFoodInfo {
-    onUpdateFoodInfo {
+  subscription OnUpdateFoodInfo($filter: ModelSubscriptionFoodInfoFilterInput) {
+    onUpdateFoodInfo(filter: $filter) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
@@ -621,10 +650,11 @@ export const onUpdateFoodInfo = /* GraphQL */ `
   }
 `;
 export const onDeleteFoodInfo = /* GraphQL */ `
-  subscription OnDeleteFoodInfo {
-    onDeleteFoodInfo {
+  subscription OnDeleteFoodInfo($filter: ModelSubscriptionFoodInfoFilterInput) {
+    onDeleteFoodInfo(filter: $filter) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
@@ -648,8 +678,10 @@ export const onDeleteFoodInfo = /* GraphQL */ `
   }
 `;
 export const onCreateMovingInfo = /* GraphQL */ `
-  subscription OnCreateMovingInfo {
-    onCreateMovingInfo {
+  subscription OnCreateMovingInfo(
+    $filter: ModelSubscriptionMovingInfoFilterInput
+  ) {
+    onCreateMovingInfo(filter: $filter) {
       items
       haveTransportation
       steepDriveway
@@ -665,8 +697,10 @@ export const onCreateMovingInfo = /* GraphQL */ `
   }
 `;
 export const onUpdateMovingInfo = /* GraphQL */ `
-  subscription OnUpdateMovingInfo {
-    onUpdateMovingInfo {
+  subscription OnUpdateMovingInfo(
+    $filter: ModelSubscriptionMovingInfoFilterInput
+  ) {
+    onUpdateMovingInfo(filter: $filter) {
       items
       haveTransportation
       steepDriveway
@@ -682,8 +716,10 @@ export const onUpdateMovingInfo = /* GraphQL */ `
   }
 `;
 export const onDeleteMovingInfo = /* GraphQL */ `
-  subscription OnDeleteMovingInfo {
-    onDeleteMovingInfo {
+  subscription OnDeleteMovingInfo(
+    $filter: ModelSubscriptionMovingInfoFilterInput
+  ) {
+    onDeleteMovingInfo(filter: $filter) {
       items
       haveTransportation
       steepDriveway
@@ -699,8 +735,10 @@ export const onDeleteMovingInfo = /* GraphQL */ `
   }
 `;
 export const onCreateHomeRepairType = /* GraphQL */ `
-  subscription OnCreateHomeRepairType {
-    onCreateHomeRepairType {
+  subscription OnCreateHomeRepairType(
+    $filter: ModelSubscriptionHomeRepairTypeFilterInput
+  ) {
+    onCreateHomeRepairType(filter: $filter) {
       plumbing
       electrical
       painting
@@ -714,8 +752,10 @@ export const onCreateHomeRepairType = /* GraphQL */ `
   }
 `;
 export const onUpdateHomeRepairType = /* GraphQL */ `
-  subscription OnUpdateHomeRepairType {
-    onUpdateHomeRepairType {
+  subscription OnUpdateHomeRepairType(
+    $filter: ModelSubscriptionHomeRepairTypeFilterInput
+  ) {
+    onUpdateHomeRepairType(filter: $filter) {
       plumbing
       electrical
       painting
@@ -729,8 +769,10 @@ export const onUpdateHomeRepairType = /* GraphQL */ `
   }
 `;
 export const onDeleteHomeRepairType = /* GraphQL */ `
-  subscription OnDeleteHomeRepairType {
-    onDeleteHomeRepairType {
+  subscription OnDeleteHomeRepairType(
+    $filter: ModelSubscriptionHomeRepairTypeFilterInput
+  ) {
+    onDeleteHomeRepairType(filter: $filter) {
       plumbing
       electrical
       painting
