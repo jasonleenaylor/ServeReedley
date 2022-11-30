@@ -580,6 +580,7 @@ function getFoodInfoFromFoodRequest(
       children: "",
       allergies: "",
       haveAllergies: RadioButtonState.NO,
+      deliveryTime: "",
       ...defaultGroceries,
     };
   }
@@ -591,6 +592,7 @@ function getFoodInfoFromFoodRequest(
     haveAllergies: foodRequest?.haveAllergies
       ? RadioButtonState.YES
       : RadioButtonState.NO,
+    deliveryTime: foodRequest?.deliveryTime || "",
     allergies: foodRequest?.allergies || "",
     beans: foodRequest.beans!!,
     beef: foodRequest.beef!!,

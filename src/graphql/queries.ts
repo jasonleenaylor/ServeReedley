@@ -26,6 +26,7 @@ export const getRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -33,6 +34,7 @@ export const getRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -118,6 +120,7 @@ export const getRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -165,6 +168,7 @@ export const listRequests = /* GraphQL */ `
           otherResources
           requestFor
           requestIsKnown
+          phoneNumber
           id
           createdAt
           updatedAt
@@ -172,6 +176,7 @@ export const listRequests = /* GraphQL */ `
         foodRequest {
           familyMembers
           children
+          deliveryTime
           haveAllergies
           allergies
           milk
@@ -257,6 +262,7 @@ export const listRequests = /* GraphQL */ `
             dateCreated
             author
             content
+            notable
             createdAt
             updatedAt
           }
@@ -285,6 +291,7 @@ export const getNoteType = /* GraphQL */ `
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
@@ -303,6 +310,7 @@ export const listNoteTypes = /* GraphQL */ `
         dateCreated
         author
         content
+        notable
         createdAt
         updatedAt
       }
@@ -318,6 +326,7 @@ export const getSelfOrOtherInfo = /* GraphQL */ `
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -341,6 +350,7 @@ export const listSelfOrOtherInfos = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -415,6 +425,7 @@ export const getFoodInfo = /* GraphQL */ `
     getFoodInfo(id: $id) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
@@ -447,6 +458,7 @@ export const listFoodInfos = /* GraphQL */ `
       items {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk

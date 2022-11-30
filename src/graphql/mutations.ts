@@ -29,6 +29,7 @@ export const createRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -36,6 +37,7 @@ export const createRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -121,6 +123,7 @@ export const createRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -166,6 +169,7 @@ export const updateRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -173,6 +177,7 @@ export const updateRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -258,6 +263,7 @@ export const updateRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -303,6 +309,7 @@ export const deleteRequest = /* GraphQL */ `
         otherResources
         requestFor
         requestIsKnown
+        phoneNumber
         id
         createdAt
         updatedAt
@@ -310,6 +317,7 @@ export const deleteRequest = /* GraphQL */ `
       foodRequest {
         familyMembers
         children
+        deliveryTime
         haveAllergies
         allergies
         milk
@@ -395,6 +403,7 @@ export const deleteRequest = /* GraphQL */ `
           dateCreated
           author
           content
+          notable
           createdAt
           updatedAt
         }
@@ -424,6 +433,7 @@ export const createNoteType = /* GraphQL */ `
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
@@ -440,6 +450,7 @@ export const updateNoteType = /* GraphQL */ `
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
@@ -456,6 +467,7 @@ export const deleteNoteType = /* GraphQL */ `
       dateCreated
       author
       content
+      notable
       createdAt
       updatedAt
     }
@@ -472,6 +484,7 @@ export const createSelfOrOtherInfo = /* GraphQL */ `
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -489,6 +502,7 @@ export const updateSelfOrOtherInfo = /* GraphQL */ `
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -506,6 +520,7 @@ export const deleteSelfOrOtherInfo = /* GraphQL */ `
       otherResources
       requestFor
       requestIsKnown
+      phoneNumber
       id
       createdAt
       updatedAt
@@ -610,6 +625,7 @@ export const createFoodInfo = /* GraphQL */ `
     createFoodInfo(input: $input, condition: $condition) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
@@ -640,6 +656,7 @@ export const updateFoodInfo = /* GraphQL */ `
     updateFoodInfo(input: $input, condition: $condition) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
@@ -670,6 +687,7 @@ export const deleteFoodInfo = /* GraphQL */ `
     deleteFoodInfo(input: $input, condition: $condition) {
       familyMembers
       children
+      deliveryTime
       haveAllergies
       allergies
       milk
