@@ -211,8 +211,11 @@ export function forOtherDetailsCard(
   referee: string,
   setReferee: (referee: string) => void,
   refereeKnows: RadioButtonState,
-  setRefereeKnows: (refereeKnows: RadioButtonState) => void
+  setRefereeKnows: (refereeKnows: RadioButtonState) => void,
+  otherPersonsPhone: string,
+  setOtherPersonsPhone: (value: string) => void
 ) {
+  const formatter = new AsYouType("US");
   return (
     <Card style={cardStyle}>
       <Grid container spacing={4}>
@@ -244,6 +247,33 @@ export function forOtherDetailsCard(
               label={t("no")}
             />
           </RadioGroup>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label={t("others_phone_number")}
+            value={
+              isPossiblePhoneNumber(otherPersonsPhone ? otherPersonsPhone : "")
+                ? parsePhoneNumber(otherPersonsPhone, "US")!.number
+                : otherPersonsPhone
+            }
+            onChange={(changeEvent: any) => {
+              let newValue = parseIncompletePhoneNumber(
+                changeEvent.target.value
+              );
+
+              // By default, if a value is something like `"(123)"`
+              // then Backspace would only erase the rightmost brace
+              // becoming something like `"(123"`
+              // which would give the same `"123"` value
+              // which would then be formatted back to `"(123)"`
+              // and so a user wouldn't be able to erase the phone number.
+              // Working around this issue with this simple hack.
+              if (changeEvent.target.value?.length !== 4)
+                setOtherPersonsPhone(formatter.input(newValue));
+              else setOtherPersonsPhone(changeEvent.target.value);
+            }}
+            fullWidth
+          />
         </Grid>
       </Grid>
     </Card>

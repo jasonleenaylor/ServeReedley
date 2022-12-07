@@ -485,6 +485,7 @@ function noteCreateFromReqData(value: NoteType): CreateNoteTypeInput {
   return {
     author: value.author,
     content: value.content,
+    notable: value.notable,
     dateCreated: value.dateCreated,
     requestID: value.requestID,
   };
