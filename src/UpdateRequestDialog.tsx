@@ -63,6 +63,7 @@ import {
 } from "./needFormCards";
 import theme from "./theme";
 import Auth from "@aws-amplify/auth";
+import Rating from "@mui/material/Rating";
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -75,6 +76,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
   const [requestData, setRequestData] = React.useState(props.requestData);
   const [currentNote, setCurrentNote] = React.useState("");
   const [movingConditions, setMovingConditions] = React.useState(true);
+  const [currentNotable, setCurrentNotable] = React.useState<number | null>(0);
   const { onClose, onSave, open } = props;
 
   const handleClose = () => {
@@ -100,6 +102,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
       content: currentNote,
       author: userInfo.attributes.email,
       requestID: requestData.id,
+      notable: currentNotable === 0 ? false : true,
       dateCreated: new Date().toUTCString(),
       createdAt: new Date().toUTCString(),
       updatedAt: "",
@@ -219,7 +222,16 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                 requestData.selfOrOtherInfo.requestIsKnown
                   ? RadioButtonState.YES
                   : RadioButtonState.NO,
-                (value: RadioButtonState) => {}
+                (value: RadioButtonState) => {},
+                requestData.selfOrOtherInfo.phoneNumber!,
+                (value: string) =>
+                  setRequestData({
+                    ...requestData,
+                    selfOrOtherInfo: {
+                      ...requestData.selfOrOtherInfo,
+                      phoneNumber: value,
+                    },
+                  })
               )}
           </Grid>
           <Grid item>
@@ -536,6 +548,14 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                         setCurrentNote(e.currentTarget.value);
                       }}
                     />
+                    <Rating
+                      name="notableStar"
+                      value={currentNotable}
+                      max={1}
+                      onChange={(_event, newValue) => {
+                        setCurrentNotable(newValue);
+                      }}
+                    />
                   </Paper>
                 </Grid>
                 {requestData.note?.items
@@ -553,6 +573,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                           <Typography>{note!.createdAt}</Typography>
                           <Typography>{note!.author}</Typography>
                           <Typography>{note!.content}</Typography>
+                          <Rating value={note!.notable ? 1 : 0} max={1} />
                         </Paper>
                       </Grid>
                     );

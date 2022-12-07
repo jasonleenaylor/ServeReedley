@@ -151,6 +151,7 @@ export interface SelfOrOtherGQL {
   otherResources?: string | null;
   requestFor?: string | null;
   requestIsKnown?: boolean | null;
+  phoneNumber?: string | null;
 }
 
 export interface FoodInfoGQL {
@@ -255,6 +256,7 @@ export interface NeedRequestType {
     otherResources?: string | null;
     requestFor?: string | null;
     requestIsKnown?: boolean | null;
+    phoneNumber?: string | null;
     createdAt: string;
     updatedAt: string;
   };
@@ -283,6 +285,7 @@ export interface NeedRequestType {
       dateCreated: string;
       author: string;
       content: string;
+      notable?: boolean | null;
       createdAt: string;
       updatedAt: string;
     } | null>;

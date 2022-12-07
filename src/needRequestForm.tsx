@@ -86,6 +86,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
   const [refereeKnows, setRefereeKnows] = useState<RadioButtonState>(
     RadioButtonState.UNSET
   );
+  const [otherPersonsPhone, setOtherPersonsPhone] = useState("");
   const [lead, setLead] = useState<LeadSource | null>(null);
   const [leadOther, setLeadOther] = useState("");
   const [needReason, setNeedReason] = useState(defaultNeedReason);
@@ -142,6 +143,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       otherResources: otherResoources,
       requestFor: referee,
       requestIsKnown: refereeKnows === RadioButtonState.YES,
+      phoneNumber: otherPersonsPhone,
     };
 
     let food: FoodInfoGQL = {
@@ -510,7 +512,9 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
                 referee,
                 setReferee,
                 refereeKnows,
-                setRefereeKnows
+                setRefereeKnows,
+                otherPersonsPhone,
+                setOtherPersonsPhone
               )}
           </Grid>
           <Grid item xs={12}>
