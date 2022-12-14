@@ -47,9 +47,13 @@ import UpdateRequestDialogButton from "./UpdateRequestDialog";
 import { Grid, Paper, Snackbar, Typography } from "@material-ui/core";
 import theme from "./theme";
 import awsExports from "./aws-exports";
+import Rating from "@mui/material/Rating";
 
 Amplify.configure(awsExports);
 
+function hasNotableNote(request: NeedRequestType): boolean {
+  return !!request.note?.items.some((e) => e?.notable === true);
+}
 function NeedRequestTable(props: ILocalizeProps) {
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [requests, setRequests] = useState([]);
@@ -57,6 +61,13 @@ function NeedRequestTable(props: ILocalizeProps) {
   const [editId, setEditId] = useState(requestId);
   const columns: Column<any>[] = [
     // Vernacular column
+    {
+      title: "★",
+      field: "notable",
+      render: (rowData: NeedRequestType) => {
+        return <Rating value={hasNotableNote(rowData) ? 1 : 0} max={1} />;
+      },
+    },
     {
       title: "Work on Request",
       field: "modify",
@@ -412,6 +423,9 @@ function NeedRequestTable(props: ILocalizeProps) {
                                     style={{
                                       padding: theme.spacing(3),
                                       width: 350,
+                                      background: note.notable
+                                        ? "gold"
+                                        : "white",
                                     }}
                                   >
                                     <Typography>
