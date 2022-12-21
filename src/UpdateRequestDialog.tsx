@@ -39,6 +39,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Snackbar,
   TextField,
 } from "@material-ui/core";
 import {
@@ -78,6 +79,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
   const [movingConditions, setMovingConditions] = React.useState(true);
   const [currentNotable, setCurrentNotable] = React.useState<number | null>(0);
   const { onClose, onSave, open } = props;
+  const [snackBarOpen, setSnackBarOpen] = React.useState(false);
 
   const handleClose = () => {
     onClose();
@@ -295,7 +297,9 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                       requestData.foodRequest
                     ),
                   });
-                }
+                },
+
+                () => setSnackBarOpen(true)
               )}{" "}
           </Grid>
           {requestData.needTypes.includes(NeedType.MOVING) && (
@@ -424,7 +428,8 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                       requestData.householdItems
                     ),
                   });
-                }
+                },
+                () => setSnackBarOpen(true)
               )}
             </Grid>
           )}
@@ -446,7 +451,8 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                       requestData.householdItems
                     ),
                   });
-                }
+                },
+                () => setSnackBarOpen(true)
               )}
             </Grid>
           )}
@@ -582,6 +588,12 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
             </Card>
           </Grid>
         </Grid>
+        <Snackbar
+          autoHideDuration={4000}
+          message="Copied"
+          open={snackBarOpen}
+          onClose={() => setSnackBarOpen(false)}
+        />
       </Container>
     </Dialog>
   );
