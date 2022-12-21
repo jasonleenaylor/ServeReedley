@@ -537,8 +537,10 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
           )}
           {needType.groceries && (
             <Grid item>
-              {groceriesCard(groceries, (event) =>
-                handleCheckboxChange(event, setGroceries, groceries)
+              {groceriesCard(
+                groceries,
+                (event) => handleCheckboxChange(event, setGroceries, groceries),
+                undefined
               )}
             </Grid>
           )}
@@ -561,15 +563,29 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
           {needType.housing && <Grid item>{housingCard}</Grid>}
           {needType.hygeneItems && (
             <Grid item>
-              {hygeneItemsCard(householdItems, (event) =>
-                handleCheckboxChange(event, setHouseholdItems, householdItems)
+              {hygeneItemsCard(
+                householdItems,
+                (event) =>
+                  handleCheckboxChange(
+                    event,
+                    setHouseholdItems,
+                    householdItems
+                  ),
+                undefined
               )}
             </Grid>
           )}
           {needType.householdItems && (
             <Grid item>
-              {householdItemsCard(householdItems, (event) =>
-                handleCheckboxChange(event, setHouseholdItems, householdItems)
+              {householdItemsCard(
+                householdItems,
+                (event) =>
+                  handleCheckboxChange(
+                    event,
+                    setHouseholdItems,
+                    householdItems
+                  ),
+                undefined
               )}
             </Grid>
           )}

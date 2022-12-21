@@ -6,11 +6,13 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  IconButton,
   Radio,
   RadioGroup,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { ContentCopy } from "@mui/icons-material";
 import { t } from "i18next";
 import parsePhoneNumber, {
   AsYouType,
@@ -891,13 +893,42 @@ export function movingCard(
 
 export function groceriesCard(
   groceries: IGroceriesType,
-  handleGroceriesChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleGroceriesChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  copy: undefined | (() => void)
 ): JSX.Element {
+  const copyItemsToClipboard = () => {
+    let selectedItems = [];
+    if (groceries.milk) selectedItems.push("Milk");
+    if (groceries.eggs) selectedItems.push("Eggs");
+    if (groceries.bread) selectedItems.push("Bread");
+    if (groceries.butter) selectedItems.push("Butter");
+    if (groceries.tortillas) selectedItems.push("Tortillas");
+    if (groceries.rice) selectedItems.push("Rice");
+    if (groceries.beans) selectedItems.push("Beans");
+    if (groceries.cheese) selectedItems.push("Cheese");
+    if (groceries.beef) selectedItems.push("Beef");
+    if (groceries.hotdogs) selectedItems.push("Hotdogs");
+    if (groceries.lunchMeat) selectedItems.push("Lunch Meat");
+    if (groceries.fruit) selectedItems.push("Fruit");
+    if (groceries.peanutButter) selectedItems.push("Peanut Butter");
+    if (groceries.jelly) selectedItems.push("Jelly");
+    navigator.clipboard.writeText(selectedItems.join());
+    if (copy) {
+      copy();
+    }
+  };
   return (
     <Card style={cardStyle}>
       <CardHeader
         title={t("groceries")}
         titleTypographyProps={{ variant: "h6" }}
+        action={
+          copy && (
+            <IconButton>
+              <ContentCopy onClick={copyItemsToClipboard} />
+            </IconButton>
+          )
+        }
       />
       <FormControl required>
         <FormGroup>
@@ -1321,13 +1352,72 @@ export function homeRepairCard(
 
 export function householdItemsCard(
   items: HouseholdItemsGQL,
-  handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  copy: undefined | (() => void)
 ): JSX.Element {
+  const copyItemsToClipboard = () => {
+    let selectedItems = [];
+    for (var key in items) {
+      switch (key) {
+        case "bleach":
+          if (items.bleach) selectedItems.push("Bleach");
+          break;
+        case "lysolSpray":
+          if (items.lysolSpray) selectedItems.push("Lysol Spray");
+          break;
+        case "lysolWipes":
+          if (items.lysolWipes) selectedItems.push("Lysol Wipes");
+          break;
+        case "dishsoap":
+          if (items.dishsoap) selectedItems.push("Dish Soap");
+          break;
+        case "sponges":
+          if (items.sponges) selectedItems.push("Sponges");
+          break;
+        case "pinesol":
+          if (items.pinesol) selectedItems.push("Pine-sol");
+          break;
+        case "paperTowels":
+          if (items.paperTowels) selectedItems.push("Paper Towels");
+          break;
+        case "laundrySoap":
+          if (items.laundrySoap) selectedItems.push("Laundry Detergent");
+          break;
+        case "bathSoap":
+        case "deodorant":
+        case "handSoap":
+        case "sanitaryPads":
+        case "shampoo":
+        case "conditioner":
+        case "tampons":
+        case "toiletPaper":
+        case "toothbrush":
+        case "toothpaste":
+        case "id":
+        case "createdAt":
+        case "updatedAt":
+          break;
+        default:
+          alert("Tell Jason that he forgot to copy " + key);
+      }
+    }
+    navigator.clipboard.writeText(selectedItems.join());
+    if (copy) {
+      copy();
+    }
+  };
   return (
     <Card style={cardStyle}>
       <CardHeader
         title={t("household_items")}
         titleTypographyProps={{ variant: "h6" }}
+        action={
+          copy && (
+            <IconButton>
+              <ContentCopy onClick={copyItemsToClipboard} />
+            </IconButton>
+          )
+        }
       />
       <FormControl required>
         <FormGroup>
@@ -1420,13 +1510,76 @@ export function householdItemsCard(
 
 export function hygeneItemsCard(
   items: HouseholdItemsGQL,
-  handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  copy: undefined | (() => void)
 ): JSX.Element {
+  const copyItemsToClipboard = () => {
+    let selectedItems = [];
+    for (var key in items) {
+      switch (key) {
+        case "bathSoap":
+          if (items.bathSoap) selectedItems.push("Bath Soap");
+          break;
+        case "deodorant":
+          if (items.deodorant) selectedItems.push("Deodorant");
+          break;
+        case "handSoap":
+          if (items.handSoap) selectedItems.push("Hand Soap");
+          break;
+        case "sanitaryPads":
+          if (items.sanitaryPads) selectedItems.push("Sanitary Pads");
+          break;
+        case "shampoo":
+          if (items.shampoo) selectedItems.push("Shampoo");
+          break;
+        case "conditioner":
+          if (items.conditioner) selectedItems.push("Conditioner");
+          break;
+        case "tampons":
+          if (items.tampons) selectedItems.push("Tampons");
+          break;
+        case "toiletPaper":
+          if (items.toiletPaper) selectedItems.push("Toilet Paper");
+          break;
+        case "toothbrush":
+          if (items.toothbrush) selectedItems.push("Tooth Brush");
+          break;
+        case "toothpaste":
+          if (items.toothpaste) selectedItems.push("Toothpaste");
+          break;
+        case "bleach":
+        case "lysolSpray":
+        case "lysolWipes":
+        case "dishsoap":
+        case "sponges":
+        case "pinesol":
+        case "paperTowels":
+        case "laundrySoap":
+        case "id":
+        case "createdAt":
+        case "updatedAt":
+          break;
+        default:
+          alert("Tell Jason that he forgot to copy " + key);
+      }
+    }
+    navigator.clipboard.writeText(selectedItems.join());
+    if (copy) {
+      copy();
+    }
+  };
   return (
     <Card style={cardStyle}>
       <CardHeader
         title={t("hygene_items")}
         titleTypographyProps={{ variant: "h6" }}
+        action={
+          copy && (
+            <IconButton>
+              <ContentCopy onClick={copyItemsToClipboard} />
+            </IconButton>
+          )
+        }
       />
       <FormControl required>
         <FormGroup>
