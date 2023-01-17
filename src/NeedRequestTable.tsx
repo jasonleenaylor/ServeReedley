@@ -356,7 +356,10 @@ function NeedRequestTable(props: ILocalizeProps) {
   }
 
   async function fetchNeedRequests() {
-    const apiData: any = await API.graphql({ query: listRequests });
+    const apiData: any = await API.graphql({
+      query: listRequests,
+      variables: { limit: 1000 },
+    });
     setRequests(apiData.data.listRequests.items);
   }
 
