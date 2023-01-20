@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# ServeReedley
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -39,8 +39,26 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Adding a New Coordinator
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Add a Cognito User
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+	1. Select "Send an email invitation"
+	1. Add email address
+	1. Mark as verified
+	1. Set a temporary password
+
+1. Add user as a verified identity in Amazon SES
+
+	1. Can only be completed AFTER user follows the login link.
+	1. Create an identity for the email address
+
+1. Open the Secrets Manager
+
+	1. Select request-email-info
+	1. Retrive the secret value
+	1. Edit it to add the new email address
+
+
+
+
