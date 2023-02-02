@@ -463,7 +463,9 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                 requestData.clothingSize || "",
                 (type) =>
                   setRequestData({ ...requestData, clothingType: type }),
-                (size) => setRequestData({ ...requestData, clothingSize: size })
+                (size) =>
+                  setRequestData({ ...requestData, clothingSize: size }),
+                () => setSnackBarOpen(true)
               )}
             </Grid>
           )}
