@@ -1083,14 +1083,32 @@ export function clothingCard(
   clothingType: string,
   clothingSize: string,
   setClothingType: (type: string) => void,
-  setClothingSize: (size: string) => void
+  setClothingSize: (size: string) => void,
+  copy: undefined | (() => void)
 ) {
+  const copyItemsToClipboard = () => {
+    "Types";
+    navigator.clipboard.writeText(
+      "Clothing Type: " + clothingType + "\nClothing Size: " + clothingSize
+    );
+    if (copy) {
+      copy();
+    }
+  };
+
   return (
     <Card style={cardStyle}>
       {" "}
       <CardHeader
         title={t("clothing")}
         titleTypographyProps={{ variant: "h6" }}
+        action={
+          copy && (
+            <IconButton>
+              <ContentCopy onClick={copyItemsToClipboard} />
+            </IconButton>
+          )
+        }
       />
       <Grid container spacing={4}>
         <Grid item xs={12}>

@@ -595,7 +595,8 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
                 clothingType,
                 clothingSize,
                 setClothingType,
-                setClothingSize
+                setClothingSize,
+                undefined
               )}
             </Grid>
           )}
