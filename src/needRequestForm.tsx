@@ -49,9 +49,7 @@ import {
   clothingCard,
   contactCard,
   foodInfoCard,
-  forOtherDetailsCard,
   forSelfDetailsCard,
-  forYouOrOtherCard,
   furnitureCard,
   groceriesCard,
   homeRepairCard,
@@ -60,7 +58,6 @@ import {
   jobTrainingCard,
   leadTracingCard,
   movingCard,
-  nameCard,
   needReasonCard,
   needRequestCard,
   otherNeedCard,
@@ -481,10 +478,11 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
-            {nameCard(firstName, setFirstName, lastName, setLastName)}
-          </Grid>
-          <Grid item>
             {contactCard(
+              firstName,
+              setFirstName,
+              lastName,
+              setLastName,
               phone,
               setPhone,
               email,
@@ -494,10 +492,18 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
               city,
               setCity,
               zip,
-              setZip
+              setZip,
+              agent,
+              setAgent,
+              referee,
+              setReferee,
+              refereeKnows,
+              setRefereeKnows,
+              otherPersonsPhone,
+              setOtherPersonsPhone,
+              undefined
             )}
           </Grid>
-          <Grid item>{forYouOrOtherCard(agent, setAgent)}</Grid>
           <Grid item>
             {agent === "yes" &&
               forSelfDetailsCard(
@@ -506,15 +512,6 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
                 otherResoources,
                 setOtherResources,
                 props.t
-              )}
-            {agent === "no" &&
-              forOtherDetailsCard(
-                referee,
-                setReferee,
-                refereeKnows,
-                setRefereeKnows,
-                otherPersonsPhone,
-                setOtherPersonsPhone
               )}
           </Grid>
           <Grid item xs={12}>

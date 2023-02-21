@@ -35,14 +35,60 @@ import {
 } from "./needRequestTypes";
 import { LeadSource } from "./RequestAPI";
 
-export function nameCard(
+export function contactCard(
   firstName: string,
   setFirstName: (name: string) => void,
   lastName: string,
-  setLastName: (name: string) => void
+  setLastName: (name: string) => void,
+  phone: string,
+  setPhone: (value: string) => void,
+  email: string,
+  setEmail: (value: string) => void,
+  address: string,
+  setAddress: (value: string) => void,
+  city: string,
+  setCity: (value: string) => void,
+  zip: string,
+  setZip: (value: string) => void,
+  agent: RadioButtonState,
+  setAgent: (value: RadioButtonState) => void,
+  referee: string,
+  setReferee: (referee: string) => void,
+  refereeKnows: RadioButtonState,
+  setRefereeKnows: (refereeKnows: RadioButtonState) => void,
+  otherPersonsPhone: string,
+  setOtherPersonsPhone: (value: string) => void,
+  copy: undefined | (() => void)
 ): JSX.Element {
+  const formatter = new AsYouType("US");
+  const copyItemsToClipboard = () => {
+    const contactInfo = `Name: ${
+      agent === RadioButtonState.YES || !referee
+        ? firstName + " " + lastName
+        : referee
+    }
+Address:\t${address}
+\t\t\t${city}
+\t\t\t${zip}
+Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
+    navigator.clipboard.writeText(contactInfo);
+    if (copy) {
+      copy();
+    }
+  };
   return (
     <Card style={cardStyle}>
+      <CardHeader
+        title={t("contact_info")}
+        titleTypographyProps={{ variant: "h6" }}
+        action={
+          copy && (
+            <IconButton>
+              <ContentCopy onClick={copyItemsToClipboard} />
+            </IconButton>
+          )
+        }
+      />{" "}
       <TextField
         label={t("first_name")}
         value={firstName}
@@ -57,25 +103,6 @@ export function nameCard(
         fullWidth
         required
       />
-    </Card>
-  );
-}
-
-export function contactCard(
-  phone: string,
-  setPhone: (value: string) => void,
-  email: string,
-  setEmail: (value: string) => void,
-  address: string,
-  setAddress: (value: string) => void,
-  city: string,
-  setCity: (value: string) => void,
-  zip: string,
-  setZip: (value: string) => void
-): JSX.Element {
-  const formatter = new AsYouType("US");
-  return (
-    <Card style={cardStyle}>
       <TextField
         label={t("phone_number")}
         value={
@@ -136,17 +163,7 @@ export function contactCard(
         autoComplete="postal-code"
         fullWidth
       />
-    </Card>
-  );
-}
-
-export function forYouOrOtherCard(
-  agent: RadioButtonState,
-  setAgent: (value: RadioButtonState) => void
-): JSX.Element {
-  return (
-    <Card style={cardStyle}>
-      <Typography>{t("for_you")}</Typography>
+      <Typography style={{ paddingTop: 15 }}>{t("for_you")}</Typography>
       <RadioGroup
         aria-label={t("for_you")}
         value={agent}
@@ -163,6 +180,68 @@ export function forYouOrOtherCard(
           label={t("no")}
         />
       </RadioGroup>
+      {agent === "no" && (
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <Typography>{t("do_they_know")}</Typography>{" "}
+            <RadioGroup
+              value={refereeKnows}
+              onChange={(changeEvent: any) =>
+                setRefereeKnows(changeEvent.target.value)
+              }
+            >
+              <FormControlLabel
+                value="yes"
+                control={<Radio required={true} />}
+                label={t("yes")}
+              />
+              <FormControlLabel
+                value="no"
+                control={<Radio required={true} />}
+                label={t("no")}
+              />
+            </RadioGroup>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label={t("request_is_for")}
+              value={referee}
+              onChange={(changeEvent: any) =>
+                setReferee(changeEvent.target.value)
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label={t("others_phone_number")}
+              value={
+                isPossiblePhoneNumber(
+                  otherPersonsPhone ? otherPersonsPhone : ""
+                )
+                  ? parsePhoneNumber(otherPersonsPhone, "US")!.number
+                  : otherPersonsPhone
+              }
+              onChange={(changeEvent: any) => {
+                let newValue = parseIncompletePhoneNumber(
+                  changeEvent.target.value
+                );
+
+                // By default, if a value is something like `"(123)"`
+                // then Backspace would only erase the rightmost brace
+                // becoming something like `"(123"`
+                // which would give the same `"123"` value
+                // which would then be formatted back to `"(123)"`
+                // and so a user wouldn't be able to erase the phone number.
+                // Working around this issue with this simple hack.
+                if (changeEvent.target.value?.length !== 4)
+                  setOtherPersonsPhone(formatter.input(newValue));
+                else setOtherPersonsPhone(changeEvent.target.value);
+              }}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
+      )}
     </Card>
   );
 }
@@ -205,79 +284,6 @@ export function forSelfDetailsCard(
           }
         />
       )}
-    </Card>
-  );
-}
-
-export function forOtherDetailsCard(
-  referee: string,
-  setReferee: (referee: string) => void,
-  refereeKnows: RadioButtonState,
-  setRefereeKnows: (refereeKnows: RadioButtonState) => void,
-  otherPersonsPhone: string,
-  setOtherPersonsPhone: (value: string) => void
-) {
-  const formatter = new AsYouType("US");
-  return (
-    <Card style={cardStyle}>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <TextField
-            label={t("request_is_for")}
-            value={referee}
-            onChange={(changeEvent: any) =>
-              setReferee(changeEvent.target.value)
-            }
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>{t("do_they_know")}</Typography>{" "}
-          <RadioGroup
-            value={refereeKnows}
-            onChange={(changeEvent: any) =>
-              setRefereeKnows(changeEvent.target.value)
-            }
-          >
-            <FormControlLabel
-              value="yes"
-              control={<Radio required={true} />}
-              label={t("yes")}
-            />
-            <FormControlLabel
-              value="no"
-              control={<Radio required={true} />}
-              label={t("no")}
-            />
-          </RadioGroup>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label={t("others_phone_number")}
-            value={
-              isPossiblePhoneNumber(otherPersonsPhone ? otherPersonsPhone : "")
-                ? parsePhoneNumber(otherPersonsPhone, "US")!.number
-                : otherPersonsPhone
-            }
-            onChange={(changeEvent: any) => {
-              let newValue = parseIncompletePhoneNumber(
-                changeEvent.target.value
-              );
-
-              // By default, if a value is something like `"(123)"`
-              // then Backspace would only erase the rightmost brace
-              // becoming something like `"(123"`
-              // which would give the same `"123"` value
-              // which would then be formatted back to `"(123)"`
-              // and so a user wouldn't be able to erase the phone number.
-              // Working around this issue with this simple hack.
-              if (changeEvent.target.value?.length !== 4)
-                setOtherPersonsPhone(formatter.input(newValue));
-              else setOtherPersonsPhone(changeEvent.target.value);
-            }}
-            fullWidth
-          />
-        </Grid>
-      </Grid>
     </Card>
   );
 }
