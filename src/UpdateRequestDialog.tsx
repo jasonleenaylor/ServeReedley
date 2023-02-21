@@ -47,9 +47,7 @@ import {
   clothingCard,
   contactCard,
   foodInfoCard,
-  forOtherDetailsCard,
   forSelfDetailsCard,
-  forYouOrOtherCard,
   furnitureCard,
   groceriesCard,
   homeRepairCard,
@@ -57,7 +55,6 @@ import {
   hygeneItemsCard,
   jobTrainingCard,
   movingCard,
-  nameCard,
   needReasonCard,
   needRequestCard,
   otherNeedCard,
@@ -137,16 +134,6 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
         </Fab>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
-            {nameCard(
-              requestData.firstName,
-              (value: string) =>
-                setRequestData({ ...requestData, firstName: value }),
-              requestData.lastName,
-              (value: string) =>
-                setRequestData({ ...requestData, lastName: value })
-            )}
-          </Grid>
-          <Grid item>
             <Card style={cardStyle}>
               <CardHeader
                 title="Spanish Speaking"
@@ -168,6 +155,12 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
           </Grid>
           <Grid item>
             {contactCard(
+              requestData.firstName,
+              (value: string) =>
+                setRequestData({ ...requestData, firstName: value }),
+              requestData.lastName,
+              (value: string) =>
+                setRequestData({ ...requestData, lastName: value }),
               requestData.phone!,
               (value: string) => {
                 setRequestData({ ...requestData, phone: value });
@@ -186,15 +179,34 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                 setRequestData({
                   ...requestData,
                   zipCode: value ? parseInt(value) : null,
-                })
-            )}
-          </Grid>
-          <Grid item>
-            {forYouOrOtherCard(
+                }),
               requestData.selfOrOtherInfo.forSelf
                 ? RadioButtonState.YES
                 : RadioButtonState.NO,
-              (value: RadioButtonState) => {}
+              (value: RadioButtonState) => {},
+              requestData.selfOrOtherInfo.requestFor!,
+              (value: string) =>
+                setRequestData({
+                  ...requestData,
+                  selfOrOtherInfo: {
+                    ...requestData.selfOrOtherInfo,
+                    requestFor: value,
+                  },
+                }),
+              requestData.selfOrOtherInfo.requestIsKnown
+                ? RadioButtonState.YES
+                : RadioButtonState.NO,
+              (value: RadioButtonState) => {},
+              requestData.selfOrOtherInfo.phoneNumber!,
+              (value: string) =>
+                setRequestData({
+                  ...requestData,
+                  selfOrOtherInfo: {
+                    ...requestData.selfOrOtherInfo,
+                    phoneNumber: value,
+                  },
+                }),
+              () => setSnackBarOpen(true)
             )}
           </Grid>
           <Grid item>
@@ -207,33 +219,6 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                 requestData.selfOrOtherInfo.otherResources!,
                 (value: string) => {},
                 props.t
-              )}
-          </Grid>
-          <Grid item>
-            {!requestData.selfOrOtherInfo.forSelf &&
-              forOtherDetailsCard(
-                requestData.selfOrOtherInfo.requestFor!,
-                (value: string) =>
-                  setRequestData({
-                    ...requestData,
-                    selfOrOtherInfo: {
-                      ...requestData.selfOrOtherInfo,
-                      requestFor: value,
-                    },
-                  }),
-                requestData.selfOrOtherInfo.requestIsKnown
-                  ? RadioButtonState.YES
-                  : RadioButtonState.NO,
-                (value: RadioButtonState) => {},
-                requestData.selfOrOtherInfo.phoneNumber!,
-                (value: string) =>
-                  setRequestData({
-                    ...requestData,
-                    selfOrOtherInfo: {
-                      ...requestData.selfOrOtherInfo,
-                      phoneNumber: value,
-                    },
-                  })
               )}
           </Grid>
           <Grid item>
