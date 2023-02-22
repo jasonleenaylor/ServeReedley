@@ -209,6 +209,7 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
               onChange={(changeEvent: any) =>
                 setReferee(changeEvent.target.value)
               }
+              required
             />
           </Grid>
           <Grid item xs={12}>
@@ -221,6 +222,7 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
                   ? parsePhoneNumber(otherPersonsPhone, "US")!.number
                   : otherPersonsPhone
               }
+              required
               onChange={(changeEvent: any) => {
                 let newValue = parseIncompletePhoneNumber(
                   changeEvent.target.value
