@@ -6,6 +6,7 @@ import theme from "./theme";
 import NeedSubmitted from "./NeedSubmitted";
 import "./i18n";
 import { useTranslation } from "react-i18next";
+import ReportForm from "./ReportForm";
 
 export default function App() {
   const { t } = useTranslation();
@@ -24,6 +25,9 @@ export default function App() {
             </Route>
             <Route path="/requests">
               <NeedRequestTable t={t} />
+            </Route>
+            <Route path="/reports">
+              <ReportForm t={t} />
             </Route>
             <Route path="/">
               <Home />
