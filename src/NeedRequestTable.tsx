@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Amplify, API, graphqlOperation } from "aws-amplify";
+import { Amplify, API, Auth, graphqlOperation, Hub } from "aws-amplify";
 import {
   AmplifySignOut,
   AmplifyAuthenticator,
@@ -55,6 +55,7 @@ function hasNotableNote(request: NeedRequestType): boolean {
   return !!request.note?.items.some((e) => e?.notable === true);
 }
 function NeedRequestTable(props: ILocalizeProps) {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false); 
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [requests, setRequests] = useState([]);
   const requestId = new URLSearchParams(window.location.search).get("id");
@@ -280,8 +281,22 @@ function NeedRequestTable(props: ILocalizeProps) {
     { title: "Follow Up", field: "followUp" },
   ];
 
+Hub.listen("auth", (data) => {
+   switch (data.payload.event) {
+     case "signIn":
+       setIsLoggedIn(true);
+       break;
+     case "signOut":
+       setIsLoggedIn(false);
+       break;
+   }
+ });
+
   useEffect(() => {
     fetchNeedRequests();
+    Auth.currentAuthenticatedUser().then((user) => {
+     setIsLoggedIn(!!user);
+});
   }, []);
 
   function printGroceryList(groceries: {
@@ -386,7 +401,7 @@ function NeedRequestTable(props: ILocalizeProps) {
 
   return (
     <AmplifyAuthenticator>
-      <AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
+      <AmplifySignIn slot="sign-in" hideSignUp/>
       <div className="App">
         <div
           style={{
@@ -457,9 +472,9 @@ function NeedRequestTable(props: ILocalizeProps) {
               thirdSortClick: false,
             }}
           />
-          {editId &&
-          requests.length > 0 &&
-          requests.findIndex((r: NeedRequestType) => r.id === editId) !== -1 ? (
+          {isLoggedIn && editId &&
+            requests.length > 0 &&
+            requests.findIndex((r: NeedRequestType) => r.id === editId) !== -1 ? (
             <UpdateRequestDialogButton
               // Couldn't figure out how to make all the type safety happy so I short circut with any :(
               requestData={
