@@ -536,6 +536,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                       fullWidth
                       label="New note"
                       variant="outlined"
+                      multiline
                       value={currentNote}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setCurrentNote(e.currentTarget.value);
