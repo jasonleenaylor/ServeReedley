@@ -150,6 +150,12 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Requested For (if not self)",
       field: "selfOrOtherInfo.requestFor",
+      cellStyle: {
+        maxWidth: 150,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Requested with knowledge",
@@ -261,6 +267,12 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       title: "Furniture",
       field: "furnitureType",
+      cellStyle: {
+        maxWidth: 350,
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+      },
     },
     {
       title: "Furniture Dimensions",
@@ -401,7 +413,7 @@ Hub.listen("auth", (data) => {
 
   return (
     <AmplifyAuthenticator>
-      <AmplifySignIn slot="sign-in" hideSignUp/>
+      <AmplifySignIn slot="sign-in" hideSignUp />
       <div className="App">
         <div
           style={{
