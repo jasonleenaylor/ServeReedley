@@ -152,6 +152,7 @@ enum RequestStatus {
   VETTED
   INPROGRESS
   FULFILLED
+  INELIGIBLE
   CANTFULFILL
 }
 

@@ -59,6 +59,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 	1. Retrive the secret value
 	1. Edit it to add the new email address
 
+## Updating the graphql model
 
-
-
+1. Pull the latest using `amplify pull`
+1. Edit amplify\backend\api\crn\schema.graphql
+1. Update the api by using `amplify push`
+	1. Select yes to update the Code and graphql queries
+1. Update code to use the new model, test all components that interact with the model
+	1. Be careful of adding data during testing that the published frontend does not yet support
+1. Commit the updated frontend code and push to github to trigger a new frontend build in amplify

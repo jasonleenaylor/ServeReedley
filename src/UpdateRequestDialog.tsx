@@ -505,6 +505,9 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                         <MenuItem value={RequestStatus.FULFILLED}>
                           Fulfilled!
                         </MenuItem>
+                        <MenuItem value={RequestStatus.INELIGIBLE}>
+                          Ineligible
+                        </MenuItem>
                         <MenuItem value={RequestStatus.CANTFULFILL}>
                           Can't Fulfill
                         </MenuItem>
