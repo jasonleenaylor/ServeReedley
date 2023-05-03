@@ -120,7 +120,13 @@ function NeedRequestTable(props: ILocalizeProps) {
       cellStyle: { minWidth: 150 },
       render: (rowData) => <a href={"tel:" + rowData.phone}>{rowData.phone}</a>,
     },
-    { title: "Address", field: "address" },
+    {
+      title: "Address",
+      field: "address",
+      cellStyle: {
+        minWidth: 185,
+      },
+    },
     { title: "City", field: "city" },
     { title: "Zip Code", field: "zipCode", type: "numeric" },
     {
@@ -406,6 +412,8 @@ Hub.listen("auth", (data) => {
       if (b.status === RequestStatus.INPROGRESS) return 1; // B is In Progress sort above A
       if (a.status === RequestStatus.FULFILLED) return -1; // A is Fulfilled sort above B
       if (b.status === RequestStatus.FULFILLED) return 1; // B is Fulfilled sort above A
+      if (a.status === RequestStatus.INELIGIBLE) return -1; // A is Ineligible sort above B
+      if (b.status === RequestStatus.INELIGIBLE) return 1; // B is Ineligible sort above A
       alert("Your logic is flawed.");
       return 1;
     }

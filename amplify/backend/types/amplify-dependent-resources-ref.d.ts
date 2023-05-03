@@ -7,11 +7,6 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "auth": {
-        "userPoolGroups": {
-            "SysOpsGroupRole": "string",
-            "CoordinatorsGroupRole": "string",
-            "ObserverGroupRole": "string"
-        },
         "crnAuth": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
@@ -20,6 +15,11 @@ export type AmplifyDependentResourcesAttributes = {
             "UserPoolName": "string",
             "AppClientIDWeb": "string",
             "AppClientID": "string"
+        },
+        "userPoolGroups": {
+            "SysOpsGroupRole": "string",
+            "CoordinatorsGroupRole": "string",
+            "ObserverGroupRole": "string"
         }
     },
     "function": {
@@ -27,14 +27,16 @@ export type AmplifyDependentResourcesAttributes = {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
-            "LambdaExecutionRole": "string"
+            "LambdaExecutionRole": "string",
+            "LambdaExecutionRoleArn": "string"
         },
         "sendReminders": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string",
-            "CloudWatchEventRule": "string"
+            "CloudWatchEventRule": "string",
+            "LambdaExecutionRoleArn": "string"
         }
     }
 }
