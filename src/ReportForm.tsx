@@ -57,6 +57,7 @@ export function ReportForm(props: ILocalizeProps) {
     { label: "In Progress", type: RequestStatus.INPROGRESS },
     { label: "Vetted", type: RequestStatus.VETTED },
     { label: "New", type: RequestStatus.NEW },
+    { label: "Ineligible", type: RequestStatus.INELIGIBLE },
   ];
 
   function queryStartDate(date: Date): string {
