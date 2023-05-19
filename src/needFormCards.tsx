@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { ContentCopy } from "@mui/icons-material";
+import { ContentCopy, LocalPhone } from "@mui/icons-material";
 import { t } from "i18next";
 import parsePhoneNumber, {
   AsYouType,
@@ -103,6 +103,9 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
         fullWidth
         required
       />
+      <Grid container spacing={0}>
+        <Grid item xs={copy ? 11 : 12}>
+                 
       <TextField
         label={t("phone_number")}
         value={
@@ -128,6 +131,16 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
         fullWidth
         required
       />
+      </Grid>
+     {
+        // use a grid to wrap this and the phone number textfield (above) to put these on the same line
+      copy && <Grid item xs={1}> <a href={"tel:" + phone}>
+      <IconButton>
+        <LocalPhone />
+      </IconButton>
+     </a> </Grid>
+     }
+    </Grid>
       <TextField
         label={t("email")}
         value={email}
