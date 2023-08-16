@@ -28,6 +28,7 @@ import theme from "./theme";
 import { ThemeProvider } from "@emotion/react";
 import "react-datepicker/dist/react-datepicker.css";
 import { NeedType, RequestStatus } from "./RequestAPI";
+import { request } from "http";
 
 Amplify.configure(awsExports);
 
@@ -58,6 +59,11 @@ export function ReportForm(props: ILocalizeProps) {
     { label: "Vetted", type: RequestStatus.VETTED },
     { label: "New", type: RequestStatus.NEW },
     { label: "Ineligible", type: RequestStatus.INELIGIBLE },
+  ];
+  const unfulfilledStatuses = [
+    { label: "In Progress", type: RequestStatus.INPROGRESS },
+    { label: "Vetted", type: RequestStatus.VETTED },
+    { label: "New", type: RequestStatus.NEW },
   ];
 
   function queryStartDate(date: Date): string {
@@ -246,6 +252,51 @@ export function ReportForm(props: ILocalizeProps) {
                           ))}
                         </TableRow>
                       ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            </Grid>
+          )}
+          {dataFetched && (
+            <Grid item xs={12}>
+              <Card>
+                <CardHeader
+                  title={"Unfulfilled Requests"}
+                  titleTypographyProps={{ variant: "h6" }}
+                />
+                <TableContainer component={Paper}>
+                  <Table size="small" aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell style={{ width: 8 }}>Status</TableCell>
+                        <TableCell style={{ width: 8 }}>Date</TableCell>
+                        <TableCell style={{ width: 8 }}>Requestor</TableCell>
+                        <TableCell style={{ width: 8 }}>Recipient</TableCell>
+                        <TableCell style={{ width: 8 }}>Link</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {
+                        apiData.filter((element: any, index: number, array: any) => unfulfilledStatuses.some(s => s.type === element.status))
+                        .map((request:any)=>{
+                          return(<TableRow>
+                            <TableCell style={{ width: 8 }}>{request.status}</TableCell>
+                            <TableCell style={{ width: 8 }}>{new Date(request.dateOfRequest).toLocaleDateString ("en-US", {
+                              weekday: undefined,
+                              year: "numeric",
+                              month: "short",
+                              day: "2-digit",
+                              })
+                            }</TableCell>
+                            <TableCell style={{ width: 8 }}>{request.firstName+" "+request.lastName}</TableCell>
+                            <TableCell style={{ width: 8 }}>{request.requestFor}</TableCell>                            
+                            <TableCell style={{ width: 8 }}>
+                              <a href={"https://crn.servereedley.org/requests?id=" + request.id} target ="_blank" >Edit Request</a>                                
+                            </TableCell>
+                          </TableRow>)
+                        })                      
+                      }                    
                     </TableBody>
                   </Table>
                 </TableContainer>
