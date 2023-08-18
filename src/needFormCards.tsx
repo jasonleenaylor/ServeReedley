@@ -106,39 +106,41 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
       <Grid container spacing={0}>
         <Grid item xs={copy ? 11 : 12}>
                  
-      <TextField
-        label={t("phone_number")}
-        value={
-          isPossiblePhoneNumber(phone)
-            ? parsePhoneNumber(phone, "US")!.number
-            : phone
-        }
-        onChange={(changeEvent: any) => {
-          let newValue = parseIncompletePhoneNumber(changeEvent.target.value);
+        <TextField
+          label={t("phone_number")}
+          value={
+            isPossiblePhoneNumber(phone)
+              ? parsePhoneNumber(phone, "US")!.number
+              : phone
+          }
+          onChange={(changeEvent: any) => {
+            let newValue = parseIncompletePhoneNumber(changeEvent.target.value);
 
-          // By default, if a value is something like `"(123)"`
-          // then Backspace would only erase the rightmost brace
-          // becoming something like `"(123"`
-          // which would give the same `"123"` value
-          // which would then be formatted back to `"(123)"`
-          // and so a user wouldn't be able to erase the phone number.
-          // Working around this issue with this simple hack.
-          if (changeEvent.target.value?.length !== 4)
-            setPhone(formatter.input(newValue));
-          else setPhone(changeEvent.target.value);
-        }}
-        autoComplete="phone"
-        fullWidth
-        required
-      />
+            // By default, if a value is something like `"(123)"`
+            // then Backspace would only erase the rightmost brace
+            // becoming something like `"(123"`
+            // which would give the same `"123"` value
+            // which would then be formatted back to `"(123)"`
+            // and so a user wouldn't be able to erase the phone number.
+            // Working around this issue with this simple hack.
+            if (changeEvent.target.value?.length !== 4)
+              setPhone(formatter.input(newValue));
+            else setPhone(changeEvent.target.value);
+          }}
+          autoComplete="phone"
+          fullWidth
+          required
+        />
       </Grid>
      {
         // use a grid to wrap this and the phone number textfield (above) to put these on the same line
-      copy && <Grid item xs={1}> <a href={"tel:" + phone}>
-      <IconButton>
-        <LocalPhone />
-      </IconButton>
-     </a> </Grid>
+      copy && 
+      <Grid item xs={1}> <a href={"tel:" + phone}>
+          <IconButton>
+            <LocalPhone />
+          </IconButton>
+        </a> 
+      </Grid>
      }
     </Grid>
       <TextField
@@ -225,35 +227,50 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
               required
             />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label={t("others_phone_number")}
-              value={
-                isPossiblePhoneNumber(
-                  otherPersonsPhone ? otherPersonsPhone : ""
-                )
-                  ? parsePhoneNumber(otherPersonsPhone, "US")!.number
-                  : otherPersonsPhone
-              }
-              required
-              onChange={(changeEvent: any) => {
-                let newValue = parseIncompletePhoneNumber(
-                  changeEvent.target.value
-                );
+            <Grid item xs={12}>
+              <Grid container spacing={0}>
+                <Grid item xs={copy ? 11 : 12}>
+                  <TextField
+                    label={t("others_phone_number")}
+                    value={
+                      isPossiblePhoneNumber(
+                        otherPersonsPhone ? otherPersonsPhone : ""
+                      )
+                        ? parsePhoneNumber(otherPersonsPhone, "US")!.number
+                        : otherPersonsPhone
+                    }
+                    required
+                    onChange={(changeEvent: any) => {
+                      let newValue = parseIncompletePhoneNumber(
+                        changeEvent.target.value
+                      );
 
-                // By default, if a value is something like `"(123)"`
-                // then Backspace would only erase the rightmost brace
-                // becoming something like `"(123"`
-                // which would give the same `"123"` value
-                // which would then be formatted back to `"(123)"`
-                // and so a user wouldn't be able to erase the phone number.
-                // Working around this issue with this simple hack.
-                if (changeEvent.target.value?.length !== 4)
-                  setOtherPersonsPhone(formatter.input(newValue));
-                else setOtherPersonsPhone(changeEvent.target.value);
-              }}
-              fullWidth
-            />
+                      // By default, if a value is something like `"(123)"`
+                      // then Backspace would only erase the rightmost brace
+                      // becoming something like `"(123"`
+                      // which would give the same `"123"` value
+                      // which would then be formatted back to `"(123)"`
+                      // and so a user wouldn't be able to erase the phone number.
+                      // Working around this issue with this simple hack.
+                      if (changeEvent.target.value?.length !== 4)
+                        setOtherPersonsPhone(formatter.input(newValue));
+                      else setOtherPersonsPhone(changeEvent.target.value);
+                    }}
+                    fullWidth
+                  />
+                </Grid>
+                {
+                    // use a grid to wrap this and the phone number textfield (above) to put these on the same line
+                  copy && 
+                  <Grid item xs={1}> 
+                    <a href={"tel:" + otherPersonsPhone}>
+                    <IconButton>
+                      <LocalPhone />
+                    </IconButton>
+                    </a> 
+                  </Grid>
+                }
+              </Grid>
           </Grid>
         </Grid>
       )}
