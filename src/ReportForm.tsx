@@ -356,7 +356,7 @@ export function ReportForm(props: ILocalizeProps) {
                                 {request.firstName + " " + request.lastName}
                               </TableCell>
                               <TableCell style={{ width: 8 }}>
-                                {request.requestFor}
+                                {request.selfOrOtherInfo.requestFor}
                               </TableCell>
                               <TableCell style={{ width: 8 }}>
                                 {getUnfulfilledNeedsForRequest(
@@ -371,6 +371,7 @@ export function ReportForm(props: ILocalizeProps) {
                                     request.id
                                   }
                                   target="_blank"
+                                  rel="noreferrer"
                                 >
                                   Edit Request
                                 </a>
