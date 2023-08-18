@@ -273,30 +273,111 @@ export function ReportForm(props: ILocalizeProps) {
                         <TableCell style={{ width: 8 }}>Date</TableCell>
                         <TableCell style={{ width: 8 }}>Requestor</TableCell>
                         <TableCell style={{ width: 8 }}>Recipient</TableCell>
+                        <TableCell style={{ width: 8 }}>
+                          Incomplete Needs
+                        </TableCell>
                         <TableCell style={{ width: 8 }}>Link</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {
-                        apiData.filter((element: any, index: number, array: any) => unfulfilledStatuses.some(s => s.type === element.status))
-                        .map((request:any)=>{
-                          return(<TableRow>
-                            <TableCell style={{ width: 8 }}>{request.status}</TableCell>
-                            <TableCell style={{ width: 8 }}>{new Date(request.dateOfRequest).toLocaleDateString ("en-US", {
-                              weekday: undefined,
-                              year: "numeric",
-                              month: "short",
-                              day: "2-digit",
+                      {apiData
+                        .filter((element: any, index: number, array: any) =>
+                          unfulfilledStatuses.some(
+                            (s) => s.type === element.status
+                          )
+                        )
+                        .sort((a: any, b: any) => {
+                          return (
+                            new Date(a.dateOfRequest).getTime() -
+                            new Date(b.dateOfRequest).getTime()
+                          );
+                        })
+                        .map((request: any) => {
+                          function getUnfulfilledNeedsForRequest(
+                            needTypes: [],
+                            fulfilledNeeds: []
+                          ): import("react").ReactNode {
+                            return needTypes
+                              .filter((x) => {
+                                return (
+                                  fulfilledNeeds == null ||
+                                  !fulfilledNeeds.includes(x)
+                                );
                               })
-                            }</TableCell>
-                            <TableCell style={{ width: 8 }}>{request.firstName+" "+request.lastName}</TableCell>
-                            <TableCell style={{ width: 8 }}>{request.requestFor}</TableCell>                            
-                            <TableCell style={{ width: 8 }}>
-                              <a href={"https://crn.servereedley.org/requests?id=" + request.id} target ="_blank" >Edit Request</a>                                
-                            </TableCell>
-                          </TableRow>)
-                        })                      
-                      }                    
+                              .map((n) => {
+                                switch (n) {
+                                  case "MEALS":
+                                    return "Meals";
+                                  case "GROCERIES":
+                                    return "Groceries";
+                                  case "MOVING":
+                                    return "Moving";
+                                  case "JOBTRAINING":
+                                    return "Job Training";
+                                  case "HOMEREPAIR":
+                                    return "Home Repair";
+                                  case "CARREPAIR":
+                                    return "Car Repair";
+                                  case "HOUSING":
+                                    return "Housing";
+                                  case "HOUSEHOLDITEMS":
+                                    return "Household Items";
+                                  case "HYGENEITEMS":
+                                    return "Personal/Hygene Items";
+                                  case "CLOTHING":
+                                    return "Clothing";
+                                  case "FURNITURE":
+                                    return "Furniture";
+                                  case "OTHER":
+                                    return "Other";
+                                  default:
+                                    return "Unmapped";
+                                }
+                              })
+                              .join(",");
+                          }
+
+                          return (
+                            <TableRow>
+                              <TableCell style={{ width: 8 }}>
+                                {request.status}
+                              </TableCell>
+                              <TableCell style={{ width: 8 }}>
+                                {new Date(
+                                  request.dateOfRequest
+                                ).toLocaleDateString("en-US", {
+                                  weekday: undefined,
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "2-digit",
+                                })}
+                              </TableCell>
+                              <TableCell style={{ width: 8 }}>
+                                {request.firstName + " " + request.lastName}
+                              </TableCell>
+                              <TableCell style={{ width: 8 }}>
+                                {request.requestFor}
+                              </TableCell>
+                              <TableCell style={{ width: 8 }}>
+                                {getUnfulfilledNeedsForRequest(
+                                  request.needTypes,
+                                  request.fulfilledNeeds
+                                )}
+                              </TableCell>
+                              <TableCell style={{ width: 8 }}>
+                                <a
+                                  href={
+                                    "https://crn.servereedley.org/requests?id=" +
+                                    request.id
+                                  }
+                                  target="_blank"
+                                >
+                                  Edit Request
+                                </a>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
                     </TableBody>
                   </Table>
                 </TableContainer>
