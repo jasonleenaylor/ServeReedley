@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="1BL9ZDde3PvqKv_xwPC9-uGHYaOsIsRg5">
+	<name>Serve Reedley Areas of Concern</name>
+	<gx:CascadingStyle kml:id="__managed_style_095186C5F72C552B4E0F">
+		<Style>
+			<IconStyle>
+				<scale>1.2</scale>
+				<Icon>
+					<href>https://earth.google.com/earth/rpc/cc/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>6</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<gx:CascadingStyle kml:id="__managed_style_1A0E5EF1B72C552B4E0E">
+		<Style>
+			<IconStyle>
+				<Icon>
+					<href>https://earth.google.com/earth/rpc/cc/icon?color=1976d2&amp;id=2000&amp;scale=4</href>
+				</Icon>
+				<hotSpot x="64" y="128" xunits="pixels" yunits="insetPixels"/>
+			</IconStyle>
+			<LabelStyle>
+			</LabelStyle>
+			<LineStyle>
+				<color>ff2dc0fb</color>
+				<width>4</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>40ffffff</color>
+			</PolyStyle>
+			<BalloonStyle>
+			</BalloonStyle>
+		</Style>
+	</gx:CascadingStyle>
+	<StyleMap id="__managed_style_0B239913A72C552B4E0E">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#__managed_style_1A0E5EF1B72C552B4E0E</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#__managed_style_095186C5F72C552B4E0F</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark id="096CFF459F2C55197222">
+		<name>East side Reedley </name>
+		<LookAt>
+			<longitude>-119.4452841491432</longitude>
+			<latitude>36.60173789614162</latitude>
+			<altitude>105.569027989132</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>3145.231383814245</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B239913A72C552B4E0E</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-119.4309849726393,36.60054298517688,0 -119.4443253045217,36.60047987283792,0 -119.4442456009429,36.59685621421671,0 -119.4420401174739,36.59692018361778,0 -119.4420651963736,36.59331375947411,0 -119.4398042975322,36.59331331861624,0 -119.4397247152887,36.58972630465084,0 -119.4310087758893,36.5897707880304,0 -119.4309849726393,36.60054298517688,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="095BBAC3632C5522C365">
+		<name>Devils Colony </name>
+		<LookAt>
+			<longitude>-119.5285491569463</longitude>
+			<latitude>36.61578142975915</latitude>
+			<altitude>108.0386611876661</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>4418.425867736223</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B239913A72C552B4E0E</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-119.5184379944491,36.61205323546422,0 -119.5164784040793,36.61202157537355,0 -119.5164062803563,36.61551357077024,0 -119.5182081775682,36.61551374164177,0 -119.5182083591751,36.61416180593359,0 -119.5185559298252,36.61265108588768,0 -119.5185425401528,36.61226347537534,0 -119.5184379944491,36.61205323546422,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="0200D444752C55247176">
+		<name>Central Parlier </name>
+		<LookAt>
+			<longitude>-119.5285491575753</longitude>
+			<latitude>36.6157814304354</latitude>
+			<altitude>108.0386611904954</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>4418.425867736224</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B239913A72C552B4E0E</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-119.5298326869933,36.61572635825107,0 -119.529881601914,36.60840437516568,0 -119.5209860779054,36.60837317278006,0 -119.5209109665931,36.61579690648284,0 -119.5298326869933,36.61572635825107,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="01FD8DD8822C552581AD">
+		<name>Delft Colony</name>
+		<LookAt>
+			<longitude>-119.4455666904669</longitude>
+			<latitude>36.51795438308291</latitude>
+			<altitude>95.67869738101476</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>4653.623987524189</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B239913A72C552B4E0E</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-119.4487389985588,36.50946062938927,0 -119.4440011363612,36.50952689441669,0 -119.4440424327421,36.51386530011909,0 -119.4489451452765,36.51389793295616,0 -119.4487389985588,36.50946062938927,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+	<Placemark id="02241913DB2C5526FBA4">
+		<name>London</name>
+		<LookAt>
+			<longitude>-119.440996448251</longitude>
+			<latitude>36.47861359910585</latitude>
+			<altitude>93.2036462488725</altitude>
+			<heading>0</heading>
+			<tilt>0</tilt>
+			<gx:fovy>35</gx:fovy>
+			<range>3349.396366846631</range>
+			<altitudeMode>absolute</altitudeMode>
+		</LookAt>
+		<styleUrl>#__managed_style_0B239913A72C552B4E0E</styleUrl>
+		<Polygon>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-119.4477847845919,36.47345264989342,0 -119.4385655517468,36.47340483648777,0 -119.4385065823776,36.48084197783269,0 -119.4476361306514,36.48077033578742,0 -119.4477847845919,36.47345264989342,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>
