@@ -13,14 +13,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import { ContentCopy, LocalPhone } from "@mui/icons-material";
+import { isPointInPolygon } from "geolib";
 import { t } from "i18next";
 import parsePhoneNumber, {
   AsYouType,
   isPossiblePhoneNumber,
   parseIncompletePhoneNumber,
 } from "libphonenumber-js";
-import { Fragment } from "react";
+import { Fragment, ReactElement, useEffect, useState } from "react";
 
+import areasOfConcern from "./data/areasOfConcern.json";
 import { cardStyle } from "./needRequestForm";
 import {
   HouseholdItemsGQL,
@@ -34,55 +36,120 @@ import {
   RadioButtonState,
 } from "./needRequestTypes";
 import { LeadSource } from "./RequestAPI";
+import { Alert } from "@mui/material";
+import { Auth } from "aws-amplify";
+import Lambda from "aws-sdk/clients/lambda";
 
-export function contactCard(
-  firstName: string,
-  setFirstName: (name: string) => void,
-  lastName: string,
-  setLastName: (name: string) => void,
-  phone: string,
-  setPhone: (value: string) => void,
-  email: string,
-  setEmail: (value: string) => void,
-  address: string,
-  setAddress: (value: string) => void,
-  city: string,
-  setCity: (value: string) => void,
-  zip: string,
-  setZip: (value: string) => void,
-  agent: RadioButtonState,
-  setAgent: (value: RadioButtonState) => void,
-  referee: string,
-  setReferee: (referee: string) => void,
-  refereeKnows: RadioButtonState,
-  setRefereeKnows: (refereeKnows: RadioButtonState) => void,
-  otherPersonsPhone: string,
-  setOtherPersonsPhone: (value: string) => void,
-  copy: undefined | (() => void)
-): JSX.Element {
+export interface ContactCardProps {
+  firstName: string;
+  setFirstName: (name: string) => void;
+  lastName: string;
+  setLastName: (name: string) => void;
+  phone: string;
+  setPhone: (value: string) => void;
+  email: string;
+  setEmail: (value: string) => void;
+  address: string;
+  setAddress: (value: string) => void;
+  city: string;
+  setCity: (value: string) => void;
+  zip: string;
+  setZip: (value: string) => void;
+  agent: RadioButtonState;
+  setAgent: (value: RadioButtonState) => void;
+  referee: string;
+  setReferee: (referee: string) => void;
+  refereeKnows: RadioButtonState;
+  setRefereeKnows: (refereeKnows: RadioButtonState) => void;
+  otherPersonsPhone: string;
+  setOtherPersonsPhone: (value: string) => void;
+  copy: undefined | (() => void);
+}
+
+export function ContactCard(props: ContactCardProps): ReactElement {
   const formatter = new AsYouType("US");
   const copyItemsToClipboard = () => {
     const contactInfo = `Name: ${
-      agent === RadioButtonState.YES || !referee
-        ? firstName + " " + lastName
-        : referee
+      props.agent === RadioButtonState.YES || !props.referee
+        ? props.firstName + " " + props.lastName
+        : props.referee
     }
-Address:\t${address}
-\t\t\t${city}
-\t\t\t${zip}
-Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
+Address:\t${props.address}
+\t\t\t${props.city}
+\t\t\t${props.zip}
+Phone:  ${
+      props.agent === RadioButtonState.YES
+        ? props.phone
+        : props.otherPersonsPhone
+    }`;
     navigator.clipboard.writeText(contactInfo);
-    if (copy) {
-      copy();
+    if (props.copy) {
+      props.copy();
     }
   };
+  const [alertForAddress, setAlertForAddress] = useState("");
+  useEffect(() => {
+    props.copy
+      ? getLocationAlertForAddress(
+          `${props.address}, ${props.city}, CA ${props.zip}`
+        )
+      : setAlertForAddress("");
+  }, []);
+
+  async function getLocationAlertForAddress(address: string) {
+    try {
+      let response: any;
+      Auth.currentCredentials().then((credentials) => {
+        const lambda = new Lambda({
+          credentials: Auth.essentialCredentials(credentials),
+        });
+        response = lambda.invoke(
+          {
+            FunctionName: "findlatlong-prod",
+            Payload: JSON.stringify({ address: address }),
+          },
+          function (err, data) {
+            if (err) {
+              setAlertForAddress(JSON.stringify(err));
+            } else {
+              // response looks like:
+              // "{"statusCode":200,
+              //   "body":"[{\"formattedAddress\":\"856 S Reed Ave, Reedley, CA 93654, USA\",
+              //             \"latitude\":36.5901299,
+              //             \"longitude\":-119.4569698,
+              //             ...}]}"
+              let payloadParsed = JSON.parse(data.Payload as string);
+              let bodyParsed = JSON.parse(payloadParsed.body);
+              response = bodyParsed[0];
+              for (let area of areasOfConcern) {
+                if (
+                  isPointInPolygon(
+                    {
+                      latitude: response.latitude,
+                      longitude: response.longitude,
+                    },
+                    area.polygon
+                  )
+                ) {
+                  setAlertForAddress(JSON.stringify(area.name));
+                }
+              }
+            }
+          }
+        );
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Card style={cardStyle}>
       <CardHeader
         title={t("contact_info")}
         titleTypographyProps={{ variant: "h6" }}
         action={
-          copy && (
+          props.copy && (
             <IconButton>
               <ContentCopy onClick={copyItemsToClipboard} />
             </IconButton>
@@ -91,84 +158,101 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
       />{" "}
       <TextField
         label={t("first_name")}
-        value={firstName}
-        onChange={(changeEvent: any) => setFirstName(changeEvent.target.value)}
+        value={props.firstName}
+        onChange={(changeEvent: any) =>
+          props.setFirstName(changeEvent.target.value)
+        }
         fullWidth
         required
       />
       <TextField
         label={t("last_name")}
-        value={lastName}
-        onChange={(changeEvent: any) => setLastName(changeEvent.target.value)}
+        value={props.lastName}
+        onChange={(changeEvent: any) =>
+          props.setLastName(changeEvent.target.value)
+        }
         fullWidth
         required
       />
       <Grid container spacing={0}>
-        <Grid item xs={copy ? 11 : 12}>
-                 
-        <TextField
-          label={t("phone_number")}
-          value={
-            isPossiblePhoneNumber(phone)
-              ? parsePhoneNumber(phone, "US")!.number
-              : phone
-          }
-          onChange={(changeEvent: any) => {
-            let newValue = parseIncompletePhoneNumber(changeEvent.target.value);
+        <Grid item xs={props.copy ? 11 : 12}>
+          <TextField
+            label={t("phone_number")}
+            value={
+              isPossiblePhoneNumber(props.phone)
+                ? parsePhoneNumber(props.phone, "US")!.number
+                : props.phone
+            }
+            onChange={(changeEvent: any) => {
+              let newValue = parseIncompletePhoneNumber(
+                changeEvent.target.value
+              );
 
-            // By default, if a value is something like `"(123)"`
-            // then Backspace would only erase the rightmost brace
-            // becoming something like `"(123"`
-            // which would give the same `"123"` value
-            // which would then be formatted back to `"(123)"`
-            // and so a user wouldn't be able to erase the phone number.
-            // Working around this issue with this simple hack.
-            if (changeEvent.target.value?.length !== 4)
-              setPhone(formatter.input(newValue));
-            else setPhone(changeEvent.target.value);
-          }}
-          autoComplete="phone"
-          fullWidth
-          required
-        />
+              // By default, if a value is something like `"(123)"`
+              // then Backspace would only erase the rightmost brace
+              // becoming something like `"(123"`
+              // which would give the same `"123"` value
+              // which would then be formatted back to `"(123)"`
+              // and so a user wouldn't be able to erase the phone number.
+              // Working around this issue with this simple hack.
+              if (changeEvent.target.value?.length !== 4)
+                props.setPhone(formatter.input(newValue));
+              else props.setPhone(changeEvent.target.value);
+            }}
+            autoComplete="phone"
+            fullWidth
+            required
+          />
+        </Grid>
+        {
+          // use a grid to wrap this and the phone number textfield (above) to put these on the same line
+          props.copy && (
+            <Grid item xs={1}>
+              {" "}
+              <a href={"tel:" + props.phone}>
+                <IconButton>
+                  <LocalPhone />
+                </IconButton>
+              </a>{" "}
+            </Grid>
+          )
+        }
       </Grid>
-     {
-        // use a grid to wrap this and the phone number textfield (above) to put these on the same line
-      copy && 
-      <Grid item xs={1}> <a href={"tel:" + phone}>
-          <IconButton>
-            <LocalPhone />
-          </IconButton>
-        </a> 
-      </Grid>
-     }
-    </Grid>
       <TextField
         label={t("email")}
-        value={email}
-        onChange={(changeEvent: any) => setEmail(changeEvent.target.value)}
+        value={props.email}
+        onChange={(changeEvent: any) =>
+          props.setEmail(changeEvent.target.value)
+        }
         autoComplete="email"
         fullWidth
       />
+      {props.copy && alertForAddress && (
+        <Alert severity="warning" style={{ marginTop: 6 }}>
+          {alertForAddress}
+        </Alert>
+      )}
       <TextField
         label={t("street_address")}
-        value={address}
-        onChange={(changeEvent: any) => setAddress(changeEvent.target.value)}
+        value={props.address}
+        onChange={(changeEvent: any) =>
+          props.setAddress(changeEvent.target.value)
+        }
         autoComplete="address-line1"
         multiline
         fullWidth
       />
       <TextField
         label={t("city")}
-        value={city}
-        onChange={(changeEvent: any) => setCity(changeEvent.target.value)}
+        value={props.city}
+        onChange={(changeEvent: any) => props.setCity(changeEvent.target.value)}
         fullWidth
         required
       />
       <TextField
         label={t("zip")}
-        value={zip}
-        onChange={(changeEvent: any) => setZip(changeEvent.target.value)}
+        value={props.zip}
+        onChange={(changeEvent: any) => props.setZip(changeEvent.target.value)}
         inputProps={{
           inputMode: "numeric",
           pattern: "[1-9][0-9]{4}",
@@ -181,8 +265,10 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
       <Typography style={{ paddingTop: 15 }}>{t("for_you")}</Typography>
       <RadioGroup
         aria-label={t("for_you")}
-        value={agent}
-        onChange={(changeEvent: any) => setAgent(changeEvent.target.value)}
+        value={props.agent}
+        onChange={(changeEvent: any) =>
+          props.setAgent(changeEvent.target.value)
+        }
       >
         <FormControlLabel
           value="yes"
@@ -195,14 +281,14 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
           label={t("no")}
         />
       </RadioGroup>
-      {agent === "no" && (
+      {props.agent === "no" && (
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <Typography>{t("do_they_know")}</Typography>{" "}
             <RadioGroup
-              value={refereeKnows}
+              value={props.refereeKnows}
               onChange={(changeEvent: any) =>
-                setRefereeKnows(changeEvent.target.value)
+                props.setRefereeKnows(changeEvent.target.value)
               }
             >
               <FormControlLabel
@@ -220,57 +306,58 @@ Phone:  ${agent === RadioButtonState.YES ? phone : otherPersonsPhone}`;
           <Grid item xs={12}>
             <TextField
               label={t("request_is_for")}
-              value={referee}
+              value={props.referee}
               onChange={(changeEvent: any) =>
-                setReferee(changeEvent.target.value)
+                props.setReferee(changeEvent.target.value)
               }
               required
             />
           </Grid>
-            <Grid item xs={12}>
-              <Grid container spacing={0}>
-                <Grid item xs={copy ? 11 : 12}>
-                  <TextField
-                    label={t("others_phone_number")}
-                    value={
-                      isPossiblePhoneNumber(
-                        otherPersonsPhone ? otherPersonsPhone : ""
-                      )
-                        ? parsePhoneNumber(otherPersonsPhone, "US")!.number
-                        : otherPersonsPhone
-                    }
-                    required
-                    onChange={(changeEvent: any) => {
-                      let newValue = parseIncompletePhoneNumber(
-                        changeEvent.target.value
-                      );
+          <Grid item xs={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={props.copy ? 11 : 12}>
+                <TextField
+                  label={t("others_phone_number")}
+                  value={
+                    isPossiblePhoneNumber(
+                      props.otherPersonsPhone ? props.otherPersonsPhone : ""
+                    )
+                      ? parsePhoneNumber(props.otherPersonsPhone, "US")!.number
+                      : props.otherPersonsPhone
+                  }
+                  required
+                  onChange={(changeEvent: any) => {
+                    let newValue = parseIncompletePhoneNumber(
+                      changeEvent.target.value
+                    );
 
-                      // By default, if a value is something like `"(123)"`
-                      // then Backspace would only erase the rightmost brace
-                      // becoming something like `"(123"`
-                      // which would give the same `"123"` value
-                      // which would then be formatted back to `"(123)"`
-                      // and so a user wouldn't be able to erase the phone number.
-                      // Working around this issue with this simple hack.
-                      if (changeEvent.target.value?.length !== 4)
-                        setOtherPersonsPhone(formatter.input(newValue));
-                      else setOtherPersonsPhone(changeEvent.target.value);
-                    }}
-                    fullWidth
-                  />
-                </Grid>
-                {
-                    // use a grid to wrap this and the phone number textfield (above) to put these on the same line
-                  copy && 
-                  <Grid item xs={1}> 
-                    <a href={"tel:" + otherPersonsPhone}>
-                    <IconButton>
-                      <LocalPhone />
-                    </IconButton>
-                    </a> 
-                  </Grid>
-                }
+                    // By default, if a value is something like `"(123)"`
+                    // then Backspace would only erase the rightmost brace
+                    // becoming something like `"(123"`
+                    // which would give the same `"123"` value
+                    // which would then be formatted back to `"(123)"`
+                    // and so a user wouldn't be able to erase the phone number.
+                    // Working around this issue with this simple hack.
+                    if (changeEvent.target.value?.length !== 4)
+                      props.setOtherPersonsPhone(formatter.input(newValue));
+                    else props.setOtherPersonsPhone(changeEvent.target.value);
+                  }}
+                  fullWidth
+                />
               </Grid>
+              {
+                // use a grid to wrap this and the phone number textfield (above) to put these on the same line
+                props.copy && (
+                  <Grid item xs={1}>
+                    <a href={"tel:" + props.otherPersonsPhone}>
+                      <IconButton>
+                        <LocalPhone />
+                      </IconButton>
+                    </a>
+                  </Grid>
+                )
+              }
+            </Grid>
           </Grid>
         </Grid>
       )}

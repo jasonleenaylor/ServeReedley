@@ -47,7 +47,7 @@ import {
 import {
   carRepairCard,
   clothingCard,
-  contactCard,
+  ContactCard,
   foodInfoCard,
   forSelfDetailsCard,
   furnitureCard,
@@ -478,31 +478,31 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item>
-            {contactCard(
-              firstName,
-              setFirstName,
-              lastName,
-              setLastName,
-              phone,
-              setPhone,
-              email,
-              setEmail,
-              address,
-              setAddress,
-              city,
-              setCity,
-              zip,
-              setZip,
-              agent,
-              setAgent,
-              referee,
-              setReferee,
-              refereeKnows,
-              setRefereeKnows,
-              otherPersonsPhone,
-              setOtherPersonsPhone,
-              undefined
-            )}
+            <ContactCard
+              firstName={firstName}
+              setFirstName={setFirstName}
+              lastName={lastName}
+              setLastName={setLastName}
+              phone={phone}
+              setPhone={setPhone}
+              email={email}
+              setEmail={setEmail}
+              address={address}
+              setAddress={setAddress}
+              city={city}
+              setCity={setCity}
+              zip={zip}
+              setZip={setZip}
+              agent={agent}
+              setAgent={setAgent}
+              referee={referee}
+              setReferee={setReferee}
+              refereeKnows={refereeKnows}
+              setRefereeKnows={setRefereeKnows}
+              otherPersonsPhone={otherPersonsPhone}
+              setOtherPersonsPhone={setOtherPersonsPhone}
+              copy={undefined}
+            />
           </Grid>
           <Grid item>
             {agent === "yes" &&
