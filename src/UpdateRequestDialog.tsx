@@ -45,7 +45,7 @@ import {
 import {
   carRepairCard,
   clothingCard,
-  contactCard,
+  ContactCard,
   foodInfoCard,
   forSelfDetailsCard,
   furnitureCard,
@@ -154,60 +154,72 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
             </Card>
           </Grid>
           <Grid item>
-            {contactCard(
-              requestData.firstName,
-              (value: string) =>
-                setRequestData({ ...requestData, firstName: value }),
-              requestData.lastName,
-              (value: string) =>
-                setRequestData({ ...requestData, lastName: value }),
-              requestData.phone!,
-              (value: string) => {
+            <ContactCard
+              firstName={requestData.firstName}
+              setFirstName={(value: string) =>
+                setRequestData({ ...requestData, firstName: value })
+              }
+              lastName={requestData.lastName}
+              setLastName={(value: string) =>
+                setRequestData({ ...requestData, lastName: value })
+              }
+              phone={requestData.phone!}
+              setPhone={(value: string) => {
                 setRequestData({ ...requestData, phone: value });
-              },
-              requestData.email ? requestData.email : "",
-              (value: string) =>
-                setRequestData({ ...requestData, email: value }),
-              requestData.address!,
-              (value: string) =>
-                setRequestData({ ...requestData, address: value }),
-              requestData.city,
-              (value: string) =>
-                setRequestData({ ...requestData, city: value }),
-              requestData.zipCode ? requestData.zipCode.toString() : "",
-              (value: string) =>
+              }}
+              email={requestData.email ? requestData.email : ""}
+              setEmail={(value: string) =>
+                setRequestData({ ...requestData, email: value })
+              }
+              address={requestData.address!}
+              setAddress={(value: string) =>
+                setRequestData({ ...requestData, address: value })
+              }
+              city={requestData.city}
+              setCity={(value: string) =>
+                setRequestData({ ...requestData, city: value })
+              }
+              zip={requestData.zipCode ? requestData.zipCode.toString() : ""}
+              setZip={(value: string) =>
                 setRequestData({
                   ...requestData,
                   zipCode: value ? parseInt(value) : null,
-                }),
-              requestData.selfOrOtherInfo.forSelf
-                ? RadioButtonState.YES
-                : RadioButtonState.NO,
-              (value: RadioButtonState) => {},
-              requestData.selfOrOtherInfo.requestFor!,
-              (value: string) =>
+                })
+              }
+              agent={
+                requestData.selfOrOtherInfo.forSelf
+                  ? RadioButtonState.YES
+                  : RadioButtonState.NO
+              }
+              setAgent={(value: RadioButtonState) => {}}
+              referee={requestData.selfOrOtherInfo.requestFor!}
+              setReferee={(value: string) =>
                 setRequestData({
                   ...requestData,
                   selfOrOtherInfo: {
                     ...requestData.selfOrOtherInfo,
                     requestFor: value,
                   },
-                }),
-              requestData.selfOrOtherInfo.requestIsKnown
-                ? RadioButtonState.YES
-                : RadioButtonState.NO,
-              (value: RadioButtonState) => {},
-              requestData.selfOrOtherInfo.phoneNumber!,
-              (value: string) =>
+                })
+              }
+              refereeKnows={
+                requestData.selfOrOtherInfo.requestIsKnown
+                  ? RadioButtonState.YES
+                  : RadioButtonState.NO
+              }
+              setRefereeKnows={(value: RadioButtonState) => {}}
+              otherPersonsPhone={requestData.selfOrOtherInfo.phoneNumber!}
+              setOtherPersonsPhone={(value: string) =>
                 setRequestData({
                   ...requestData,
                   selfOrOtherInfo: {
                     ...requestData.selfOrOtherInfo,
                     phoneNumber: value,
                   },
-                }),
-              () => setSnackBarOpen(true)
-            )}
+                })
+              }
+              copy={() => setSnackBarOpen(true)}
+            />
           </Grid>
           <Grid item>
             {requestData.selfOrOtherInfo.forSelf &&

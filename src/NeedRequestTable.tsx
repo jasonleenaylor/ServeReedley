@@ -55,7 +55,7 @@ function hasNotableNote(request: NeedRequestType): boolean {
   return !!request.note?.items.some((e) => e?.notable === true);
 }
 function NeedRequestTable(props: ILocalizeProps) {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [requests, setRequests] = useState([]);
   const requestId = new URLSearchParams(window.location.search).get("id");
@@ -299,22 +299,24 @@ function NeedRequestTable(props: ILocalizeProps) {
     { title: "Follow Up", field: "followUp" },
   ];
 
-Hub.listen("auth", (data) => {
-   switch (data.payload.event) {
-     case "signIn":
-       setIsLoggedIn(true);
-       break;
-     case "signOut":
-       setIsLoggedIn(false);
-       break;
-   }
- });
+  Hub.listen("auth", (data) => {
+    switch (data.payload.event) {
+      case "signIn":
+        setIsLoggedIn(true);
+        break;
+      case "signOut":
+        setIsLoggedIn(false);
+        break;
+    }
+  });
 
   useEffect(() => {
     fetchNeedRequests();
     Auth.currentAuthenticatedUser().then((user) => {
-     setIsLoggedIn(!!user);
-});
+      setIsLoggedIn(!!user);
+      var AWS = require("aws-sdk");
+      AWS.config.update({ region: "us-west-1" });
+    });
   }, []);
 
   function printGroceryList(groceries: {
@@ -492,9 +494,10 @@ Hub.listen("auth", (data) => {
               thirdSortClick: false,
             }}
           />
-          {isLoggedIn && editId &&
-            requests.length > 0 &&
-            requests.findIndex((r: NeedRequestType) => r.id === editId) !== -1 ? (
+          {isLoggedIn &&
+          editId &&
+          requests.length > 0 &&
+          requests.findIndex((r: NeedRequestType) => r.id === editId) !== -1 ? (
             <UpdateRequestDialogButton
               // Couldn't figure out how to make all the type safety happy so I short circut with any :(
               requestData={
