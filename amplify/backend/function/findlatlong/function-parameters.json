@@ -1,13 +1,6 @@
 {
   "lambdaLayers": [
     {
-      "type": "ProjectLayer",
-      "resourceName": "crngeocoderLayer",
-      "env": "prod",
-      "version": 1,
-      "isLatestVersionSelected": false
-    },
-    {
       "type": "ExternalLayer",
       "arn": "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension:11"
     }
