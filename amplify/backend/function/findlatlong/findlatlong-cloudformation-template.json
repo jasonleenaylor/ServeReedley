@@ -16,10 +16,6 @@
     "s3Key": {
       "Type": "String"
     },
-    "functioncrngeocoderLayerArn": {
-      "Type": "String",
-      "Default": "functioncrngeocoderLayerArn"
-    },
     "secretsPathAmplifyAppId": {
       "Type": "String"
     }
@@ -109,9 +105,6 @@
         },
         "Runtime": "nodejs14.x",
         "Layers": [
-          {
-            "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:crngeocoderLayer-prod:1"
-          },
           "arn:aws:lambda:us-west-1:997803712105:layer:AWS-Parameters-and-Secrets-Lambda-Extension:11"
         ],
         "Timeout": 25
