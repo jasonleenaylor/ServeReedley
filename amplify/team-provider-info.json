@@ -25,10 +25,6 @@
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
           "s3Key": "amplify-builds/sendReminders-395935716c6a77506569-build.zip"
         },
-        "crngeocoderLayer": {
-          "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/crngeocoderLayer-LambdaLayerVersion67761627-build.zip"
-        },
         "findlatlong": {
           "secretsPathAmplifyAppId": "d287596rtukllb",
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
