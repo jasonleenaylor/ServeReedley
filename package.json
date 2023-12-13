@@ -15,6 +15,7 @@
     "aws-sdk": "^2.1517.0",
     "csv": "^5.5.3",
     "deep-object-diff": "^1.1.0",
+    "geolib": "^3.3.4",
     "graphql-scalars": "^1.12.0",
     "i18next": "^21.6.11",
     "i18next-browser-languagedetector": "^6.1.3",
