@@ -12,6 +12,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.0.4",
     "aws-amplify": "^4.3.2",
+    "aws-sdk": "^2.1517.0",
     "csv": "^5.5.3",
     "deep-object-diff": "^1.1.0",
     "graphql-scalars": "^1.12.0",
