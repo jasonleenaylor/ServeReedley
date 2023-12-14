@@ -314,8 +314,6 @@ function NeedRequestTable(props: ILocalizeProps) {
     fetchNeedRequests();
     Auth.currentAuthenticatedUser().then((user) => {
       setIsLoggedIn(!!user);
-      var AWS = require("aws-sdk");
-      AWS.config.update({ region: "us-west-1" });
     });
   }, []);
 

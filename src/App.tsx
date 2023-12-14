@@ -9,6 +9,14 @@ import { useTranslation } from "react-i18next";
 import ReportForm from "./ReportForm";
 
 export default function App() {
+  // Set the region in the static AWS config on load so that it is available
+  // for later code that needs it to call lambda functions
+  // Review: Update is synchronous, but the set values aren't immediately available
+  // there may be a better solution and there could still be a race condition putting
+  // it here.
+  var AWS = require("aws-sdk");
+  AWS.config.update({ region: "us-west-1" });
+
   const { t } = useTranslation();
   return (
     <ThemeProvider theme={theme}>
