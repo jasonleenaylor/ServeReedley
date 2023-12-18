@@ -70,19 +70,18 @@ export function ContactCard(props: ContactCardProps): ReactElement {
   const formatter = new AsYouType("US");
   const copyItemsToClipboard = () => {
     const contactInfo = `Name
-    ${
-      props.agent === RadioButtonState.YES || !props.referee
-        ? props.firstName + " " + props.lastName
-        : props.referee
-    }
+${
+  props.agent === RadioButtonState.YES || !props.referee
+    ? props.firstName + " " + props.lastName
+    : props.referee
+}
 Address
 ${props.address}
 ${props.city}, ${props.zip}
-Phone ${
-      props.agent === RadioButtonState.YES
-        ? props.phone
-        : props.otherPersonsPhone
-    }`;
+Phone
+${
+  props.agent === RadioButtonState.YES ? props.phone : props.otherPersonsPhone
+}`;
     navigator.clipboard.writeText(contactInfo);
     if (props.copy) {
       props.copy();
