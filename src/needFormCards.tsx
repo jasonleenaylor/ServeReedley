@@ -69,15 +69,16 @@ export interface ContactCardProps {
 export function ContactCard(props: ContactCardProps): ReactElement {
   const formatter = new AsYouType("US");
   const copyItemsToClipboard = () => {
-    const contactInfo = `Name: ${
+    const contactInfo = `Name
+    ${
       props.agent === RadioButtonState.YES || !props.referee
         ? props.firstName + " " + props.lastName
         : props.referee
     }
-Address:\t${props.address}
-\t\t\t${props.city}
-\t\t\t${props.zip}
-Phone:  ${
+Address
+${props.address}
+${props.city}, ${props.zip}
+Phone ${
       props.agent === RadioButtonState.YES
         ? props.phone
         : props.otherPersonsPhone
