@@ -508,7 +508,8 @@ export function needRequestCard(
               />
             </Fragment>
           )}
-          {(displayAll || needType.meals) && (
+          {/*Meals is a deprecated request - only display for older requests */}
+          {needType.meals && (
             <Fragment>
               <FormControlLabel
                 control={
@@ -713,6 +714,38 @@ export function needReasonCard(
   );
 }
 
+export function familySizeCard(
+  foodInfo: IFoodInfo,
+  handleFoodInfoChange: (newFoodInfo: IFoodInfo) => void
+) {
+  return (
+    <Card style={cardStyle}>
+      <CardHeader
+        title={t("family_size_title")}
+        titleTypographyProps={{ variant: "h6" }}
+      />
+      <Grid item xs={12}>
+        <Typography>{t("family_size")}</Typography>
+        <TextField
+          inputProps={{
+            inputMode: "numeric",
+            pattern: "[0-9][0-9]?",
+            maxLength: 2,
+          }}
+          onChange={(changeEvent: any) =>
+            handleFoodInfoChange({
+              ...foodInfo,
+              familyMembers: changeEvent.target.value,
+            })
+          }
+          value={foodInfo.familyMembers}
+          required
+        ></TextField>
+      </Grid>
+    </Card>
+  );
+}
+
 export function foodInfoCard(
   mealsOrGroceries: boolean,
   foodInfo: IFoodInfo,
@@ -725,24 +758,6 @@ export function foodInfoCard(
         titleTypographyProps={{ variant: "h6" }}
       />
       <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography>{t("family_size")}</Typography>
-          <TextField
-            inputProps={{
-              inputMode: "numeric",
-              pattern: "[0-9][0-9]?",
-              maxLength: 2,
-            }}
-            onChange={(changeEvent: any) =>
-              handleFoodInfoChange({
-                ...foodInfo,
-                familyMembers: changeEvent.target.value,
-              })
-            }
-            value={foodInfo.familyMembers}
-            required
-          ></TextField>
-        </Grid>
         <Grid item xs={12}>
           <FormControl>
             <Typography>{t("minors")}</Typography>

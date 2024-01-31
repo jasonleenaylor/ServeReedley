@@ -30,6 +30,13 @@ export type AmplifyDependentResourcesAttributes = {
             "LambdaExecutionRole": "string",
             "LambdaExecutionRoleArn": "string"
         },
+        "findlatlong": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string",
+            "LambdaExecutionRoleArn": "string"
+        },
         "sendReminders": {
             "Name": "string",
             "Arn": "string",
@@ -37,12 +44,6 @@ export type AmplifyDependentResourcesAttributes = {
             "LambdaExecutionRole": "string",
             "CloudWatchEventRule": "string",
             "LambdaExecutionRoleArn": "string"
-        },
-        "findlatlong": {
-            "Name": "string",
-            "Arn": "string",
-            "Region": "string",
-            "LambdaExecutionRole": "string"
         }
     }
 }

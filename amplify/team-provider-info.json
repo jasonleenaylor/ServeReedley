@@ -19,11 +19,11 @@
       "function": {
         "NotifyCoordinators": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/NotifyCoordinators-5065482f376261756e64-build.zip"
+          "s3Key": "amplify-builds/NotifyCoordinators-4563564b537670717453-build.zip"
         },
         "sendReminders": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/sendReminders-395935716c6a77506569-build.zip"
+          "s3Key": "amplify-builds/sendReminders-6b7976442f52594d586f-build.zip"
         },
         "findlatlong": {
           "secretsPathAmplifyAppId": "d287596rtukllb",
