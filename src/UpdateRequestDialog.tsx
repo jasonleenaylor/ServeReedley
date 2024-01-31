@@ -46,6 +46,7 @@ import {
   carRepairCard,
   clothingCard,
   ContactCard,
+  familySizeCard,
   foodInfoCard,
   forSelfDetailsCard,
   furnitureCard,
@@ -255,6 +256,20 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                     ...needTypeArrayToBooleans(requestData.needTypes),
                     [event.target.name]: event.target.checked,
                   }),
+                });
+              }
+            )}
+          </Grid>
+          <Grid item>
+            {familySizeCard(
+              getFoodInfoFromFoodRequest(requestData.foodRequest),
+              (newFoodInfo: IFoodInfo) => {
+                setRequestData({
+                  ...requestData,
+                  foodRequest: editOrCreateFoodInfoReq(
+                    newFoodInfo,
+                    requestData.foodRequest
+                  ),
                 });
               }
             )}

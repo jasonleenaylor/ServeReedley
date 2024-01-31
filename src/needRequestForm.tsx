@@ -48,6 +48,7 @@ import {
   carRepairCard,
   clothingCard,
   ContactCard,
+  familySizeCard,
   foodInfoCard,
   forSelfDetailsCard,
   furnitureCard,
@@ -223,15 +224,14 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
         alert("home maintenance error: " + JSON.stringify(err));
       }
       request.requestSelfOrOtherInfoId = result.data.createSelfOrOtherInfo.id;
-      if (needType.meals || needType.groceries) {
-        try {
-          result = await API.graphql(
-            graphqlOperation(createFoodInfo, { input: food })
-          );
-          request.requestFoodRequestId = result.data.createFoodInfo.id;
-        } catch (err) {
-          alert("food info: " + JSON.stringify(err));
-        }
+
+      try {
+        result = await API.graphql(
+          graphqlOperation(createFoodInfo, { input: food })
+        );
+        request.requestFoodRequestId = result.data.createFoodInfo.id;
+      } catch (err) {
+        alert("food info: " + JSON.stringify(err));
       }
       if (needType.moving) {
         let result: any = await API.graphql(
@@ -527,6 +527,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
               handleCheckboxChange(event, setNeedType, needType)
             )}
           </Grid>
+          <Grid item>{familySizeCard(foodInfo, handleFoodInfoChange)}</Grid>
           {(needType.meals || needType.groceries) && (
             <Grid item>
               {foodInfoCard(needType.meals, foodInfo, handleFoodInfoChange)}

@@ -83,6 +83,12 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "findlatlong": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "sendReminders": {
       "build": true,
       "dependsOn": [
@@ -97,12 +103,6 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    },
-    "findlatlong": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
     }
   },
   "parameters": {
@@ -119,6 +119,30 @@
         {
           "category": "function",
           "resourceName": "NotifyCoordinators"
+        }
+      ]
+    },
+    "AMPLIFY_function_findlatlong_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "findlatlong"
+        }
+      ]
+    },
+    "AMPLIFY_function_findlatlong_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "findlatlong"
+        }
+      ]
+    },
+    "AMPLIFY_function_findlatlong_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "findlatlong"
         }
       ]
     },
