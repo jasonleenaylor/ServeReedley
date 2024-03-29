@@ -1,0 +1,185 @@
+type Request
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  id: ID!
+  createdAt: AWSDateTime
+  dateOfRequest: String!
+  firstName: String!
+  lastName: String!
+  address: String
+  city: String!
+  zipCode: Int
+  phone: String
+  email: String
+  spanishOnly: Boolean
+  preferredContactTime: String
+  request: String
+  leadSource: LeadSource!
+  leadOtherDetails: String
+  selfOrOtherInfo: SelfOrOtherInfo! @hasOne
+  foodRequest: FoodInfo @hasOne
+  movingRequest: MovingInfo @hasOne
+  resumeHelp: Boolean
+  coverLetterHelp: Boolean
+  carRepairDetails: String
+  homeRepairType: HomeRepairType @hasOne
+  clothingType: String
+  clothingSize: String
+  furnitureType: String
+  housingHelp: Boolean
+  householdItems: HouseholdItems @hasOne
+  needReason: [NeedReason]!
+  needTypes: [NeedType]!
+  fulfilledNeeds: [NeedType]
+  status: RequestStatus!
+    @index(name: "requestsByDate", sortKeyFields: ["createdAt"])
+  note: [NoteType] @hasMany(indexName: "byRequest", fields: ["id"])
+  otherNeeds: String
+  needFulfiller: String
+  dateFulfilled: String
+  followUp: String
+}
+
+type NoteType
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  id: ID!
+  requestID: ID! @index(name: "byRequest")
+  dateCreated: String!
+  author: String!
+  content: String!
+  notable: Boolean
+}
+
+type SelfOrOtherInfo
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  forSelf: Boolean
+  usedOtherResources: Boolean
+  otherResources: String
+  requestFor: String
+  requestIsKnown: Boolean
+  phoneNumber: String
+}
+
+type HouseholdItems
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  shampoo: Boolean
+  bathSoap: Boolean
+  toothpaste: Boolean
+  toothbrush: Boolean
+  deodorant: Boolean
+  toiletPaper: Boolean
+  handSoap: Boolean
+  sanitaryPads: Boolean
+  tampons: Boolean
+  bleach: Boolean
+  lysolSpray: Boolean
+  lysolWipes: Boolean
+  dishsoap: Boolean
+  sponges: Boolean
+  pinesol: Boolean
+  conditioner: Boolean
+  paperTowels: Boolean
+  laundrySoap: Boolean
+}
+
+type FoodInfo
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  familyMembers: Int
+  children: String
+  deliveryTime: String
+  haveAllergies: Boolean
+  allergies: String
+  milk: Boolean
+  eggs: Boolean
+  bread: Boolean
+  butter: Boolean
+  tortillas: Boolean
+  rice: Boolean
+  beans: Boolean
+  cheese: Boolean
+  beef: Boolean
+  hotdogs: Boolean
+  lunchMeat: Boolean
+  fruit: Boolean
+  peanutButter: Boolean
+  jelly: Boolean
+}
+
+type MovingInfo
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  items: String
+  haveTransportation: Boolean
+  steepDriveway: Boolean
+  stairs: Boolean
+  unpavedRoad: Boolean
+  other: Boolean
+  otherDetails: String
+  liabilityAck: Boolean
+}
+
+type HomeRepairType
+  @model
+  @auth(
+    rules: [{ allow: public, operations: [create, read] }, { allow: private }]
+  ) {
+  plumbing: Boolean
+  electrical: Boolean
+  painting: Boolean
+  yardwork: Boolean
+  other: Boolean
+  details: String
+}
+
+enum RequestStatus {
+  NEW
+  VETTED
+  INPROGRESS
+  FULFILLED
+  INELIGIBLE
+  CANTFULFILL
+}
+
+enum NeedType {
+  MEALS
+  GROCERIES
+  MOVING
+  JOBTRAINING
+  HOMEREPAIR
+  CARREPAIR
+  HOUSING
+  HOUSEHOLDITEMS
+  HYGENEITEMS
+  CLOTHING
+  FURNITURE
+  OTHER
+}
+
+enum NeedReason {
+  COVID
+  ILLNESS
+  FINANCIAL
+}
+
+enum LeadSource {
+  REDEEMERS
+  FAMILY
+  FRIEND
+  OTHER
+}

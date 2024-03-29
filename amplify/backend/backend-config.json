@@ -1,13 +1,22 @@
 {
   "api": {
     "crn": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "crn3790d334"
+        }
+      ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "authcrnAuth"
+                "userPoolId": "authcrn3790d334"
               }
             }
           ],
@@ -24,7 +33,7 @@
     }
   },
   "auth": {
-    "crnAuth": {
+    "crn3790d334": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -49,116 +58,14 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
-    },
-    "userPoolGroups": {
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "crnAuth",
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ]
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito-UserPool-Groups"
-    }
-  },
-  "function": {
-    "NotifyCoordinators": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ],
-          "category": "api",
-          "resourceName": "crn"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "findlatlong": {
-      "build": true,
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "sendReminders": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ],
-          "category": "api",
-          "resourceName": "crn"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_NotifyCoordinators_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "NotifyCoordinators"
-        }
-      ]
-    },
-    "AMPLIFY_function_NotifyCoordinators_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "NotifyCoordinators"
-        }
-      ]
-    },
-    "AMPLIFY_function_findlatlong_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "findlatlong"
-        }
-      ]
-    },
-    "AMPLIFY_function_findlatlong_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "findlatlong"
-        }
-      ]
-    },
     "AMPLIFY_function_findlatlong_secretsPathAmplifyAppId": {
       "usedBy": [
         {
           "category": "function",
           "resourceName": "findlatlong"
-        }
-      ]
-    },
-    "AMPLIFY_function_sendReminders_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "sendReminders"
-        }
-      ]
-    },
-    "AMPLIFY_function_sendReminders_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "sendReminders"
         }
       ]
     }

@@ -1,4 +1,30 @@
 {
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-crn-dev-144807-authRole",
+      "UnauthRoleArn": "arn:aws:iam::765421687952:role/amplify-crn-dev-144807-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::765421687952:role/amplify-crn-dev-144807-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-crn-dev-144807-deployment",
+      "UnauthRoleName": "amplify-crn-dev-144807-unauthRole",
+      "StackName": "amplify-crn-dev-144807",
+      "StackId": "arn:aws:cloudformation:us-west-1:765421687952:stack/amplify-crn-dev-144807/22b484c0-c21d-11ee-993f-029d0d82d177",
+      "AmplifyAppId": "d287596rtukllb"
+    },
+    "categories": {
+      "function": {
+        "findlatlong": {
+          "secretsPathAmplifyAppId": "d287596rtukllb"
+        }
+      },
+      "auth": {
+        "crn3790d334": {}
+      },
+      "api": {
+        "crn": {}
+      }
+    }
+  },
   "prod": {
     "awscloudformation": {
       "AuthRoleName": "amplify-crn-prod-155021-authRole",
