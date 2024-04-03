@@ -1600,26 +1600,30 @@ export function householdItemsCard(
             }
             label={t("dish_soap")}
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={!!items.lysolSpray}
-                onChange={handleItemsChange}
-                name="lysolSpray"
-              />
-            }
-            label={t("lysol_spray")}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={!!items.lysolWipes}
-                onChange={handleItemsChange}
-                name="lysolWipes"
-              />
-            }
-            label={t("lysol_wipes")}
-          />
+          {items.lysolWipes && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!!items.lysolSpray}
+                  onChange={handleItemsChange}
+                  name="lysolSpray"
+                />
+              }
+              label={t("lysol_spray")}
+            />
+          )}
+          {items.lysolWipes && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!!items.lysolWipes}
+                  onChange={handleItemsChange}
+                  name="lysolWipes"
+                />
+              }
+              label={t("lysol_wipes")}
+            />
+          )}
           <FormControlLabel
             control={
               <Checkbox
