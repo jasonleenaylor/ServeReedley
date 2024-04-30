@@ -1,9 +1,10 @@
-import axios from "axios";
 import { Button, MenuItem, Select } from "@material-ui/core";
 import React, { useState } from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
+import { Auth } from "@aws-amplify/auth";
+import Lambda from "aws-sdk/clients/lambda";
 
 interface Person {
   id: string;
@@ -162,6 +163,9 @@ const PeopleTable: React.FC<Props> = ({ people, onSelectionChange }) => {
           <Button variant="contained" color="primary">
             Send
           </Button>
+          <Button variant="contained" color="primary">
+            Mark as Sent
+          </Button>
         </div>
       </CardContent>
     </Card>
@@ -190,16 +194,69 @@ const populatePeopleArray = (data: any[]): Person[] => {
 const TeamPicker: React.FC = () => {
   const jsonData = [
     {
-      id: "38917814",
-      first_name: "Jessica",
-      last_name: "Aguilar",
+      id: "43405199",
+      first_name: "Kathy",
+      force_first_name: "Kathy",
+      last_name: "Brown",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
     },
     {
-      id: "38559690",
-      first_name: "Linda",
-      last_name: "Armson",
+      id: "44306340",
+      first_name: "David",
+      force_first_name: "David",
+      last_name: "Harler Jr",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
     },
-    // Add more data as needed
+    {
+      id: "38559836",
+      first_name: "Debbie",
+      force_first_name: "Debbie",
+      last_name: "Lepp",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
+    },
+    {
+      id: "38917838",
+      first_name: "Nicole",
+      force_first_name: "Nicole",
+      last_name: "Lovewell",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
+    },
+    {
+      id: "47822547",
+      first_name: "Kimberly",
+      force_first_name: "Kimberly",
+      last_name: "McNutt",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
+    },
+    {
+      id: "38559882",
+      first_name: "Tod",
+      force_first_name: "Tod",
+      last_name: "Parkinson",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
+    },
+    {
+      id: "38559898",
+      first_name: "Ray",
+      force_first_name: "Ray",
+      last_name: "Perkins",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
+    },
+    {
+      id: "46699342",
+      first_name: "Leo",
+      force_first_name: "Leo",
+      last_name: "Rojas",
+      thumb_path: "",
+      path: "img/profiles/generic/gray.png",
+    },
   ];
 
   const [selectedOption, setSelectedOption] = useState<string>("");
@@ -212,31 +269,46 @@ const TeamPicker: React.FC = () => {
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
     setSelectedOption(event.target.value as string);
-    await getPeopleOnTeam(selectedOption);
-  };
-
-  const getPeopleOnTeam = async (optionId: string) => {
-    const peopleEndpoint = `https://servereedley.breezechms.com/api/people`;
-    const filterArgs = `{"2141362012":"${optionId}"}`;
-    const apiUrl = `${peopleEndpoint}?filter_json=${encodeURIComponent(
-      filterArgs
-    )}`;
-    const headers = {
-      "Api-Key": `"${process.env.REACT_APP_BREEZE_TEST}"`,
-    };
-    axios
-      .get(apiUrl, { headers })
-      .then((response) => {
-        console.log(JSON.stringify(response));
-        // let peopleJson = await response.json();
-        // setPeople(populatePeopleArray(peopleJson));
-      })
-      .catch((error) => {
-        console.error("Error fetching team members:", error);
-      });
+    const peopleResult = await getPeopleOnTeam(selectedOption);
+    console.log(JSON.stringify(peopleResult));
   };
 
   const [people, setPeople] = useState(populatePeopleArray(jsonData));
+  async function getPeopleOnTeam(teamId: string): Promise<Person[]> {
+    const people: Person[] = [];
+    try {
+      let response: any;
+      Auth.currentCredentials().then((credentials) => {
+        const lambda = new Lambda({
+          credentials: Auth.essentialCredentials(credentials),
+        });
+        response = lambda.invoke(
+          {
+            FunctionName: "listPeopleOnTeam",
+            Payload: JSON.stringify({ teamId: teamId }),
+          },
+          function (err, data) {
+            if (err) {
+              console.log(JSON.stringify(err));
+            } else {
+              // response looks like:
+              // "{"statusCode":200,
+              //   "body":"[{\"formattedAddress\":\"856 S Reed Ave, Reedley, CA 93654, USA\",
+              //             \"latitude\":36.5901299,
+              //             \"longitude\":-119.4569698,
+              //             ...}]}"
+              let payloadParsed = JSON.parse(data.Payload as string);
+
+              console.log(payloadParsed);
+            }
+          }
+        );
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    return people;
+  }
 
   const handleSelectionChange = (selectedPeople: string[]) => {
     console.log("Selected people:", selectedPeople);
@@ -330,7 +402,7 @@ const TeamPicker: React.FC = () => {
           </MenuItem>
         ))}
       </Select>
-      <h1>Select People</h1>
+      <h1>Select Personal Care + Hygiene Products Members</h1>
       <PeopleTable people={people} onSelectionChange={handleSelectionChange} />
     </div>
   );
