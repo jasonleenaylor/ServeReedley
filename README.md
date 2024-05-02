@@ -41,7 +41,7 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 ## Adding a New Coordinator
 
-1. Add a Cognito User
+1. Create a Cognito User
 
 	1. Select "Send an email invitation"
 	1. Add email address
