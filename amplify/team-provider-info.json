@@ -29,6 +29,11 @@
           "secretsPathAmplifyAppId": "d287596rtukllb",
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
           "s3Key": "amplify-builds/findlatlong-74556b6a333639584561-build.zip"
+        },
+        "listPeopleOnTeam": {
+          "breezeInfo": "\"\"",
+          "deploymentBucketName": "amplify-crn-prod-155021-deployment",
+          "s3Key": "amplify-builds/listPeopleOnTeam-46382f38484252616c59-build.zip"
         }
       },
       "api": {
