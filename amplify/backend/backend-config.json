@@ -159,6 +159,22 @@
         }
       ]
     },
+    "AMPLIFY_function_listPeopleOnTeam_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "listPeopleOnTeam"
+        }
+      ]
+    },
+    "AMPLIFY_function_listPeopleOnTeam_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "listPeopleOnTeam"
+        }
+      ]
+    },
     "AMPLIFY_function_sendReminders_deploymentBucketName": {
       "usedBy": [
         {

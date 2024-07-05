@@ -147,6 +147,32 @@ type HomeRepairType
   details: String
 }
 
+type Team @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  teamName: String!
+  teamType: NeedType!
+  requests: [TeamRequest] @hasMany(indexName: "byTeam", fields: ["id"])
+}
+
+type TeamMember @model @auth(rules: [{ allow: private }]) {
+  breezeId: String! @primaryKey
+  name: String!
+  asks: [TeamRequest] @hasMany
+  fulfilled: [TeamRequest] @hasMany
+}
+
+type TeamRequest @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  needRequest: Request! @hasOne
+  type: NeedType!
+  teamID: ID! @index(name: "byTeam")
+  askDate: String!
+  note: String!
+  filledDate: String
+  filledBy: TeamMember @hasOne
+  askedMembers: [TeamMember] @hasMany
+}
+
 enum RequestStatus {
   NEW
   VETTED
