@@ -57,12 +57,12 @@ import {
   jobTrainingCard,
   movingCard,
   needReasonCard,
-  needRequestCard,
   otherNeedCard,
 } from "./needFormCards";
 import theme from "./theme";
 import Auth from "@aws-amplify/auth";
 import Rating from "@mui/material/Rating";
+import { RequestedNeedTypesCard } from "./RequestedNeedTypesCard";
 
 export interface SimpleDialogProps {
   open: boolean;
@@ -247,7 +247,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
             )}
           </Grid>
           <Grid item>
-            {needRequestCard(
+            {RequestedNeedTypesCard(
               needTypeArrayToBooleans(requestData.needTypes),
               (event: React.ChangeEvent<HTMLInputElement>) => {
                 setRequestData({
@@ -543,7 +543,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                   </Card>
                 </Grid>{" "}
                 <Grid item xs={12}>
-                  {needRequestCard(
+                  {RequestedNeedTypesCard(
                     needTypeArrayToBooleans(requestData.needTypes),
                     (event: React.ChangeEvent<HTMLInputElement>) => {
                       let fullfilled = getNeedTypes({
@@ -557,7 +557,8 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                       });
                     },
                     needTypeArrayToBooleans(requestData.fulfilledNeeds),
-                    false
+                    false,
+                    requestData
                   )}
                 </Grid>
                 <Grid item xs={12}>

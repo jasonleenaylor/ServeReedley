@@ -117,5 +117,6 @@
   "submit": "Submit",
   "conditioner": "Conditioner",
   "laundry_detergent": "Laundry Detergent",
-  "paper_towels": "Paper Towels"
+  "paper_towels": "Paper Towels",
+  "send_to_team": "Send to {{team}}"
 }

@@ -30,7 +30,7 @@ const needTypeLabels = {
 
 const CreateTeamForm: React.FC = () => {
   const [teamName, setTeamName] = useState("");
-  const [teamId, setTeamId] = useState<NeedType | "">("");
+  const [teamType, setTeamType] = useState<NeedType | "">("");
   const [loading, setLoading] = useState(false);
   const { setTeams } = useTeams(); // to update the team list after creating a new team
 
@@ -39,7 +39,7 @@ const CreateTeamForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const newTeam = { teamName, teamId };
+      const newTeam = { teamName, teamType };
       const apiData: any = await API.graphql({
         query: createTeam,
         variables: { input: newTeam },
@@ -47,7 +47,7 @@ const CreateTeamForm: React.FC = () => {
       });
       setTeams((prevTeams) => [...prevTeams, apiData.data.createTeam]);
       setTeamName("");
-      setTeamId("");
+      setTeamType("");
     } catch (error) {
       console.error("Error creating team:", error);
     } finally {
@@ -69,10 +69,10 @@ const CreateTeamForm: React.FC = () => {
         required
       />
       <FormControl required>
-        <InputLabel>Team ID</InputLabel>
+        <InputLabel>Team Type</InputLabel>
         <Select
-          value={teamId}
-          onChange={(e) => setTeamId(e.target.value as NeedType)}
+          value={teamType}
+          onChange={(e) => setTeamType(e.target.value as NeedType)}
           displayEmpty
         >
           <MenuItem value="">
