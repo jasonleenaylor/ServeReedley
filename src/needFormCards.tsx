@@ -20,7 +20,7 @@ import parsePhoneNumber, {
   isPossiblePhoneNumber,
   parseIncompletePhoneNumber,
 } from "libphonenumber-js";
-import { Fragment, ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 import areasOfConcern from "./data/areasOfConcern.json";
 import { cardStyle } from "./needRequestForm";
@@ -32,7 +32,6 @@ import {
   IJobTraining,
   IMovingType,
   INeedReason,
-  INeedTypes,
   RadioButtonState,
 } from "./needRequestTypes";
 import { LeadSource } from "./RequestAPI";
@@ -40,48 +39,54 @@ import { Alert } from "@mui/material";
 import { Auth } from "aws-amplify";
 import Lambda from "aws-sdk/clients/lambda";
 
-export interface ContactCardProps {
+export interface ContactCardData {
   firstName: string;
-  setFirstName: (name: string) => void;
   lastName: string;
-  setLastName: (name: string) => void;
   phone: string;
-  setPhone: (value: string) => void;
   email: string;
-  setEmail: (value: string) => void;
   address: string;
-  setAddress: (value: string) => void;
   city: string;
-  setCity: (value: string) => void;
   zip: string;
-  setZip: (value: string) => void;
   agent: RadioButtonState;
-  setAgent: (value: RadioButtonState) => void;
   referee: string;
-  setReferee: (referee: string) => void;
-  refereeKnows: RadioButtonState;
-  setRefereeKnows: (refereeKnows: RadioButtonState) => void;
   otherPersonsPhone: string;
+}
+export interface ContactCardProps extends ContactCardData {
+  setFirstName: (name: string) => void;
+  setLastName: (name: string) => void;
+  setPhone: (value: string) => void;
+  setEmail: (value: string) => void;
+  setAddress: (value: string) => void;
+  setCity: (value: string) => void;
+  setZip: (value: string) => void;
+  setAgent: (value: RadioButtonState) => void;
+  setReferee: (referee: string) => void;
+  setRefereeKnows: (refereeKnows: RadioButtonState) => void;
+  refereeKnows: RadioButtonState;
   setOtherPersonsPhone: (value: string) => void;
   copy: undefined | (() => void);
+}
+
+export function getCopyTextForContactInfo(contactData: ContactCardData) {
+  return `Name| ${
+    contactData.agent === RadioButtonState.YES || !contactData.referee
+      ? contactData.firstName.trimEnd() + " " + contactData.lastName
+      : contactData.referee
+  }
+Address|
+${contactData.address}
+${contactData.city}, ${contactData.zip}
+Phone| ${
+    contactData.agent === RadioButtonState.YES
+      ? contactData.phone
+      : contactData.otherPersonsPhone
+  }`;
 }
 
 export function ContactCard(props: ContactCardProps): ReactElement {
   const formatter = new AsYouType("US");
   const copyItemsToClipboard = () => {
-    const contactInfo = `Name
-${
-  props.agent === RadioButtonState.YES || !props.referee
-    ? props.firstName + " " + props.lastName
-    : props.referee
-}
-Address
-${props.address}
-${props.city}, ${props.zip}
-Phone
-${
-  props.agent === RadioButtonState.YES ? props.phone : props.otherPersonsPhone
-}`;
+    const contactInfo = getCopyTextForContactInfo(props);
     navigator.clipboard.writeText(contactInfo);
     if (props.copy) {
       props.copy();
@@ -457,218 +462,6 @@ export function leadTracingCard(
   );
 }
 
-export function needRequestCard(
-  needType: INeedTypes,
-  handleNeedTypeChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  completed?: INeedTypes,
-  displayAll: boolean = true
-) {
-  let groceriesCheck = displayAll ? needType.groceries : completed?.groceries;
-  let mealsCheck = displayAll ? needType.meals : completed?.meals;
-  let clothingCheck = displayAll ? needType.clothing : completed?.clothing;
-  let furnitureCheck = displayAll ? needType.furniture : completed?.furniture;
-  let carRepairCheck = displayAll ? needType.carRepair : completed?.carRepair;
-  let homeRepairCheck = displayAll
-    ? needType.homeRepair
-    : completed?.homeRepair;
-  let hygeneCheck = displayAll ? needType.hygeneItems : completed?.hygeneItems;
-  let otherCheck = displayAll ? needType.other : completed?.other;
-  let householdItemsCheck = displayAll
-    ? needType.householdItems
-    : completed?.householdItems;
-  let housingCheck = displayAll ? needType.housing : completed?.housing;
-  let jobTrainingCheck = displayAll
-    ? needType.jobTraining
-    : completed?.jobTraining;
-  let movingCheck = displayAll ? needType.moving : completed?.moving;
-  return (
-    <Card style={cardStyle}>
-      {" "}
-      <FormControl required>
-        <FormGroup>
-          {displayAll ? (
-            <Typography>{t("assistance_type")}</Typography>
-          ) : (
-            <Typography>
-              Assistance Requested: Check items when they are fulfilled
-            </Typography>
-          )}
-          {}
-          {(displayAll || needType.groceries) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={groceriesCheck}
-                    onChange={handleNeedTypeChange}
-                    name="groceries"
-                  />
-                }
-                label={t("groceries")}
-              />
-            </Fragment>
-          )}
-          {/*Meals is a deprecated request - only display for older requests */}
-          {needType.meals && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={mealsCheck}
-                    onChange={handleNeedTypeChange}
-                    name="meals"
-                  />
-                }
-                label={t("meals")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.clothing) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={clothingCheck}
-                    onChange={handleNeedTypeChange}
-                    name="clothing"
-                  />
-                }
-                label={t("clothing")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.householdItems) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={householdItemsCheck}
-                    onChange={handleNeedTypeChange}
-                    name="householdItems"
-                  />
-                }
-                label={t("household_items")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.hygeneItems) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={hygeneCheck}
-                    onChange={handleNeedTypeChange}
-                    name="hygeneItems"
-                  />
-                }
-                label={t("hygene_items")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.moving) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={movingCheck}
-                    onChange={handleNeedTypeChange}
-                    name="moving"
-                  />
-                }
-                label={t("moving_assistance")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.furniture) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={furnitureCheck}
-                    onChange={handleNeedTypeChange}
-                    name="furniture"
-                  />
-                }
-                label={t("furniture")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.homeRepair) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={homeRepairCheck}
-                    onChange={handleNeedTypeChange}
-                    name="homeRepair"
-                  />
-                }
-                label={t("home_repair")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.carRepair) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={carRepairCheck}
-                    onChange={handleNeedTypeChange}
-                    name="carRepair"
-                  />
-                }
-                label={t("car_repair")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.jobTraining) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={jobTrainingCheck}
-                    onChange={handleNeedTypeChange}
-                    name="jobTraining"
-                  />
-                }
-                label={t("job_prep")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.housing) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={housingCheck}
-                    onChange={handleNeedTypeChange}
-                    name="housing"
-                  />
-                }
-                label={t("housing")}
-              />
-            </Fragment>
-          )}
-          {(displayAll || needType.other) && (
-            <Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={otherCheck}
-                    onChange={handleNeedTypeChange}
-                    name="other"
-                  />
-                }
-                label={t("other")}
-              />
-            </Fragment>
-          )}
-        </FormGroup>
-      </FormControl>
-    </Card>
-  );
-}
-
 export function needReasonCard(
   needReason: INeedReason,
   handleNeedReasonChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -1031,28 +824,32 @@ export function movingCard(
   );
 }
 
+export function getGroceriesListText(groceries: IGroceriesType): string {
+  let selectedItems = [];
+  if (groceries.milk) selectedItems.push("Milk");
+  if (groceries.eggs) selectedItems.push("Eggs");
+  if (groceries.bread) selectedItems.push("Bread");
+  if (groceries.butter) selectedItems.push("Butter");
+  if (groceries.tortillas) selectedItems.push("Tortillas");
+  if (groceries.rice) selectedItems.push("Rice");
+  if (groceries.beans) selectedItems.push("Beans");
+  if (groceries.cheese) selectedItems.push("Cheese");
+  if (groceries.beef) selectedItems.push("Beef");
+  if (groceries.hotdogs) selectedItems.push("Hotdogs");
+  if (groceries.lunchMeat) selectedItems.push("Lunch Meat");
+  if (groceries.fruit) selectedItems.push("Fruit");
+  if (groceries.peanutButter) selectedItems.push("Peanut Butter");
+  if (groceries.jelly) selectedItems.push("Jelly");
+  return selectedItems.join();
+}
+
 export function groceriesCard(
   groceries: IGroceriesType,
   handleGroceriesChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   copy: undefined | (() => void)
 ): JSX.Element {
   const copyItemsToClipboard = () => {
-    let selectedItems = [];
-    if (groceries.milk) selectedItems.push("Milk");
-    if (groceries.eggs) selectedItems.push("Eggs");
-    if (groceries.bread) selectedItems.push("Bread");
-    if (groceries.butter) selectedItems.push("Butter");
-    if (groceries.tortillas) selectedItems.push("Tortillas");
-    if (groceries.rice) selectedItems.push("Rice");
-    if (groceries.beans) selectedItems.push("Beans");
-    if (groceries.cheese) selectedItems.push("Cheese");
-    if (groceries.beef) selectedItems.push("Beef");
-    if (groceries.hotdogs) selectedItems.push("Hotdogs");
-    if (groceries.lunchMeat) selectedItems.push("Lunch Meat");
-    if (groceries.fruit) selectedItems.push("Fruit");
-    if (groceries.peanutButter) selectedItems.push("Peanut Butter");
-    if (groceries.jelly) selectedItems.push("Jelly");
-    navigator.clipboard.writeText(selectedItems.join());
+    navigator.clipboard.writeText(getGroceriesListText(groceries));
     if (copy) {
       copy();
     }
@@ -1508,58 +1305,46 @@ export function homeRepairCard(
   );
 }
 
+export function getHouseholdItemsText(items: HouseholdItemsGQL) {
+  let selectedItems = [];
+  for (var key in items) {
+    switch (key) {
+      case "bleach":
+        if (items.bleach) selectedItems.push("Bleach");
+        break;
+      case "lysolSpray":
+        if (items.lysolSpray) selectedItems.push("Lysol Spray");
+        break;
+      case "lysolWipes":
+        if (items.lysolWipes) selectedItems.push("Lysol Wipes");
+        break;
+      case "dishsoap":
+        if (items.dishsoap) selectedItems.push("Dish Soap");
+        break;
+      case "sponges":
+        if (items.sponges) selectedItems.push("Sponges");
+        break;
+      case "pinesol":
+        if (items.pinesol) selectedItems.push("Pine-sol");
+        break;
+      case "paperTowels":
+        if (items.paperTowels) selectedItems.push("Paper Towels");
+        break;
+      case "laundrySoap":
+        if (items.laundrySoap) selectedItems.push("Laundry Detergent");
+        break;
+    }
+  }
+  return selectedItems.join();
+}
+
 export function householdItemsCard(
   items: HouseholdItemsGQL,
   handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
   copy: undefined | (() => void)
 ): JSX.Element {
   const copyItemsToClipboard = () => {
-    let selectedItems = [];
-    for (var key in items) {
-      switch (key) {
-        case "bleach":
-          if (items.bleach) selectedItems.push("Bleach");
-          break;
-        case "lysolSpray":
-          if (items.lysolSpray) selectedItems.push("Lysol Spray");
-          break;
-        case "lysolWipes":
-          if (items.lysolWipes) selectedItems.push("Lysol Wipes");
-          break;
-        case "dishsoap":
-          if (items.dishsoap) selectedItems.push("Dish Soap");
-          break;
-        case "sponges":
-          if (items.sponges) selectedItems.push("Sponges");
-          break;
-        case "pinesol":
-          if (items.pinesol) selectedItems.push("Pine-sol");
-          break;
-        case "paperTowels":
-          if (items.paperTowels) selectedItems.push("Paper Towels");
-          break;
-        case "laundrySoap":
-          if (items.laundrySoap) selectedItems.push("Laundry Detergent");
-          break;
-        case "bathSoap":
-        case "deodorant":
-        case "handSoap":
-        case "sanitaryPads":
-        case "shampoo":
-        case "conditioner":
-        case "tampons":
-        case "toiletPaper":
-        case "toothbrush":
-        case "toothpaste":
-        case "id":
-        case "createdAt":
-        case "updatedAt":
-          break;
-        default:
-          alert("Tell Jason that he forgot to copy " + key);
-      }
-    }
-    navigator.clipboard.writeText(selectedItems.join());
+    navigator.clipboard.writeText(getHouseholdItemsText(items));
     if (copy) {
       copy();
     }

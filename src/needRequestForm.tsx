@@ -60,11 +60,11 @@ import {
   leadTracingCard,
   movingCard,
   needReasonCard,
-  needRequestCard,
   otherNeedCard,
 } from "./needFormCards";
 import { useHistory } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
+import { RequestedNeedTypesCard } from "./RequestedNeedTypesCard";
 
 export const NeedRequestForm = (props: ILocalizeProps) => {
   const { i18n } = useTranslation();
@@ -523,7 +523,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
             )}
           </Grid>
           <Grid item>
-            {needRequestCard(needType, (event) =>
+            {RequestedNeedTypesCard(needType, (event) =>
               handleCheckboxChange(event, setNeedType, needType)
             )}
           </Grid>

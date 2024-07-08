@@ -5,7 +5,6 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  Typography,
   Button,
   Dialog,
   DialogActions,
@@ -31,6 +30,7 @@ function NeedCheckbox({
   checked,
   onChange,
   needType,
+  request,
   label,
   displayAll,
   handleOpenDialog,
@@ -38,9 +38,12 @@ function NeedCheckbox({
   checked: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   needType: NeedType;
+  request: NeedRequestType | undefined;
   label: string;
   displayAll: boolean;
-  handleOpenDialog: undefined | ((type: NeedType) => void);
+  handleOpenDialog:
+    | undefined
+    | ((type: NeedType, request: NeedRequestType) => void);
 }): JSX.Element {
   return (
     <Grid container alignItems="center" spacing={2}>
@@ -52,7 +55,7 @@ function NeedCheckbox({
           label={label}
         />
       </Grid>
-      {!displayAll && handleOpenDialog && (
+      {!displayAll && request && handleOpenDialog && (
         <Grid item xs={4}>
           <Button
             variant="contained"
@@ -62,9 +65,9 @@ function NeedCheckbox({
               fontSize: "8pt",
               whiteSpace: "nowrap",
             }}
-            onClick={() => handleOpenDialog(needType)}
+            onClick={() => handleOpenDialog(needType, request)}
           >
-            {t("send_to_team", { label })}
+            {t("send_to_team", { team: label })}
           </Button>
         </Grid>
       )}
@@ -89,7 +92,7 @@ function SendToTeamDialog({
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
 
   useEffect(() => {
-    const filtered = teams.filter((team) => team.teamId === needType);
+    const filtered = teams.filter((team) => team.teamType === needType);
     setFilteredTeams(filtered);
     if (filtered.length === 1) {
       setSelectedTeam(filtered[0].id);
@@ -181,7 +184,7 @@ export function RequestedNeedTypesCard(
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedNeedType, setSelectedNeedType] = useState(NeedType.OTHER);
 
-  const handleOpenDialog = (type: NeedType) => {
+  const handleOpenDialog = (type: NeedType, request: NeedRequestType) => {
     setSelectedNeedType(type);
     setOpenDialog(true);
   };
@@ -201,6 +204,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.GROCERIES}
+              request={request}
               label={t("groceries")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -211,6 +215,7 @@ export function RequestedNeedTypesCard(
               checked={displayAll ? needType.meals : completed?.meals || false}
               onChange={handleNeedTypeChange}
               needType={NeedType.MEALS}
+              request={request}
               label={t("meals")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -223,6 +228,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.CLOTHING}
+              request={request}
               label={t("clothing")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -235,6 +241,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.FURNITURE}
+              request={request}
               label={t("furniture")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -247,6 +254,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.CARREPAIR}
+              request={request}
               label={t("car_repair")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -261,6 +269,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.HOMEREPAIR}
+              request={request}
               label={t("home_repair")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -275,6 +284,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.HYGENEITEMS}
+              request={request}
               label={t("hygene_items")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -289,6 +299,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.HOUSEHOLDITEMS}
+              request={request}
               label={t("household_items")}
               displayAll={displayAll}
               handleOpenDialog={handleOpenDialog}
@@ -301,6 +312,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.HOUSING}
+              request={request}
               label={t("housing")}
               displayAll={displayAll}
               handleOpenDialog={undefined}
@@ -315,6 +327,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.JOBTRAINING}
+              request={request}
               label={t("job_prep")}
               displayAll={displayAll}
               handleOpenDialog={undefined}
@@ -327,6 +340,7 @@ export function RequestedNeedTypesCard(
               }
               onChange={handleNeedTypeChange}
               needType={NeedType.MOVING}
+              request={request}
               label={t("moving_assistance")}
               displayAll={displayAll}
               handleOpenDialog={undefined}
@@ -337,6 +351,7 @@ export function RequestedNeedTypesCard(
               checked={displayAll ? needType.other : completed?.other || false}
               onChange={handleNeedTypeChange}
               needType={NeedType.OTHER}
+              request={request}
               label={t("other")}
               displayAll={displayAll}
               handleOpenDialog={undefined}

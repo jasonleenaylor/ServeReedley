@@ -19,7 +19,7 @@ const TeamList = () => {
         <ListItem key={team.id}>
           <ListItemText
             primary={team.teamName}
-            secondary={`Team ID: ${team.teamId}`}
+            secondary={`Team ID: ${team.teamType}`}
           />
         </ListItem>
       ))}
