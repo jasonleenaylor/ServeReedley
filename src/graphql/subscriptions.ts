@@ -883,7 +883,8 @@ export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam($filter: Mo
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -943,7 +944,6 @@ export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam($filter: Mo
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -967,7 +967,8 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam($filter: Mo
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1027,7 +1028,6 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam($filter: Mo
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1051,7 +1051,8 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam($filter: Mo
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1111,7 +1112,6 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam($filter: Mo
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1136,7 +1136,8 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1196,7 +1197,6 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1206,7 +1206,8 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1266,7 +1267,6 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1292,7 +1292,8 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1352,7 +1353,6 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1362,7 +1362,8 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1422,7 +1423,6 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1448,7 +1448,8 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1508,7 +1509,6 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1518,7 +1518,8 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1578,7 +1579,6 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1600,7 +1600,8 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
 ) {
   onCreateTeamRequest(filter: $filter) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -1752,6 +1753,7 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1761,7 +1763,6 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -1771,6 +1772,7 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1780,7 +1782,6 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -1816,7 +1817,6 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }
@@ -1830,7 +1830,8 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
 ) {
   onUpdateTeamRequest(filter: $filter) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -1982,6 +1983,7 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1991,7 +1993,6 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2001,6 +2002,7 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2010,7 +2012,6 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2046,7 +2047,6 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }
@@ -2060,7 +2060,8 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
 ) {
   onDeleteTeamRequest(filter: $filter) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -2212,6 +2213,7 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2221,7 +2223,6 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2231,6 +2232,7 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2240,7 +2242,6 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2276,7 +2277,6 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }

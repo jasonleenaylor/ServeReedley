@@ -1338,6 +1338,74 @@ export function getHouseholdItemsText(items: HouseholdItemsGQL) {
   return selectedItems.join();
 }
 
+export function getHygeneItemsText(items: HouseholdItemsGQL) {
+  let selectedItems = [];
+  for (var key in items) {
+    switch (key) {
+      case "shampoo":
+        if (items.shampoo) {
+          selectedItems.push("Shampoo");
+        }
+        break;
+
+      case "conditioner":
+        if (items.conditioner) {
+          selectedItems.push("Conditioner");
+        }
+        break;
+
+      case "bathSoap":
+        if (items.bathSoap) {
+          selectedItems.push("Bath Soap");
+        }
+        break;
+
+      case "toothpaste":
+        if (items.toothpaste) {
+          selectedItems.push("Toothpaste");
+        }
+        break;
+
+      case "toothbrush":
+        if (items.toothbrush) {
+          selectedItems.push("Toothbrush");
+        }
+        break;
+
+      case "deodorant":
+        if (items.deodorant) {
+          selectedItems.push("Deodorant");
+        }
+        break;
+
+      case "toiletPaper":
+        if (items.toiletPaper) {
+          selectedItems.push("Toilet Paper");
+        }
+        break;
+
+      case "handSoap":
+        if (items.handSoap) {
+          selectedItems.push("Hand Soap");
+        }
+        break;
+
+      case "sanitaryPads":
+        if (items.sanitaryPads) {
+          selectedItems.push("Sanitary Pads");
+        }
+        break;
+
+      case "tampons":
+        if (items.tampons) {
+          selectedItems.push("Tampons");
+        }
+        break;
+    }
+  }
+  return selectedItems.join();
+}
+
 export function householdItemsCard(
   items: HouseholdItemsGQL,
   handleItemsChange: (event: React.ChangeEvent<HTMLInputElement>) => void,

@@ -925,7 +925,8 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -985,7 +986,6 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1012,7 +1012,8 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1072,7 +1073,6 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1099,7 +1099,8 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1159,7 +1160,6 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1185,7 +1185,8 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1245,7 +1246,6 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1255,7 +1255,8 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1315,7 +1316,6 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1342,7 +1342,8 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1402,7 +1403,6 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1412,7 +1412,8 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1472,7 +1473,6 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1499,7 +1499,8 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1559,7 +1560,6 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1569,7 +1569,8 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -1629,7 +1630,6 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -1652,7 +1652,8 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
 ) {
   createTeamRequest(input: $input, condition: $condition) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -1804,6 +1805,7 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1813,7 +1815,6 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -1823,6 +1824,7 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1832,7 +1834,6 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -1868,7 +1869,6 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }
@@ -1883,7 +1883,8 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
 ) {
   updateTeamRequest(input: $input, condition: $condition) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -2035,6 +2036,7 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2044,7 +2046,6 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2054,6 +2055,7 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2063,7 +2065,6 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2099,7 +2100,6 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }
@@ -2114,7 +2114,8 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
 ) {
   deleteTeamRequest(input: $input, condition: $condition) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -2266,6 +2267,7 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2275,7 +2277,6 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2285,6 +2286,7 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -2294,7 +2296,6 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -2330,7 +2331,6 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }

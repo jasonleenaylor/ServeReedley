@@ -163,7 +163,8 @@ type TeamMember @model @auth(rules: [{ allow: private }]) {
 
 type TeamRequest @model @auth(rules: [{ allow: private }]) {
   id: ID!
-  needRequest: Request! @hasOne
+  requestID: ID! @index(name: "byRequest") # This creates an index for querying by Request ID
+  request: Request! @hasOne(fields: ["requestID"]) # This sets up a one-to-one connection using requestID
   type: NeedType!
   teamID: ID! @index(name: "byTeam")
   askDate: String!
