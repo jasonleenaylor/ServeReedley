@@ -8,6 +8,8 @@ import "./i18n";
 import { useTranslation } from "react-i18next";
 import ReportForm from "./ReportForm";
 import TeamPicker from "./TeamPicker";
+import TeamList from "./TeamList";
+import TeamManagement from "./TeamManagementForm";
 
 export default function App() {
   // Set the region in the static AWS config on load so that it is available
@@ -38,7 +40,10 @@ export default function App() {
             <Route path="/reports">
               <ReportForm t={t} />
             </Route>
-            <Route path="/team">
+            <Route path="/teams">
+              <TeamManagement />
+            </Route>
+            <Route path="/team:teamId">
               <TeamPicker />
             </Route>
             <Route path="/">

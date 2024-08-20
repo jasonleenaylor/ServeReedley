@@ -763,7 +763,8 @@ export type ModelTeamRequestConnection = {
 export type TeamRequest = {
   __typename: "TeamRequest",
   id: string,
-  needRequest: Request,
+  requestID: string,
+  request: Request,
   type: NeedType,
   teamID: string,
   askDate: string,
@@ -775,7 +776,6 @@ export type TeamRequest = {
   updatedAt: string,
   teamMemberAsksId?: string | null,
   teamMemberFulfilledId?: string | null,
-  teamRequestNeedRequestId: string,
   teamRequestFilledById?: string | null,
 };
 
@@ -834,6 +834,7 @@ export type DeleteTeamMemberInput = {
 
 export type CreateTeamRequestInput = {
   id?: string | null,
+  requestID: string,
   type: NeedType,
   teamID: string,
   askDate: string,
@@ -841,11 +842,11 @@ export type CreateTeamRequestInput = {
   filledDate?: string | null,
   teamMemberAsksId?: string | null,
   teamMemberFulfilledId?: string | null,
-  teamRequestNeedRequestId: string,
   teamRequestFilledById?: string | null,
 };
 
 export type ModelTeamRequestConditionInput = {
+  requestID?: ModelIDInput | null,
   type?: ModelNeedTypeInput | null,
   teamID?: ModelIDInput | null,
   askDate?: ModelStringInput | null,
@@ -858,12 +859,12 @@ export type ModelTeamRequestConditionInput = {
   updatedAt?: ModelStringInput | null,
   teamMemberAsksId?: ModelIDInput | null,
   teamMemberFulfilledId?: ModelIDInput | null,
-  teamRequestNeedRequestId?: ModelIDInput | null,
   teamRequestFilledById?: ModelIDInput | null,
 };
 
 export type UpdateTeamRequestInput = {
   id: string,
+  requestID?: string | null,
   type?: NeedType | null,
   teamID?: string | null,
   askDate?: string | null,
@@ -871,7 +872,6 @@ export type UpdateTeamRequestInput = {
   filledDate?: string | null,
   teamMemberAsksId?: string | null,
   teamMemberFulfilledId?: string | null,
-  teamRequestNeedRequestId?: string | null,
   teamRequestFilledById?: string | null,
 };
 
@@ -1110,6 +1110,7 @@ export enum ModelSortDirection {
 
 export type ModelTeamRequestFilterInput = {
   id?: ModelIDInput | null,
+  requestID?: ModelIDInput | null,
   type?: ModelNeedTypeInput | null,
   teamID?: ModelIDInput | null,
   askDate?: ModelStringInput | null,
@@ -1122,7 +1123,6 @@ export type ModelTeamRequestFilterInput = {
   not?: ModelTeamRequestFilterInput | null,
   teamMemberAsksId?: ModelIDInput | null,
   teamMemberFulfilledId?: ModelIDInput | null,
-  teamRequestNeedRequestId?: ModelIDInput | null,
   teamRequestFilledById?: ModelIDInput | null,
 };
 
@@ -1348,6 +1348,7 @@ export type ModelSubscriptionTeamMemberFilterInput = {
 
 export type ModelSubscriptionTeamRequestFilterInput = {
   id?: ModelSubscriptionIDInput | null,
+  requestID?: ModelSubscriptionIDInput | null,
   type?: ModelSubscriptionStringInput | null,
   teamID?: ModelSubscriptionIDInput | null,
   askDate?: ModelSubscriptionStringInput | null,
@@ -1358,7 +1359,6 @@ export type ModelSubscriptionTeamRequestFilterInput = {
   and?: Array< ModelSubscriptionTeamRequestFilterInput | null > | null,
   or?: Array< ModelSubscriptionTeamRequestFilterInput | null > | null,
   teamRequestAskedMembersId?: ModelSubscriptionIDInput | null,
-  teamRequestNeedRequestId?: ModelSubscriptionIDInput | null,
   teamRequestFilledById?: ModelSubscriptionIDInput | null,
 };
 
@@ -2263,7 +2263,8 @@ export type CreateTeamMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2323,7 +2324,6 @@ export type CreateTeamMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2349,7 +2349,8 @@ export type UpdateTeamMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2409,7 +2410,6 @@ export type UpdateTeamMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2435,7 +2435,8 @@ export type DeleteTeamMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2495,7 +2496,6 @@ export type DeleteTeamMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2520,7 +2520,8 @@ export type CreateTeamMemberMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2580,7 +2581,6 @@ export type CreateTeamMemberMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2590,7 +2590,8 @@ export type CreateTeamMemberMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2650,7 +2651,6 @@ export type CreateTeamMemberMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2676,7 +2676,8 @@ export type UpdateTeamMemberMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2736,7 +2737,6 @@ export type UpdateTeamMemberMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2746,7 +2746,8 @@ export type UpdateTeamMemberMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2806,7 +2807,6 @@ export type UpdateTeamMemberMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2832,7 +2832,8 @@ export type DeleteTeamMemberMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2892,7 +2893,6 @@ export type DeleteTeamMemberMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2902,7 +2902,8 @@ export type DeleteTeamMemberMutation = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -2962,7 +2963,6 @@ export type DeleteTeamMemberMutation = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -2982,7 +2982,8 @@ export type CreateTeamRequestMutation = {
   createTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -3137,6 +3138,7 @@ export type CreateTeamRequestMutation = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -3146,7 +3148,6 @@ export type CreateTeamRequestMutation = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -3156,6 +3157,7 @@ export type CreateTeamRequestMutation = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -3165,7 +3167,6 @@ export type CreateTeamRequestMutation = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -3198,7 +3199,6 @@ export type CreateTeamRequestMutation = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };
@@ -3212,7 +3212,8 @@ export type UpdateTeamRequestMutation = {
   updateTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -3367,6 +3368,7 @@ export type UpdateTeamRequestMutation = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -3376,7 +3378,6 @@ export type UpdateTeamRequestMutation = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -3386,6 +3387,7 @@ export type UpdateTeamRequestMutation = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -3395,7 +3397,6 @@ export type UpdateTeamRequestMutation = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -3428,7 +3429,6 @@ export type UpdateTeamRequestMutation = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };
@@ -3442,7 +3442,8 @@ export type DeleteTeamRequestMutation = {
   deleteTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -3597,6 +3598,7 @@ export type DeleteTeamRequestMutation = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -3606,7 +3608,6 @@ export type DeleteTeamRequestMutation = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -3616,6 +3617,7 @@ export type DeleteTeamRequestMutation = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -3625,7 +3627,6 @@ export type DeleteTeamRequestMutation = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -3658,7 +3659,6 @@ export type DeleteTeamRequestMutation = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };
@@ -4296,7 +4296,8 @@ export type GetTeamQuery = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -4356,7 +4357,6 @@ export type GetTeamQuery = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -4385,6 +4385,7 @@ export type ListTeamsQuery = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -4394,7 +4395,6 @@ export type ListTeamsQuery = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -4420,7 +4420,8 @@ export type GetTeamMemberQuery = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -4480,7 +4481,6 @@ export type GetTeamMemberQuery = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -4490,7 +4490,8 @@ export type GetTeamMemberQuery = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -4550,7 +4551,6 @@ export type GetTeamMemberQuery = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -4581,6 +4581,7 @@ export type ListTeamMembersQuery = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -4590,7 +4591,6 @@ export type ListTeamMembersQuery = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -4600,6 +4600,7 @@ export type ListTeamMembersQuery = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -4609,7 +4610,6 @@ export type ListTeamMembersQuery = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -4630,7 +4630,8 @@ export type GetTeamRequestQuery = {
   getTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -4785,6 +4786,7 @@ export type GetTeamRequestQuery = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -4794,7 +4796,6 @@ export type GetTeamRequestQuery = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -4804,6 +4805,7 @@ export type GetTeamRequestQuery = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -4813,7 +4815,6 @@ export type GetTeamRequestQuery = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -4846,7 +4847,6 @@ export type GetTeamRequestQuery = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };
@@ -4863,7 +4863,8 @@ export type ListTeamRequestsQuery = {
     items:  Array< {
       __typename: "TeamRequest",
       id: string,
-      needRequest:  {
+      requestID: string,
+      request:  {
         __typename: "Request",
         id: string,
         createdAt?: string | null,
@@ -5030,7 +5031,6 @@ export type ListTeamRequestsQuery = {
       updatedAt: string,
       teamMemberAsksId?: string | null,
       teamMemberFulfilledId?: string | null,
-      teamRequestNeedRequestId: string,
       teamRequestFilledById?: string | null,
     } | null >,
     nextToken?: string | null,
@@ -5916,7 +5916,8 @@ export type OnCreateTeamSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -5976,7 +5977,6 @@ export type OnCreateTeamSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6001,7 +6001,8 @@ export type OnUpdateTeamSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6061,7 +6062,6 @@ export type OnUpdateTeamSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6086,7 +6086,8 @@ export type OnDeleteTeamSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6146,7 +6147,6 @@ export type OnDeleteTeamSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6170,7 +6170,8 @@ export type OnCreateTeamMemberSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6230,7 +6231,6 @@ export type OnCreateTeamMemberSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6240,7 +6240,8 @@ export type OnCreateTeamMemberSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6300,7 +6301,6 @@ export type OnCreateTeamMemberSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6325,7 +6325,8 @@ export type OnUpdateTeamMemberSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6385,7 +6386,6 @@ export type OnUpdateTeamMemberSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6395,7 +6395,8 @@ export type OnUpdateTeamMemberSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6455,7 +6456,6 @@ export type OnUpdateTeamMemberSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6480,7 +6480,8 @@ export type OnDeleteTeamMemberSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6540,7 +6541,6 @@ export type OnDeleteTeamMemberSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6550,7 +6550,8 @@ export type OnDeleteTeamMemberSubscription = {
       items:  Array< {
         __typename: "TeamRequest",
         id: string,
-        needRequest:  {
+        requestID: string,
+        request:  {
           __typename: "Request",
           id: string,
           createdAt?: string | null,
@@ -6610,7 +6611,6 @@ export type OnDeleteTeamMemberSubscription = {
         updatedAt: string,
         teamMemberAsksId?: string | null,
         teamMemberFulfilledId?: string | null,
-        teamRequestNeedRequestId: string,
         teamRequestFilledById?: string | null,
       } | null >,
       nextToken?: string | null,
@@ -6629,7 +6629,8 @@ export type OnCreateTeamRequestSubscription = {
   onCreateTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -6784,6 +6785,7 @@ export type OnCreateTeamRequestSubscription = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -6793,7 +6795,6 @@ export type OnCreateTeamRequestSubscription = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -6803,6 +6804,7 @@ export type OnCreateTeamRequestSubscription = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -6812,7 +6814,6 @@ export type OnCreateTeamRequestSubscription = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -6845,7 +6846,6 @@ export type OnCreateTeamRequestSubscription = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };
@@ -6858,7 +6858,8 @@ export type OnUpdateTeamRequestSubscription = {
   onUpdateTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -7013,6 +7014,7 @@ export type OnUpdateTeamRequestSubscription = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -7022,7 +7024,6 @@ export type OnUpdateTeamRequestSubscription = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -7032,6 +7033,7 @@ export type OnUpdateTeamRequestSubscription = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -7041,7 +7043,6 @@ export type OnUpdateTeamRequestSubscription = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -7074,7 +7075,6 @@ export type OnUpdateTeamRequestSubscription = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };
@@ -7087,7 +7087,8 @@ export type OnDeleteTeamRequestSubscription = {
   onDeleteTeamRequest?:  {
     __typename: "TeamRequest",
     id: string,
-    needRequest:  {
+    requestID: string,
+    request:  {
       __typename: "Request",
       id: string,
       createdAt?: string | null,
@@ -7242,6 +7243,7 @@ export type OnDeleteTeamRequestSubscription = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -7251,7 +7253,6 @@ export type OnDeleteTeamRequestSubscription = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -7261,6 +7262,7 @@ export type OnDeleteTeamRequestSubscription = {
         items:  Array< {
           __typename: "TeamRequest",
           id: string,
+          requestID: string,
           type: NeedType,
           teamID: string,
           askDate: string,
@@ -7270,7 +7272,6 @@ export type OnDeleteTeamRequestSubscription = {
           updatedAt: string,
           teamMemberAsksId?: string | null,
           teamMemberFulfilledId?: string | null,
-          teamRequestNeedRequestId: string,
           teamRequestFilledById?: string | null,
         } | null >,
         nextToken?: string | null,
@@ -7303,7 +7304,6 @@ export type OnDeleteTeamRequestSubscription = {
     updatedAt: string,
     teamMemberAsksId?: string | null,
     teamMemberFulfilledId?: string | null,
-    teamRequestNeedRequestId: string,
     teamRequestFilledById?: string | null,
   } | null,
 };

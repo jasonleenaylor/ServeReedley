@@ -8,13 +8,17 @@ import {
   RadioButtonState,
 } from "./needRequestTypes";
 import {
+  ContactCard,
   ContactCardData,
   getCopyTextForContactInfo,
   getGroceriesListText,
   getHouseholdItemsText,
+  getHygeneItemsText,
 } from "./needFormCards";
 import { ContentCopy } from "@mui/icons-material";
 import { NeedType } from "./RequestAPI";
+import BasicContactInfoCard from "./BasicContactInfoCard";
+import mobileCardStyles from "./MobileCardStyles";
 
 interface NeedSummaryForTeamProps {
   needType: NeedType;
@@ -67,11 +71,15 @@ const getDeliveryDetails = (request: NeedRequestType): string => {
   let details = "";
 
   if (request.foodRequest?.familyMembers) {
-    details += `Family Size| ${request.foodRequest.familyMembers}\n`;
+    details += `Family Size - ${request.foodRequest.familyMembers}\n`;
+  }
+
+  if (request.foodRequest?.children) {
+    details += `Children ages - ${request.foodRequest.children}\n`;
   }
 
   if (request.foodRequest?.deliveryTime) {
-    details += `Preferred Delivery Time| ${request.foodRequest.deliveryTime}\n`;
+    details += `Preferred Delivery Time - ${request.foodRequest.deliveryTime}\n`;
   }
   return details;
 };
@@ -84,7 +92,7 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
   const getSummaryDetails = () => {
     switch (needType) {
       case NeedType.GROCERIES:
-        return `${getDeliveryDetails(request)}Items| ${getGroceriesListText(
+        return `${getDeliveryDetails(request)}\nItems - ${getGroceriesListText(
           request.foodRequest as IGroceriesType
         )}`;
       case NeedType.MEALS:
@@ -98,9 +106,11 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
       case NeedType.HOMEREPAIR:
         return t("home_repair_summary");
       case NeedType.HYGENEITEMS:
-        return t("hygiene_items_summary");
+        return `${getDeliveryDetails(request)}\nItems - ${getHygeneItemsText(
+          request.householdItems as HouseholdItemsGQL
+        )}`;
       case NeedType.HOUSEHOLDITEMS:
-        return `${getDeliveryDetails(request)}Items| ${getHouseholdItemsText(
+        return `${getDeliveryDetails(request)}\nItems - ${getHouseholdItemsText(
           request.householdItems as HouseholdItemsGQL
         )}`;
       case NeedType.HOUSING:
@@ -116,14 +126,37 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
     }
   };
 
+  var cardStyle = mobileCardStyles();
   return (
     <Card>
       <CardContent>
-        {CopyableText(
-          getCopyTextForContactInfo(mapNeedRequestToContactCardData(request)) +
-            "\n" +
-            getSummaryDetails()
-        )}
+        <BasicContactInfoCard
+          name={request.firstName?.trim() + " " + request.lastName?.trim()}
+          address={
+            request.address + ", " + request.city + ", " + request.zipCode
+          }
+          phone={
+            "" +
+            (request.selfOrOtherInfo.phoneNumber
+              ? request.selfOrOtherInfo.phoneNumber
+              : request.phone)
+          }
+          email={"" + request.email}
+        />
+        <Card className={cardStyle.card}>
+          {getSummaryDetails()
+            .trim()
+            .split("\n")
+            .map((line, index) => (
+              <Typography
+                className={cardStyle.text}
+                key={index}
+                variant="body1"
+              >
+                {line}
+              </Typography>
+            ))}
+        </Card>
       </CardContent>
     </Card>
   );

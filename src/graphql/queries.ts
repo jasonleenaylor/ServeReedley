@@ -634,7 +634,8 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
     requests {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -694,7 +695,6 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -720,6 +720,7 @@ export const listTeams = /* GraphQL */ `query ListTeams(
       requests {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -729,7 +730,6 @@ export const listTeams = /* GraphQL */ `query ListTeams(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -752,7 +752,8 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
     asks {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -812,7 +813,6 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -822,7 +822,8 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
     fulfilled {
       items {
         id
-        needRequest {
+        requestID
+        request {
           id
           createdAt
           dateOfRequest
@@ -882,7 +883,6 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
         updatedAt
         teamMemberAsksId
         teamMemberFulfilledId
-        teamRequestNeedRequestId
         teamRequestFilledById
         __typename
       }
@@ -919,6 +919,7 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -928,7 +929,6 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -938,6 +938,7 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -947,7 +948,6 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -970,7 +970,8 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
 export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
   getTeamRequest(id: $id) {
     id
-    needRequest {
+    requestID
+    request {
       id
       createdAt
       dateOfRequest
@@ -1122,6 +1123,7 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
       asks {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1131,7 +1133,6 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -1141,6 +1142,7 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
       fulfilled {
         items {
           id
+          requestID
           type
           teamID
           askDate
@@ -1150,7 +1152,6 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
           updatedAt
           teamMemberAsksId
           teamMemberFulfilledId
-          teamRequestNeedRequestId
           teamRequestFilledById
           __typename
         }
@@ -1186,7 +1187,6 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
     updatedAt
     teamMemberAsksId
     teamMemberFulfilledId
-    teamRequestNeedRequestId
     teamRequestFilledById
     __typename
   }
@@ -1203,7 +1203,8 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
   listTeamRequests(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      needRequest {
+      requestID
+      request {
         id
         createdAt
         dateOfRequest
@@ -1370,7 +1371,6 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
       updatedAt
       teamMemberAsksId
       teamMemberFulfilledId
-      teamRequestNeedRequestId
       teamRequestFilledById
       __typename
     }

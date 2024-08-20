@@ -104,7 +104,7 @@ function SendToTeamDialog({
   const onSubmit = async () => {
     try {
       const input = {
-        needRequestID: request.id,
+        requestID: request.id,
         teamID: selectedTeam,
         type: needType,
         note,
@@ -113,6 +113,7 @@ function SendToTeamDialog({
       await API.graphql({
         query: createTeamRequest,
         variables: { input },
+        authMode: "AMAZON_COGNITO_USER_POOLS"
       });
       onClose();
     } catch (error) {
