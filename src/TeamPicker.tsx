@@ -12,18 +12,23 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Auth } from "@aws-amplify/auth";
+import { GraphQLResult } from "@aws-amplify/api-graphql";
 import Lambda from "aws-sdk/clients/lambda";
 import { CSSProperties } from "react";
 import { useParams } from "react-router-dom";
 import { useTeams } from "./useTeams";
 import useRequestsById from "./useRequestsById";
 import NeedSummaryForTeam from "./NeedSummaryForTeam";
-import { NeedType, Team, TeamRequest } from "./RequestAPI";
-import { getRequest, getTeamMember } from "./graphql/queries";
+import { NeedType, Team, TeamMember, TeamRequest } from "./RequestAPI";
+import { getRequest, getTeamMember, listTeamMembers } from "./graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { NeedRequestType } from "./needRequestTypes";
 import { CheckBox } from "@material-ui/icons";
-import { createTeamMember, updateTeamMember } from "./graphql/mutations";
+import {
+  createAskedMembers,
+  createTeamMember,
+  updateTeamMember,
+} from "./graphql/mutations";
 
 interface Person {
   id: string;
@@ -37,9 +42,14 @@ interface Person {
 interface PeopleProps {
   people: Person[];
   onSelectionChange: (selectedPeople: Person[]) => void;
+  onMarkAsSent: () => void;
 }
 
-const PeopleTable: React.FC<PeopleProps> = ({ people, onSelectionChange }) => {
+const PeopleTable: React.FC<PeopleProps> = ({
+  people,
+  onSelectionChange,
+  onMarkAsSent,
+}) => {
   const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
 
   const handleCheckboxChange = (personId: string) => {
@@ -74,48 +84,6 @@ const PeopleTable: React.FC<PeopleProps> = ({ people, onSelectionChange }) => {
       </tr>
     );
   });
-
-  const handleMarkAsSent = async () => {
-    try {
-      const breezeId = "some-unique-identifier"; // Replace with actual data
-
-      // Step 1: Check if the TeamMember exists
-      const existingTeamMemberData: any = await API.graphql(
-        graphqlOperation(getTeamMember, { id: breezeId })
-      );
-
-      if (existingTeamMemberData.data.getTeamMember) {
-        // Step 2: If exists, update the TeamMember
-        const updatedTeamMemberInput = {
-          id: existingTeamMemberData.data.getTeamMember.id,
-          breezeId: breezeId,
-          name: "John Doe", // Replace with actual data
-          // Add other fields as needed
-        };
-
-        const updatedTeamMember = await API.graphql(
-          graphqlOperation(updateTeamMember, { input: updatedTeamMemberInput })
-        );
-
-        console.log("TeamMember record updated:", updatedTeamMember);
-      } else {
-        // Step 3: If doesn't exist, create a new TeamMember
-        const newTeamMemberInput = {
-          breezeId: breezeId,
-          name: "John Doe", // Replace with actual data
-          // Add other fields as needed
-        };
-
-        const newTeamMember = await API.graphql(
-          graphqlOperation(createTeamMember, { input: newTeamMemberInput })
-        );
-
-        console.log("TeamMember record created:", newTeamMember);
-      }
-    } catch (err) {
-      console.error("Error creating/updating TeamMember:", err);
-    }
-  };
 
   return (
     <Card>
@@ -153,7 +121,7 @@ const PeopleTable: React.FC<PeopleProps> = ({ people, onSelectionChange }) => {
           >
             Send
           </Button>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={onMarkAsSent}>
             Mark as Sent
           </Button>
         </div>
@@ -203,6 +171,70 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
   if (error) return <div>{error}</div>;
   if (!needRequest) return <div>Loading...</div>;
 
+  const handleMarkAsSent = async () => {
+    for (let askee of selectedPeople) {
+      console.log("Askee data:");
+      console.log(JSON.stringify(askee));
+      try {
+        // Step 1: Check if the TeamMember exists
+        const existingTeamMemberData = (await API.graphql({
+          query: getTeamMember,
+          variables: {
+            breezeId: askee.id, // Correctly pass the breezeId here
+          },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        })) as GraphQLResult<{ getTeamMember: TeamMember }>;
+        console.log("Looking up team member:");
+        console.log(JSON.stringify(existingTeamMemberData));
+        if (existingTeamMemberData.data?.getTeamMember) {
+          // Step 2: If exists, update the join table to record the ask
+          // unless they already were for this request
+          if (
+            !existingTeamMemberData.data?.getTeamMember.asks?.items.find(
+              (a) => a?.teamRequestID == request.id
+            )
+          ) {
+            const updatedTeamMember = await API.graphql({
+              query: createAskedMembers,
+              variables: {
+                input: { teamRequestID: request.id, teamMemberID: askee.id },
+              },
+              authMode: "AMAZON_COGNITO_USER_POOLS",
+            });
+
+            console.log("Join table updated:", updatedTeamMember);
+          } else {
+            console.log("Already asked about this one.");
+          }
+        } else {
+          // Step 3: If doesn't exist, create a new TeamMember
+          const newTeamMemberInput = {
+            breezeId: askee.id,
+            name: askee.first_name.trim() + " " + askee.last_name.trim(),
+          };
+          console.log("Attempting to create new member.");
+          const newTeamMember = await API.graphql({
+            query: createTeamMember,
+            variables: { input: newTeamMemberInput },
+            authMode: "AMAZON_COGNITO_USER_POOLS",
+          });
+          console.log("Attempting to update join table.");
+          const updatedJoinTable = await API.graphql({
+            query: createAskedMembers,
+            variables: {
+              input: { teamRequestID: request.id, teamMemberID: askee.id },
+            },
+            authMode: "AMAZON_COGNITO_USER_POOLS",
+          });
+          console.log("TeamMember record created:", newTeamMember);
+          console.log("Join table updated:", updatedJoinTable);
+        }
+      } catch (err) {
+        console.error("Error creating/updating TeamMember:", err);
+      }
+    }
+  };
+
   return (
     <Card style={{ width: "90%", alignSelf: "center" }}>
       <NeedSummaryForTeam request={needRequest} needType={team.teamType} />
@@ -214,6 +246,7 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
       <PeopleTable
         people={people}
         onSelectionChange={(people) => setSelectedPeople(people)}
+        onMarkAsSent={handleMarkAsSent}
       />
     </Card>
   );
@@ -283,8 +316,61 @@ const TeamPicker: React.FC = () => {
     { needType: NeedType.OTHER, option_id: "11", name: "Yard Care" },
   ];
 
-  function fillInPeopleInfo(value: Person[]) {
-    setPeople(value);
+  async function fillInPeopleInfo(people: Person[]) {
+    try {
+      // Fetch all TeamMembers from the API
+      const teamMembersData: any = await API.graphql({
+        query: listTeamMembers,
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+
+      if (teamMembersData.data.listTeamMembers.items) {
+        const teamMembers: TeamMember[] =
+          teamMembersData.data.listTeamMembers.items;
+
+        // Iterate over each person in the provided array
+        people.forEach((person) => {
+          // Find the corresponding TeamMember by matching the `breezeId`
+          const matchingTeamMember = teamMembers.find(
+            (member) => member.breezeId === person.id
+          );
+          // If a matching TeamMember is found, update the person's details
+          if (matchingTeamMember) {
+            console.log("So close! :" + JSON.stringify(matchingTeamMember));
+            // Safely handle `fulfilled` field, which could be null or empty
+            const lastFilledDate =
+              matchingTeamMember.fulfilled?.items?.reduce(
+                (latest, item) =>
+                  item!.filledDate && item!.filledDate > latest
+                    ? item!.filledDate
+                    : latest,
+                ""
+              ) || "";
+
+            // Safely handle `asks` field, which could be null or empty
+            const contactsLastMonth =
+              matchingTeamMember.asks?.items?.filter((ask) => {
+                const askDate = new Date(ask!.createdAt);
+                const lastMonth = new Date();
+                lastMonth.setMonth(lastMonth.getMonth() - 1);
+                return askDate >= lastMonth;
+              }).length || 0;
+
+            // Update the person with the new information
+            person.first_name =
+              matchingTeamMember.name.split(" ")[0] || person.first_name;
+            person.last_name =
+              matchingTeamMember.name.split(" ")[1] || person.last_name;
+            person.last_contacted = matchingTeamMember.updatedAt;
+            person.last_filled = lastFilledDate;
+            person.contacts_last_month = contactsLastMonth;
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching team members:", error);
+    }
+    setPeople(people);
   }
 
   useEffect(() => {

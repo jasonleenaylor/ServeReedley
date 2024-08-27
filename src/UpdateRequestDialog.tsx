@@ -78,6 +78,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
   const [currentNotable, setCurrentNotable] = React.useState<number | null>(0);
   const { onClose, onSave, open } = props;
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
+  const [snackBarMessage, setSnackBarMessage] = React.useState("");
 
   const handleClose = () => {
     onClose();
@@ -111,6 +112,11 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
     setCurrentNote("");
   };
   const cardStyle = { padding: 12 };
+
+  function showSnackBarMessage(message: string): void {
+    setSnackBarMessage(message);
+    setSnackBarOpen(true);
+  }
 
   return (
     <Dialog onClose={handleDlgClose} open={open}>
@@ -219,7 +225,9 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                   },
                 })
               }
-              copy={() => setSnackBarOpen(true)}
+              copy={() => {
+                showSnackBarMessage("Copied");
+              }}
             />
           </Grid>
           <Grid item>
@@ -311,7 +319,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                   });
                 },
 
-                () => setSnackBarOpen(true)
+                () => showSnackBarMessage("Copied")
               )}{" "}
           </Grid>
           {requestData.needTypes.includes(NeedType.MOVING) && (
@@ -441,7 +449,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                     ),
                   });
                 },
-                () => setSnackBarOpen(true)
+                () => showSnackBarMessage("Copied")
               )}
             </Grid>
           )}
@@ -464,7 +472,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                     ),
                   });
                 },
-                () => setSnackBarOpen(true)
+                () => showSnackBarMessage("Copied")
               )}
             </Grid>
           )}
@@ -477,7 +485,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                   setRequestData({ ...requestData, clothingType: type }),
                 (size) =>
                   setRequestData({ ...requestData, clothingSize: size }),
-                () => setSnackBarOpen(true)
+                () => showSnackBarMessage("Copied")
               )}
             </Grid>
           )}
@@ -558,7 +566,8 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
                     },
                     needTypeArrayToBooleans(requestData.fulfilledNeeds),
                     false,
-                    requestData
+                    requestData,
+                    showSnackBarMessage
                   )}
                 </Grid>
                 <Grid item xs={12}>
@@ -609,7 +618,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
         </Grid>
         <Snackbar
           autoHideDuration={4000}
-          message="Copied"
+          message={snackBarMessage}
           open={snackBarOpen}
           onClose={() => setSnackBarOpen(false)}
         />
