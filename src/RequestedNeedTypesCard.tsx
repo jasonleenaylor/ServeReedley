@@ -82,7 +82,7 @@ function SendToTeamDialog({
   request,
 }: {
   open: boolean;
-  onClose: () => void;
+  onClose: (submitted: boolean) => void;
   needType: NeedType;
   request: NeedRequestType;
 }): JSX.Element {
@@ -113,9 +113,12 @@ function SendToTeamDialog({
       await API.graphql({
         query: createTeamRequest,
         variables: { input },
-        authMode: "AMAZON_COGNITO_USER_POOLS"
+        authMode: "AMAZON_COGNITO_USER_POOLS",
       });
-      onClose();
+      onClose(true);
+      navigator.clipboard.writeText(
+        `https://crn.servereedley.org/team${selectedTeam}`
+      );
     } catch (error) {
       console.error("Error creating team request:", error);
     }
@@ -166,7 +169,7 @@ function SendToTeamDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t("cancel")}</Button>
+        <Button onClick={() => onClose(false)}>{t("cancel")}</Button>
         <Button onClick={onSubmit} disabled={!selectedTeam}>
           {t("submit")}
         </Button>
@@ -180,7 +183,8 @@ export function RequestedNeedTypesCard(
   handleNeedTypeChange: (event: ChangeEvent<HTMLInputElement>) => void,
   completed?: INeedTypes,
   displayAll: boolean = true,
-  request: NeedRequestType | undefined = undefined
+  request: NeedRequestType | undefined = undefined,
+  toast: ((message: string) => void) | undefined = undefined
 ): JSX.Element {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedNeedType, setSelectedNeedType] = useState(NeedType.OTHER);
@@ -190,8 +194,9 @@ export function RequestedNeedTypesCard(
     setOpenDialog(true);
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (submitted: boolean) => {
     setOpenDialog(false);
+    if (submitted && toast) toast("Team link copied to clipboard");
   };
 
   return (

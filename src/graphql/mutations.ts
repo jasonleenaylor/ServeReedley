@@ -975,7 +975,6 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -984,7 +983,6 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -1062,7 +1060,6 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -1071,7 +1068,6 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -1149,7 +1145,6 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -1158,7 +1153,6 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -1185,68 +1179,31 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
     asks {
       items {
         id
-        requestID
-        request {
-          id
-          createdAt
-          dateOfRequest
-          firstName
-          lastName
-          address
-          city
-          zipCode
-          phone
-          email
-          spanishOnly
-          preferredContactTime
-          request
-          leadSource
-          leadOtherDetails
-          resumeHelp
-          coverLetterHelp
-          carRepairDetails
-          clothingType
-          clothingSize
-          furnitureType
-          housingHelp
-          needReason
-          needTypes
-          fulfilledNeeds
-          status
-          otherNeeds
-          needFulfiller
-          dateFulfilled
-          followUp
-          updatedAt
-          requestSelfOrOtherInfoId
-          requestFoodRequestId
-          requestMovingRequestId
-          requestHomeRepairTypeId
-          requestHouseholdItemsId
-          __typename
-        }
-        type
-        teamID
-        askDate
-        note
-        filledDate
-        filledBy {
+        teamMemberID
+        teamRequestID
+        teamMember {
           breezeId
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
-        askedMembers {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamMemberAsksId
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1305,7 +1262,6 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -1314,7 +1270,6 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -1324,7 +1279,6 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
     }
     createdAt
     updatedAt
-    teamRequestAskedMembersId
     __typename
   }
 }
@@ -1342,68 +1296,31 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
     asks {
       items {
         id
-        requestID
-        request {
-          id
-          createdAt
-          dateOfRequest
-          firstName
-          lastName
-          address
-          city
-          zipCode
-          phone
-          email
-          spanishOnly
-          preferredContactTime
-          request
-          leadSource
-          leadOtherDetails
-          resumeHelp
-          coverLetterHelp
-          carRepairDetails
-          clothingType
-          clothingSize
-          furnitureType
-          housingHelp
-          needReason
-          needTypes
-          fulfilledNeeds
-          status
-          otherNeeds
-          needFulfiller
-          dateFulfilled
-          followUp
-          updatedAt
-          requestSelfOrOtherInfoId
-          requestFoodRequestId
-          requestMovingRequestId
-          requestHomeRepairTypeId
-          requestHouseholdItemsId
-          __typename
-        }
-        type
-        teamID
-        askDate
-        note
-        filledDate
-        filledBy {
+        teamMemberID
+        teamRequestID
+        teamMember {
           breezeId
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
-        askedMembers {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamMemberAsksId
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1462,7 +1379,6 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -1471,7 +1387,6 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -1481,7 +1396,6 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
     }
     createdAt
     updatedAt
-    teamRequestAskedMembersId
     __typename
   }
 }
@@ -1499,68 +1413,31 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
     asks {
       items {
         id
-        requestID
-        request {
-          id
-          createdAt
-          dateOfRequest
-          firstName
-          lastName
-          address
-          city
-          zipCode
-          phone
-          email
-          spanishOnly
-          preferredContactTime
-          request
-          leadSource
-          leadOtherDetails
-          resumeHelp
-          coverLetterHelp
-          carRepairDetails
-          clothingType
-          clothingSize
-          furnitureType
-          housingHelp
-          needReason
-          needTypes
-          fulfilledNeeds
-          status
-          otherNeeds
-          needFulfiller
-          dateFulfilled
-          followUp
-          updatedAt
-          requestSelfOrOtherInfoId
-          requestFoodRequestId
-          requestMovingRequestId
-          requestHomeRepairTypeId
-          requestHouseholdItemsId
-          __typename
-        }
-        type
-        teamID
-        askDate
-        note
-        filledDate
-        filledBy {
+        teamMemberID
+        teamRequestID
+        teamMember {
           breezeId
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
-        askedMembers {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamMemberAsksId
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1619,7 +1496,6 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -1628,7 +1504,6 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -1638,7 +1513,6 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
     }
     createdAt
     updatedAt
-    teamRequestAskedMembersId
     __typename
   }
 }
@@ -1805,17 +1679,10 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
       asks {
         items {
           id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
+          teamMemberID
+          teamRequestID
           createdAt
           updatedAt
-          teamMemberAsksId
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -1832,7 +1699,6 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
           filledDate
           createdAt
           updatedAt
-          teamMemberAsksId
           teamMemberFulfilledId
           teamRequestFilledById
           __typename
@@ -1842,24 +1708,36 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
       }
       createdAt
       updatedAt
-      teamRequestAskedMembersId
       __typename
     }
     askedMembers {
       items {
-        breezeId
-        name
-        asks {
-          nextToken
+        id
+        teamMemberID
+        teamRequestID
+        teamMember {
+          breezeId
+          name
+          createdAt
+          updatedAt
           __typename
         }
-        fulfilled {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamRequestAskedMembersId
         __typename
       }
       nextToken
@@ -1867,7 +1745,6 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
     }
     createdAt
     updatedAt
-    teamMemberAsksId
     teamMemberFulfilledId
     teamRequestFilledById
     __typename
@@ -2036,17 +1913,10 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
       asks {
         items {
           id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
+          teamMemberID
+          teamRequestID
           createdAt
           updatedAt
-          teamMemberAsksId
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2063,7 +1933,6 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
           filledDate
           createdAt
           updatedAt
-          teamMemberAsksId
           teamMemberFulfilledId
           teamRequestFilledById
           __typename
@@ -2073,24 +1942,36 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
       }
       createdAt
       updatedAt
-      teamRequestAskedMembersId
       __typename
     }
     askedMembers {
       items {
-        breezeId
-        name
-        asks {
-          nextToken
+        id
+        teamMemberID
+        teamRequestID
+        teamMember {
+          breezeId
+          name
+          createdAt
+          updatedAt
           __typename
         }
-        fulfilled {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamRequestAskedMembersId
         __typename
       }
       nextToken
@@ -2098,7 +1979,6 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
     }
     createdAt
     updatedAt
-    teamMemberAsksId
     teamMemberFulfilledId
     teamRequestFilledById
     __typename
@@ -2267,17 +2147,10 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
       asks {
         items {
           id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
+          teamMemberID
+          teamRequestID
           createdAt
           updatedAt
-          teamMemberAsksId
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2294,7 +2167,6 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
           filledDate
           createdAt
           updatedAt
-          teamMemberAsksId
           teamMemberFulfilledId
           teamRequestFilledById
           __typename
@@ -2304,11 +2176,236 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
       }
       createdAt
       updatedAt
-      teamRequestAskedMembersId
       __typename
     }
     askedMembers {
       items {
+        id
+        teamMemberID
+        teamRequestID
+        teamMember {
+          breezeId
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    teamMemberFulfilledId
+    teamRequestFilledById
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteTeamRequestMutationVariables,
+  APITypes.DeleteTeamRequestMutation
+>;
+export const createAskedMembers = /* GraphQL */ `mutation CreateAskedMembers(
+  $input: CreateAskedMembersInput!
+  $condition: ModelAskedMembersConditionInput
+) {
+  createAskedMembers(input: $input, condition: $condition) {
+    id
+    teamMemberID
+    teamRequestID
+    teamMember {
+      breezeId
+      name
+      asks {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      fulfilled {
+        items {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    teamRequest {
+      id
+      requestID
+      request {
+        id
+        createdAt
+        dateOfRequest
+        firstName
+        lastName
+        address
+        city
+        zipCode
+        phone
+        email
+        spanishOnly
+        preferredContactTime
+        request
+        leadSource
+        leadOtherDetails
+        selfOrOtherInfo {
+          forSelf
+          usedOtherResources
+          otherResources
+          requestFor
+          requestIsKnown
+          phoneNumber
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        foodRequest {
+          familyMembers
+          children
+          deliveryTime
+          haveAllergies
+          allergies
+          milk
+          eggs
+          bread
+          butter
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        movingRequest {
+          items
+          haveTransportation
+          steepDriveway
+          stairs
+          unpavedRoad
+          other
+          otherDetails
+          liabilityAck
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        resumeHelp
+        coverLetterHelp
+        carRepairDetails
+        homeRepairType {
+          plumbing
+          electrical
+          painting
+          yardwork
+          other
+          details
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        clothingType
+        clothingSize
+        furnitureType
+        housingHelp
+        householdItems {
+          shampoo
+          bathSoap
+          toothpaste
+          toothbrush
+          deodorant
+          toiletPaper
+          handSoap
+          sanitaryPads
+          tampons
+          bleach
+          lysolSpray
+          lysolWipes
+          dishsoap
+          sponges
+          pinesol
+          conditioner
+          paperTowels
+          laundrySoap
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        needReason
+        needTypes
+        fulfilledNeeds
+        status
+        note {
+          nextToken
+          __typename
+        }
+        otherNeeds
+        needFulfiller
+        dateFulfilled
+        followUp
+        updatedAt
+        requestSelfOrOtherInfoId
+        requestFoodRequestId
+        requestMovingRequestId
+        requestHomeRepairTypeId
+        requestHouseholdItemsId
+        __typename
+      }
+      type
+      teamID
+      askDate
+      note
+      filledDate
+      filledBy {
         breezeId
         name
         asks {
@@ -2321,21 +2418,482 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
         }
         createdAt
         updatedAt
-        teamRequestAskedMembersId
         __typename
       }
-      nextToken
+      askedMembers {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      teamMemberFulfilledId
+      teamRequestFilledById
       __typename
     }
     createdAt
     updatedAt
-    teamMemberAsksId
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteTeamRequestMutationVariables,
-  APITypes.DeleteTeamRequestMutation
+  APITypes.CreateAskedMembersMutationVariables,
+  APITypes.CreateAskedMembersMutation
+>;
+export const updateAskedMembers = /* GraphQL */ `mutation UpdateAskedMembers(
+  $input: UpdateAskedMembersInput!
+  $condition: ModelAskedMembersConditionInput
+) {
+  updateAskedMembers(input: $input, condition: $condition) {
+    id
+    teamMemberID
+    teamRequestID
+    teamMember {
+      breezeId
+      name
+      asks {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      fulfilled {
+        items {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    teamRequest {
+      id
+      requestID
+      request {
+        id
+        createdAt
+        dateOfRequest
+        firstName
+        lastName
+        address
+        city
+        zipCode
+        phone
+        email
+        spanishOnly
+        preferredContactTime
+        request
+        leadSource
+        leadOtherDetails
+        selfOrOtherInfo {
+          forSelf
+          usedOtherResources
+          otherResources
+          requestFor
+          requestIsKnown
+          phoneNumber
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        foodRequest {
+          familyMembers
+          children
+          deliveryTime
+          haveAllergies
+          allergies
+          milk
+          eggs
+          bread
+          butter
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        movingRequest {
+          items
+          haveTransportation
+          steepDriveway
+          stairs
+          unpavedRoad
+          other
+          otherDetails
+          liabilityAck
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        resumeHelp
+        coverLetterHelp
+        carRepairDetails
+        homeRepairType {
+          plumbing
+          electrical
+          painting
+          yardwork
+          other
+          details
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        clothingType
+        clothingSize
+        furnitureType
+        housingHelp
+        householdItems {
+          shampoo
+          bathSoap
+          toothpaste
+          toothbrush
+          deodorant
+          toiletPaper
+          handSoap
+          sanitaryPads
+          tampons
+          bleach
+          lysolSpray
+          lysolWipes
+          dishsoap
+          sponges
+          pinesol
+          conditioner
+          paperTowels
+          laundrySoap
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        needReason
+        needTypes
+        fulfilledNeeds
+        status
+        note {
+          nextToken
+          __typename
+        }
+        otherNeeds
+        needFulfiller
+        dateFulfilled
+        followUp
+        updatedAt
+        requestSelfOrOtherInfoId
+        requestFoodRequestId
+        requestMovingRequestId
+        requestHomeRepairTypeId
+        requestHouseholdItemsId
+        __typename
+      }
+      type
+      teamID
+      askDate
+      note
+      filledDate
+      filledBy {
+        breezeId
+        name
+        asks {
+          nextToken
+          __typename
+        }
+        fulfilled {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      askedMembers {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      teamMemberFulfilledId
+      teamRequestFilledById
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateAskedMembersMutationVariables,
+  APITypes.UpdateAskedMembersMutation
+>;
+export const deleteAskedMembers = /* GraphQL */ `mutation DeleteAskedMembers(
+  $input: DeleteAskedMembersInput!
+  $condition: ModelAskedMembersConditionInput
+) {
+  deleteAskedMembers(input: $input, condition: $condition) {
+    id
+    teamMemberID
+    teamRequestID
+    teamMember {
+      breezeId
+      name
+      asks {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      fulfilled {
+        items {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    teamRequest {
+      id
+      requestID
+      request {
+        id
+        createdAt
+        dateOfRequest
+        firstName
+        lastName
+        address
+        city
+        zipCode
+        phone
+        email
+        spanishOnly
+        preferredContactTime
+        request
+        leadSource
+        leadOtherDetails
+        selfOrOtherInfo {
+          forSelf
+          usedOtherResources
+          otherResources
+          requestFor
+          requestIsKnown
+          phoneNumber
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        foodRequest {
+          familyMembers
+          children
+          deliveryTime
+          haveAllergies
+          allergies
+          milk
+          eggs
+          bread
+          butter
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        movingRequest {
+          items
+          haveTransportation
+          steepDriveway
+          stairs
+          unpavedRoad
+          other
+          otherDetails
+          liabilityAck
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        resumeHelp
+        coverLetterHelp
+        carRepairDetails
+        homeRepairType {
+          plumbing
+          electrical
+          painting
+          yardwork
+          other
+          details
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        clothingType
+        clothingSize
+        furnitureType
+        housingHelp
+        householdItems {
+          shampoo
+          bathSoap
+          toothpaste
+          toothbrush
+          deodorant
+          toiletPaper
+          handSoap
+          sanitaryPads
+          tampons
+          bleach
+          lysolSpray
+          lysolWipes
+          dishsoap
+          sponges
+          pinesol
+          conditioner
+          paperTowels
+          laundrySoap
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        needReason
+        needTypes
+        fulfilledNeeds
+        status
+        note {
+          nextToken
+          __typename
+        }
+        otherNeeds
+        needFulfiller
+        dateFulfilled
+        followUp
+        updatedAt
+        requestSelfOrOtherInfoId
+        requestFoodRequestId
+        requestMovingRequestId
+        requestHomeRepairTypeId
+        requestHouseholdItemsId
+        __typename
+      }
+      type
+      teamID
+      askDate
+      note
+      filledDate
+      filledBy {
+        breezeId
+        name
+        asks {
+          nextToken
+          __typename
+        }
+        fulfilled {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      askedMembers {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      teamMemberFulfilledId
+      teamRequestFilledById
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteAskedMembersMutationVariables,
+  APITypes.DeleteAskedMembersMutation
 >;

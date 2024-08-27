@@ -684,7 +684,6 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -693,7 +692,6 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -728,7 +726,6 @@ export const listTeams = /* GraphQL */ `query ListTeams(
           filledDate
           createdAt
           updatedAt
-          teamMemberAsksId
           teamMemberFulfilledId
           teamRequestFilledById
           __typename
@@ -752,68 +749,31 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
     asks {
       items {
         id
-        requestID
-        request {
-          id
-          createdAt
-          dateOfRequest
-          firstName
-          lastName
-          address
-          city
-          zipCode
-          phone
-          email
-          spanishOnly
-          preferredContactTime
-          request
-          leadSource
-          leadOtherDetails
-          resumeHelp
-          coverLetterHelp
-          carRepairDetails
-          clothingType
-          clothingSize
-          furnitureType
-          housingHelp
-          needReason
-          needTypes
-          fulfilledNeeds
-          status
-          otherNeeds
-          needFulfiller
-          dateFulfilled
-          followUp
-          updatedAt
-          requestSelfOrOtherInfoId
-          requestFoodRequestId
-          requestMovingRequestId
-          requestHomeRepairTypeId
-          requestHouseholdItemsId
-          __typename
-        }
-        type
-        teamID
-        askDate
-        note
-        filledDate
-        filledBy {
+        teamMemberID
+        teamRequestID
+        teamMember {
           breezeId
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
-        askedMembers {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamMemberAsksId
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -872,7 +832,6 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
           name
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         askedMembers {
@@ -881,7 +840,6 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
         }
         createdAt
         updatedAt
-        teamMemberAsksId
         teamMemberFulfilledId
         teamRequestFilledById
         __typename
@@ -891,7 +849,6 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
     }
     createdAt
     updatedAt
-    teamRequestAskedMembersId
     __typename
   }
 }
@@ -919,17 +876,10 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
       asks {
         items {
           id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
+          teamMemberID
+          teamRequestID
           createdAt
           updatedAt
-          teamMemberAsksId
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -946,7 +896,6 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
           filledDate
           createdAt
           updatedAt
-          teamMemberAsksId
           teamMemberFulfilledId
           teamRequestFilledById
           __typename
@@ -956,7 +905,6 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
       }
       createdAt
       updatedAt
-      teamRequestAskedMembersId
       __typename
     }
     nextToken
@@ -1123,17 +1071,10 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
       asks {
         items {
           id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
+          teamMemberID
+          teamRequestID
           createdAt
           updatedAt
-          teamMemberAsksId
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -1150,7 +1091,6 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
           filledDate
           createdAt
           updatedAt
-          teamMemberAsksId
           teamMemberFulfilledId
           teamRequestFilledById
           __typename
@@ -1160,24 +1100,36 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
       }
       createdAt
       updatedAt
-      teamRequestAskedMembersId
       __typename
     }
     askedMembers {
       items {
-        breezeId
-        name
-        asks {
-          nextToken
+        id
+        teamMemberID
+        teamRequestID
+        teamMember {
+          breezeId
+          name
+          createdAt
+          updatedAt
           __typename
         }
-        fulfilled {
-          nextToken
+        teamRequest {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
           __typename
         }
         createdAt
         updatedAt
-        teamRequestAskedMembersId
         __typename
       }
       nextToken
@@ -1185,7 +1137,6 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
     }
     createdAt
     updatedAt
-    teamMemberAsksId
     teamMemberFulfilledId
     teamRequestFilledById
     __typename
@@ -1352,16 +1303,15 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
         }
         createdAt
         updatedAt
-        teamRequestAskedMembersId
         __typename
       }
       askedMembers {
         items {
-          breezeId
-          name
+          id
+          teamMemberID
+          teamRequestID
           createdAt
           updatedAt
-          teamRequestAskedMembersId
           __typename
         }
         nextToken
@@ -1369,7 +1319,6 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
       }
       createdAt
       updatedAt
-      teamMemberAsksId
       teamMemberFulfilledId
       teamRequestFilledById
       __typename
@@ -1381,4 +1330,327 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
 ` as GeneratedQuery<
   APITypes.ListTeamRequestsQueryVariables,
   APITypes.ListTeamRequestsQuery
+>;
+export const getAskedMembers = /* GraphQL */ `query GetAskedMembers($id: ID!) {
+  getAskedMembers(id: $id) {
+    id
+    teamMemberID
+    teamRequestID
+    teamMember {
+      breezeId
+      name
+      asks {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      fulfilled {
+        items {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          createdAt
+          updatedAt
+          teamMemberFulfilledId
+          teamRequestFilledById
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    teamRequest {
+      id
+      requestID
+      request {
+        id
+        createdAt
+        dateOfRequest
+        firstName
+        lastName
+        address
+        city
+        zipCode
+        phone
+        email
+        spanishOnly
+        preferredContactTime
+        request
+        leadSource
+        leadOtherDetails
+        selfOrOtherInfo {
+          forSelf
+          usedOtherResources
+          otherResources
+          requestFor
+          requestIsKnown
+          phoneNumber
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        foodRequest {
+          familyMembers
+          children
+          deliveryTime
+          haveAllergies
+          allergies
+          milk
+          eggs
+          bread
+          butter
+          tortillas
+          rice
+          beans
+          cheese
+          beef
+          hotdogs
+          lunchMeat
+          fruit
+          peanutButter
+          jelly
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        movingRequest {
+          items
+          haveTransportation
+          steepDriveway
+          stairs
+          unpavedRoad
+          other
+          otherDetails
+          liabilityAck
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        resumeHelp
+        coverLetterHelp
+        carRepairDetails
+        homeRepairType {
+          plumbing
+          electrical
+          painting
+          yardwork
+          other
+          details
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        clothingType
+        clothingSize
+        furnitureType
+        housingHelp
+        householdItems {
+          shampoo
+          bathSoap
+          toothpaste
+          toothbrush
+          deodorant
+          toiletPaper
+          handSoap
+          sanitaryPads
+          tampons
+          bleach
+          lysolSpray
+          lysolWipes
+          dishsoap
+          sponges
+          pinesol
+          conditioner
+          paperTowels
+          laundrySoap
+          id
+          createdAt
+          updatedAt
+          __typename
+        }
+        needReason
+        needTypes
+        fulfilledNeeds
+        status
+        note {
+          nextToken
+          __typename
+        }
+        otherNeeds
+        needFulfiller
+        dateFulfilled
+        followUp
+        updatedAt
+        requestSelfOrOtherInfoId
+        requestFoodRequestId
+        requestMovingRequestId
+        requestHomeRepairTypeId
+        requestHouseholdItemsId
+        __typename
+      }
+      type
+      teamID
+      askDate
+      note
+      filledDate
+      filledBy {
+        breezeId
+        name
+        asks {
+          nextToken
+          __typename
+        }
+        fulfilled {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      askedMembers {
+        items {
+          id
+          teamMemberID
+          teamRequestID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      teamMemberFulfilledId
+      teamRequestFilledById
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetAskedMembersQueryVariables,
+  APITypes.GetAskedMembersQuery
+>;
+export const listAskedMembers = /* GraphQL */ `query ListAskedMembers(
+  $filter: ModelAskedMembersFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAskedMembers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      teamMemberID
+      teamRequestID
+      teamMember {
+        breezeId
+        name
+        asks {
+          nextToken
+          __typename
+        }
+        fulfilled {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      teamRequest {
+        id
+        requestID
+        request {
+          id
+          createdAt
+          dateOfRequest
+          firstName
+          lastName
+          address
+          city
+          zipCode
+          phone
+          email
+          spanishOnly
+          preferredContactTime
+          request
+          leadSource
+          leadOtherDetails
+          resumeHelp
+          coverLetterHelp
+          carRepairDetails
+          clothingType
+          clothingSize
+          furnitureType
+          housingHelp
+          needReason
+          needTypes
+          fulfilledNeeds
+          status
+          otherNeeds
+          needFulfiller
+          dateFulfilled
+          followUp
+          updatedAt
+          requestSelfOrOtherInfoId
+          requestFoodRequestId
+          requestMovingRequestId
+          requestHomeRepairTypeId
+          requestHouseholdItemsId
+          __typename
+        }
+        type
+        teamID
+        askDate
+        note
+        filledDate
+        filledBy {
+          breezeId
+          name
+          createdAt
+          updatedAt
+          __typename
+        }
+        askedMembers {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        teamMemberFulfilledId
+        teamRequestFilledById
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAskedMembersQueryVariables,
+  APITypes.ListAskedMembersQuery
 >;
