@@ -928,21 +928,13 @@ export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam($filter: Mo
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1010,21 +1002,13 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam($filter: Mo
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1092,21 +1076,13 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam($filter: Mo
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1147,10 +1123,9 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1208,21 +1183,13 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1263,10 +1230,9 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1324,21 +1290,13 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1379,10 +1337,9 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1440,21 +1397,13 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1621,43 +1570,7 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -1678,10 +1591,9 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1693,8 +1605,6 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -1854,43 +1764,7 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -1911,10 +1785,9 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1926,8 +1799,6 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -2087,43 +1958,7 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -2144,10 +1979,9 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -2159,8 +1993,6 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -2199,10 +2031,9 @@ export const onCreateAskedMembers = /* GraphQL */ `subscription OnCreateAskedMem
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2350,21 +2181,7 @@ export const onCreateAskedMembers = /* GraphQL */ `subscription OnCreateAskedMem
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -2379,8 +2196,6 @@ export const onCreateAskedMembers = /* GraphQL */ `subscription OnCreateAskedMem
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt
@@ -2423,10 +2238,9 @@ export const onUpdateAskedMembers = /* GraphQL */ `subscription OnUpdateAskedMem
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2574,21 +2388,7 @@ export const onUpdateAskedMembers = /* GraphQL */ `subscription OnUpdateAskedMem
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -2603,8 +2403,6 @@ export const onUpdateAskedMembers = /* GraphQL */ `subscription OnUpdateAskedMem
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt
@@ -2647,10 +2445,9 @@ export const onDeleteAskedMembers = /* GraphQL */ `subscription OnDeleteAskedMem
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2798,21 +2595,7 @@ export const onDeleteAskedMembers = /* GraphQL */ `subscription OnDeleteAskedMem
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -2827,8 +2610,6 @@ export const onDeleteAskedMembers = /* GraphQL */ `subscription OnDeleteAskedMem
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt

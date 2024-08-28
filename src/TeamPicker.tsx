@@ -18,8 +18,15 @@ import { CSSProperties } from "react";
 import { useParams } from "react-router-dom";
 import { useTeams } from "./useTeams";
 import useRequestsById from "./useRequestsById";
-import NeedSummaryForTeam from "./NeedSummaryForTeam";
-import { NeedType, Team, TeamMember, TeamRequest } from "./RequestAPI";
+import NeedSummaryForTeam, { getSummaryDetails } from "./NeedSummaryForTeam";
+import {
+  GetRequestQuery,
+  NeedType,
+  Team,
+  TeamMember,
+  TeamRequest,
+  UpdateRequestMutation,
+} from "./RequestAPI";
 import { getRequest, getTeamMember, listTeamMembers } from "./graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { NeedRequestType } from "./needRequestTypes";
@@ -27,7 +34,9 @@ import { CheckBox } from "@material-ui/icons";
 import {
   createAskedMembers,
   createTeamMember,
+  updateRequest,
   updateTeamMember,
+  updateTeamRequest,
 } from "./graphql/mutations";
 
 interface Person {
@@ -41,14 +50,20 @@ interface Person {
 
 interface PeopleProps {
   people: Person[];
+  message: string;
   onSelectionChange: (selectedPeople: Person[]) => void;
+  onSend: () => void;
   onMarkAsSent: () => void;
+  onMarkFulfilled: () => void;
 }
 
 const PeopleTable: React.FC<PeopleProps> = ({
   people,
+  message,
   onSelectionChange,
+  onSend,
   onMarkAsSent,
+  onMarkFulfilled,
 }) => {
   const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
 
@@ -78,8 +93,16 @@ const PeopleTable: React.FC<PeopleProps> = ({
         <td style={cellStyle as CSSProperties}>
           {person.first_name?.trim()} {person.last_name?.trim()}
         </td>
-        <td style={cellStyle as CSSProperties}>{person.last_contacted}</td>
-        <td style={cellStyle as CSSProperties}>{person.last_filled}</td>
+        <td style={cellStyle as CSSProperties}>
+          {person.last_contacted
+            ? new Date(person.last_contacted).toDateString()
+            : ""}
+        </td>
+        <td style={cellStyle as CSSProperties}>
+          {person.last_filled
+            ? new Date(person.last_filled).toDateString()
+            : ""}
+        </td>
         <td style={cellStyle as CSSProperties}>{person.contacts_last_month}</td>
       </tr>
     );
@@ -114,15 +137,34 @@ const PeopleTable: React.FC<PeopleProps> = ({
               </li>
             ))}
           </ul>
+          <a href={`sms:&body=${message}`}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginRight: "8px" }}
+              disabled={selectedPeople.length < 1}
+              onClick={onMarkAsSent}
+            >
+              Send
+            </Button>
+          </a>
           <Button
             variant="contained"
             color="primary"
             style={{ marginRight: "8px" }}
+            disabled={selectedPeople.length < 1}
+            onClick={onMarkAsSent}
           >
-            Send
-          </Button>
-          <Button variant="contained" color="primary" onClick={onMarkAsSent}>
             Mark as Sent
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ marginRight: "8px" }}
+            disabled={selectedPeople.length !== 1}
+            onClick={onMarkFulfilled}
+          >
+            Fulfilled
           </Button>
         </div>
       </CardContent>
@@ -141,7 +183,11 @@ interface RequestSummaryProps {
 }
 
 const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request }) => {
-  return <Typography>{new Date(request.askDate).toDateString()}</Typography>;
+  return (
+    <Typography>{`${new Date(request.askDate).toDateString()} - ${
+      request.request.firstName
+    }`}</Typography>
+  );
 };
 
 const OpenTeamRequest: React.FC<TeamRequestProps> = ({
@@ -171,10 +217,128 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
   if (error) return <div>{error}</div>;
   if (!needRequest) return <div>Loading...</div>;
 
+  const updateFulfilledNeeds = async (
+    requestId: string,
+    newNeedType: NeedType
+  ): Promise<void> => {
+    try {
+      // Fetch the existing Request data first
+      const requestData = (await API.graphql(
+        graphqlOperation(getRequest, { id: requestId })
+      )) as { data: GetRequestQuery }; // Cast response to specific query type
+
+      const existingFulfilledNeeds: (NeedType | null)[] =
+        requestData.data.getRequest?.fulfilledNeeds || [];
+
+      // Create a new fulfilledNeeds array that includes the new NeedType
+      const updatedFulfilledNeeds: (NeedType | null)[] = [
+        ...existingFulfilledNeeds,
+        newNeedType,
+      ];
+
+      // Prepare input for the update mutation
+      const input = {
+        ...requestData.data.getRequest,
+        id: requestId,
+        fulfilledNeeds: updatedFulfilledNeeds,
+      };
+
+      // Execute the update mutation
+      const result = (await API.graphql({
+        query: updateRequest,
+        variables: { input: input },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      })) as { data: UpdateRequestMutation }; // Cast response to specific mutation type
+
+      console.log(
+        "Request fulfilledNeeds updated successfully:",
+        result.data.updateRequest
+      );
+    } catch (error) {
+      console.error("Error updating fulfilledNeeds:", error);
+    }
+  };
+
+  const handleFulfilled = async () => {
+    if (selectedPeople.length != 1) {
+      alert("Logic error, only one person can fulfill each request");
+      return;
+    }
+    let askee = selectedPeople[0];
+    try {
+      // Update team request as fulfilled
+      const teamRequest = await API.graphql({
+        query: updateTeamRequest,
+        variables: {
+          input: {
+            id: request.id,
+            filledDate: new Date().toISOString(),
+            filledBy: askee.id,
+          },
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      // Step 1: Check if the TeamMember exists
+      const existingTeamMemberData = (await API.graphql({
+        query: getTeamMember,
+        variables: {
+          breezeId: askee.id,
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      })) as GraphQLResult<{ getTeamMember: TeamMember }>;
+      console.log("Looking up team member:");
+      console.log(JSON.stringify(existingTeamMemberData));
+      if (existingTeamMemberData.data?.getTeamMember) {
+        // Step 2: If exists, update the join table to record the ask
+        // unless they already were for this request
+        if (
+          !existingTeamMemberData.data?.getTeamMember.asks?.items.find(
+            (a) => a?.teamRequestID == request.id
+          )
+        ) {
+          const updatedTeamMember = await API.graphql({
+            query: createAskedMembers,
+            variables: {
+              input: { teamRequestID: request.id, teamMemberID: askee.id },
+            },
+            authMode: "AMAZON_COGNITO_USER_POOLS",
+          });
+
+          console.log("Join table updated:", updatedTeamMember);
+        } else {
+          console.log("Already asked about this one.");
+        }
+      } else {
+        // Step 3: If doesn't exist, create a new TeamMember
+        const newTeamMemberInput = {
+          breezeId: askee.id,
+          name: askee.first_name.trim() + " " + askee.last_name.trim(),
+        };
+        console.log("Attempting to create new member.");
+        const newTeamMember = await API.graphql({
+          query: createTeamMember,
+          variables: { input: newTeamMemberInput },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        });
+        console.log("Attempting to update join table.");
+        const updatedJoinTable = await API.graphql({
+          query: createAskedMembers,
+          variables: {
+            input: { teamRequestID: request.id, teamMemberID: askee.id },
+          },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        });
+        console.log("TeamMember record created:", newTeamMember);
+        console.log("Join table updated:", updatedJoinTable);
+      }
+      updateFulfilledNeeds(request.id, request.type);
+    } catch (err) {
+      console.error("Error creating/updating TeamMember:", err);
+    }
+  };
+
   const handleMarkAsSent = async () => {
     for (let askee of selectedPeople) {
-      console.log("Askee data:");
-      console.log(JSON.stringify(askee));
       try {
         // Step 1: Check if the TeamMember exists
         const existingTeamMemberData = (await API.graphql({
@@ -238,15 +402,18 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
   return (
     <Card style={{ width: "90%", alignSelf: "center" }}>
       <NeedSummaryForTeam request={needRequest} needType={team.teamType} />
-      {needRequest.note && (
+      {request.note && (
         <Card style={{ width: "50%", alignSelf: "center" }}>
           <Typography>Coordinator Notes: {request.note}</Typography>
         </Card>
       )}
       <PeopleTable
         people={people}
+        message={getSummaryDetails(team.teamType, needRequest)}
         onSelectionChange={(people) => setSelectedPeople(people)}
         onMarkAsSent={handleMarkAsSent}
+        onMarkFulfilled={handleFulfilled}
+        onSend={handleMarkAsSent}
       />
     </Card>
   );
@@ -336,7 +503,11 @@ const TeamPicker: React.FC = () => {
           );
           // If a matching TeamMember is found, update the person's details
           if (matchingTeamMember) {
-            console.log("So close! :" + JSON.stringify(matchingTeamMember));
+            console.log(
+              `fulfilled values: ${JSON.stringify(
+                matchingTeamMember.fulfilled?.items
+              )}`
+            );
             // Safely handle `fulfilled` field, which could be null or empty
             const lastFilledDate =
               matchingTeamMember.fulfilled?.items?.reduce(

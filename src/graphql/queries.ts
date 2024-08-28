@@ -679,21 +679,13 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -724,10 +716,9 @@ export const listTeams = /* GraphQL */ `query ListTeams(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -742,7 +733,7 @@ export const listTeams = /* GraphQL */ `query ListTeams(
   }
 }
 ` as GeneratedQuery<APITypes.ListTeamsQueryVariables, APITypes.ListTeamsQuery>;
-export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: String!) {
+export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: ID!) {
   getTeamMember(breezeId: $breezeId) {
     breezeId
     name
@@ -766,10 +757,9 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -827,21 +817,13 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -857,7 +839,7 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: Strin
   APITypes.GetTeamMemberQuery
 >;
 export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
-  $breezeId: String
+  $breezeId: ID
   $filter: ModelTeamMemberFilterInput
   $limit: Int
   $nextToken: String
@@ -894,10 +876,9 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -1065,43 +1046,7 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -1122,10 +1067,9 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1137,8 +1081,6 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -1290,21 +1232,7 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -1319,8 +1247,6 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     nextToken
@@ -1360,10 +1286,9 @@ export const getAskedMembers = /* GraphQL */ `query GetAskedMembers($id: ID!) {
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -1511,21 +1436,7 @@ export const getAskedMembers = /* GraphQL */ `query GetAskedMembers($id: ID!) {
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -1540,8 +1451,6 @@ export const getAskedMembers = /* GraphQL */ `query GetAskedMembers($id: ID!) {
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt
@@ -1625,21 +1534,13 @@ export const listAskedMembers = /* GraphQL */ `query ListAskedMembers(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       createdAt
