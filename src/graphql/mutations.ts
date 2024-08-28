@@ -970,21 +970,13 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1055,21 +1047,13 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1140,21 +1124,13 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1196,10 +1172,9 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1257,21 +1232,13 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1313,10 +1280,9 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1374,21 +1340,13 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1430,10 +1388,9 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1491,21 +1448,13 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
         askDate
         note
         filledDate
-        filledBy {
-          breezeId
-          name
-          createdAt
-          updatedAt
-          __typename
-        }
+        filledBy
         askedMembers {
           nextToken
           __typename
         }
         createdAt
         updatedAt
-        teamMemberFulfilledId
-        teamRequestFilledById
         __typename
       }
       nextToken
@@ -1673,43 +1622,7 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -1730,10 +1643,9 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1745,8 +1657,6 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -1907,43 +1817,7 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -1964,10 +1838,9 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -1979,8 +1852,6 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -2141,43 +2012,7 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
     askDate
     note
     filledDate
-    filledBy {
-      breezeId
-      name
-      asks {
-        items {
-          id
-          teamMemberID
-          teamRequestID
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      fulfilled {
-        items {
-          id
-          requestID
-          type
-          teamID
-          askDate
-          note
-          filledDate
-          createdAt
-          updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      createdAt
-      updatedAt
-      __typename
-    }
+    filledBy
     askedMembers {
       items {
         id
@@ -2198,10 +2033,9 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         createdAt
@@ -2213,8 +2047,6 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
     }
     createdAt
     updatedAt
-    teamMemberFulfilledId
-    teamRequestFilledById
     __typename
   }
 }
@@ -2254,10 +2086,9 @@ export const createAskedMembers = /* GraphQL */ `mutation CreateAskedMembers(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2405,21 +2236,7 @@ export const createAskedMembers = /* GraphQL */ `mutation CreateAskedMembers(
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -2434,8 +2251,6 @@ export const createAskedMembers = /* GraphQL */ `mutation CreateAskedMembers(
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt
@@ -2479,10 +2294,9 @@ export const updateAskedMembers = /* GraphQL */ `mutation UpdateAskedMembers(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2630,21 +2444,7 @@ export const updateAskedMembers = /* GraphQL */ `mutation UpdateAskedMembers(
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -2659,8 +2459,6 @@ export const updateAskedMembers = /* GraphQL */ `mutation UpdateAskedMembers(
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt
@@ -2704,10 +2502,9 @@ export const deleteAskedMembers = /* GraphQL */ `mutation DeleteAskedMembers(
           askDate
           note
           filledDate
+          filledBy
           createdAt
           updatedAt
-          teamMemberFulfilledId
-          teamRequestFilledById
           __typename
         }
         nextToken
@@ -2855,21 +2652,7 @@ export const deleteAskedMembers = /* GraphQL */ `mutation DeleteAskedMembers(
       askDate
       note
       filledDate
-      filledBy {
-        breezeId
-        name
-        asks {
-          nextToken
-          __typename
-        }
-        fulfilled {
-          nextToken
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
+      filledBy
       askedMembers {
         items {
           id
@@ -2884,8 +2667,6 @@ export const deleteAskedMembers = /* GraphQL */ `mutation DeleteAskedMembers(
       }
       createdAt
       updatedAt
-      teamMemberFulfilledId
-      teamRequestFilledById
       __typename
     }
     createdAt

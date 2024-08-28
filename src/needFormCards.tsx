@@ -68,15 +68,15 @@ export interface ContactCardProps extends ContactCardData {
 }
 
 export function getCopyTextForContactInfo(contactData: ContactCardData) {
-  return `Name| ${
+  return `Name - ${
     contactData.agent === RadioButtonState.YES || !contactData.referee
       ? contactData.firstName.trimEnd() + " " + contactData.lastName
       : contactData.referee
   }
-Address|
+Address -
 ${contactData.address}
 ${contactData.city}, ${contactData.zip}
-Phone| ${
+Phone - ${
     contactData.agent === RadioButtonState.YES
       ? contactData.phone
       : contactData.otherPersonsPhone

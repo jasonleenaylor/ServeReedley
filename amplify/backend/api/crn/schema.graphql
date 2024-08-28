@@ -155,10 +155,10 @@ type Team @model @auth(rules: [{ allow: private }]) {
 }
 
 type TeamMember @model @auth(rules: [{ allow: private }]) {
-  breezeId: String! @primaryKey
+  breezeId: ID! @primaryKey
   name: String!
   asks: [TeamRequest] @manyToMany(relationName: "AskedMembers")
-  fulfilled: [TeamRequest] @hasMany
+  fulfilled: [TeamRequest] @hasMany(indexName: "byMember", fields: ["breezeId"])
 }
 
 type TeamRequest @model @auth(rules: [{ allow: private }]) {
@@ -170,7 +170,7 @@ type TeamRequest @model @auth(rules: [{ allow: private }]) {
   askDate: String!
   note: String!
   filledDate: String
-  filledBy: TeamMember @hasOne
+  filledBy: ID @index(name: "byMember")
   askedMembers: [TeamMember] @manyToMany(relationName: "AskedMembers")
 }
 

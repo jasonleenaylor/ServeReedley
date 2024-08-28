@@ -84,47 +84,51 @@ const getDeliveryDetails = (request: NeedRequestType): string => {
   return details;
 };
 
+export const getSummaryDetails = (
+  needType: NeedType,
+  request: NeedRequestType
+) => {
+  switch (needType) {
+    case NeedType.GROCERIES:
+      return `${getDeliveryDetails(request)}\nItems - ${getGroceriesListText(
+        request.foodRequest as IGroceriesType
+      )}`;
+    case NeedType.MEALS:
+      return t("meals_summary");
+    case NeedType.CLOTHING:
+      return t("clothing_summary");
+    case NeedType.FURNITURE:
+      return t("furniture_summary");
+    case NeedType.CARREPAIR:
+      return t("car_repair_summary");
+    case NeedType.HOMEREPAIR:
+      return t("home_repair_summary");
+    case NeedType.HYGENEITEMS:
+      return `${getDeliveryDetails(request)}\nItems - ${getHygeneItemsText(
+        request.householdItems as HouseholdItemsGQL
+      )}`;
+    case NeedType.HOUSEHOLDITEMS:
+      return `${getDeliveryDetails(request)}\nItems - ${getHouseholdItemsText(
+        request.householdItems as HouseholdItemsGQL
+      )}`;
+    case NeedType.HOUSING:
+      return t("housing_summary");
+    case NeedType.JOBTRAINING:
+      return t("job_training_summary");
+    case NeedType.MOVING:
+      return t("moving_assistance_summary");
+    case NeedType.OTHER:
+      return t("other_summary");
+    default:
+      return t("default_summary");
+  }
+};
+
 const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
   needType,
   request,
 }) => {
   // Function to get the summary details based on needType and request
-  const getSummaryDetails = () => {
-    switch (needType) {
-      case NeedType.GROCERIES:
-        return `${getDeliveryDetails(request)}\nItems - ${getGroceriesListText(
-          request.foodRequest as IGroceriesType
-        )}`;
-      case NeedType.MEALS:
-        return t("meals_summary");
-      case NeedType.CLOTHING:
-        return t("clothing_summary");
-      case NeedType.FURNITURE:
-        return t("furniture_summary");
-      case NeedType.CARREPAIR:
-        return t("car_repair_summary");
-      case NeedType.HOMEREPAIR:
-        return t("home_repair_summary");
-      case NeedType.HYGENEITEMS:
-        return `${getDeliveryDetails(request)}\nItems - ${getHygeneItemsText(
-          request.householdItems as HouseholdItemsGQL
-        )}`;
-      case NeedType.HOUSEHOLDITEMS:
-        return `${getDeliveryDetails(request)}\nItems - ${getHouseholdItemsText(
-          request.householdItems as HouseholdItemsGQL
-        )}`;
-      case NeedType.HOUSING:
-        return t("housing_summary");
-      case NeedType.JOBTRAINING:
-        return t("job_training_summary");
-      case NeedType.MOVING:
-        return t("moving_assistance_summary");
-      case NeedType.OTHER:
-        return t("other_summary");
-      default:
-        return t("default_summary");
-    }
-  };
 
   var cardStyle = mobileCardStyles();
   return (
@@ -133,7 +137,9 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
         <BasicContactInfoCard
           name={request.firstName?.trim() + " " + request.lastName?.trim()}
           address={
-            request.address + ", " + request.city + ", " + request.zipCode
+            (request.address ? `${request.address}, "` : "") +
+            request.city + // City is the only required field (to support homeless requests)
+            (request.zipCode ? ", " + request.zipCode : "")
           }
           phone={
             "" +
@@ -141,10 +147,10 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
               ? request.selfOrOtherInfo.phoneNumber
               : request.phone)
           }
-          email={"" + request.email}
+          email={request.email ? request.email : ""}
         />
         <Card className={cardStyle.card}>
-          {getSummaryDetails()
+          {getSummaryDetails(needType, request)
             .trim()
             .split("\n")
             .map((line, index) => (
