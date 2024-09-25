@@ -114,6 +114,21 @@ export const defaultNeedType: INeedTypes = {
   other: false,
 };
 
+export const needTypeMapping = {
+  MEALS: "meals",
+  GROCERIES: "groceries",
+  MOVING: "moving",
+  JOBTRAINING: "jobTraining",
+  HOMEREPAIR: "homeRepair",
+  CARREPAIR: "carRepair",
+  HOUSING: "housing",
+  HOUSEHOLDITEMS: "householdItems",
+  HYGENEITEMS: "hygeneItems",
+  CLOTHING: "clothing",
+  FURNITURE: "furniture",
+  OTHER: "other",
+};
+
 export const defaultFoodInfo: IFoodInfo = {
   familyMembers: undefined,
   children: "",
