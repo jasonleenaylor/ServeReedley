@@ -51,7 +51,7 @@ function NeedCheckbox({
 }): JSX.Element {
   return (
     <Grid container alignItems="center" spacing={2}>
-      <Grid item xs={6}>
+      <Grid item xs={displayAll ? 12 : 6}>
         <FormControlLabel
           control={
             <Checkbox
