@@ -18,7 +18,11 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { t } from "i18next";
-import { INeedTypes, NeedRequestType } from "./needRequestTypes";
+import {
+  INeedTypes,
+  NeedRequestType,
+  needTypeMapping,
+} from "./needRequestTypes";
 import { cardStyle } from "./needRequestForm";
 import NeedSummaryForTeam from "./NeedSummaryForTeam";
 import { useTeams } from "./useTeams";
@@ -50,7 +54,11 @@ function NeedCheckbox({
       <Grid item xs={6}>
         <FormControlLabel
           control={
-            <Checkbox checked={checked} onChange={onChange} name={needType} />
+            <Checkbox
+              checked={checked}
+              onChange={onChange}
+              name={needTypeMapping[needType]}
+            />
           }
           label={label}
         />
