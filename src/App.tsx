@@ -43,7 +43,7 @@ export default function App() {
             <Route path="/teams">
               <TeamManagement />
             </Route>
-            <Route path="/team:teamId">
+            <Route path="/team">
               <TeamPicker />
             </Route>
             <Route path="/">
