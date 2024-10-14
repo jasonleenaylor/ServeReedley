@@ -29,6 +29,7 @@ import { useTeams } from "./useTeams";
 import { NeedType, Team } from "./RequestAPI";
 import { API } from "aws-amplify";
 import { createTeamRequest } from "./graphql/mutations";
+import { listTeamRequests } from "./graphql/queries";
 
 function NeedCheckbox({
   checked,
@@ -46,8 +47,8 @@ function NeedCheckbox({
   label: string;
   displayAll: boolean;
   handleOpenDialog:
-    | undefined
-    | ((type: NeedType, request: NeedRequestType) => void);
+  | undefined
+  | ((type: NeedType, request: NeedRequestType) => void);
 }): JSX.Element {
   return (
     <Grid container alignItems="center" spacing={2}>
@@ -111,22 +112,38 @@ function SendToTeamDialog({
 
   const onSubmit = async () => {
     try {
-      const input = {
-        requestID: request.id,
-        teamID: selectedTeam,
-        type: needType,
-        note,
-        askDate: new Date().toISOString(),
-      };
-      await API.graphql({
-        query: createTeamRequest,
-        variables: { input },
+      navigator.clipboard.writeText(
+        `https://crn.servereedley.org/team?id=${selectedTeam}`
+      );
+      const existingTeamRequest: any = await API.graphql({
+        query: listTeamRequests, // Assuming you have a query named listTeamRequests
+        variables: {
+          filter: {
+            requestID: { eq: request.id },
+            teamID: { eq: selectedTeam }
+          }
+        },
         authMode: "AMAZON_COGNITO_USER_POOLS",
       });
+
+      // Check if any matching team requests are returned
+      const teamRequestExists = existingTeamRequest.data.listTeamRequests.items.length > 0;
+
+      if (!teamRequestExists) {
+        const input = {
+          requestID: request.id,
+          teamID: selectedTeam,
+          type: needType,
+          note,
+          askDate: new Date().toISOString(),
+        };
+        await API.graphql({
+          query: createTeamRequest,
+          variables: { input },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        });
+      }
       onClose(true);
-      navigator.clipboard.writeText(
-        `https://crn.servereedley.org/team${selectedTeam}`
-      );
     } catch (error) {
       console.error("Error creating team request:", error);
     }

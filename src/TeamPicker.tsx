@@ -3,19 +3,16 @@ import {
   Card,
   CardHeader,
   CardContent,
-  TextField,
   Typography,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Icon,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Auth } from "@aws-amplify/auth";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import Lambda from "aws-sdk/clients/lambda";
 import { CSSProperties } from "react";
-import { useParams } from "react-router-dom";
 import { useTeams } from "./useTeams";
 import useRequestsById from "./useRequestsById";
 import NeedSummaryForTeam, { getSummaryDetails } from "./NeedSummaryForTeam";
@@ -35,7 +32,6 @@ import {
   createAskedMembers,
   createTeamMember,
   updateRequest,
-  updateTeamMember,
   updateTeamRequest,
 } from "./graphql/mutations";
 
@@ -46,6 +42,7 @@ interface Person {
   last_contacted: string;
   last_filled: string;
   contacts_last_month: number;
+  phone: string;
 }
 
 interface PeopleProps {
@@ -61,7 +58,6 @@ const PeopleTable: React.FC<PeopleProps> = ({
   people,
   message,
   onSelectionChange,
-  onSend,
   onMarkAsSent,
   onMarkFulfilled,
 }) => {
@@ -76,6 +72,8 @@ const PeopleTable: React.FC<PeopleProps> = ({
     setSelectedPeople(updatedSelection);
     onSelectionChange(updatedSelection);
   };
+  // Construct the appropriate SMS link based on the OS
+  const isIOS = /iPhone/.test(navigator.userAgent);
 
   const rows: JSX.Element[] = [];
   people.forEach((person) => {
@@ -108,6 +106,16 @@ const PeopleTable: React.FC<PeopleProps> = ({
     );
   });
 
+  function buildSmsHref(): string {
+    const phoneNumbers = selectedPeople.map(p => p.phone).join(','); // Join numbers with a comma
+
+    if (isIOS) {
+      return `sms://open?addresses=${phoneNumbers}&body=${encodeURIComponent(message)}`;
+    }
+
+    return `sms:${phoneNumbers};?&body=${encodeURIComponent(message)}`;
+  }
+
   return (
     <Card>
       <CardHeader title="Select People" />
@@ -137,7 +145,7 @@ const PeopleTable: React.FC<PeopleProps> = ({
               </li>
             ))}
           </ul>
-          <a href={`sms:&body=${message}`}>
+          <a href={buildSmsHref()}>
             <Button
               variant="contained"
               color="primary"
@@ -184,9 +192,8 @@ interface RequestSummaryProps {
 
 const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request }) => {
   return (
-    <Typography>{`${new Date(request.askDate).toDateString()} - ${
-      request.request.firstName
-    }`}</Typography>
+    <Typography>{`${new Date(request.askDate).toDateString()} - ${request.request.firstName
+      }`}</Typography>
   );
 };
 
@@ -433,7 +440,7 @@ const cellStyle: CSSProperties = {
 };
 
 const TeamPicker: React.FC = () => {
-  const { teamId } = useParams<{ teamId: string }>();
+  const teamId = new URLSearchParams(window.location.search).get("id");
   const [people, setPeople] = useState<Person[]>([]);
   const { teams, loading: teamsLoading } = useTeams();
   const {
