@@ -91,6 +91,7 @@
     },
     "getUserContactInfo": {
       "build": true,
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -153,6 +154,22 @@
         {
           "category": "function",
           "resourceName": "findlatlong"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserContactInfo_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserContactInfo"
+        }
+      ]
+    },
+    "AMPLIFY_function_getUserContactInfo_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "getUserContactInfo"
         }
       ]
     },
