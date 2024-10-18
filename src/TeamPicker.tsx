@@ -62,8 +62,32 @@ const PeopleTable: React.FC<PeopleProps> = ({
   onMarkFulfilled,
 }) => {
   const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
+  const [phoneNumbers, setPhoneNumbers] = useState<{ [key: string]: string }>(
+    {}
+  ); // To store fetched phone numbers
+  const getContactInfo = async (
+    id: string
+  ): Promise<{ mobileNumber: string }> => {
+    try {
+      const credentials = await Auth.currentCredentials();
+      const lambda = new Lambda({
+        credentials: Auth.essentialCredentials(credentials),
+      });
+      const response = await lambda
+        .invoke({
+          FunctionName: "getUserContactInfo-prod",
+          Payload: JSON.stringify({ id }),
+        })
+        .promise();
 
-  const handleCheckboxChange = (personId: string) => {
+      const payloadParsed = JSON.parse(response.Payload as string);
+      return JSON.parse(payloadParsed.body);
+    } catch (err) {
+      console.log(err);
+      return { mobileNumber: "" };
+    }
+  };
+  const handleCheckboxChange = async (personId: string) => {
     const updatedSelection = selectedPeople.some(
       (person) => person.id === personId
     )
@@ -71,6 +95,16 @@ const PeopleTable: React.FC<PeopleProps> = ({
       : [...selectedPeople, people.find((person) => person.id === personId)!];
     setSelectedPeople(updatedSelection);
     onSelectionChange(updatedSelection);
+    // If the person is newly selected, fetch their phone number from Lambda
+    if (!phoneNumbers[personId]) {
+      let { mobileNumber } = await getContactInfo(personId);
+      if (mobileNumber) {
+        setPhoneNumbers((prevNumbers) => ({
+          ...prevNumbers,
+          [personId]: mobileNumber,
+        }));
+      }
+    }
   };
   // Construct the appropriate SMS link based on the OS
   const isIOS = /iPhone/.test(navigator.userAgent);
@@ -107,10 +141,12 @@ const PeopleTable: React.FC<PeopleProps> = ({
   });
 
   function buildSmsHref(): string {
-    const phoneNumbers = selectedPeople.map(p => p.phone).join(','); // Join numbers with a comma
+    const phoneNumbers = selectedPeople.map((p) => p.phone).join(","); // Join numbers with a comma
 
     if (isIOS) {
-      return `sms://open?addresses=${phoneNumbers}&body=${encodeURIComponent(message)}`;
+      return `sms://open?addresses=${phoneNumbers}&body=${encodeURIComponent(
+        message
+      )}`;
     }
 
     return `sms:${phoneNumbers};?&body=${encodeURIComponent(message)}`;
@@ -192,8 +228,9 @@ interface RequestSummaryProps {
 
 const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request }) => {
   return (
-    <Typography>{`${new Date(request.askDate).toDateString()} - ${request.request.firstName
-      }`}</Typography>
+    <Typography>{`${new Date(request.askDate).toDateString()} - ${
+      request.request.firstName
+    }`}</Typography>
   );
 };
 
