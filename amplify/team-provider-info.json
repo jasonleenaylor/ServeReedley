@@ -34,7 +34,8 @@
           "breezeInfo": "\"\"",
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
           "s3Key": "amplify-builds/listPeopleOnTeam-46382f38484252616c59-build.zip"
-        }
+        },
+        "getUserContactInfo": {}
       },
       "api": {
         "crn": {}
