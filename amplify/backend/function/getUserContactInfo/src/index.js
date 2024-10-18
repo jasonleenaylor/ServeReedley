@@ -27,8 +27,8 @@ const extractMobilePhoneNumber = (data) => {
 exports.handler = async (event) => {
   let breezeInfo = process.env.BREEZE_INFO;
   const { id } = event;
-  const getPerson = async (teamId) => {
-    const url = `https://servereedley.breezechms.com/api/people/${id}"}`;
+  const getPerson = async (id) => {
+    const url = `https://servereedley.breezechms.com/api/people/${id}`;
     let response = undefined;
     try {
       response = await axios.get(url, {
@@ -44,7 +44,7 @@ exports.handler = async (event) => {
   };
 
   try {
-    let result = await getPerson(teamId);
+    let result = await getPerson(id);
     return {
       statusCode: 200,
       body: JSON.stringify({

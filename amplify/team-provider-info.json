@@ -19,23 +19,26 @@
       "function": {
         "NotifyCoordinators": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/NotifyCoordinators-4563564b537670717453-build.zip"
+          "s3Key": "amplify-builds/NotifyCoordinators-5065482f376261756e64-build.zip"
         },
         "sendReminders": {
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/sendReminders-6b7976442f52594d586f-build.zip"
+          "s3Key": "amplify-builds/sendReminders-395935716c6a77506569-build.zip"
         },
         "findlatlong": {
           "secretsPathAmplifyAppId": "d287596rtukllb",
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/findlatlong-74556b6a333639584561-build.zip"
+          "s3Key": "amplify-builds/findlatlong-7878734f596d4a464547-build.zip"
         },
         "listPeopleOnTeam": {
           "breezeInfo": "\"\"",
           "deploymentBucketName": "amplify-crn-prod-155021-deployment",
-          "s3Key": "amplify-builds/listPeopleOnTeam-46382f38484252616c59-build.zip"
+          "s3Key": "amplify-builds/listPeopleOnTeam-7741325645574a485155-build.zip"
         },
-        "getUserContactInfo": {}
+        "getUserContactInfo": {
+          "deploymentBucketName": "amplify-crn-prod-155021-deployment",
+          "s3Key": "amplify-builds/getUserContactInfo-31444846697a3065664f-build.zip"
+        }
       },
       "api": {
         "crn": {}
