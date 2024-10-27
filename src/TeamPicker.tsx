@@ -64,7 +64,8 @@ const PeopleTable: React.FC<PeopleProps> = ({
   const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
   const [phoneNumbers, setPhoneNumbers] = useState<{ [key: string]: string }>(
     {}
-  ); // To store fetched phone numbers
+  );
+
   const getContactInfo = async (
     id: string
   ): Promise<{ mobileNumber: string }> => {
@@ -141,15 +142,15 @@ const PeopleTable: React.FC<PeopleProps> = ({
   });
 
   function buildSmsHref(): string {
-    const phoneNumbers = selectedPeople.map((p) => p.phone).join(","); // Join numbers with a comma
+    const selectedPhoneNumbers = selectedPeople.map((p) => `+1${phoneNumbers[p.id]?.replaceAll(/[\+\(\) -]/g, "")}`).join(","); // Join numbers with a comma
 
     if (isIOS) {
-      return `sms://open?addresses=${phoneNumbers}&body=${encodeURIComponent(
+      return `sms://open?addresses=${selectedPhoneNumbers}&body=${encodeURIComponent(
         message
       )}`;
     }
 
-    return `sms:${phoneNumbers};?&body=${encodeURIComponent(message)}`;
+    return `sms:${selectedPhoneNumbers};?&body=${encodeURIComponent(message)}`;
   }
 
   return (
@@ -228,9 +229,8 @@ interface RequestSummaryProps {
 
 const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request }) => {
   return (
-    <Typography>{`${new Date(request.askDate).toDateString()} - ${
-      request.request.firstName
-    }`}</Typography>
+    <Typography>{`${new Date(request.askDate).toDateString()} - ${request.request.firstName
+      }`}</Typography>
   );
 };
 
