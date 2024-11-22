@@ -34,6 +34,7 @@ import {
   updateRequest,
   updateTeamRequest,
 } from "./graphql/mutations";
+import { AmplifyAuthenticator, AmplifySignIn } from "@aws-amplify/ui-react";
 
 interface Person {
   id: string;
@@ -623,6 +624,8 @@ const TeamPicker: React.FC = () => {
   };
 
   return (
+    <AmplifyAuthenticator>
+      <AmplifySignIn slot="sign-in" hideSignUp />
     <div>
       <h1>Active requests for {team?.teamName}</h1>
       {team &&
@@ -643,6 +646,7 @@ const TeamPicker: React.FC = () => {
             </Accordion>
           ))}
     </div>
+    </AmplifyAuthenticator>
   );
 };
 
