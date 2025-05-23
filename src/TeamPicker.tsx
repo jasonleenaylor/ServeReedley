@@ -577,7 +577,9 @@ const TeamPicker: React.FC = () => {
               matchingTeamMember.name.split(" ")[0] || person.first_name;
             person.last_name =
               matchingTeamMember.name.split(" ")[1] || person.last_name;
-            person.last_contacted = matchingTeamMember.updatedAt;
+            person.last_contacted = matchingTeamMember.asks?.items.sort(a => {
+              return new Date(a!.createdAt).getTime();
+            })[0]?.createdAt || "";
             person.last_filled = lastFilledDate;
             person.contacts_last_month = contactsLastMonth;
           }
