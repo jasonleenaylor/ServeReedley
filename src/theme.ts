@@ -1,8 +1,9 @@
-import { green, grey, orange, red, yellow } from "@material-ui/core/colors";
-import { createTheme, responsiveFontSizes } from "@material-ui/core/styles";
-import { PaletteOptions } from "@material-ui/core/styles/createPalette";
+// theme.ts
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { PaletteOptions } from "@mui/material/styles/createPalette";
+import { green, grey, orange, red, yellow } from "@mui/material/colors";
 
-// Constants which define colors later:
+// Theme color constants
 export const themeColors = {
   primary: yellow[600],
   secondary: grey[600],
@@ -12,27 +13,19 @@ export const themeColors = {
   highlight: yellow[200],
 };
 
-// Constants used in multiple themes
-const palette = {
-  type: "light",
-  primary: {
-    main: themeColors.primary,
-  },
-  secondary: {
-    main: themeColors.secondary,
-  },
-  error: {
-    main: themeColors.error,
-  },
-  background: {
-    default: themeColors.secondary,
-  },
+// Common palette settings
+const palette: PaletteOptions = {
+  mode: "light", // was 'type' in v4
+  primary: { main: themeColors.primary },
+  secondary: { main: themeColors.secondary },
+  error: { main: themeColors.error },
+  background: { default: "#ffffff" },
   contrastThreshold: 3,
   tonalOffset: 0.2,
 };
 
+// Typography settings
 const typography = {
-  // Copied from default theme
   fontFamily: [
     '"Roboto"',
     '"Noto Sans"',
@@ -42,27 +35,50 @@ const typography = {
   ].join(","),
 };
 
+// Dynamic font scaling
 const dynamicFontParams = { factor: 2 };
 
-// Theme for the entire project
-const baseTheme = createTheme({
-  typography: { ...typography },
-  palette: { ...palette } as PaletteOptions,
+// Create theme
+let baseTheme = createTheme({
+  palette,
+  typography,
   spacing: 8,
-  props: {
-    MuiButtonBase: {
-      disableRipple: false,
-    },
-  },
-  overrides: {
+  components: {
+    MuiTableHead: { styleOverrides: { root: { backgroundColor: "#fff" } } },
+    MuiTableBody: { styleOverrides: { root: { backgroundColor: "#fff" } } },
+    MuiTableFooter: { styleOverrides: { root: { backgroundColor: "#fff" } } },
+    MuiTableRow: { styleOverrides: { root: { backgroundColor: "#fff" } } },
+    MuiTableCell: { styleOverrides: { root: { backgroundColor: "#fff" } } },
+
     MuiCardHeader: {
-      root: { background: themeColors.primary, margin: -1 },
+      styleOverrides: {
+        root: {
+          backgroundColor: themeColors.primary,
+          margin: -1,
+        },
+      },
     },
     MuiToolbar: {
-      root: { background: themeColors.primary },
+      styleOverrides: {
+        root: {
+          backgroundColor: themeColors.primary,
+        },
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: false,
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: "standard", // default to underline
+      },
     },
   },
 });
 
-// Can have a number of additional options passed in; here, sticks with defaults
-export default responsiveFontSizes(baseTheme, dynamicFontParams);
+// Enable responsive font sizes
+const theme = responsiveFontSizes(baseTheme, dynamicFontParams);
+
+export default theme;

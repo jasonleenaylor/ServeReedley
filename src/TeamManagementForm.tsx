@@ -1,11 +1,11 @@
-import { Container, Typography } from "@material-ui/core";
+import { Container, Typography } from "@mui/material";
 import TeamList from "./TeamList"; // Adjust the import path accordingly
 import CreateTeamForm from "./CreateTeamForm"; // Adjust the import path accordingly
-import { AmplifyAuthenticator } from "@aws-amplify/ui-react";
+import { Authenticator } from "@aws-amplify/ui-react";
 
 const TeamManagement = () => {
   return (
-    <AmplifyAuthenticator>
+    <Authenticator hideSignUp>
       <Container>
         <Typography variant="h4" gutterBottom>
           Team Management
@@ -16,7 +16,7 @@ const TeamManagement = () => {
         </Typography>
         <TeamList />
       </Container>
-    </AmplifyAuthenticator>
+    </Authenticator>
   );
 };
 

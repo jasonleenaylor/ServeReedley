@@ -3,7 +3,7 @@ import {
   ListItem,
   ListItemText,
   CircularProgress,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useTeams } from "./useTeams"; // Adjust the import path accordingly
 
 const TeamList = () => {

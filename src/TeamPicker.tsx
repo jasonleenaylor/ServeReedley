@@ -7,11 +7,10 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-} from "@material-ui/core";
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Auth } from "@aws-amplify/auth";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
-import Lambda from "aws-sdk/clients/lambda";
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { CSSProperties } from "react";
 import { useTeams } from "./useTeams";
 import useRequestsById from "./useRequestsById";
@@ -25,16 +24,17 @@ import {
   UpdateRequestMutation,
 } from "./RequestAPI";
 import { getRequest, getTeamMember, listTeamMembers } from "./graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
+import { generateClient } from "aws-amplify/api";
+import { fetchAuthSession } from "@aws-amplify/auth";
 import { NeedRequestType } from "./needRequestTypes";
-import { CheckBox } from "@material-ui/icons";
+import { CheckBox } from "@mui/icons-material";
 import {
   createAskedMembers,
   createTeamMember,
   updateRequest,
   updateTeamRequest,
 } from "./graphql/mutations";
-import { AmplifyAuthenticator, AmplifySignIn } from "@aws-amplify/ui-react";
+import { Authenticator } from "@aws-amplify/ui-react";
 
 interface Person {
   id: string;
@@ -71,24 +71,42 @@ const PeopleTable: React.FC<PeopleProps> = ({
     id: string
   ): Promise<{ mobileNumber: string }> => {
     try {
-      const credentials = await Auth.currentCredentials();
-      const lambda = new Lambda({
-        credentials: Auth.essentialCredentials(credentials),
-      });
-      const response = await lambda
-        .invoke({
-          FunctionName: "getUserContactInfo-prod",
-          Payload: JSON.stringify({ id }),
-        })
-        .promise();
+      const { credentials } = await fetchAuthSession();
 
-      const payloadParsed = JSON.parse(response.Payload as string);
+      if (!credentials) {
+        throw new Error("No credentials available.");
+      }
+
+      const client = new LambdaClient({
+        region: "us-west-1",
+        credentials: {
+          accessKeyId: credentials.accessKeyId,
+          secretAccessKey: credentials.secretAccessKey,
+          sessionToken: credentials.sessionToken,
+        },
+      });
+
+      const command = new InvokeCommand({
+        FunctionName: "getUserContactInfo-prod",
+        Payload: Buffer.from(JSON.stringify({ id })),
+      });
+
+      const response = await client.send(command);
+
+      if (!response.Payload) {
+        return { mobileNumber: "" };
+      }
+
+      const payloadParsed = JSON.parse(
+        new TextDecoder().decode(response.Payload)
+      );
       return JSON.parse(payloadParsed.body);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return { mobileNumber: "" };
     }
   };
+
   const handleCheckboxChange = async (personId: string) => {
     const updatedSelection = selectedPeople.some(
       (person) => person.id === personId
@@ -143,7 +161,9 @@ const PeopleTable: React.FC<PeopleProps> = ({
   });
 
   function buildSmsHref(): string {
-    const selectedPhoneNumbers = selectedPeople.map((p) => `+1${phoneNumbers[p.id]?.replaceAll(/[\+\(\) -]/g, "")}`).join(","); // Join numbers with a comma
+    const selectedPhoneNumbers = selectedPeople
+      .map((p) => `+1${phoneNumbers[p.id]?.replace(/[\+\(\) -]/g, "")}`)
+      .join(","); // Join numbers with a comma
 
     if (isIOS) {
       return `sms://open?addresses=${selectedPhoneNumbers}&body=${encodeURIComponent(
@@ -230,8 +250,9 @@ interface RequestSummaryProps {
 
 const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request }) => {
   return (
-    <Typography>{`${new Date(request.askDate).toDateString()} - ${request.request.firstName
-      }`}</Typography>
+    <Typography>{`${new Date(request.askDate).toDateString()} - ${
+      request.request.firstName
+    }`}</Typography>
   );
 };
 
@@ -243,13 +264,14 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
   const [needRequest, setNeedRequest] = useState<NeedRequestType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedPeople, setSelectedPeople] = useState<Person[]>([]);
-
+  const graphqlClient = generateClient();
   useEffect(() => {
     const fetchRequest = async () => {
       try {
-        const response: any = await API.graphql(
-          graphqlOperation(getRequest, { id: request.requestID })
-        );
+        const response: any = await graphqlClient.graphql({
+          query: getRequest,
+          variables: { id: request.requestID },
+        });
         setNeedRequest(response.data.getRequest as NeedRequestType);
       } catch (err) {
         setError("Error fetching request");
@@ -268,9 +290,10 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
   ): Promise<void> => {
     try {
       // Fetch the existing Request data first
-      const requestData = (await API.graphql(
-        graphqlOperation(getRequest, { id: requestId })
-      )) as { data: GetRequestQuery }; // Cast response to specific query type
+      const requestData = (await graphqlClient.graphql({
+        query: getRequest,
+        variables: { id: requestId },
+      })) as { data: GetRequestQuery }; // Cast response to specific query type
 
       const existingFulfilledNeeds: (NeedType | null)[] =
         requestData.data.getRequest?.fulfilledNeeds || [];
@@ -289,10 +312,10 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
       };
 
       // Execute the update mutation
-      const result = (await API.graphql({
+      const result = (await graphqlClient.graphql({
         query: updateRequest,
         variables: { input: input },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
+        authMode: "userPool",
       })) as { data: UpdateRequestMutation }; // Cast response to specific mutation type
 
       console.log(
@@ -312,7 +335,7 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
     let askee = selectedPeople[0];
     try {
       // Update team request as fulfilled
-      const teamRequest = await API.graphql({
+      const teamRequest = await graphqlClient.graphql({
         query: updateTeamRequest,
         variables: {
           input: {
@@ -321,15 +344,15 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
             filledBy: askee.id,
           },
         },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
+        authMode: "userPool",
       });
       // Step 1: Check if the TeamMember exists
-      const existingTeamMemberData = (await API.graphql({
+      const existingTeamMemberData = (await graphqlClient.graphql({
         query: getTeamMember,
         variables: {
           breezeId: askee.id,
         },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
+        authMode: "userPool",
       })) as GraphQLResult<{ getTeamMember: TeamMember }>;
       console.log("Looking up team member:");
       console.log(JSON.stringify(existingTeamMemberData));
@@ -341,12 +364,12 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
             (a) => a?.teamRequestID == request.id
           )
         ) {
-          const updatedTeamMember = await API.graphql({
+          const updatedTeamMember = await graphqlClient.graphql({
             query: createAskedMembers,
             variables: {
               input: { teamRequestID: request.id, teamMemberID: askee.id },
             },
-            authMode: "AMAZON_COGNITO_USER_POOLS",
+            authMode: "userPool",
           });
 
           console.log("Join table updated:", updatedTeamMember);
@@ -360,18 +383,18 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
           name: askee.first_name.trim() + " " + askee.last_name.trim(),
         };
         console.log("Attempting to create new member.");
-        const newTeamMember = await API.graphql({
+        const newTeamMember = await graphqlClient.graphql({
           query: createTeamMember,
           variables: { input: newTeamMemberInput },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          authMode: "userPool",
         });
         console.log("Attempting to update join table.");
-        const updatedJoinTable = await API.graphql({
+        const updatedJoinTable = await graphqlClient.graphql({
           query: createAskedMembers,
           variables: {
             input: { teamRequestID: request.id, teamMemberID: askee.id },
           },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          authMode: "userPool",
         });
         console.log("TeamMember record created:", newTeamMember);
         console.log("Join table updated:", updatedJoinTable);
@@ -386,12 +409,12 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
     for (let askee of selectedPeople) {
       try {
         // Step 1: Check if the TeamMember exists
-        const existingTeamMemberData = (await API.graphql({
+        const existingTeamMemberData = (await graphqlClient.graphql({
           query: getTeamMember,
           variables: {
             breezeId: askee.id, // Correctly pass the breezeId here
           },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          authMode: "userPool",
         })) as GraphQLResult<{ getTeamMember: TeamMember }>;
         console.log("Looking up team member:");
         console.log(JSON.stringify(existingTeamMemberData));
@@ -403,12 +426,12 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
               (a) => a?.teamRequestID == request.id
             )
           ) {
-            const updatedTeamMember = await API.graphql({
+            const updatedTeamMember = await graphqlClient.graphql({
               query: createAskedMembers,
               variables: {
                 input: { teamRequestID: request.id, teamMemberID: askee.id },
               },
-              authMode: "AMAZON_COGNITO_USER_POOLS",
+              authMode: "userPool",
             });
 
             console.log("Join table updated:", updatedTeamMember);
@@ -422,18 +445,18 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
             name: askee.first_name.trim() + " " + askee.last_name.trim(),
           };
           console.log("Attempting to create new member.");
-          const newTeamMember = await API.graphql({
+          const newTeamMember = await graphqlClient.graphql({
             query: createTeamMember,
             variables: { input: newTeamMemberInput },
-            authMode: "AMAZON_COGNITO_USER_POOLS",
+            authMode: "userPool",
           });
           console.log("Attempting to update join table.");
-          const updatedJoinTable = await API.graphql({
+          const updatedJoinTable = await graphqlClient.graphql({
             query: createAskedMembers,
             variables: {
               input: { teamRequestID: request.id, teamMemberID: askee.id },
             },
-            authMode: "AMAZON_COGNITO_USER_POOLS",
+            authMode: "userPool",
           });
           console.log("TeamMember record created:", newTeamMember);
           console.log("Join table updated:", updatedJoinTable);
@@ -487,7 +510,7 @@ const TeamPicker: React.FC = () => {
     error: teamRequestError,
   } = useRequestsById(teamId);
   const team = teams.find((t) => t.id == teamId);
-
+  const graphqlClient = generateClient();
   const options = [
     { needType: NeedType.OTHER, option_id: "42", name: "Baby Needs" },
     { needType: NeedType.CARREPAIR, option_id: "7", name: "Car Repair" },
@@ -531,9 +554,9 @@ const TeamPicker: React.FC = () => {
   async function fillInPeopleInfo(people: Person[]) {
     try {
       // Fetch all TeamMembers from the API
-      const teamMembersData: any = await API.graphql({
+      const teamMembersData: any = await graphqlClient.graphql({
         query: listTeamMembers,
-        authMode: "AMAZON_COGNITO_USER_POOLS",
+        authMode: "userPool",
       });
 
       if (teamMembersData.data.listTeamMembers.items) {
@@ -606,9 +629,18 @@ const TeamPicker: React.FC = () => {
 
   const getBreezeTeam = async (teamId: string): Promise<Person[]> => {
     try {
-      const credentials = await Auth.currentCredentials();
+      const { credentials } = await fetchAuthSession();
+
+      if (!credentials) {
+        throw new Error("No credentials available.");
+      }
+
       const lambda = new Lambda({
-        credentials: Auth.essentialCredentials(credentials),
+        credentials: {
+          accessKeyId: credentials.accessKeyId,
+          secretAccessKey: credentials.secretAccessKey,
+          sessionToken: credentials.sessionToken,
+        },
       });
       const response = await lambda
         .invoke({
@@ -626,29 +658,28 @@ const TeamPicker: React.FC = () => {
   };
 
   return (
-    <AmplifyAuthenticator>
-      <AmplifySignIn slot="sign-in" hideSignUp />
-    <div>
-      <h1>Active requests for {team?.teamName}</h1>
-      {team &&
-        requests
-          .filter((request) => !request.filledDate)
-          .map((openRequest) => (
-            <Accordion>
-              <AccordionSummary>
-                <OpenTeamRequestSummary request={openRequest} />
-              </AccordionSummary>
-              <AccordionDetails>
-                <OpenTeamRequest
-                  request={openRequest}
-                  team={team}
-                  people={people}
-                />
-              </AccordionDetails>
-            </Accordion>
-          ))}
-    </div>
-    </AmplifyAuthenticator>
+    <Authenticator hideSignUp>
+      <div>
+        <h1>Active requests for {team?.teamName}</h1>
+        {team &&
+          requests
+            .filter((request) => !request.filledDate)
+            .map((openRequest) => (
+              <Accordion>
+                <AccordionSummary>
+                  <OpenTeamRequestSummary request={openRequest} />
+                </AccordionSummary>
+                <AccordionDetails>
+                  <OpenTeamRequest
+                    request={openRequest}
+                    team={team}
+                    people={people}
+                  />
+                </AccordionDetails>
+              </Accordion>
+            ))}
+      </div>
+    </Authenticator>
   );
 };
 

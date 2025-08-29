@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Card, CardContent, Box, Button } from "@material-ui/core";
+import { Typography, Card, CardContent } from "@mui/material";
 import { t } from "i18next";
 import {
   HouseholdItemsGQL,
@@ -8,22 +8,20 @@ import {
   RadioButtonState,
 } from "./needRequestTypes";
 import {
-  ContactCard,
   ContactCardData,
-  getCopyTextForContactInfo,
   getGroceriesListText,
   getHouseholdItemsText,
   getHygeneItemsText,
 } from "./needFormCards";
-import { ContentCopy } from "@mui/icons-material";
 import { NeedType } from "./RequestAPI";
 import BasicContactInfoCard from "./BasicContactInfoCard";
-import mobileCardStyles from "./MobileCardStyles";
+import { StyledCard, Text } from "./MobileCardStyles";
 
 interface NeedSummaryForTeamProps {
   needType: NeedType;
   request: NeedRequestType;
 }
+
 function mapNeedRequestToContactCardData(
   request: NeedRequestType
 ): ContactCardData {
@@ -40,32 +38,6 @@ function mapNeedRequestToContactCardData(
     otherPersonsPhone: request.selfOrOtherInfo.phoneNumber || "",
   };
 }
-const CopyableText = (text: string) => {
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        alert("Text copied to clipboard");
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-      });
-  };
-
-  return (
-    <Box>
-      <Typography style={{ whiteSpace: "pre-wrap" }}>{text}</Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleCopy}
-        startIcon={<ContentCopy />}
-      >
-        Copy
-      </Button>
-    </Box>
-  );
-};
 
 const getDeliveryDetails = (request: NeedRequestType): string => {
   let details = "";
@@ -128,9 +100,6 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
   needType,
   request,
 }) => {
-  // Function to get the summary details based on needType and request
-
-  var cardStyle = mobileCardStyles();
   return (
     <Card>
       <CardContent>
@@ -149,20 +118,17 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
           }
           email={request.email ? request.email : ""}
         />
-        <Card className={cardStyle.card}>
+
+        <StyledCard>
           {getSummaryDetails(needType, request)
             .trim()
             .split("\n")
             .map((line, index) => (
-              <Typography
-                className={cardStyle.text}
-                key={index}
-                variant="body1"
-              >
+              <Text key={index} variant="body1" color="textSecondary">
                 {line}
-              </Typography>
+              </Text>
             ))}
-        </Card>
+        </StyledCard>
       </CardContent>
     </Card>
   );
