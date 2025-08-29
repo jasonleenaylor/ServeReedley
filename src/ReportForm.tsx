@@ -1,12 +1,9 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "./App.css";
-import { Amplify, API } from "aws-amplify";
-import {
-  AmplifySignOut,
-  AmplifyAuthenticator,
-  AmplifySignIn,
-} from "@aws-amplify/ui-react";
+import { generateClient } from "aws-amplify/api";
+import { Amplify } from "aws-amplify";
+import { Authenticator } from "@aws-amplify/ui-react";
 import { listRequests } from "./graphql/queries";
 import { ILocalizeProps, NeedRequestType } from "./needRequestTypes";
 import awsExports from "./aws-exports";
@@ -23,7 +20,7 @@ import {
   Typography,
   TableHead,
   TableBody,
-} from "@material-ui/core";
+} from "@mui/material";
 import theme from "./theme";
 import { ThemeProvider } from "@emotion/react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -66,6 +63,8 @@ export function ReportForm(props: ILocalizeProps) {
     { label: "New", type: RequestStatus.NEW },
   ];
 
+  const graphqlClient = generateClient();
+
   function queryStartDate(date: Date): string {
     return new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
@@ -91,7 +90,7 @@ export function ReportForm(props: ILocalizeProps) {
         between: [queryStartDate(startDate), queryEndDate(endDate)],
       },
     };
-    const requests: any = await API.graphql({
+    const requests: any = await graphqlClient.graphql({
       query: listRequests,
       variables: { limit: 1000, filter: filter },
     });
@@ -117,9 +116,7 @@ export function ReportForm(props: ILocalizeProps) {
   }
 
   return (
-    <AmplifyAuthenticator>
-      <AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
-
+    <Authenticator hideSignUp>
       <ThemeProvider theme={theme}>
         <Grid container spacing={4} direction="column" justifyContent="center">
           <Grid item>
@@ -387,7 +384,7 @@ export function ReportForm(props: ILocalizeProps) {
           )}
         </Grid>
       </ThemeProvider>
-    </AmplifyAuthenticator>
+    </Authenticator>
   );
 }
 export default ReportForm;

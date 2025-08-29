@@ -7,8 +7,8 @@ import {
   Select,
   FormControl,
   InputLabel,
-} from "@material-ui/core";
-import { API } from "aws-amplify";
+} from "@mui/material";
+import { generateClient } from 'aws-amplify/api';
 import { createTeam } from "./graphql/mutations"; // Adjust the import path accordingly
 import { useTeams } from "./useTeams"; // Adjust the import path accordingly
 import { NeedType } from "./RequestAPI"; // Adjust the import path accordingly
@@ -37,13 +37,19 @@ const CreateTeamForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    if(teamType === "") {
+      console.error("Team type is required");
+      setLoading(false);
+      return;
+    }
 
+    const graphqlClient = generateClient();
     try {
       const newTeam = { teamName, teamType };
-      const apiData: any = await API.graphql({
+      const apiData: any = await graphqlClient.graphql({
         query: createTeam,
         variables: { input: newTeam },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
+        authMode: 'userPool',
       });
       setTeams((prevTeams) => [...prevTeams, apiData.data.createTeam]);
       setTeamName("");

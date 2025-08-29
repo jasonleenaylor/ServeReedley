@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
+import { generateClient } from 'aws-amplify/api';
 import {
   Card,
   Checkbox,
@@ -16,7 +17,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@material-ui/core";
+} from "@mui/material";
 import { t } from "i18next";
 import {
   INeedTypes,
@@ -27,7 +28,6 @@ import { cardStyle } from "./needRequestForm";
 import NeedSummaryForTeam from "./NeedSummaryForTeam";
 import { useTeams } from "./useTeams";
 import { NeedType, Team } from "./RequestAPI";
-import { API } from "aws-amplify";
 import { createTeamRequest } from "./graphql/mutations";
 import { listTeamRequests } from "./graphql/queries";
 
@@ -99,6 +99,7 @@ function SendToTeamDialog({
   const [selectedTeam, setSelectedTeam] = useState<string | "">("");
   const { teams, loading } = useTeams();
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
+  const graphqlClient = generateClient();
 
   useEffect(() => {
     const filtered = teams.filter((team) => team.teamType === needType);
@@ -115,7 +116,7 @@ function SendToTeamDialog({
       navigator.clipboard.writeText(
         `https://crn.servereedley.org/team?id=${selectedTeam}`
       );
-      const existingTeamRequest: any = await API.graphql({
+      const existingTeamRequest: any = await graphqlClient.graphql({
         query: listTeamRequests, // Assuming you have a query named listTeamRequests
         variables: {
           filter: {
@@ -123,7 +124,7 @@ function SendToTeamDialog({
             teamID: { eq: selectedTeam }
           }
         },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
+        authMode: 'userPool',
       });
 
       // Check if any matching team requests are returned
@@ -137,10 +138,10 @@ function SendToTeamDialog({
           note,
           askDate: new Date().toISOString(),
         };
-        await API.graphql({
+        await graphqlClient.graphql({
           query: createTeamRequest,
           variables: { input },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          authMode: 'userPool',
         });
       }
       onClose(true);

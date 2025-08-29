@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@material-ui/core";
-import mobileCardStyles from "./MobileCardStyles";
+import { StyledCard, StyledCardContent, Title, Text } from "./MobileCardStyles";
 
 interface ContactInfoProps {
   name: string;
@@ -15,25 +14,17 @@ const ContactInfoCard: React.FC<ContactInfoProps> = ({
   phone,
   address,
 }) => {
-  const classes = mobileCardStyles();
-
   return (
-    <Card className={classes.card}>
-      <CardContent className={classes.content}>
-        <Typography className={classes.title} color="textPrimary" gutterBottom>
+    <StyledCard>
+      <StyledCardContent>
+        <Title color="textPrimary" gutterBottom>
           {name}
-        </Typography>
-        <Typography className={classes.text} color="textSecondary">
-          {email}
-        </Typography>
-        <Typography className={classes.text} color="textSecondary">
-          {phone}
-        </Typography>
-        <Typography className={classes.text} color="textSecondary">
-          {address}
-        </Typography>
-      </CardContent>
-    </Card>
+        </Title>
+        <Text color="textSecondary">{email}</Text>
+        <Text color="textSecondary">{phone}</Text>
+        <Text color="textSecondary">{address}</Text>
+      </StyledCardContent>
+    </StyledCard>
   );
 };
 

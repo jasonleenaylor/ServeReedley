@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Amplify, API, Auth, graphqlOperation, Hub } from "aws-amplify";
-import {
-  AmplifySignOut,
-  AmplifyAuthenticator,
-  AmplifySignIn,
-} from "@aws-amplify/ui-react";
+import { generateClient } from "aws-amplify/api";
+import { getCurrentUser } from "@aws-amplify/auth";
+import { Amplify } from "aws-amplify";
+import { Hub } from "aws-amplify/utils";
 import { listRequests } from "./graphql/queries";
 import {
   createFoodInfo,
@@ -18,36 +16,35 @@ import {
   updateNoteType,
   updateRequest,
 } from "./graphql/mutations";
-import MaterialTable, { Column } from "@material-table/core";
-import tableIcons from "./tableIcons";
 import {
-  CreateFoodInfoInput,
-  CreateHomeRepairTypeInput,
-  CreateMovingInfoInput,
-  CreateNoteTypeInput,
-  NoteType,
-  RequestStatus,
-  UpdateFoodInfoInput,
-  UpdateHomeRepairTypeInput,
-  UpdateMovingInfoInput,
-  UpdateNoteTypeInput,
-  UpdateRequestInput,
-} from "./RequestAPI";
+  MaterialReactTable,
+  MRT_ColumnSizingState,
+  type MRT_ColumnDef,
+} from "material-react-table";
+import { NoteType, RequestStatus, UpdateRequestInput } from "./RequestAPI";
 import {
-  CREATE_TABLE,
-  IFoodInfoReqType,
-  IGraphQLTable,
-  IHomeRepairReqType,
   IHomeRepairType,
   ILocalizeProps,
   MovingInfoGQL,
   NeedRequestType,
 } from "./needRequestTypes";
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
-import { Grid, Paper, Snackbar, Typography } from "@material-ui/core";
+import { Box, Button, Grid, Paper, Snackbar, Typography } from "@mui/material";
 import theme from "./theme";
 import awsExports from "./aws-exports";
 import Rating from "@mui/material/Rating";
+import { Authenticator } from "@aws-amplify/ui-react";
+import {
+  noteCreateFromReqData,
+  movingInfoCreateFromReqData,
+  homeRepairCreateFromReqData,
+  foodInfoCreateFromReqData,
+  noteUpdateFromReqData,
+  movingInfoUpdateFromReqData,
+  homeRepairUpdateFromReqData,
+  foodInfoUpdateFromReqData,
+  createOrUpdate,
+} from "./needRequestDataUtils";
 
 Amplify.configure(awsExports);
 
@@ -60,277 +57,290 @@ function NeedRequestTable(props: ILocalizeProps) {
   const [requests, setRequests] = useState([]);
   const requestId = new URLSearchParams(window.location.search).get("id");
   const [editId, setEditId] = useState(requestId);
-  const columns: Column<any>[] = [
-    // Vernacular column
+  const graphqlClient = generateClient();
+  const [columnSizing, setColumnSizing] = useState<MRT_ColumnSizingState>({});
+  const columns: MRT_ColumnDef<NeedRequestType>[] = [
+    // Vernacular
     {
-      title: "★",
-      field: "notable",
-      render: (rowData: NeedRequestType) => {
-        return <Rating value={hasNotableNote(rowData) ? 1 : 0} max={1} />;
-      },
+      accessorKey: "notable",
+      header: "★",
+      Cell: ({ row }) => (
+        <Rating value={hasNotableNote(row.original) ? 1 : 0} max={1} />
+      ),
     },
+    // Work on Request
     {
-      title: "Work on Request",
-      field: "modify",
-      render: (rowData: NeedRequestType) => {
-        return (
-          <UpdateRequestDialogButton
-            requestData={rowData}
-            open={false}
-            onClose={function () {
-              setSnackBarOpen(true);
-            }}
-            onSave={async function (value: NeedRequestType) {
-              await API.graphql({
-                query: updateRequest,
-                variables: {
-                  input: await needUpdateFromNeedReqData(value),
-                },
-                authMode: "AMAZON_COGNITO_USER_POOLS",
-              });
-              fetchNeedRequests();
-            }}
-            t={props.t}
-          />
-        );
-      },
+      accessorKey: "modify",
+      header: "Work on Request",
+      Cell: ({ row }) => (
+        <UpdateRequestDialogButton
+          requestData={row.original}
+          open={false}
+          onClose={() => setSnackBarOpen(true)}
+          onSave={async (value: NeedRequestType) => {
+            await graphqlClient.graphql({
+              query: updateRequest,
+              variables: { input: await needUpdateFromNeedReqData(value) },
+              authMode: "userPool",
+            });
+            fetchNeedRequests();
+          }}
+          t={props.t}
+        />
+      ),
+      enableColumnFilter: false,
     },
-    { title: "Status", field: "status" },
+    { accessorKey: "status", header: "Status" },
+    // Date of Request
     {
-      title: "Date Of Request",
-      field: "dateOfRequest",
-      type: "datetime",
-      customSort: (a, b) =>
-        new Date(b.dateOfRequest).getTime() -
-        new Date(a.dateOfRequest).getTime(),
-      render: (rowData) =>
-        new Date(rowData.dateOfRequest).toLocaleDateString("en-US", {
-          weekday: undefined,
+      accessorKey: "dateOfRequest",
+      header: "Date Of Request",
+      Cell: ({ row }) =>
+        new Date(row.original.dateOfRequest).toLocaleDateString("en-US", {
           year: "numeric",
           month: "short",
           day: "2-digit",
         }),
-      cellStyle: { minWidth: 175 },
+      sortingFn: (rowA, rowB, columnId) =>
+        new Date(rowA.getValue<string>(columnId)).getTime() -
+        new Date(rowB.getValue<string>(columnId)).getTime(),
+      muiTableBodyCellProps: { sx: { minWidth: 175 } },
     },
-    { title: "First Name", field: "firstName" },
-    { title: "Last Name", field: "lastName" },
+    { accessorKey: "firstName", header: "First" },
+    { accessorKey: "lastName", header: "Last" },
     {
-      title: "Phone",
-      field: "phone",
-      cellStyle: { minWidth: 150 },
-      render: (rowData) => <a href={"tel:" + rowData.phone}>{rowData.phone}</a>,
+      accessorKey: "phone",
+      header: "Phone",
+      Cell: ({ row }) => (
+        <a href={`tel:${row.original.phone}`}>{row.original.phone}</a>
+      ),
+      muiTableBodyCellProps: { sx: { minWidth: 150 } },
     },
     {
-      title: "Address",
-      field: "address",
-      cellStyle: {
-        minWidth: 185,
-      },
+      accessorKey: "address",
+      header: "Address",
+      muiTableBodyCellProps: { sx: { minWidth: 185 } },
     },
-    { title: "City", field: "city" },
-    { title: "Zip Code", field: "zipCode", type: "numeric" },
+    { accessorKey: "city", header: "City", enableColumnFilter: true },
     {
-      title: "Email",
-      field: "email",
-      render: (rowData) => (
-        <a href={"mailto:" + rowData.email}>{rowData.email}</a>
+      accessorKey: "zipCode",
+      header: "Zip Code",
+      muiTableBodyCellProps: { align: "right" },
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+      Cell: ({ row }) => (
+        <a href={`mailto:${row.original.email}`}>{row.original.email}</a>
       ),
     },
-    { title: "Spanish Only", field: "spanishOnly", type: "boolean" },
-    { title: "Specific Need", field: "specificNeed" },
-    { title: "Preferred Contact Time", field: "preferredContactTime" },
-    { title: "Lead Source", field: "leadSource" },
     {
-      title: "Need Reason(s)",
-      field: "needReason",
-      render: (rowData) => rowData.needReason.join(", "),
+      accessorKey: "spanishOnly",
+      header: "Spanish Only",
+      Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
+      sortingFn: (rowA, rowB, columnId) =>
+        (rowA.getValue<boolean>(columnId) ? 1 : 0) -
+        (rowB.getValue<boolean>(columnId) ? 1 : 0),
+      muiTableBodyCellProps: { align: "center" },
+    },
+    { accessorKey: "specificNeed", header: "Specific Need" },
+    { accessorKey: "preferredContactTime", header: "Preferred Contact Time" },
+    { accessorKey: "leadSource", header: "Lead Source" },
+    {
+      accessorKey: "needReason",
+      header: "Need Reason(s)",
+      Cell: ({ row }) => row.original.needReason.join(", "),
     },
     {
-      title: "Need Type(s)",
-      field: "needTypes",
-      cellStyle: { minWidth: 350 },
-      render: (rowData) => rowData.needTypes.join(", "),
+      accessorKey: "needTypes",
+      header: "Need Type(s)",
+      Cell: ({ row }) => row.original.needTypes.join(", "),
+      muiTableBodyCellProps: { sx: { minWidth: 350 } },
     },
-    { title: "Own Need", field: "selfOrOtherInfo.forSelf" },
-    { title: "Other Resources Used", field: "selfOrOtherInfo.otherResources" },
     {
-      title: "Requested For (if not self)",
-      field: "selfOrOtherInfo.requestFor",
-      cellStyle: {
-        maxWidth: 150,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
+      accessorKey: "selfOrOtherInfo.forSelf",
+      header: "Own Need",
+    },
+    {
+      accessorKey: "selfOrOtherInfo.otherResources",
+      header: "Other Resources Used",
+    },
+    {
+      accessorKey: "selfOrOtherInfo.requestFor",
+      header: "Requested For (if not self)",
+      muiTableBodyCellProps: {
+        sx: {
+          maxWidth: 150,
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        },
       },
     },
     {
-      title: "Requested with knowledge",
-      field: "selfOrOtherInfo.requestIsKnown",
+      accessorKey: "selfOrOtherInfo.requestIsKnown",
+      header: "Requested with knowledge",
     },
     {
-      title: "Family Size",
-      field: "foodRequest.familyMembers",
+      accessorKey: "foodRequest.familyMembers",
+      header: "Family Size",
     },
     {
-      title: "Children",
-      field: "foodRequest.children",
+      accessorKey: "foodRequest.children",
+      header: "Children",
     },
     {
-      title: "Allergies",
-      field: "foodRequest.allergies",
+      accessorKey: "foodRequest.allergies",
+      header: "Allergies",
     },
     {
-      title: "Groceries",
-      field: "foodRequest.groceries",
-      cellStyle: {
-        minWidth: 250,
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      },
-      render: (rowData) => printGroceryList(rowData.foodRequest), // JSON.stringify(rowData.foodRequest.groceries);
-    },
-    {
-      title: "Moving: Items",
-      field: "movingRequest.items",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      },
-    },
-    {
-      title: "Moving: Has Vehicle",
-      field: "movingRequest.haveTransportation",
-      type: "boolean",
-    },
-    {
-      title: "Moving: Special Conditions",
-      field: "movingRequest.specialConditions",
-      render: (rowData) => printMovingConditions(rowData.movingRequest),
-    },
-    {
-      title: "Moving: Other Special Conditions",
-      field: "movingRequest.otherDetails",
-    },
-    {
-      title: "Job: Resume Help",
-      field: "resumeHelp",
-      type: "boolean",
-    },
-    {
-      title: "Job: Cover Letter Help",
-      field: "coverLetterHelp",
-      type: "boolean",
-    },
-    {
-      title: "Car Repair Details",
-      field: "carRepairDetails",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
+      accessorKey: "foodRequest.groceries",
+      header: "Groceries",
+      Cell: ({ row }) =>
+        row.original.foodRequest
+          ? printGroceryList(
+              Object.fromEntries(
+                Object.entries(row.original.foodRequest).map(([key, value]) => [
+                  key,
+                  value === null ? undefined : value,
+                ])
+              )
+            )
+          : "",
+      muiTableBodyCellProps: {
+        sx: {
+          minWidth: 250,
+          maxWidth: 350,
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        },
       },
     },
     {
-      title: "Home Repair Details",
-      field: "homeRepairType.details",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
+      accessorKey: "movingRequest.items",
+      header: "Moving: Items",
+      muiTableBodyCellProps: {
+        sx: {
+          maxWidth: 350,
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+        },
       },
     },
     {
-      title: "Home Repair Categories",
-      field: "homeRepairType",
-      render: (rowData) => printHomeRepairList(rowData.homeRepairType), // JSON.stringify(rowData.foodRequest.groceries);
+      accessorKey: "movingRequest.haveTransportation",
+      header: "Moving: Has Vehicle",
+      Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
+      sortingFn: (rowA, rowB, columnId) =>
+        (rowA.getValue<boolean>(columnId) ? 1 : 0) -
+        (rowB.getValue<boolean>(columnId) ? 1 : 0),
+      muiTableBodyCellProps: { align: "center" },
     },
     {
-      title: "Clothing Type",
-      field: "clothingType",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
+      accessorKey: "movingRequest.specialConditions",
+      header: "Moving: Special Conditions",
+      Cell: ({ row }) =>
+        row.original.movingRequest
+          ? printMovingConditions(row.original.movingRequest)
+          : "",
+    },
+    {
+      accessorKey: "movingRequest.otherDetails",
+      header: "Moving: Other Special Conditions",
+    },
+    {
+      accessorKey: "resumeHelp",
+      header: "Job: Resume Help",
+      Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
+      sortingFn: (rowA, rowB, columnId) =>
+        (rowA.getValue<boolean>(columnId) ? 1 : 0) -
+        (rowB.getValue<boolean>(columnId) ? 1 : 0),
+      muiTableBodyCellProps: { align: "center" },
+    },
+    {
+      accessorKey: "coverLetterHelp",
+      header: "Job: Cover Letter Help",
+      Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
+      sortingFn: (rowA, rowB, columnId) =>
+        (rowA.getValue<boolean>(columnId) ? 1 : 0) -
+        (rowB.getValue<boolean>(columnId) ? 1 : 0),
+      muiTableBodyCellProps: { align: "center" },
+    },
+    // …and similarly for the rest (Car Repair, Home Repair, Clothing, Furniture, Other Needs)
+    {
+      accessorKey: "dateFulfilled",
+      header: "Date Fulfilled",
+      Cell: ({ row }) =>
+        row.original.dateFulfilled
+          ? new Date(row.original.dateFulfilled).toLocaleDateString()
+          : "",
+      sortingFn: (rowA, rowB, columnId) => {
+        const a = rowA.getValue<string>(columnId)
+          ? new Date(rowA.getValue<string>(columnId)).getTime()
+          : 0;
+        const b = rowB.getValue<string>(columnId)
+          ? new Date(rowB.getValue<string>(columnId)).getTime()
+          : 0;
+        return a - b;
       },
     },
-    {
-      title: "Clothing Size",
-      field: "clothingSize",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      },
-    },
-    {
-      title: "Furniture",
-      field: "furnitureType",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      },
-    },
-    {
-      title: "Furniture Dimensions",
-      field: "furnitureSize",
-    },
-    {
-      title: "Other Needs",
-      field: "otherNeeds",
-      cellStyle: {
-        maxWidth: 350,
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-      },
-    },
-    { title: "Need Fulfiller", field: "needFulfiller" },
-    { title: "Date Fulfilled", field: "dateFulfilled", type: "datetime" },
-    { title: "Follow Up", field: "followUp" },
+    { accessorKey: "followUp", header: "Follow Up", enableColumnFilter: true },
   ];
 
   Hub.listen("auth", (data) => {
     switch (data.payload.event) {
-      case "signIn":
+      case "signedIn":
         setIsLoggedIn(true);
         break;
-      case "signOut":
+      case "signedOut":
         setIsLoggedIn(false);
         break;
     }
   });
-
+  useEffect(() => {
+    const savedSizing = localStorage.getItem("needRequestTableColumnSizing");
+    if (savedSizing) {
+      setColumnSizing(JSON.parse(savedSizing));
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem(
+      "needRequestTableColumnSizing",
+      JSON.stringify(columnSizing)
+    );
+  }, [columnSizing]);
   useEffect(() => {
     fetchNeedRequests();
-    Auth.currentAuthenticatedUser().then((user) => {
-      setIsLoggedIn(!!user);
-    });
+    getCurrentUser()
+      .then(() => {
+        // This code will ONLY run if a user is signed in.
+        setIsLoggedIn(true);
+      })
+      .catch(() => {
+        // This code will run if the user is not signed in,
+        // or if there's any other authentication error.
+        setIsLoggedIn(false);
+      });
   }, []);
 
-  function printGroceryList(groceries: {
-    milk: boolean;
-    eggs: boolean;
-    beans: boolean;
-    rice: boolean;
-    bread: boolean;
-    butter: boolean;
-    tortillas: boolean;
-    peanutButter: boolean;
-    jelly: boolean;
-    fruit: boolean;
-    lunchmeat: boolean;
-    hotdogs: boolean;
-  }): string {
+  function printGroceryList(
+    groceries: Partial<{
+      milk: boolean;
+      eggs: boolean;
+      beans: boolean;
+      rice: boolean;
+      bread: boolean;
+      butter: boolean;
+      tortillas: boolean;
+      peanutButter: boolean;
+      jelly: boolean;
+      fruit: boolean;
+      lunchMeat: boolean;
+      hotdogs: boolean;
+    }>
+  ): string {
     let groceryList = "";
     if (groceries) {
       if (groceries.milk) groceryList += ", Milk";
@@ -343,6 +353,7 @@ function NeedRequestTable(props: ILocalizeProps) {
       if (groceries.fruit) groceryList += ", Fruit";
       if (groceries.peanutButter) groceryList += ", Peanut Butter";
       if (groceries.jelly) groceryList += ", Jelly";
+      if (groceries.lunchMeat) groceryList += ", Lunch Meat";
       if (groceries.hotdogs) groceryList += ", Hot Dogs";
     }
     return groceryList.substring(2);
@@ -389,7 +400,7 @@ function NeedRequestTable(props: ILocalizeProps) {
   }
 
   async function fetchNeedRequests() {
-    const apiData: any = await API.graphql({
+    const apiData: any = await graphqlClient.graphql({
       query: listRequests,
       variables: { limit: 1000 },
     });
@@ -420,248 +431,147 @@ function NeedRequestTable(props: ILocalizeProps) {
   };
 
   return (
-    <AmplifyAuthenticator>
-      <AmplifySignIn slot="sign-in" hideSignUp />
-      <div className="App">
-        <div
-          style={{
-            width: "auto",
-            height: "auto",
-            overflow: "auto",
-            margin: "auto",
-          }}
-        >
-          <MaterialTable<any>
-            columns={columns}
-            icons={tableIcons}
-            data={requests.sort(sortByStatusThenDate)}
-            detailPanel={[
-              {
-                tooltip: "Show Notes",
-                render: (row: any) => {
-                  return (
-                    <div
-                      style={{
-                        textAlign: "left",
-                      }}
-                    >
-                      {
-                        <Grid container spacing={2}>
-                          {row.rowData.note?.items
-                            ?.sort((a: NoteType, b: NoteType) => {
-                              return (
-                                Date.parse(b.createdAt) -
-                                Date.parse(a.createdAt)
-                              );
-                            })
-                            ?.map((note: NoteType) => {
-                              return (
-                                <Grid item xs={12}>
-                                  <Paper
-                                    style={{
-                                      padding: theme.spacing(3),
-                                      width: 350,
-                                      background: note.notable
-                                        ? "gold"
-                                        : "white",
-                                    }}
-                                  >
-                                    <Typography>
-                                      {new Date(
-                                        note.createdAt
-                                      ).toLocaleDateString()}
-                                    </Typography>
-                                    <Typography>{note.author}</Typography>
-                                    <Typography>{note.content}</Typography>
-                                  </Paper>
-                                </Grid>
-                              );
-                            })}
-                        </Grid>
-                      }
-                    </div>
-                  );
-                },
-              },
-            ]}
-            title="Need Requests"
-            options={{
-              filtering: true,
-              pageSize: 20,
-              pageSizeOptions: [20, 40, 100],
-              thirdSortClick: false,
+    <Authenticator hideSignUp>
+      {({ signOut }) => (
+        <div className="App">
+          <div
+            style={{
+              width: "auto",
+              height: "auto",
+              overflow: "auto",
+              margin: "auto",
             }}
-          />
-          {isLoggedIn &&
-          editId &&
-          requests.length > 0 &&
-          requests.findIndex((r: NeedRequestType) => r.id === editId) !== -1 ? (
-            <UpdateRequestDialogButton
-              // Couldn't figure out how to make all the type safety happy so I short circut with any :(
-              requestData={
-                requests.find((r: NeedRequestType) => r.id === editId) as any
-              }
-              open={true}
-              onClose={function () {
-                setSnackBarOpen(true);
-                setEditId(null);
+          >
+            <Box
+              sx={{
+                backgroundColor: (theme) => theme.palette.primary.main,
+                color: (theme) => theme.palette.primary.contrastText,
+                px: 3,
+                py: 2,
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
               }}
-              onSave={async function (value: NeedRequestType) {
-                await API.graphql({
-                  query: updateRequest,
-                  variables: {
-                    input: await needUpdateFromNeedReqData(value),
+            >
+              <Typography variant="h6" component="div">
+                Submitted Requests
+              </Typography>
+            </Box>
+            <MaterialReactTable
+              columns={columns} // use your fully migrated MRT columns array
+              data={requests.sort(sortByStatusThenDate)}
+              enableColumnFilters={true}
+              enableColumnResizing
+              state={{ columnSizing }}
+              onColumnSizingChange={setColumnSizing}
+              columnResizeMode="onEnd"
+              enableMultiSort={false} // replaces thirdSortClick
+              initialState={{
+                pagination: {
+                  pageSize: 20,
+                  pageIndex: 0,
+                },
+                showColumnFilters: true,
+              }}
+              muiTableHeadCellProps={{
+                sx: {
+                  "& .MuiBox-root": {
+                    // Targets the inner label container
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
                   },
-                  authMode: "AMAZON_COGNITO_USER_POOLS",
-                });
-                setEditId(null);
-                fetchNeedRequests();
+                },
               }}
-              t={props.t}
+              muiPaginationProps={{ rowsPerPageOptions: [20, 40, 100] }}
+              renderDetailPanel={({ row }) => (
+                <div style={{ textAlign: "left" }}>
+                  <Grid container spacing={2}>
+                    {row.original.note?.items
+                      ?.sort((a: NoteType | null, b: NoteType | null) => {
+                        if (a === null || b === null) {
+                          if (a === null) return b === null ? 0 : 1;
+                          return -1;
+                        }
+                        return (
+                          Date.parse(b.createdAt) - Date.parse(a.createdAt)
+                        );
+                      })
+                      ?.map(
+                        (note: NoteType | null) =>
+                          note && (
+                            <Grid item xs={12} key={note.createdAt}>
+                              <Paper
+                                style={{
+                                  padding: theme.spacing(3),
+                                  width: 350,
+                                  background: note.notable ? "gold" : "white",
+                                }}
+                              >
+                                <Typography>
+                                  {new Date(
+                                    note.createdAt
+                                  ).toLocaleDateString()}
+                                </Typography>
+                                <Typography>{note.author}</Typography>
+                                <Typography>{note.content}</Typography>
+                              </Paper>
+                            </Grid>
+                          )
+                      )}
+                  </Grid>
+                </div>
+              )}
             />
-          ) : null}
+            {isLoggedIn &&
+            editId &&
+            requests.length > 0 &&
+            requests.findIndex((r: NeedRequestType) => r.id === editId) !==
+              -1 ? (
+              <UpdateRequestDialogButton
+                // Couldn't figure out how to make all the type safety happy so I short circut with any :(
+                requestData={
+                  requests.find((r: NeedRequestType) => r.id === editId) as any
+                }
+                open={true}
+                onClose={function () {
+                  setSnackBarOpen(true);
+                  setEditId(null);
+                }}
+                onSave={async function (value: NeedRequestType) {
+                  await graphqlClient.graphql({
+                    query: updateRequest,
+                    variables: {
+                      input: await needUpdateFromNeedReqData(value),
+                    },
+                    authMode: "userPool",
+                  });
+                  setEditId(null);
+                  fetchNeedRequests();
+                }}
+                t={props.t}
+              />
+            ) : null}
+          </div>
+          <span style={{ width: "20%" }} />
+          <Snackbar
+            autoHideDuration={4000}
+            message="No changes made"
+            open={snackBarOpen}
+            onClose={() => setSnackBarOpen(false)}
+          />
+          <Button
+            onClick={signOut}
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2, py: 1.5, fontSize: "1rem" }}
+          >
+            Sign Out
+          </Button>
         </div>
-        <span style={{ width: "20%" }} />
-        <Snackbar
-          autoHideDuration={4000}
-          message="No changes made"
-          open={snackBarOpen}
-          onClose={() => setSnackBarOpen(false)}
-        />
-        <AmplifySignOut />
-      </div>
-    </AmplifyAuthenticator>
+      )}
+    </Authenticator>
   );
 } // NoteRequestTable
-
-function noteCreateFromReqData(value: NoteType): CreateNoteTypeInput {
-  return {
-    author: value.author,
-    content: value.content,
-    notable: value.notable,
-    dateCreated: value.dateCreated,
-    requestID: value.requestID,
-  };
-}
-
-function movingInfoCreateFromReqData(
-  value: MovingInfoGQL
-): CreateMovingInfoInput {
-  return {
-    items: value.items,
-    haveTransportation: value.haveTransportation,
-    other: value.other,
-    otherDetails: value.otherDetails,
-    liabilityAck: value.liabilityAck,
-    stairs: value.stairs,
-    steepDriveway: value.steepDriveway,
-    unpavedRoad: value.unpavedRoad,
-  };
-}
-
-function homeRepairCreateFromReqData(
-  value: IHomeRepairReqType
-): CreateHomeRepairTypeInput {
-  return {
-    other: value.other,
-    painting: value.painting,
-    plumbing: value.plumbing,
-    yardwork: value.yardwork,
-    electrical: value.electrical,
-    details: value.details,
-  };
-}
-
-function foodInfoCreateFromReqData(
-  value: IFoodInfoReqType
-): CreateFoodInfoInput {
-  return {
-    allergies: value.allergies,
-    children: value.children,
-    haveAllergies: value.haveAllergies,
-    familyMembers: value.familyMembers,
-    milk: value.milk,
-    eggs: value.eggs,
-    beans: value.beans,
-    beef: value.beef,
-    bread: value.bread,
-    butter: value.butter,
-    peanutButter: value.peanutButter,
-    cheese: value.cheese,
-    fruit: value.fruit,
-    hotdogs: value.hotdogs,
-    jelly: value.jelly,
-    lunchMeat: value.lunchMeat,
-    rice: value.rice,
-    tortillas: value.tortillas,
-  };
-}
-
-function noteUpdateFromReqData(value: NoteType): UpdateNoteTypeInput {
-  return {
-    id: value.id,
-    author: value.author,
-    content: value.content,
-    dateCreated: value.dateCreated,
-    requestID: value.requestID,
-  };
-}
-
-function movingInfoUpdateFromReqData(
-  value: MovingInfoGQL & IGraphQLTable
-): UpdateMovingInfoInput {
-  return {
-    id: value.id,
-    items: value.items,
-    haveTransportation: value.haveTransportation,
-    other: value.other,
-    otherDetails: value.otherDetails,
-    liabilityAck: value.liabilityAck,
-    stairs: value.stairs,
-    steepDriveway: value.steepDriveway,
-    unpavedRoad: value.unpavedRoad,
-  };
-}
-
-function homeRepairUpdateFromReqData(
-  value: IHomeRepairReqType
-): UpdateHomeRepairTypeInput {
-  return {
-    id: value.id,
-    other: value.other,
-    painting: value.painting,
-    plumbing: value.plumbing,
-    yardwork: value.yardwork,
-    electrical: value.electrical,
-    details: value.details,
-  };
-}
-
-function foodInfoUpdateFromReqData(
-  value: IFoodInfoReqType
-): UpdateFoodInfoInput {
-  return {
-    id: value.id,
-    allergies: value.allergies,
-    children: value.children,
-    haveAllergies: value.haveAllergies,
-    familyMembers: value.familyMembers,
-    milk: value.milk,
-    eggs: value.eggs,
-    beans: value.beans,
-    beef: value.beef,
-    bread: value.bread,
-    butter: value.butter,
-    peanutButter: value.peanutButter,
-    cheese: value.cheese,
-    fruit: value.fruit,
-    hotdogs: value.hotdogs,
-    jelly: value.jelly,
-    lunchMeat: value.lunchMeat,
-    rice: value.rice,
-    tortillas: value.tortillas,
-  };
-}
 
 async function needUpdateFromNeedReqData(
   value: NeedRequestType
@@ -752,36 +662,6 @@ async function needUpdateFromNeedReqData(
     needReason: value.needReason,
     requestSelfOrOtherInfoId: value.selfOrOtherInfo.id,
   };
-
-  async function createOrUpdate<TableType extends IGraphQLTable>(
-    requestTable: TableType,
-    createOperation: string,
-    tableCreateFromReqData: (reqData: TableType) => any,
-    updateOperation: string,
-    tableUpdateFromReqData: (reqData: TableType) => any,
-    getIdFromCreate: (newRowData: any) => string
-  ): Promise<TableType> {
-    if (requestTable.id === CREATE_TABLE) {
-      let newRow: any = await API.graphql(
-        graphqlOperation(createOperation, {
-          input: tableCreateFromReqData(requestTable),
-        })
-      );
-      requestTable.id = getIdFromCreate(newRow.data);
-    } else if (requestTable.id === "DELETE_TABLE") {
-      // delete the row from the table and set requestTable to null
-    } else {
-      // update the row in the table
-      await API.graphql({
-        query: updateOperation,
-        variables: {
-          input: tableUpdateFromReqData(requestTable),
-        },
-        authMode: "AMAZON_COGNITO_USER_POOLS",
-      });
-    }
-    return requestTable;
-  }
 }
 
 export default NeedRequestTable;

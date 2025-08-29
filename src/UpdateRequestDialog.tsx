@@ -41,7 +41,7 @@ import {
   Select,
   Snackbar,
   TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 import {
   carRepairCard,
   clothingCard,
@@ -60,7 +60,7 @@ import {
   otherNeedCard,
 } from "./needFormCards";
 import theme from "./theme";
-import Auth from "@aws-amplify/auth";
+import { fetchUserAttributes } from '@aws-amplify/auth';
 import Rating from "@mui/material/Rating";
 import { RequestedNeedTypesCard } from "./RequestedNeedTypesCard";
 
@@ -97,11 +97,14 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
     if (!requestData.note?.items) {
       requestData.note!.items = [];
     }
-    let userInfo = await Auth.currentUserInfo();
+    let userInfo = await fetchUserAttributes();
+    if(!userInfo || !userInfo.email) {
+      throw new Error("No user email info found");
+    }
     requestData.note?.items.push({
       id: CREATE_TABLE,
       content: currentNote,
-      author: userInfo.attributes.email,
+      author: userInfo.email,
       requestID: requestData.id,
       notable: currentNotable === 0 ? false : true,
       dateCreated: new Date().toUTCString(),

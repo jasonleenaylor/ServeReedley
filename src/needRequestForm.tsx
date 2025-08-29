@@ -12,8 +12,9 @@ import {
   Select,
   Toolbar,
   Typography,
-} from "@material-ui/core";
-import { API, graphqlOperation } from "aws-amplify";
+} from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { generateClient } from "aws-amplify/api";
 import React, { SetStateAction, useState } from "react";
 import { t } from "i18next";
 import {
@@ -62,13 +63,13 @@ import {
   needReasonCard,
   otherNeedCard,
 } from "./needFormCards";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { RequestedNeedTypesCard } from "./RequestedNeedTypesCard";
 
 export const NeedRequestForm = (props: ILocalizeProps) => {
   const { i18n } = useTranslation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -214,29 +215,34 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       followUp: "",
     };
 
+    const API = await generateClient();
+
     try {
       var result: any;
       try {
-        result = await API.graphql(
-          graphqlOperation(createSelfOrOtherInfo, { input: selfOrOther })
-        );
+        result = await API.graphql({
+          query: createSelfOrOtherInfo,
+          variables: { input: selfOrOther },
+        });
       } catch (err) {
         alert("home maintenance error: " + JSON.stringify(err));
       }
       request.requestSelfOrOtherInfoId = result.data.createSelfOrOtherInfo.id;
 
       try {
-        result = await API.graphql(
-          graphqlOperation(createFoodInfo, { input: food })
-        );
+        result = await API.graphql({
+          query: createFoodInfo,
+          variables: { input: food },
+        });
         request.requestFoodRequestId = result.data.createFoodInfo.id;
       } catch (err) {
         alert("food info: " + JSON.stringify(err));
       }
       if (needType.moving) {
-        let result: any = await API.graphql(
-          graphqlOperation(createMovingInfo, { input: movingInfo })
-        );
+        let result: any = await API.graphql({
+          query: createMovingInfo,
+          variables: { input: movingInfo },
+        });
         request.requestMovingRequestId = result.data.createMovingInfo.id;
       }
       if (needType.jobTraining) {
@@ -248,9 +254,10 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       }
       if (needType.homeRepair) {
         try {
-          result = await API.graphql(
-            graphqlOperation(createHomeRepairType, { input: homeRepairInfo })
-          );
+          result = await API.graphql({
+            query: createHomeRepairType,
+            variables: { input: homeRepairInfo },
+          });
           request.requestHomeRepairTypeId = result.data.createHomeRepairType.id;
         } catch (err) {
           alert("home maintenance error: " + JSON.stringify(err));
@@ -258,9 +265,10 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       }
       if (needType.householdItems || needType.hygeneItems) {
         try {
-          result = await API.graphql(
-            graphqlOperation(createHouseholdItems, { input: householdItems })
-          );
+          result = await API.graphql({
+            query: createHouseholdItems,
+            variables: { input: householdItems },
+          });
           request.requestHouseholdItemsId = result.data.createHouseholdItems.id;
         } catch (err) {
           alert("household items error: " + JSON.stringify(err));
@@ -273,8 +281,21 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
       if (needType.furniture) {
         request.furnitureType = furnitureType;
       }
-      await API.graphql(graphqlOperation(createRequest, { input: request }));
-      history.push("/need-submitted?lng=" + i18n.language);
+      if (!request.requestSelfOrOtherInfoId) {
+        throw new Error(
+          "requestSelfOrOtherInfoId is required but is null or undefined."
+        );
+      }
+      await API.graphql({
+        query: createRequest,
+        variables: {
+          input: {
+            ...request,
+            requestSelfOrOtherInfoId: request.requestSelfOrOtherInfoId,
+          },
+        },
+      });
+      navigate("/need-submitted?lng=" + i18n.language);
     } catch (err) {
       alert("error: " + JSON.stringify(err));
     } finally {
@@ -287,7 +308,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
     let phoneUri = parsePhoneNumber(phone, "US")?.getURI();
     return (
       <Trans i18nKey="housing_phone_field">
-        Phone: <a href={phoneUri}>{{ formattedPhone }}</a>
+        Phone: <a href={phoneUri}>{formattedPhone}</a>
       </Trans>
     );
   }
@@ -452,7 +473,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
                 labelId="lng-label"
                 id="lng"
                 value={i18n.language}
-                onChange={(e: React.ChangeEvent<{ value: unknown }>) => {
+                onChange={(e: SelectChangeEvent<string>) => {
                   i18n.changeLanguage(e.target.value as string);
                 }}
               >
