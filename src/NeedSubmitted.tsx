@@ -1,4 +1,4 @@
-import { Card, CardMedia, Typography, useMediaQuery } from "@material-ui/core";
+import { Card, CardMedia, Typography, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { cardStyle } from "./needRequestForm";
 import logo from "./ServeReedleyLogo.webp";

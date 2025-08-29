@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { API } from "aws-amplify";
+import { generateClient } from 'aws-amplify/api';
 import { listTeams } from "./graphql/queries"; // Adjust the import path accordingly
 import { Team } from "./RequestAPI";
 
 export const useTeams = () => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
+  const graphqlClient = generateClient();
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const apiData: any = await API.graphql({
+        const apiData: any = await graphqlClient.graphql({
           query: listTeams,
           variables: { limit: 1000 },
-          authMode: "AMAZON_COGNITO_USER_POOLS",
+          authMode: 'userPool',
         });
         setTeams(apiData.data.listTeams.items);
       } catch (error) {

@@ -11,7 +11,7 @@ import {
   RadioGroup,
   TextField,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { ContentCopy, LocalPhone } from "@mui/icons-material";
 import { isPointInPolygon } from "geolib";
 import { t } from "i18next";
@@ -36,8 +36,8 @@ import {
 } from "./needRequestTypes";
 import { LeadSource } from "./RequestAPI";
 import { Alert } from "@mui/material";
-import { Auth } from "aws-amplify";
-import Lambda from "aws-sdk/clients/lambda";
+import { fetchAuthSession } from "@aws-amplify/auth";
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 
 export interface ContactCardData {
   firstName: string;
@@ -103,48 +103,46 @@ export function ContactCard(props: ContactCardProps): ReactElement {
 
   async function getLocationAlertForAddress(address: string) {
     try {
-      let response: any;
-      Auth.currentCredentials().then((credentials) => {
-        const lambda = new Lambda({
-          credentials: Auth.essentialCredentials(credentials),
-        });
-        response = lambda.invoke(
-          {
-            FunctionName: "findlatlong-prod",
-            Payload: JSON.stringify({ address: address }),
-          },
-          function (err, data) {
-            if (err) {
-              setAlertForAddress(JSON.stringify(err));
-            } else {
-              // response looks like:
-              // "{"statusCode":200,
-              //   "body":"[{\"formattedAddress\":\"856 S Reed Ave, Reedley, CA 93654, USA\",
-              //             \"latitude\":36.5901299,
-              //             \"longitude\":-119.4569698,
-              //             ...}]}"
-              let payloadParsed = JSON.parse(data.Payload as string);
-              let bodyParsed = JSON.parse(payloadParsed.body);
-              response = bodyParsed[0];
-              for (let area of areasOfConcern) {
-                if (
-                  isPointInPolygon(
-                    {
-                      latitude: response.latitude,
-                      longitude: response.longitude,
-                    },
-                    area.polygon
-                  )
-                ) {
-                  setAlertForAddress(JSON.stringify(area.name));
-                }
-              }
-            }
-          }
-        );
+      const { credentials } = await fetchAuthSession();
+
+      if (!credentials) {
+        throw new Error("No credentials available.");
+      }
+
+      const client = new LambdaClient({
+        region: "us-west-1",
+        credentials: {
+          accessKeyId: credentials.accessKeyId,
+          secretAccessKey: credentials.secretAccessKey,
+          sessionToken: credentials.sessionToken,
+        },
       });
+
+      const command = new InvokeCommand({
+        FunctionName: "findlatlong-prod",
+        Payload: Buffer.from(JSON.stringify({ address })),
+      });
+
+      const data = await client.send(command);
+
+      if (data.Payload) {
+        const payloadParsed = JSON.parse(Buffer.from(data.Payload).toString());
+        const bodyParsed = JSON.parse(payloadParsed.body);
+        const response = bodyParsed[0];
+
+        for (let area of areasOfConcern) {
+          if (
+            isPointInPolygon(
+              { latitude: response.latitude, longitude: response.longitude },
+              area.polygon
+            )
+          ) {
+            setAlertForAddress(JSON.stringify(area.name));
+          }
+        }
+      }
     } catch (err) {
-      console.log(err);
+      console.error("Error invoking Lambda:", err);
     }
   }
 
