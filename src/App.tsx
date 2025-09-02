@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import ReportForm from "./ReportForm";
 import TeamPicker from "./TeamPicker";
 import TeamManagement from "./TeamManagementForm";
+import "@aws-amplify/ui-react/styles.css";
 
 export default function App() {
   const { t } = useTranslation();
