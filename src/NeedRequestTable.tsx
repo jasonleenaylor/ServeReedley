@@ -29,8 +29,16 @@ import {
   NeedRequestType,
 } from "./needRequestTypes";
 import UpdateRequestDialogButton from "./UpdateRequestDialog";
-import { Box, Button, Grid, Paper, Snackbar, Typography } from "@mui/material";
-import theme from "./theme";
+import {
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Snackbar,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import theme, { amplifyTheme } from "./theme";
 import awsExports from "./aws-exports";
 import Rating from "@mui/material/Rating";
 import { Authenticator } from "@aws-amplify/ui-react";
@@ -59,11 +67,15 @@ function NeedRequestTable(props: ILocalizeProps) {
   const [editId, setEditId] = useState(requestId);
   const graphqlClient = generateClient();
   const [columnSizing, setColumnSizing] = useState<MRT_ColumnSizingState>({});
+
   const columns: MRT_ColumnDef<NeedRequestType>[] = [
     // Vernacular
     {
       accessorKey: "notable",
       header: "★",
+      size: 50,
+      minSize: 40,
+      maxSize: 60,
       Cell: ({ row }) => (
         <Rating value={hasNotableNote(row.original) ? 1 : 0} max={1} />
       ),
@@ -72,6 +84,9 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       accessorKey: "modify",
       header: "Work on Request",
+      size: 120,
+      minSize: 100,
+      maxSize: 150,
       Cell: ({ row }) => (
         <UpdateRequestDialogButton
           requestData={row.original}
@@ -90,11 +105,20 @@ function NeedRequestTable(props: ILocalizeProps) {
       ),
       enableColumnFilter: false,
     },
-    { accessorKey: "status", header: "Status" },
+    {
+      accessorKey: "status",
+      header: "Status",
+      size: 100,
+      minSize: 80,
+      maxSize: 150,
+    },
     // Date of Request
     {
       accessorKey: "dateOfRequest",
       header: "Date Of Request",
+      size: 120,
+      minSize: 100,
+      maxSize: 150,
       Cell: ({ row }) =>
         new Date(row.original.dateOfRequest).toLocaleDateString("en-US", {
           year: "numeric",
@@ -104,32 +128,59 @@ function NeedRequestTable(props: ILocalizeProps) {
       sortingFn: (rowA, rowB, columnId) =>
         new Date(rowA.getValue<string>(columnId)).getTime() -
         new Date(rowB.getValue<string>(columnId)).getTime(),
-      muiTableBodyCellProps: { sx: { minWidth: 175 } },
     },
-    { accessorKey: "firstName", header: "First" },
-    { accessorKey: "lastName", header: "Last" },
+    {
+      accessorKey: "firstName",
+      header: "First",
+      size: 100,
+      minSize: 80,
+      maxSize: 150,
+    },
+    {
+      accessorKey: "lastName",
+      header: "Last",
+      size: 100,
+      minSize: 80,
+      maxSize: 150,
+    },
     {
       accessorKey: "phone",
       header: "Phone",
+      size: 130,
+      minSize: 120,
+      maxSize: 160,
       Cell: ({ row }) => (
         <a href={`tel:${row.original.phone}`}>{row.original.phone}</a>
       ),
-      muiTableBodyCellProps: { sx: { minWidth: 150 } },
     },
     {
       accessorKey: "address",
       header: "Address",
-      muiTableBodyCellProps: { sx: { minWidth: 185 } },
+      size: 200,
+      minSize: 150,
+      maxSize: 300,
     },
-    { accessorKey: "city", header: "City", enableColumnFilter: true },
+    {
+      accessorKey: "city",
+      header: "City",
+      enableColumnFilter: true,
+      size: 120,
+      minSize: 100,
+      maxSize: 180,
+    },
     {
       accessorKey: "zipCode",
       header: "Zip Code",
-      muiTableBodyCellProps: { align: "right" },
+      size: 90,
+      minSize: 70,
+      maxSize: 120,
     },
     {
       accessorKey: "email",
       header: "Email",
+      size: 250,
+      minSize: 200,
+      maxSize: 350,
       Cell: ({ row }) => (
         <a href={`mailto:${row.original.email}`}>{row.original.email}</a>
       ),
@@ -137,141 +188,194 @@ function NeedRequestTable(props: ILocalizeProps) {
     {
       accessorKey: "spanishOnly",
       header: "Spanish Only",
+      size: 100,
+      minSize: 90,
+      maxSize: 120,
       Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
       sortingFn: (rowA, rowB, columnId) =>
         (rowA.getValue<boolean>(columnId) ? 1 : 0) -
         (rowB.getValue<boolean>(columnId) ? 1 : 0),
-      muiTableBodyCellProps: { align: "center" },
     },
-    { accessorKey: "specificNeed", header: "Specific Need" },
-    { accessorKey: "preferredContactTime", header: "Preferred Contact Time" },
-    { accessorKey: "leadSource", header: "Lead Source" },
+    {
+      accessorKey: "specificNeed",
+      header: "Specific Need",
+      size: 200,
+      minSize: 150,
+      maxSize: 350,
+    },
+    {
+      accessorKey: "preferredContactTime",
+      header: "Preferred Contact Time",
+      size: 180,
+      minSize: 150,
+      maxSize: 250,
+    },
+    {
+      accessorKey: "leadSource",
+      header: "Lead Source",
+      size: 120,
+      minSize: 100,
+      maxSize: 180,
+    },
     {
       accessorKey: "needReason",
       header: "Need Reason(s)",
+      size: 200,
+      minSize: 150,
+      maxSize: 350,
       Cell: ({ row }) => row.original.needReason.join(", "),
     },
     {
       accessorKey: "needTypes",
       header: "Need Type(s)",
+      size: 250,
+      minSize: 200,
+      maxSize: 400,
       Cell: ({ row }) => row.original.needTypes.join(", "),
-      muiTableBodyCellProps: { sx: { minWidth: 350 } },
     },
+    // Updated with null checks
     {
-      accessorKey: "selfOrOtherInfo.forSelf",
+      accessorFn: (row) => row.selfOrOtherInfo?.forSelf || "",
+      id: "selfOrOtherInfo.forSelf",
       header: "Own Need",
+      size: 100,
+      minSize: 80,
+      maxSize: 150,
     },
     {
-      accessorKey: "selfOrOtherInfo.otherResources",
+      accessorFn: (row) => row.selfOrOtherInfo?.otherResources || "",
+      id: "selfOrOtherInfo.otherResources",
       header: "Other Resources Used",
+      size: 180,
+      minSize: 150,
+      maxSize: 250,
     },
     {
-      accessorKey: "selfOrOtherInfo.requestFor",
+      accessorFn: (row) => row.selfOrOtherInfo?.requestFor || "",
+      id: "selfOrOtherInfo.requestFor",
       header: "Requested For (if not self)",
-      muiTableBodyCellProps: {
-        sx: {
-          maxWidth: 150,
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-        },
-      },
+      size: 180,
+      minSize: 150,
+      maxSize: 250,
     },
     {
-      accessorKey: "selfOrOtherInfo.requestIsKnown",
+      accessorFn: (row) => row.selfOrOtherInfo?.requestIsKnown || "",
+      id: "selfOrOtherInfo.requestIsKnown",
       header: "Requested with knowledge",
+      size: 180,
+      minSize: 150,
+      maxSize: 250,
     },
     {
-      accessorKey: "foodRequest.familyMembers",
+      accessorFn: (row) => row.foodRequest?.familyMembers || "",
+      id: "foodRequest.familyMembers",
       header: "Family Size",
+      size: 100,
+      minSize: 80,
+      maxSize: 150,
     },
     {
-      accessorKey: "foodRequest.children",
+      accessorFn: (row) => {
+        console.log(`${JSON.stringify(row)}`);
+        return row.foodRequest?.children || "";
+      },
+      id: "foodRequest.children",
       header: "Children",
+      size: 100,
+      minSize: 80,
+      maxSize: 150,
     },
     {
-      accessorKey: "foodRequest.allergies",
+      accessorFn: (row) => row.foodRequest?.allergies || "",
+      id: "foodRequest.allergies",
       header: "Allergies",
+      size: 150,
+      minSize: 120,
+      maxSize: 250,
     },
     {
-      accessorKey: "foodRequest.groceries",
-      header: "Groceries",
-      Cell: ({ row }) =>
-        row.original.foodRequest
+      accessorFn: (row) =>
+        row.foodRequest
           ? printGroceryList(
               Object.fromEntries(
-                Object.entries(row.original.foodRequest).map(([key, value]) => [
+                Object.entries(row.foodRequest).map(([key, value]) => [
                   key,
                   value === null ? undefined : value,
                 ])
               )
             )
           : "",
-      muiTableBodyCellProps: {
-        sx: {
-          minWidth: 250,
-          maxWidth: 350,
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-        },
-      },
+      id: "foodRequest.groceries",
+      header: "Groceries",
+      size: 300,
+      minSize: 200,
+      maxSize: 400,
     },
     {
-      accessorKey: "movingRequest.items",
+      accessorFn: (row) => row.movingRequest?.items || "",
+      id: "movingRequest.items",
       header: "Moving: Items",
-      muiTableBodyCellProps: {
-        sx: {
-          maxWidth: 350,
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-        },
-      },
+      size: 250,
+      minSize: 200,
+      maxSize: 400,
     },
     {
-      accessorKey: "movingRequest.haveTransportation",
+      accessorFn: (row) => row.movingRequest?.haveTransportation,
+      id: "movingRequest.haveTransportation",
       header: "Moving: Has Vehicle",
+      size: 120,
+      minSize: 100,
+      maxSize: 150,
       Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
       sortingFn: (rowA, rowB, columnId) =>
         (rowA.getValue<boolean>(columnId) ? 1 : 0) -
         (rowB.getValue<boolean>(columnId) ? 1 : 0),
-      muiTableBodyCellProps: { align: "center" },
     },
     {
-      accessorKey: "movingRequest.specialConditions",
+      accessorFn: (row) =>
+        row.movingRequest ? printMovingConditions(row.movingRequest) : "",
+      id: "movingRequest.specialConditions",
       header: "Moving: Special Conditions",
-      Cell: ({ row }) =>
-        row.original.movingRequest
-          ? printMovingConditions(row.original.movingRequest)
-          : "",
+      size: 220,
+      minSize: 180,
+      maxSize: 350,
     },
     {
-      accessorKey: "movingRequest.otherDetails",
+      accessorFn: (row) => row.movingRequest?.otherDetails || "",
+      id: "movingRequest.otherDetails",
       header: "Moving: Other Special Conditions",
+      size: 250,
+      minSize: 200,
+      maxSize: 400,
     },
     {
       accessorKey: "resumeHelp",
       header: "Job: Resume Help",
+      size: 120,
+      minSize: 100,
+      maxSize: 150,
       Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
       sortingFn: (rowA, rowB, columnId) =>
         (rowA.getValue<boolean>(columnId) ? 1 : 0) -
         (rowB.getValue<boolean>(columnId) ? 1 : 0),
-      muiTableBodyCellProps: { align: "center" },
     },
     {
       accessorKey: "coverLetterHelp",
       header: "Job: Cover Letter Help",
+      size: 150,
+      minSize: 120,
+      maxSize: 180,
       Cell: ({ cell }) => (cell.getValue<boolean>() ? "✅" : "❌"),
       sortingFn: (rowA, rowB, columnId) =>
         (rowA.getValue<boolean>(columnId) ? 1 : 0) -
         (rowB.getValue<boolean>(columnId) ? 1 : 0),
-      muiTableBodyCellProps: { align: "center" },
     },
-    // …and similarly for the rest (Car Repair, Home Repair, Clothing, Furniture, Other Needs)
     {
       accessorKey: "dateFulfilled",
       header: "Date Fulfilled",
+      size: 130,
+      minSize: 110,
+      maxSize: 160,
       Cell: ({ row }) =>
         row.original.dateFulfilled
           ? new Date(row.original.dateFulfilled).toLocaleDateString()
@@ -286,7 +390,14 @@ function NeedRequestTable(props: ILocalizeProps) {
         return a - b;
       },
     },
-    { accessorKey: "followUp", header: "Follow Up", enableColumnFilter: true },
+    {
+      accessorKey: "followUp",
+      header: "Follow Up",
+      enableColumnFilter: true,
+      size: 120,
+      minSize: 100,
+      maxSize: 180,
+    },
   ];
 
   Hub.listen("auth", (data) => {
@@ -429,147 +540,181 @@ function NeedRequestTable(props: ILocalizeProps) {
       return 1;
     }
   };
-
-  return (
-    <Authenticator hideSignUp>
-      {({ signOut }) => (
-        <div className="App">
-          <div
-            style={{
-              width: "auto",
-              height: "auto",
-              overflow: "auto",
-              margin: "auto",
+  const authComponents = {
+    SignIn: {
+      Header() {
+        return (
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{
+              mb: 2,
+              mt: 3, // Add top margin
+              pt: 2, // Add top padding
+              fontWeight: 600,
             }}
           >
-            <Box
-              sx={{
-                backgroundColor: (theme) => theme.palette.primary.main,
-                color: (theme) => theme.palette.primary.contrastText,
-                px: 3,
-                py: 2,
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
+            Sign in to Serve Reedley CRN
+          </Typography>
+        );
+      },
+    },
+  };
+  return (
+    <ThemeProvider theme={theme}>
+      <Authenticator components={authComponents} hideSignUp>
+        {({ signOut }) => (
+          <div className="App">
+            <div
+              style={{
+                width: "auto",
+                height: "auto",
+                overflow: "auto",
+                margin: "auto",
               }}
             >
-              <Typography variant="h6" component="div">
-                Submitted Requests
-              </Typography>
-            </Box>
-            <MaterialReactTable
-              columns={columns} // use your fully migrated MRT columns array
-              data={requests.sort(sortByStatusThenDate)}
-              enableColumnFilters={true}
-              enableColumnResizing
-              state={{ columnSizing }}
-              onColumnSizingChange={setColumnSizing}
-              columnResizeMode="onEnd"
-              enableMultiSort={false} // replaces thirdSortClick
-              initialState={{
-                pagination: {
-                  pageSize: 20,
-                  pageIndex: 0,
-                },
-                showColumnFilters: true,
-              }}
-              muiTableHeadCellProps={{
-                sx: {
-                  "& .MuiBox-root": {
-                    // Targets the inner label container
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
+              <Box
+                sx={{
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: (theme) => theme.palette.primary.contrastText,
+                  px: 3,
+                  py: 2,
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                }}
+              >
+                <Typography variant="h6" component="div">
+                  Submitted Requests
+                </Typography>
+              </Box>
+              <MaterialReactTable
+                columns={columns} // use your fully migrated MRT columns array
+                data={requests.sort(sortByStatusThenDate)}
+                enableColumnFilters={true}
+                enableColumnResizing
+                state={{ columnSizing }}
+                onColumnSizingChange={setColumnSizing}
+                columnResizeMode="onEnd"
+                enableMultiSort={false} // replaces thirdSortClick
+                initialState={{
+                  pagination: {
+                    pageSize: 20,
+                    pageIndex: 0,
                   },
-                },
-              }}
-              muiPaginationProps={{ rowsPerPageOptions: [20, 40, 100] }}
-              renderDetailPanel={({ row }) => (
-                <div style={{ textAlign: "left" }}>
-                  <Grid container spacing={2}>
-                    {row.original.note?.items
-                      ?.sort((a: NoteType | null, b: NoteType | null) => {
-                        if (a === null || b === null) {
-                          if (a === null) return b === null ? 0 : 1;
-                          return -1;
-                        }
-                        return (
-                          Date.parse(b.createdAt) - Date.parse(a.createdAt)
-                        );
-                      })
-                      ?.map(
-                        (note: NoteType | null) =>
-                          note && (
-                            <Grid item xs={12} key={note.createdAt}>
-                              <Paper
-                                style={{
-                                  padding: theme.spacing(3),
-                                  width: 350,
-                                  background: note.notable ? "gold" : "white",
-                                }}
-                              >
-                                <Typography>
-                                  {new Date(
-                                    note.createdAt
-                                  ).toLocaleDateString()}
-                                </Typography>
-                                <Typography>{note.author}</Typography>
-                                <Typography>{note.content}</Typography>
-                              </Paper>
-                            </Grid>
-                          )
-                      )}
-                  </Grid>
-                </div>
-              )}
-            />
-            {isLoggedIn &&
-            editId &&
-            requests.length > 0 &&
-            requests.findIndex((r: NeedRequestType) => r.id === editId) !==
-              -1 ? (
-              <UpdateRequestDialogButton
-                // Couldn't figure out how to make all the type safety happy so I short circut with any :(
-                requestData={
-                  requests.find((r: NeedRequestType) => r.id === editId) as any
-                }
-                open={true}
-                onClose={function () {
-                  setSnackBarOpen(true);
-                  setEditId(null);
+                  showColumnFilters: true,
                 }}
-                onSave={async function (value: NeedRequestType) {
-                  await graphqlClient.graphql({
-                    query: updateRequest,
-                    variables: {
-                      input: await needUpdateFromNeedReqData(value),
+                muiTableProps={{
+                  sx: {
+                    tableLayout: "fixed",
+                    "& .MuiTableCell-body": {
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      display: "inline-block",
                     },
-                    authMode: "userPool",
-                  });
-                  setEditId(null);
-                  fetchNeedRequests();
+                  },
                 }}
-                t={props.t}
+                muiTableHeadCellProps={{
+                  sx: {
+                    "& .MuiBox-root": {
+                      // Targets the inner label container
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                    },
+                  },
+                }}
+                muiPaginationProps={{ rowsPerPageOptions: [20, 40, 100] }}
+                renderDetailPanel={({ row }) => (
+                  <div style={{ textAlign: "left" }}>
+                    <Grid container spacing={2}>
+                      {row.original.note?.items
+                        ?.sort((a: NoteType | null, b: NoteType | null) => {
+                          if (a === null || b === null) {
+                            if (a === null) return b === null ? 0 : 1;
+                            return -1;
+                          }
+                          return (
+                            Date.parse(b.createdAt) - Date.parse(a.createdAt)
+                          );
+                        })
+                        ?.map(
+                          (note: NoteType | null) =>
+                            note && (
+                              <Grid item xs={12} key={note.createdAt}>
+                                <Paper
+                                  style={{
+                                    padding: theme.spacing(3),
+                                    width: 350,
+                                    background: note.notable ? "gold" : "white",
+                                  }}
+                                >
+                                  <Typography>
+                                    {new Date(
+                                      note.createdAt
+                                    ).toLocaleDateString()}
+                                  </Typography>
+                                  <Typography>{note.author}</Typography>
+                                  <Typography>{note.content}</Typography>
+                                </Paper>
+                              </Grid>
+                            )
+                        )}
+                    </Grid>
+                  </div>
+                )}
               />
-            ) : null}
+              {isLoggedIn &&
+              editId &&
+              requests.length > 0 &&
+              requests.findIndex((r: NeedRequestType) => r.id === editId) !==
+                -1 ? (
+                <UpdateRequestDialogButton
+                  // Couldn't figure out how to make all the type safety happy so I short circut with any :(
+                  requestData={
+                    requests.find(
+                      (r: NeedRequestType) => r.id === editId
+                    ) as any
+                  }
+                  open={true}
+                  onClose={function () {
+                    setSnackBarOpen(true);
+                    setEditId(null);
+                  }}
+                  onSave={async function (value: NeedRequestType) {
+                    await graphqlClient.graphql({
+                      query: updateRequest,
+                      variables: {
+                        input: await needUpdateFromNeedReqData(value),
+                      },
+                      authMode: "userPool",
+                    });
+                    setEditId(null);
+                    fetchNeedRequests();
+                  }}
+                  t={props.t}
+                />
+              ) : null}
+            </div>
+            <span style={{ width: "20%" }} />
+            <Snackbar
+              autoHideDuration={4000}
+              message="No changes made"
+              open={snackBarOpen}
+              onClose={() => setSnackBarOpen(false)}
+            />
+            <Button
+              onClick={signOut}
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2, py: 1.5, fontSize: "1rem" }}
+            >
+              Sign Out
+            </Button>
           </div>
-          <span style={{ width: "20%" }} />
-          <Snackbar
-            autoHideDuration={4000}
-            message="No changes made"
-            open={snackBarOpen}
-            onClose={() => setSnackBarOpen(false)}
-          />
-          <Button
-            onClick={signOut}
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2, py: 1.5, fontSize: "1rem" }}
-          >
-            Sign Out
-          </Button>
-        </div>
-      )}
-    </Authenticator>
+        )}
+      </Authenticator>
+    </ThemeProvider>
   );
 } // NoteRequestTable
 
