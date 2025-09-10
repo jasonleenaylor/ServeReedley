@@ -49,7 +49,6 @@ let baseTheme = createTheme({
     MuiTableFooter: { styleOverrides: { root: { backgroundColor: "#fff" } } },
     MuiTableRow: { styleOverrides: { root: { backgroundColor: "#fff" } } },
     MuiTableCell: { styleOverrides: { root: { backgroundColor: "#fff" } } },
-
     MuiCardHeader: {
       styleOverrides: {
         root: {
@@ -80,5 +79,62 @@ let baseTheme = createTheme({
 
 // Enable responsive font sizes
 const theme = responsiveFontSizes(baseTheme, dynamicFontParams);
+
+// Amplify theme that matches MUI theme colors
+export const amplifyTheme = {
+  name: "reedley-crn-theme",
+  tokens: {
+    colors: {
+      brand: {
+        primary: {
+          "10": "#fff8e1",
+          "20": "#ffecb3",
+          "40": themeColors.primary, // Use your actual primary color
+          "60": yellow[500],
+          "80": yellow[700],
+          "90": yellow[800],
+          "100": yellow[900],
+        },
+      },
+      neutral: {
+        "10": "#ffffff",
+        "20": "#f5f5f5",
+        "40": themeColors.secondary, // Use your actual secondary color
+        "60": grey[700],
+        "80": grey[800],
+        "90": grey[900],
+        "100": "#000000",
+      },
+    },
+    components: {
+      authenticator: {
+        router: {
+          boxShadow: "none",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          borderColor: "{colors.neutral.20}",
+        },
+      },
+      button: {
+        primary: {
+          backgroundColor: "{colors.brand.primary.40}",
+          color: "{colors.neutral.100}",
+          _hover: {
+            backgroundColor: "{colors.brand.primary.60}",
+          },
+          _active: {
+            backgroundColor: "{colors.brand.primary.80}",
+          },
+        },
+      },
+      fieldcontrol: {
+        borderColor: "{colors.neutral.40}",
+        _focus: {
+          borderColor: "{colors.brand.primary.40}",
+        },
+      },
+    },
+  },
+};
 
 export default theme;

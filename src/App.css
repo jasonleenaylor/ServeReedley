@@ -36,3 +36,93 @@
     transform: rotate(360deg);
   }
 }
+/* Add this CSS to override Amplify UI default colors */
+/* You can put this in a CSS file or use it with styled-components/emotion */
+
+[data-amplify-authenticator] {
+  /* Override primary brand colors to match your yellow theme */
+  --amplify-colors-brand-primary-10: #fff8e1;
+  --amplify-colors-brand-primary-20: #ffecb3;
+  --amplify-colors-brand-primary-40: #fdd835;
+  /* yellow[600] */
+  --amplify-colors-brand-primary-60: #fbc02d;
+  /* yellow[700] */
+  --amplify-colors-brand-primary-80: #f9a825;
+  /* yellow[800] */
+  --amplify-colors-brand-primary-90: #f57f17;
+  /* yellow[900] */
+  --amplify-colors-brand-primary-100: #e65100;
+
+  /* Override neutral colors */
+  --amplify-colors-neutral-10: #ffffff;
+  --amplify-colors-neutral-20: #f5f5f5;
+  --amplify-colors-neutral-40: #757575;
+  /* grey[600] */
+  --amplify-colors-neutral-60: #616161;
+  --amplify-colors-neutral-80: #424242;
+  --amplify-colors-neutral-90: #212121;
+  --amplify-colors-neutral-100: #000000;
+
+  /* Center the authenticator and add proper spacing */
+  margin: auto;
+  max-width: 400px;
+  margin-top: 10vh;
+
+  /* Override the form container */
+  .amplify-authenticator {
+    --amplify-components-authenticator-router-box-shadow: none;
+    --amplify-components-authenticator-router-border-width: 1px;
+    --amplify-components-authenticator-router-border-color: var(--amplify-colors-neutral-20);
+  }
+
+  /* Style the button to match your theme - multiple selectors for compatibility */
+  button[data-amplify-button][data-variation="primary"] {
+    background-color: var(--amplify-colors-brand-primary-40) !important;
+    border-color: var(--amplify-colors-brand-primary-40) !important;
+    color: var(--amplify-colors-neutral-100) !important;
+  }
+
+  button[data-amplify-button][data-variation="primary"]:hover {
+    background-color: var(--amplify-colors-brand-primary-60) !important;
+    border-color: var(--amplify-colors-brand-primary-60) !important;
+  }
+
+  button[data-amplify-button][data-variation="primary"]:active {
+    background-color: var(--amplify-colors-brand-primary-80) !important;
+    border-color: var(--amplify-colors-brand-primary-80) !important;
+  }
+
+  /* Additional button selectors in case the above don't work */
+  .amplify-button--primary {
+    background-color: var(--amplify-colors-brand-primary-40) !important;
+    border-color: var(--amplify-colors-brand-primary-40) !important;
+    color: var(--amplify-colors-neutral-100) !important;
+  }
+
+  .amplify-button--primary:hover {
+    background-color: var(--amplify-colors-brand-primary-60) !important;
+    border-color: var(--amplify-colors-brand-primary-60) !important;
+  }
+
+  /* Style forgot password link */
+  .amplify-button--link,
+  button[data-amplify-button][data-variation="link"],
+  a[data-amplify-button] {
+    color: var(--amplify-colors-brand-primary-80) !important;
+  }
+
+  .amplify-button--link:hover,
+  button[data-amplify-button][data-variation="link"]:hover,
+  a[data-amplify-button]:hover {
+    color: var(--amplify-colors-brand-primary-60) !important;
+  }
+
+  /* Style input fields */
+  .amplify-input {
+    --amplify-components-fieldcontrol-border-color: var(--amplify-colors-neutral-40);
+  }
+
+  .amplify-input:focus-within {
+    --amplify-components-fieldcontrol-focus-border-color: var(--amplify-colors-brand-primary-40);
+  }
+}
