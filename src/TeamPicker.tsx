@@ -87,8 +87,8 @@ const PeopleTable: React.FC<PeopleProps> = ({
       });
 
       const command = new InvokeCommand({
-        FunctionName: "getUserContactInfo-prod",
-        Payload: Buffer.from(JSON.stringify({ id })),
+        FunctionName: `getUserContactInfo-${process.env.ENV}`,
+        Payload: new TextEncoder().encode(JSON.stringify({ id })),
       });
 
       const response = await client.send(command);
