@@ -119,14 +119,16 @@ export function ContactCard(props: ContactCardProps): ReactElement {
       });
 
       const command = new InvokeCommand({
-        FunctionName: "findlatlong-prod",
-        Payload: Buffer.from(JSON.stringify({ address })),
+        FunctionName: "findlatlong-dev",
+        Payload: new TextEncoder().encode(JSON.stringify({ address })),
       });
 
       const data = await client.send(command);
 
       if (data.Payload) {
-        const payloadParsed = JSON.parse(Buffer.from(data.Payload).toString());
+        const payloadParsed = JSON.parse(
+          new TextDecoder().decode(data.Payload)
+        );
         const bodyParsed = JSON.parse(payloadParsed.body);
         const response = bodyParsed[0];
 
