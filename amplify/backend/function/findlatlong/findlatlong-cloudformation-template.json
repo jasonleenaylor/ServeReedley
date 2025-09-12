@@ -18,6 +18,9 @@
     },
     "secretsPathAmplifyAppId": {
       "Type": "String"
+    },
+    "geocodingApiKey": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -94,6 +97,9 @@
                   "key"
                 ]
               ]
+            },
+            "GEOCODING_API_KEY": {
+              "Ref": "geocodingApiKey"
             }
           }
         },
