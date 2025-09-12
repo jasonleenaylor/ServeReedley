@@ -119,7 +119,7 @@ export function ContactCard(props: ContactCardProps): ReactElement {
       });
 
       const command = new InvokeCommand({
-        FunctionName: `findlatlong-${process.env.ENV}`,
+        FunctionName: `findlatlong-${import.meta.env.VITE_FUNCTION_ENV}`,
         Payload: new TextEncoder().encode(JSON.stringify({ address })),
       });
 
