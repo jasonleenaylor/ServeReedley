@@ -87,7 +87,7 @@ const PeopleTable: React.FC<PeopleProps> = ({
       });
 
       const command = new InvokeCommand({
-        FunctionName: `getUserContactInfo-${process.env.ENV}`,
+        FunctionName: `getUserContactInfo-${import.meta.env.VITE_FUNCTION_ENV}`,
         Payload: new TextEncoder().encode(JSON.stringify({ id })),
       });
 
