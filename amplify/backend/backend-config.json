@@ -141,6 +141,14 @@
         }
       ]
     },
+    "AMPLIFY_function_findlatlong_geocodingApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "findlatlong"
+        }
+      ]
+    },
     "AMPLIFY_function_findlatlong_s3Key": {
       "usedBy": [
         {
