@@ -174,6 +174,7 @@ export interface FoodInfoGQL {
   children?: string | null;
   haveAllergies?: boolean | null;
   allergies?: string | null;
+  deliveryTime?: string | null;
   milk?: boolean | null;
   eggs?: boolean | null;
   bread?: boolean | null;
