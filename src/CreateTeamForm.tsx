@@ -8,7 +8,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { generateClient } from 'aws-amplify/api';
+import { generateClient } from "aws-amplify/api";
 import { createTeam } from "./graphql/mutations"; // Adjust the import path accordingly
 import { useTeams } from "./useTeams"; // Adjust the import path accordingly
 import { NeedType } from "./RequestAPI"; // Adjust the import path accordingly
@@ -37,7 +37,7 @@ const CreateTeamForm: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
-    if(teamType === "") {
+    if (teamType === "") {
       console.error("Team type is required");
       setLoading(false);
       return;
@@ -49,7 +49,7 @@ const CreateTeamForm: React.FC = () => {
       const apiData: any = await graphqlClient.graphql({
         query: createTeam,
         variables: { input: newTeam },
-        authMode: 'userPool',
+        authMode: "userPool",
       });
       setTeams((prevTeams) => [...prevTeams, apiData.data.createTeam]);
       setTeamName("");
@@ -81,9 +81,6 @@ const CreateTeamForm: React.FC = () => {
           onChange={(e) => setTeamType(e.target.value as NeedType)}
           displayEmpty
         >
-          <MenuItem value="">
-            <em>Select a Team ID</em>
-          </MenuItem>
           {Object.entries(NeedType).map(([key, value]) => (
             <MenuItem key={key} value={value}>
               {needTypeLabels[value as NeedType]}
