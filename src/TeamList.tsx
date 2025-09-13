@@ -1,10 +1,6 @@
-import {
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
-} from "@mui/material";
+import { List, ListItem, ListItemText, CircularProgress } from "@mui/material";
 import { useTeams } from "./useTeams"; // Adjust the import path accordingly
+import { Link } from "react-router-dom";
 
 const TeamList = () => {
   const { teams, loading } = useTeams();
@@ -19,7 +15,12 @@ const TeamList = () => {
         <ListItem key={team.id}>
           <ListItemText
             primary={team.teamName}
-            secondary={`Team ID: ${team.teamType}`}
+            secondary={
+              <>
+                Team Type: {team.teamType} |{" "}
+                <Link to={`/team?id=${team.id}`}>View Team Page</Link>
+              </>
+            }
           />
         </ListItem>
       ))}
