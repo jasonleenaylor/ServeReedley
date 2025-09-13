@@ -625,7 +625,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
           {needType.other && (
             <Grid item>{otherNeedCard(otherNeeds, setOtherNeeds)}</Grid>
           )}
-          <Grid item>
+          <Grid item style={{ marginBottom: "15px" }}>
             <Button
               type="submit"
               variant="contained"

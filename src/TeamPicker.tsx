@@ -665,16 +665,21 @@ const TeamPicker: React.FC = () => {
     }
     return [];
   };
-
+  if (teamsLoading || requestsLoading) {
+    return <div>Loading team data…</div>;
+  }
   return (
     <Authenticator hideSignUp>
-      <div>
+      <div style={{ margin: "15px" }}>
         <h1>Active requests for {team?.teamName}</h1>
         {team &&
-          requests
-            .filter((request) => !request.filledDate)
-            .map((openRequest) => (
-              <Accordion>
+          (() => {
+            const unfulfilled = requests.filter((r) => !r.filledDate);
+            if (unfulfilled.length === 0) {
+              return <p>No unfulfilled requests.</p>;
+            }
+            return unfulfilled.map((openRequest) => (
+              <Accordion key={openRequest.id}>
                 <AccordionSummary>
                   <OpenTeamRequestSummary request={openRequest} />
                 </AccordionSummary>
@@ -686,7 +691,8 @@ const TeamPicker: React.FC = () => {
                   />
                 </AccordionDetails>
               </Accordion>
-            ))}
+            ));
+          })()}
       </div>
     </Authenticator>
   );
