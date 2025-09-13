@@ -633,8 +633,6 @@ const TeamPicker: React.FC = () => {
       if (!credentials) {
         throw new Error("No credentials available.");
       }
-
-      const lambda = new Lambda({
       const client = new LambdaClient({
         region: "us-west-1",
         credentials: {
