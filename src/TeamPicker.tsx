@@ -306,7 +306,6 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
 
       // Prepare input for the update mutation
       const input = {
-        ...requestData.data.getRequest,
         id: requestId,
         fulfilledNeeds: updatedFulfilledNeeds,
       };
@@ -399,7 +398,7 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
         console.log("TeamMember record created:", newTeamMember);
         console.log("Join table updated:", updatedJoinTable);
       }
-      updateFulfilledNeeds(request.id, request.type);
+      updateFulfilledNeeds(request.requestID, request.type);
     } catch (err) {
       console.error("Error creating/updating TeamMember:", err);
     }
@@ -634,25 +633,39 @@ const TeamPicker: React.FC = () => {
       }
 
       const lambda = new Lambda({
+      const client = new LambdaClient({
+        region: "us-west-1",
         credentials: {
           accessKeyId: credentials.accessKeyId,
           secretAccessKey: credentials.secretAccessKey,
           sessionToken: credentials.sessionToken,
         },
       });
-      const response = await lambda
-        .invoke({
-          FunctionName: "listPeopleOnTeam-prod",
-          Payload: JSON.stringify({ teamId }),
-        })
-        .promise();
 
-      const payloadParsed = JSON.parse(response.Payload as string);
-      return JSON.parse(payloadParsed.body);
+      const command = new InvokeCommand({
+        FunctionName: `listPeopleOnTeam-${import.meta.env.VITE_FUNCTION_ENV}`,
+        Payload: new TextEncoder().encode(JSON.stringify({ teamId })),
+      });
+
+      const response = await client.send(command);
+      if (response.Payload) {
+        const payloadString = new TextDecoder().decode(response.Payload);
+        const payloadParsed = JSON.parse(payloadString);
+
+        // Handle Lambda function errors
+        if (payloadParsed.statusCode !== 200) {
+          console.error("Lambda function error:", payloadParsed.body);
+          throw new Error(
+            `Lambda function returned ${payloadParsed.statusCode}: ${payloadParsed.body}`
+          );
+        }
+
+        return JSON.parse(payloadParsed.body);
+      }
     } catch (err) {
       console.log(err);
-      return [];
     }
+    return [];
   };
 
   return (
