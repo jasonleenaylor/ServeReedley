@@ -60,7 +60,7 @@ import {
   otherNeedCard,
 } from "./needFormCards";
 import theme from "./theme";
-import { fetchUserAttributes } from '@aws-amplify/auth';
+import { fetchUserAttributes } from "@aws-amplify/auth";
 import Rating from "@mui/material/Rating";
 import { RequestedNeedTypesCard } from "./RequestedNeedTypesCard";
 
@@ -98,7 +98,7 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
       requestData.note!.items = [];
     }
     let userInfo = await fetchUserAttributes();
-    if(!userInfo || !userInfo.email) {
+    if (!userInfo || !userInfo.email) {
       throw new Error("No user email info found");
     }
     requestData.note?.items.push({
@@ -770,6 +770,7 @@ function editOrCreateFoodInfoReq(
     haveAllergies: newFoodInfo.haveAllergies === RadioButtonState.YES,
     allergies: newFoodInfo.allergies,
     familyMembers: newFoodInfo.familyMembers,
+    deliveryTime: newFoodInfo.deliveryTime,
     children: newFoodInfo.children,
     beans: newFoodInfo.beans,
     beef: newFoodInfo.beef,
