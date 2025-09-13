@@ -307,7 +307,7 @@ export const NeedRequestForm = (props: ILocalizeProps) => {
     let formattedPhone = parsePhoneNumber(phone, "US")?.formatNational();
     let phoneUri = parsePhoneNumber(phone, "US")?.getURI();
     return (
-      <Trans i18nKey="housing_phone_field">
+      <Trans i18nKey="housing_phone_field" values={{ formattedPhone }}>
         Phone: <a href={phoneUri}>{formattedPhone}</a>
       </Trans>
     );
