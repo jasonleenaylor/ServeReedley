@@ -31,6 +31,7 @@ const needTypeLabels = {
 const CreateTeamForm: React.FC = () => {
   const [teamName, setTeamName] = useState("");
   const [teamType, setTeamType] = useState<NeedType | "">("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { setTeams } = useTeams(); // to update the team list after creating a new team
 
@@ -42,10 +43,15 @@ const CreateTeamForm: React.FC = () => {
       setLoading(false);
       return;
     }
+    if (!email || !email.trim()) {
+      console.error("Email is required");
+      setLoading(false);
+      return;
+    }
 
     const graphqlClient = generateClient();
     try {
-      const newTeam = { teamName, teamType };
+      const newTeam = { teamName, teamType, email };
       const apiData: any = await graphqlClient.graphql({
         query: createTeam,
         variables: { input: newTeam },
@@ -54,6 +60,7 @@ const CreateTeamForm: React.FC = () => {
       setTeams((prevTeams) => [...prevTeams, apiData.data.createTeam]);
       setTeamName("");
       setTeamType("");
+      setEmail("");
     } catch (error) {
       console.error("Error creating team:", error);
     } finally {
@@ -72,6 +79,13 @@ const CreateTeamForm: React.FC = () => {
         label="Team Name"
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
+        required
+      />
+      <TextField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         required
       />
       <FormControl required>
