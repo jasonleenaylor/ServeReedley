@@ -151,7 +151,7 @@ type Team @model @auth(rules: [{ allow: private }]) {
   id: ID!
   teamName: String!
   teamType: NeedType!
-  email: String!
+  email: String
   requests: [TeamRequest] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 

@@ -922,6 +922,7 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
     id
     teamName
     teamType
+    email
     requests {
       items {
         id
@@ -999,6 +1000,7 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
     id
     teamName
     teamType
+    email
     requests {
       items {
         id
@@ -1076,6 +1078,7 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
     id
     teamName
     teamType
+    email
     requests {
       items {
         id
