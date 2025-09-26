@@ -631,6 +631,7 @@ export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
     id
     teamName
     teamType
+    email
     requests {
       items {
         id
@@ -707,6 +708,7 @@ export const listTeams = /* GraphQL */ `query ListTeams(
       id
       teamName
       teamType
+      email
       requests {
         items {
           id

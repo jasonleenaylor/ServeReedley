@@ -880,6 +880,7 @@ export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam($filter: Mo
     id
     teamName
     teamType
+    email
     requests {
       items {
         id
@@ -954,6 +955,7 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam($filter: Mo
     id
     teamName
     teamType
+    email
     requests {
       items {
         id
@@ -1028,6 +1030,7 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam($filter: Mo
     id
     teamName
     teamType
+    email
     requests {
       items {
         id

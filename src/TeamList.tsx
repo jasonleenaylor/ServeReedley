@@ -17,7 +17,7 @@ const TeamList = () => {
             primary={team.teamName}
             secondary={
               <>
-                Team Type: {team.teamType} |{" "}
+                Team Type: {team.teamType} | Team Leader Email : {team.email} |{" "}
                 <Link to={`/team?id=${team.id}`}>View Team Page</Link>
               </>
             }

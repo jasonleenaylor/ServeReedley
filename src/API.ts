@@ -732,11 +732,13 @@ export type CreateTeamInput = {
   id?: string | null,
   teamName: string,
   teamType: NeedType,
+  email?: string | null,
 };
 
 export type ModelTeamConditionInput = {
   teamName?: ModelStringInput | null,
   teamType?: ModelNeedTypeInput | null,
+  email?: ModelStringInput | null,
   and?: Array< ModelTeamConditionInput | null > | null,
   or?: Array< ModelTeamConditionInput | null > | null,
   not?: ModelTeamConditionInput | null,
@@ -749,6 +751,7 @@ export type Team = {
   id: string,
   teamName: string,
   teamType: NeedType,
+  email?: string | null,
   requests?: ModelTeamRequestConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -807,6 +810,7 @@ export type UpdateTeamInput = {
   id: string,
   teamName?: string | null,
   teamType?: NeedType | null,
+  email?: string | null,
 };
 
 export type DeleteTeamInput = {
@@ -1101,6 +1105,7 @@ export type ModelTeamFilterInput = {
   id?: ModelIDInput | null,
   teamName?: ModelStringInput | null,
   teamType?: ModelNeedTypeInput | null,
+  email?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelTeamFilterInput | null > | null,
@@ -1366,6 +1371,7 @@ export type ModelSubscriptionTeamFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   teamName?: ModelSubscriptionStringInput | null,
   teamType?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionTeamFilterInput | null > | null,
@@ -2303,6 +2309,7 @@ export type CreateTeamMutation = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -2379,6 +2386,7 @@ export type UpdateTeamMutation = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -2455,6 +2463,7 @@ export type DeleteTeamMutation = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -4672,6 +4681,7 @@ export type GetTeamQuery = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -4751,6 +4761,7 @@ export type ListTeamsQuery = {
       id: string,
       teamName: string,
       teamType: NeedType,
+      email?: string | null,
       requests?:  {
         __typename: "ModelTeamRequestConnection",
         items:  Array< {
@@ -6465,6 +6476,7 @@ export type OnCreateTeamSubscription = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -6540,6 +6552,7 @@ export type OnUpdateTeamSubscription = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -6615,6 +6628,7 @@ export type OnDeleteTeamSubscription = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email?: string | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
