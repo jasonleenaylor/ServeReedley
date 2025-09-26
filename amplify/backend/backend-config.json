@@ -114,6 +114,21 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "NotifyTeamOnRequest": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "crn"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -218,6 +233,22 @@
         {
           "category": "function",
           "resourceName": "sendReminders"
+        }
+      ]
+    },
+    "AMPLIFY_function_NotifyTeamOnRequest_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "NotifyTeamOnRequest"
+        }
+      ]
+    },
+    "AMPLIFY_function_NotifyTeamOnRequest_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "NotifyTeamOnRequest"
         }
       ]
     }

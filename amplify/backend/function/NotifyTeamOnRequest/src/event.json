@@ -1,0 +1,33 @@
+{
+  "Records": [
+    {
+      "eventID": "1",
+      "eventVersion": "1.0",
+      "dynamodb": {
+        "Keys": {
+          "id": {
+            "S": "example-team-request-id"
+          }
+        },
+        "NewImage": {
+          "id": {
+            "S": "example-team-request-id"
+          },
+          "teamID": {
+            "S": "example-team-id"
+          },
+          "requestID": {
+            "S": "example-request-id"
+          },
+          "askDate": {
+            "S": "2023-01-01T00:00:00.000Z"
+          },
+          "note": {
+            "S": "Test note for team request"
+          }
+        }
+      },
+      "eventName": "INSERT"
+    }
+  ]
+}

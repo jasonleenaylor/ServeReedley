@@ -732,11 +732,13 @@ export type CreateTeamInput = {
   id?: string | null,
   teamName: string,
   teamType: NeedType,
+  email: string,
 };
 
 export type ModelTeamConditionInput = {
   teamName?: ModelStringInput | null,
   teamType?: ModelNeedTypeInput | null,
+  email?: ModelStringInput | null,
   and?: Array< ModelTeamConditionInput | null > | null,
   or?: Array< ModelTeamConditionInput | null > | null,
   not?: ModelTeamConditionInput | null,
@@ -749,6 +751,7 @@ export type Team = {
   id: string,
   teamName: string,
   teamType: NeedType,
+  email: string,
   requests?: ModelTeamRequestConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -2303,6 +2306,7 @@ export type CreateTeamMutation = {
     id: string,
     teamName: string,
     teamType: NeedType,
+    email: string,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
