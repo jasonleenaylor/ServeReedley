@@ -41,13 +41,6 @@ exports.handler = async (event) => {
         
         const request = requestResult.Item;
         
-        // Get email configuration from secrets manager
-        const vault = new aws.SecretsManager({ region: "us-west-1" });
-        const secretInfo = await vault
-          .getSecretValue({ SecretId: "request-email-info" })
-          .promise();
-        const emailInfo = JSON.parse(secretInfo.SecretString);
-        
         // Map need types to readable strings
         const prettyNeedTypes = {
           MEALS: "Meals",
@@ -94,7 +87,7 @@ Serve Reedley Team`;
             Destination: {
               ToAddresses: [team.email],
             },
-            Source: emailInfo.fromAddress,
+            Source: team.email, // Now using the team's email as the source
             Message: {
               Subject: {
                 Data: subject,

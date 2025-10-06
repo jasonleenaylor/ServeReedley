@@ -77,16 +77,6 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
-            },
-            "API_CRN_TEAMTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apicrnGraphQLAPIIdOutput}:GetAtt:TeamTable:Name"
-              }
-            },
-            "API_CRN_REQUESTTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apicrnGraphQLAPIIdOutput}:GetAtt:RequestTable:Name"
-              }
             }
           }
         },
@@ -96,7 +86,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs18.x",
         "Layers": [],
         "Timeout": 25
       }
@@ -107,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "crnLambdaRole7928ed8e",
+            "crnLambdaRolef29c5a20",
             {
               "Fn::Join": [
                 "",
                 [
-                  "crnLambdaRole7928ed8e",
+                  "crnLambdaRolef29c5a20",
                   "-",
                   {
                     "Ref": "env"
@@ -211,51 +201,6 @@
                   "Fn::Sub": "${apicrnGraphQLAPIIdOutput}:GetAtt:TeamRequestTable:StreamArn"
                 }
               }
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:GetItem",
-                "dynamodb:Query"
-              ],
-              "Resource": [
-                {
-                  "Fn::ImportValue": {
-                    "Fn::Sub": "${apicrnGraphQLAPIIdOutput}:GetAtt:TeamTable:Arn"
-                  }
-                },
-                {
-                  "Fn::ImportValue": {
-                    "Fn::Sub": "${apicrnGraphQLAPIIdOutput}:GetAtt:RequestTable:Arn"
-                  }
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "secretsmanager:GetSecretValue"
-              ],
-              "Resource": {
-                "Fn::Sub": [
-                  "arn:aws:secretsmanager:us-west-1:765421687952:secret:request-email-info-42Wte4",
-                  {
-                    "region": {
-                      "Ref": "AWS::Region"
-                    },
-                    "account": {
-                      "Ref": "AWS::AccountId"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "Action": [
-                "ses:SendEmail"
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:ses:us-west-1:765421687952:identity/*"
             }
           ]
         }
@@ -282,6 +227,87 @@
           ]
         },
         "StartingPosition": "LATEST"
+      }
+    },
+    "LambdaDynamoDBReadPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-dynamodb-read-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Query"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Team-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Request-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "LambdaSESPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-ses-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
       }
     }
   },
