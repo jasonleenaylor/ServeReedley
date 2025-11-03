@@ -22,7 +22,7 @@ const TeamList = () => {
               secondary={
                 <>
                   Team Type: {team.teamType} | Team Leader Email : {team.email} | 
-                  Vetted/In-Progress Requests: {count} |{" "}
+                  Open Requests: {count} |{" "}
                   <Link to={`/team?id=${team.id}`}>View Team Page</Link>
                 </>
               }

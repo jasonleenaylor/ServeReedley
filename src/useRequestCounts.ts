@@ -28,6 +28,14 @@ export const useRequestCounts = () => {
 
         const allRequests = requestsData.data.listRequests.items || [];
 
+        // Sort by createdAt descending (newest first) to ensure we process most recent requests
+        // This is important when we hit the 1000 limit, as newer requests are more likely to be active
+        allRequests.sort((a: any, b: any) => {
+          const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return dateB - dateA; // Descending order (newest first)
+        });
+
         // Count requests by need type
         const counts: Record<NeedType, number> = {} as Record<NeedType, number>;
         
