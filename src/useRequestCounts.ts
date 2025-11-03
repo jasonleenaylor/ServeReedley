@@ -11,31 +11,22 @@ export const useRequestCounts = () => {
   useEffect(() => {
     const fetchRequestCounts = async () => {
       try {
-        // Fetch vetted requests
-        const vettedData: any = await graphqlClient.graphql({
+        // Fetch vetted and in-progress requests in a single query
+        const requestsData: any = await graphqlClient.graphql({
           query: listRequests,
           variables: { 
-            filter: { status: { eq: RequestStatus.VETTED } },
+            filter: { 
+              or: [
+                { status: { eq: RequestStatus.VETTED } },
+                { status: { eq: RequestStatus.INPROGRESS } }
+              ]
+            },
             limit: 1000 
           },
           authMode: 'userPool',
         });
 
-        // Fetch in-progress requests
-        const inProgressData: any = await graphqlClient.graphql({
-          query: listRequests,
-          variables: { 
-            filter: { status: { eq: RequestStatus.INPROGRESS } },
-            limit: 1000 
-          },
-          authMode: 'userPool',
-        });
-
-        // Combine both lists
-        const allRequests = [
-          ...(vettedData.data.listRequests.items || []),
-          ...(inProgressData.data.listRequests.items || [])
-        ];
+        const allRequests = requestsData.data.listRequests.items || [];
 
         // Count requests by need type
         const counts: Record<NeedType, number> = {} as Record<NeedType, number>;
