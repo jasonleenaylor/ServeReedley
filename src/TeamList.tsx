@@ -1,29 +1,35 @@
 import { List, ListItem, ListItemText, CircularProgress } from "@mui/material";
 import { useTeams } from "./useTeams"; // Adjust the import path accordingly
+import { useRequestCounts } from "./useRequestCounts";
 import { Link } from "react-router-dom";
 
 const TeamList = () => {
-  const { teams, loading } = useTeams();
+  const { teams, loading: teamsLoading } = useTeams();
+  const { requestCounts, loading: countsLoading } = useRequestCounts();
 
-  if (loading) {
+  if (teamsLoading || countsLoading) {
     return <CircularProgress />;
   }
 
   return (
     <List>
-      {teams.map((team) => (
-        <ListItem key={team.id}>
-          <ListItemText
-            primary={team.teamName}
-            secondary={
-              <>
-                Team Type: {team.teamType} | Team Leader Email : {team.email} |{" "}
-                <Link to={`/team?id=${team.id}`}>View Team Page</Link>
-              </>
-            }
-          />
-        </ListItem>
-      ))}
+      {teams.map((team) => {
+        const count = requestCounts[team.teamType] || 0;
+        return (
+          <ListItem key={team.id}>
+            <ListItemText
+              primary={team.teamName}
+              secondary={
+                <>
+                  Team Type: {team.teamType} | Team Leader Email : {team.email} | 
+                  Vetted/In-Progress Requests: {count} |{" "}
+                  <Link to={`/team?id=${team.id}`}>View Team Page</Link>
+                </>
+              }
+            />
+          </ListItem>
+        );
+      })}
     </List>
   );
 };
