@@ -15,6 +15,10 @@ const TeamList = () => {
     <List>
       {teams.map((team) => {
         const count = requestCounts[team.teamType] || 0;
+        // Count pending team requests (where filledDate is null)
+        const pendingTeamRequests = team.requests?.items?.filter(
+          (request) => request && !request.filledDate
+        ).length || 0;
         return (
           <ListItem key={team.id}>
             <ListItemText
@@ -22,7 +26,7 @@ const TeamList = () => {
               secondary={
                 <>
                   Team Type: {team.teamType} | Team Leader Email : {team.email} | 
-                  Open Requests: {count} |{" "}
+                  Open Requests: {count} | Pending Team Requests: {pendingTeamRequests} |{" "}
                   <Link to={`/team?id=${team.id}`}>View Team Page</Link>
                 </>
               }
