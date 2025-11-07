@@ -1,10 +1,11 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { describe, test, expect, beforeEach, vi } from "vitest";
 import TeamList from "./TeamList";
 import { useTeams } from "./useTeams";
 import { useRequestCounts } from "./useRequestCounts";
+import { NeedType } from "./API";
+import type { Team, TeamRequest } from "./RequestAPI";
 
 // Mock the hooks
 vi.mock("./useTeams");
@@ -12,6 +13,24 @@ vi.mock("./useRequestCounts");
 
 const mockUseTeams = useTeams as ReturnType<typeof vi.fn>;
 const mockUseRequestCounts = useRequestCounts as ReturnType<typeof vi.fn>;
+
+// Helper function to create a partial TeamRequest for testing
+const createMockTeamRequest = (overrides: Partial<TeamRequest> = {}): Partial<TeamRequest> => ({
+  id: "default-id",
+  filledDate: null,
+  teamID: "default-team",
+  ...overrides,
+});
+
+// Helper function to create a partial Team for testing
+const createMockTeam = (overrides: Partial<Team> = {}): Partial<Team> => ({
+  id: "default-id",
+  teamName: "Default Team",
+  teamType: NeedType.MEALS,
+  email: "default@example.com",
+  requests: null,
+  ...overrides,
+});
 
 describe("TeamList", () => {
   beforeEach(() => {
@@ -22,43 +41,43 @@ describe("TeamList", () => {
     // Mock teams with some pending and completed team requests
     mockUseTeams.mockReturnValue({
       teams: [
-        {
+        createMockTeam({
           id: "team1",
           teamName: "Meals Team",
-          teamType: "MEALS" as any,
+          teamType: NeedType.MEALS,
           email: "meals@example.com",
           requests: {
             items: [
               // Pending request (no filledDate)
-              { id: "tr1", filledDate: null, teamID: "team1" } as any,
+              createMockTeamRequest({ id: "tr1", filledDate: null, teamID: "team1" }),
               // Completed request (has filledDate)
-              { id: "tr2", filledDate: "2024-01-15", teamID: "team1" } as any,
+              createMockTeamRequest({ id: "tr2", filledDate: "2024-01-15", teamID: "team1" }),
               // Another pending request
-              { id: "tr3", filledDate: null, teamID: "team1" } as any,
+              createMockTeamRequest({ id: "tr3", filledDate: null, teamID: "team1" }),
             ],
-          },
-        },
-        {
+          } as any,
+        }),
+        createMockTeam({
           id: "team2",
           teamName: "Housing Team",
-          teamType: "HOUSING" as any,
+          teamType: NeedType.HOUSING,
           email: "housing@example.com",
           requests: {
             items: [
               // All requests completed
-              { id: "tr4", filledDate: "2024-01-20", teamID: "team2" } as any,
+              createMockTeamRequest({ id: "tr4", filledDate: "2024-01-20", teamID: "team2" }),
             ],
-          },
-        },
-      ],
+          } as any,
+        }),
+      ] as Team[],
       loading: false,
       setTeams: vi.fn(),
     });
 
     mockUseRequestCounts.mockReturnValue({
       requestCounts: {
-        MEALS: 5,
-        HOUSING: 3,
+        [NeedType.MEALS]: 5,
+        [NeedType.HOUSING]: 3,
       } as any,
       loading: false,
     });
@@ -69,22 +88,22 @@ describe("TeamList", () => {
       </BrowserRouter>
     );
 
-    // Check that pending team requests count is displayed correctly
-    expect(screen.getByText(/Pending Team Requests: 2/)).toBeInTheDocument();
-    expect(screen.getByText(/Pending Team Requests: 0/)).toBeInTheDocument();
+    // Check that assigned requests count is displayed correctly
+    expect(screen.getByText(/Assigned Requests: 2/)).toBeInTheDocument();
+    expect(screen.getByText(/Assigned Requests: 0/)).toBeInTheDocument();
   });
 
   test("handles teams with no requests", () => {
     mockUseTeams.mockReturnValue({
       teams: [
-        {
+        createMockTeam({
           id: "team1",
           teamName: "Empty Team",
-          teamType: "GROCERIES" as any,
+          teamType: NeedType.GROCERIES,
           email: "groceries@example.com",
           requests: null,
-        },
-      ],
+        }),
+      ] as Team[],
       loading: false,
       setTeams: vi.fn(),
     });
@@ -100,8 +119,8 @@ describe("TeamList", () => {
       </BrowserRouter>
     );
 
-    // Should show 0 pending requests
-    expect(screen.getByText(/Pending Team Requests: 0/)).toBeInTheDocument();
+    // Should show 0 assigned requests
+    expect(screen.getByText(/Assigned Requests: 0/)).toBeInTheDocument();
   });
 
   test("shows loading indicator when data is loading", () => {
