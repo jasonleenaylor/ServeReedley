@@ -248,7 +248,6 @@ interface TeamRequestProps {
   request: TeamRequest;
   team: Team;
   people: Person[];
-  onRemove?: () => void;
 }
 
 interface RequestSummaryProps {
@@ -258,7 +257,10 @@ interface RequestSummaryProps {
 
 const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request, onRemove }) => {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+      <Typography>{`${new Date(request.askDate).toDateString()} - ${
+        request.request.firstName
+      }`}</Typography>
       {onRemove && (
         <IconButton
           aria-label="remove request"
@@ -271,9 +273,6 @@ const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request, onRemo
           <Delete />
         </IconButton>
       )}
-      <Typography>{`${new Date(request.askDate).toDateString()} - ${
-        request.request.firstName
-      }`}</Typography>
     </Box>
   );
 };
@@ -282,7 +281,6 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
   request,
   team,
   people,
-  onRemove,
 }) => {
   const [needRequest, setNeedRequest] = useState<NeedRequestType | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -491,17 +489,6 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
 
   return (
     <Card style={{ width: "90%", alignSelf: "center" }}>
-      {onRemove && (
-        <Box sx={{ padding: 1 }}>
-          <IconButton
-            aria-label="remove request"
-            onClick={onRemove}
-            sx={{ color: 'error.main' }}
-          >
-            <Delete />
-          </IconButton>
-        </Box>
-      )}
       <NeedSummaryForTeam request={needRequest} needType={team.teamType} />
       {request.note && (
         <Card style={{ width: "50%", alignSelf: "center" }}>
@@ -764,7 +751,6 @@ const TeamPicker: React.FC = () => {
                     request={openRequest}
                     team={team}
                     people={people}
-                    onRemove={() => handleRemoveRequest(openRequest)}
                   />
                 </AccordionDetails>
               </Accordion>
@@ -782,10 +768,10 @@ const TeamPicker: React.FC = () => {
           Are you sure you want to remove this request?
         </DialogTitle>
         <DialogActions>
-          <Button onClick={handleCancelRemove} color="primary">
+          <Button onClick={handleCancelRemove} variant="contained" color="primary">
             No
           </Button>
-          <Button onClick={handleConfirmRemove} color="primary" autoFocus>
+          <Button onClick={handleConfirmRemove} variant="contained" color="primary" autoFocus>
             Yes
           </Button>
         </DialogActions>
