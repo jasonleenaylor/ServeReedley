@@ -258,13 +258,6 @@ Vite automatically loads the appropriate env file based on mode.
 - `amplify/backend/backend-config.json` - Backend resource configuration
 - All `amplify/backend/function/*/function-parameters.json` files
 
-## Adding New Coordinators
-
-**From README.md:**
-1. Add Cognito User → Send email invitation → Set temporary password
-2. Add user as verified identity in Amazon SES (after user logs in)
-3. Update Secrets Manager → Edit `request-email-info` secret to add email address
-
 ## Testing Guidelines
 
 **Existing Tests:** Located in `src/*.test.tsx` files  
