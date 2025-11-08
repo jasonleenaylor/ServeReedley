@@ -255,9 +255,19 @@ interface RequestSummaryProps {
   onRemove?: () => void;
 }
 
-const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request, onRemove }) => {
+const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({
+  request,
+  onRemove,
+}) => {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+      }}
+    >
       <Typography>{`${new Date(request.askDate).toDateString()} - ${
         request.request.firstName
       }`}</Typography>
@@ -268,7 +278,7 @@ const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request, onRemo
             e.stopPropagation();
             onRemove();
           }}
-          sx={{ color: 'error.main' }}
+          sx={{ color: "error.main" }}
         >
           <Delete />
         </IconButton>
@@ -524,7 +534,9 @@ const TeamPicker: React.FC = () => {
   const teamId = new URLSearchParams(window.location.search).get("id");
   const [people, setPeople] = useState<Person[]>([]);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [requestToRemove, setRequestToRemove] = useState<TeamRequest | null>(null);
+  const [requestToRemove, setRequestToRemove] = useState<TeamRequest | null>(
+    null
+  );
   const { teams, loading: teamsLoading } = useTeams();
   const {
     requests,
@@ -653,11 +665,11 @@ const TeamPicker: React.FC = () => {
         },
         authMode: "userPool",
       });
-      
+
       // Close dialog and reset state
       setConfirmDialogOpen(false);
       setRequestToRemove(null);
-      
+
       // Reload the page to refresh the list
       window.location.reload();
     } catch (err) {
@@ -741,7 +753,7 @@ const TeamPicker: React.FC = () => {
             return unfulfilled.map((openRequest) => (
               <Accordion key={openRequest.id}>
                 <AccordionSummary>
-                  <OpenTeamRequestSummary 
+                  <OpenTeamRequestSummary
                     request={openRequest}
                     onRemove={() => handleRemoveRequest(openRequest)}
                   />
@@ -764,14 +776,28 @@ const TeamPicker: React.FC = () => {
         onClose={handleCancelRemove}
         aria-labelledby="confirm-remove-dialog-title"
       >
+        {/* Add a dialog title with the first name and a short date format */}
         <DialogTitle id="confirm-remove-dialog-title">
-          Are you sure you want to remove this request?
+          {requestToRemove &&
+            `Remove Request for ${requestToRemove.request.firstName}?`}
         </DialogTitle>
+        <DialogContent>
+          Are you sure you want to remove this request?
+        </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelRemove} variant="contained" color="primary">
+          <Button
+            onClick={handleCancelRemove}
+            variant="contained"
+            color="primary"
+          >
             No
           </Button>
-          <Button onClick={handleConfirmRemove} variant="contained" color="primary" autoFocus>
+          <Button
+            onClick={handleConfirmRemove}
+            variant="contained"
+            color="primary"
+            autoFocus
+          >
             Yes
           </Button>
         </DialogActions>
