@@ -7,6 +7,12 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
@@ -27,7 +33,7 @@ import { getRequest, getTeamMember, listTeamMembers } from "./graphql/queries";
 import { generateClient } from "aws-amplify/api";
 import { fetchAuthSession } from "@aws-amplify/auth";
 import { NeedRequestType } from "./needRequestTypes";
-import { CheckBox } from "@mui/icons-material";
+import { CheckBox, Delete } from "@mui/icons-material";
 import {
   createAskedMembers,
   createTeamMember,
@@ -246,13 +252,28 @@ interface TeamRequestProps {
 
 interface RequestSummaryProps {
   request: TeamRequest;
+  onRemove?: () => void;
 }
 
-const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request }) => {
+const OpenTeamRequestSummary: React.FC<RequestSummaryProps> = ({ request, onRemove }) => {
   return (
-    <Typography>{`${new Date(request.askDate).toDateString()} - ${
-      request.request.firstName
-    }`}</Typography>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+      <Typography>{`${new Date(request.askDate).toDateString()} - ${
+        request.request.firstName
+      }`}</Typography>
+      {onRemove && (
+        <IconButton
+          aria-label="remove request"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          sx={{ color: 'error.main' }}
+        >
+          <Delete />
+        </IconButton>
+      )}
+    </Box>
   );
 };
 
@@ -502,6 +523,8 @@ const cellStyle: CSSProperties = {
 const TeamPicker: React.FC = () => {
   const teamId = new URLSearchParams(window.location.search).get("id");
   const [people, setPeople] = useState<Person[]>([]);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [requestToRemove, setRequestToRemove] = useState<TeamRequest | null>(null);
   const { teams, loading: teamsLoading } = useTeams();
   const {
     requests,
@@ -599,9 +622,7 @@ const TeamPicker: React.FC = () => {
               matchingTeamMember.name.split(" ")[0] || person.first_name;
             person.last_name =
               matchingTeamMember.name.split(" ")[1] || person.last_name;
-            person.last_contacted = matchingTeamMember.asks?.items.sort(a => {
-              return new Date(a!.createdAt).getTime();
-            })[0]?.createdAt || "";
+            person.last_contacted = matchingTeamMember.updatedAt;
             person.last_filled = lastFilledDate;
             person.contacts_last_month = contactsLastMonth;
           }
@@ -612,6 +633,43 @@ const TeamPicker: React.FC = () => {
     }
     setPeople(people);
   }
+
+  const handleRemoveRequest = (request: TeamRequest) => {
+    setRequestToRemove(request);
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmRemove = async () => {
+    if (!requestToRemove) return;
+
+    try {
+      await graphqlClient.graphql({
+        query: updateTeamRequest,
+        variables: {
+          input: {
+            id: requestToRemove.id,
+            filledDate: new Date().toISOString(),
+          },
+        },
+        authMode: "userPool",
+      });
+      
+      // Close dialog and reset state
+      setConfirmDialogOpen(false);
+      setRequestToRemove(null);
+      
+      // Reload the page to refresh the list
+      window.location.reload();
+    } catch (err) {
+      console.error("Error removing request:", err);
+      alert("Failed to remove request. Please try again.");
+    }
+  };
+
+  const handleCancelRemove = () => {
+    setConfirmDialogOpen(false);
+    setRequestToRemove(null);
+  };
 
   useEffect(() => {
     if (teamsLoading || requestsLoading) return;
@@ -683,7 +741,10 @@ const TeamPicker: React.FC = () => {
             return unfulfilled.map((openRequest) => (
               <Accordion key={openRequest.id}>
                 <AccordionSummary>
-                  <OpenTeamRequestSummary request={openRequest} />
+                  <OpenTeamRequestSummary 
+                    request={openRequest}
+                    onRemove={() => handleRemoveRequest(openRequest)}
+                  />
                 </AccordionSummary>
                 <AccordionDetails>
                   <OpenTeamRequest
@@ -696,6 +757,25 @@ const TeamPicker: React.FC = () => {
             ));
           })()}
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog
+        open={confirmDialogOpen}
+        onClose={handleCancelRemove}
+        aria-labelledby="confirm-remove-dialog-title"
+      >
+        <DialogTitle id="confirm-remove-dialog-title">
+          Are you sure you want to remove this request?
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleCancelRemove} variant="contained" color="primary">
+            No
+          </Button>
+          <Button onClick={handleConfirmRemove} variant="contained" color="primary" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Authenticator>
   );
 };
