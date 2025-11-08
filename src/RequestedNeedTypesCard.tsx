@@ -195,8 +195,8 @@ function SendToTeamDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose(false)}>{t("cancel")}</Button>
-        <Button onClick={onSubmit} disabled={!selectedTeam}>
+        <Button onClick={() => onClose(false)} variant="contained" color="primary">{t("cancel")}</Button>
+        <Button onClick={onSubmit} disabled={!selectedTeam} variant="contained" color="primary">
           {t("submit")}
         </Button>
       </DialogActions>
