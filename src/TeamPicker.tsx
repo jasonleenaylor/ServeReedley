@@ -20,7 +20,11 @@ import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { CSSProperties } from "react";
 import { useTeams } from "./useTeams";
 import useRequestsById from "./useRequestsById";
-import NeedSummaryForTeam, { getSummaryDetails } from "./NeedSummaryForTeam";
+import NeedSummaryForTeam, {
+  getSummaryDetails,
+  getRecipientName,
+  getRecipientAddress,
+} from "./NeedSummaryForTeam";
 import {
   GetRequestQuery,
   NeedType,
@@ -507,7 +511,13 @@ const OpenTeamRequest: React.FC<TeamRequestProps> = ({
       )}
       <PeopleTable
         people={people}
-        message={getSummaryDetails(team.teamType, needRequest)}
+        message={
+          getRecipientName(needRequest) +
+          "\n" +
+          getRecipientAddress(needRequest) +
+          "\n" +
+          getSummaryDetails(team.teamType, needRequest)
+        }
         onSelectionChange={(people) => setSelectedPeople(people)}
         onMarkAsSent={handleMarkAsSent}
         onMarkFulfilled={handleFulfilled}

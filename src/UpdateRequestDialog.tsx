@@ -80,6 +80,15 @@ function UpdateRequestDialog(props: SimpleDialogProps & ILocalizeProps) {
   const [snackBarOpen, setSnackBarOpen] = React.useState(false);
   const [snackBarMessage, setSnackBarMessage] = React.useState("");
 
+  // Sync internal state when dialog opens OR when props.requestData changes
+  React.useEffect(() => {
+    if (open) {
+      setRequestData(props.requestData);
+      setCurrentNote("");
+      setCurrentNotable(0);
+    }
+  }, [open, props.requestData]);
+
   const handleClose = () => {
     onClose();
   };
@@ -716,15 +725,15 @@ export default function UpdateRequestDialogButton(
   props: SimpleDialogProps & ILocalizeProps
 ) {
   const [open, setOpen] = React.useState(props.open);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleSave = (value: NeedRequestType) => {
+  const handleSave = async (value: NeedRequestType) => {
     setOpen(false);
-    props.onSave(value);
+    await props.onSave(value);
   };
+
   const handleClose = () => {
     setOpen(false);
     props.onClose();
