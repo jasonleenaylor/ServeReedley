@@ -13,7 +13,7 @@
 - **Test Framework:** Vitest 2.0.4 with jsdom
 - **Styling:** Material-UI, Emotion, custom theme
 - **Internationalization:** i18next (English and Spanish support)
-- **Node Version:** v20.19.5
+- **Node Version:** v22
 - **NPM Version:** 10.8.2
 
 ## Critical Build Requirements
