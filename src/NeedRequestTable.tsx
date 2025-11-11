@@ -87,22 +87,25 @@ function NeedRequestTable(props: ILocalizeProps) {
       size: 120,
       minSize: 100,
       maxSize: 150,
-      Cell: ({ row }) => (
-        <UpdateRequestDialogButton
-          requestData={row.original}
-          open={false}
-          onClose={() => setSnackBarOpen(true)}
-          onSave={async (value: NeedRequestType) => {
-            await graphqlClient.graphql({
-              query: updateRequest,
-              variables: { input: await needUpdateFromNeedReqData(value) },
-              authMode: "userPool",
-            });
-            fetchNeedRequests();
-          }}
-          t={props.t}
-        />
-      ),
+      Cell: ({ row }) => {
+        return (
+          <UpdateRequestDialogButton
+            requestData={row.original}
+            open={false}
+            onClose={() => setSnackBarOpen(true)}
+            onSave={async (value: NeedRequestType) => {
+              await graphqlClient.graphql({
+                query: updateRequest,
+                variables: { input: await needUpdateFromNeedReqData(value) },
+                authMode: "userPool",
+              });
+              // Wait for fetch to complete before dialog closes
+              await fetchNeedRequests();
+            }}
+            t={props.t}
+          />
+        );
+      },
       enableColumnFilter: false,
     },
     {
@@ -275,10 +278,7 @@ function NeedRequestTable(props: ILocalizeProps) {
       maxSize: 150,
     },
     {
-      accessorFn: (row) => {
-        console.log(`${JSON.stringify(row)}`);
-        return row.foodRequest?.children || "";
-      },
+      accessorFn: (row) => row.foodRequest?.children ?? "",
       id: "foodRequest.children",
       header: "Children",
       size: 100,

@@ -56,6 +56,24 @@ const getDeliveryDetails = (request: NeedRequestType): string => {
   return details;
 };
 
+export const getRecipientName = (request: NeedRequestType): string => {
+  if (request.selfOrOtherInfo.forSelf) {
+    return `${request.firstName} ${request.lastName}`;
+  } else {
+    return `${request.selfOrOtherInfo.requestFor}`;
+  }
+};
+
+export const getRecipientAddress = (request: NeedRequestType): string => {
+  // Return the best available address checking each optional field to avoid
+  // unnecessary commas. If there is no address return an empty string.
+  return request.address
+    ? `${request.address}, "` +
+        request.city +
+        (request.zipCode ? ", " + request.zipCode : "")
+    : "";
+};
+
 export const getSummaryDetails = (
   needType: NeedType,
   request: NeedRequestType
@@ -100,11 +118,12 @@ const NeedSummaryForTeam: React.FC<NeedSummaryForTeamProps> = ({
   needType,
   request,
 }) => {
+  const name = getRecipientName(request);
   return (
     <Card>
       <CardContent>
         <BasicContactInfoCard
-          name={request.firstName?.trim() + " " + request.lastName?.trim()}
+          name={name}
           address={
             (request.address ? `${request.address}, "` : "") +
             request.city + // City is the only required field (to support homeless requests)
