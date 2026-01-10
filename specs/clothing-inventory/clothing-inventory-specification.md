@@ -98,6 +98,10 @@ The following decisions have been confirmed:
 
 5. **Clothing Request Format:** Clothing requests will continue to come in as free-form text. The people using the system will evaluate the text manually.
 
+6. **Breeze Integration:** The clothing team Breeze category is already defined in `TeamPicker.tsx` with `option_id: "41"` and name `"Clothing Needs"`. No additional Breeze configuration is needed.
+
+7. **Access Control:** All authenticated coordinators will have access to the clothing inventory management page.
+
 ---
 
 ## Clarifying Questions
@@ -133,24 +137,15 @@ The following questions need to be answered before implementation can proceed:
    - Automatically suggest matching inventory items?
    - Automatically decrement inventory when a request is fulfilled?
 
-8. **Breeze Integration**: Is the clothing team Breeze category already defined?
-   - If not, what should it be called?
+8. **Message Templates**: Should donation request messages follow a standard template, or be free-form?
 
-9. **Message Templates**: Should donation request messages follow a standard template, or be free-form?
-
-10. **Request Evaluation Responsibility**: Who should evaluate the free-form clothing request text and match it to inventory?
+9. **Request Evaluation Responsibility**: Who should evaluate the free-form clothing request text and match it to inventory?
     - **Option A:** The coordinator when creating the team request
     - **Option B:** The team lead when sending it out to team members
 
-### UI/UX Questions
-
-11. **Access Control**: Who should have access to the inventory management page?
-    - Only clothing team coordinators?
-    - All authenticated coordinators?
-
 ### Integration Questions
 
-12. **Team Page Behavior**: Should the clothing team page replace or augment the existing team page pattern used by other teams (groceries, household items, hygiene)?
+10. **Team Page Behavior**: Should the clothing team page replace or augment the existing team page pattern used by other teams (groceries, household items, hygiene)?
 
 ---
 
