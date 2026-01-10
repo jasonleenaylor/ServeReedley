@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document captures the specifications for a new clothing inventory management system to support the clothing team's operations. The system will track clothing donations, manage inventory levels, enable donation requests when stock is low, and facilitate communication with team members about clothing needs.
+This document captures the specifications for a new clothing inventory management system to support the clothing team's operations. The system will track clothing donations, manage inventory levels, and facilitate communication with team members about clothing needs.
 
 ## Background
 
@@ -12,7 +12,7 @@ The existing ServeReedley application supports team pages for groceries, househo
 - Send SMS messages with request details
 - Mark requests as sent or fulfilled
 
-The clothing team requires similar functionality but with additional inventory management capabilities to track available clothing items and facilitate donation requests when stock is low.
+The clothing team requires similar functionality but with additional inventory management capabilities to track available clothing items and facilitate donation requests.
 
 ## Current Clothing Request Flow
 
@@ -37,12 +37,13 @@ Create a new data model to track clothing inventory items.
 - `gender` - Target gender (Men, Women, Children, Unisex)
 - `ageGroup` - Age group (Adult, Youth, Child, Infant)
 - `quantity` - Number of items in stock
-- `minStockLevel` - Threshold for triggering low stock alerts
 - `condition` - Condition of items (New, Good, Fair)
 - `location` - Storage location (if applicable)
 - `notes` - Additional notes
 - `lastUpdated` - Timestamp of last inventory update
 - `createdAt` - Timestamp of creation
+
+> **Note:** Low stock alerts are not needed in the data model at this time. This will be a manual process managed by the clothing coordinator. Any future low stock highlighting can be implemented with constants in the frontend code.
 
 ### 2. Inventory Management Page
 
@@ -53,15 +54,18 @@ A new page for managing the clothing inventory.
 - Add new inventory items (to accept donations)
 - Edit existing inventory quantities (to correct inventory)
 - Delete inventory items
-- View low-stock alerts
-- Select team members for donation requests
+- Select team members for donation requests (via Breeze integration)
 - Create and send donation request messages to team members
+
+**UX Requirements:**
+- **Desktop Experience:** Focused on overall inventory management, bulk operations, and comprehensive views
+- **Mobile Experience:** Optimized for on-site inventory updates (e.g., when receiving donations or checking stock)
 
 ### 3. Donation Request Workflow
 
 **Process Flow:**
-1. Team leader identifies low inventory items (manually or via low-stock alerts)
-2. Team leader selects which team members to contact
+1. Team leader manually identifies low inventory items
+2. Team leader selects which team members to contact (via Breeze integration)
 3. System generates a message listing needed items and current inventory status
 4. Team leader sends message to selected team members
 5. When donations are received, team leader updates inventory
@@ -75,6 +79,24 @@ The clothing team page should:
   - What clothing items are needed (from the request)
   - Whether those items are in inventory and where
   - If not in inventory, indicate donation may be needed
+
+---
+
+## Decisions Made
+
+The following decisions have been confirmed:
+
+1. **Low Stock Alerts:** Not needed in the data model. Low stock identification will be a manual process managed by the clothing coordinator. Future low stock highlighting can be implemented with frontend constants.
+
+2. **Team Member Selection:** Team members will be selected through the existing Breeze integration (same as other teams).
+
+3. **UX Requirements:** The system must support both desktop and mobile use:
+   - Desktop: Focused on overall inventory management
+   - Mobile: Focused on on-site updating (receiving donations, checking stock)
+
+4. **Reporting Needs:** No additional reporting requirements at this time.
+
+5. **Clothing Request Format:** Clothing requests will continue to come in as free-form text. The people using the system will evaluate the text manually.
 
 ---
 
@@ -100,55 +122,35 @@ The following questions need to be answered before implementation can proceed:
 4. **Inventory Location**: Is there a single storage location or multiple?
    - If multiple, should inventory be tracked per location?
 
-5. **Low Stock Thresholds**: Should minimum stock levels be:
-   - Set per item?
-   - Set per category?
-   - A global default?
-
-6. **Condition Tracking**: Is tracking item condition (New/Good/Fair) important for this use case?
+5. **Condition Tracking**: Is tracking item condition (New/Good/Fair) important for this use case?
 
 ### Workflow Questions
 
-7. **Donation Tracking**: Should the system track who donated items and when?
+6. **Donation Tracking**: Should the system track who donated items and when?
    - This would require an additional "DonationRecord" model
 
-8. **Request Matching**: When a clothing request comes in, should the system:
+7. **Request Matching**: When a clothing request comes in, should the system:
    - Automatically suggest matching inventory items?
    - Automatically decrement inventory when a request is fulfilled?
 
-9. **Team Member Selection**: For donation requests, should team members be:
-   - Selected from the existing Breeze integration (like other teams)?
-   - A separate list of potential clothing donors?
+8. **Breeze Integration**: Is the clothing team Breeze category already defined?
+   - If not, what should it be called?
 
-10. **Message Templates**: Should donation request messages follow a standard template, or be free-form?
+9. **Message Templates**: Should donation request messages follow a standard template, or be free-form?
 
-11. **Notification System**: Should there be automatic notifications when:
-    - Inventory falls below minimum levels?
-    - A new clothing request is submitted?
+10. **Request Evaluation Responsibility**: Who should evaluate the free-form clothing request text and match it to inventory?
+    - **Option A:** The coordinator when creating the team request
+    - **Option B:** The team lead when sending it out to team members
 
 ### UI/UX Questions
 
-12. **Access Control**: Who should have access to the inventory management page?
+11. **Access Control**: Who should have access to the inventory management page?
     - Only clothing team coordinators?
     - All authenticated coordinators?
 
-13. **Mobile Optimization**: Is the inventory management primarily used on:
-    - Desktop computers?
-    - Mobile devices?
-    - Both equally?
-
-14. **Reporting Needs**: Are there any reporting requirements, such as:
-    - Monthly inventory reports?
-    - Donation tracking reports?
-    - Request fulfillment rates?
-
 ### Integration Questions
 
-15. **Existing Clothing Requests**: How should existing clothing requests (with free-text type/size) integrate with the new inventory system?
-    - Should coordinators manually match requests to inventory?
-    - Should there be a migration of existing data?
-
-16. **Team Page Behavior**: Should the clothing team page replace or augment the existing team page pattern used by other teams (groceries, household items, hygiene)?
+12. **Team Page Behavior**: Should the clothing team page replace or augment the existing team page pattern used by other teams (groceries, household items, hygiene)?
 
 ---
 
