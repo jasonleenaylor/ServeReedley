@@ -26,17 +26,9 @@ The existing `NeedType.CLOTHING` enum value is already defined in the schema.
 
 ## Development Phases
 
-### ⚠️ Decisions Required Before Phase 1
+### ✅ Phase 1 Ready for Implementation
 
-The following decisions must be made before Phase 1 implementation can begin:
-
-1. **Inventory Location**: Is there a single storage location or multiple?
-   - If multiple, should inventory be tracked per location?
-
-2. **Condition Tracking**: Is tracking item condition (New/Good/Fair) important for Phase 1?
-
-3. **Donation Tracking**: Should the system track who donated items and when?
-   - This would require an additional "DonationRecord" model
+All decisions required for Phase 1 have been resolved. See "Decisions Made" section below.
 
 ---
 
@@ -69,11 +61,39 @@ The following items and sizes will be supported in Phase 1:
 | 16 |
 
 #### Kids Shoes
-| Size Range | Sizes |
-|------------|-------|
-| Infant/Toddler | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 |
-| Little Kids | 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 1, 1.5, 2, 2.5, 3 |
-| Big Kids | 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7 |
+| Size |
+|------|
+| 0 |
+| 1 |
+| 2 |
+| 3 |
+| 4 |
+| 5 |
+| 6 |
+| 7 |
+| 8 |
+| 9 |
+| 10 |
+| 10.5 |
+| 11 |
+| 11.5 |
+| 12 |
+| 12.5 |
+| 13 |
+| 13.5 |
+| 1Y |
+| 1.5Y |
+| 2Y |
+| 2.5Y |
+| 3Y |
+| 3.5Y |
+| 4Y |
+| 4.5Y |
+| 5Y |
+| 5.5Y |
+| 6Y |
+| 6.5Y |
+| 7Y |
 
 #### Diapers
 | Size |
@@ -90,18 +110,45 @@ The following items and sizes will be supported in Phase 1:
 
 ### Phase 1 Data Model
 
+#### ClothingInventory Model
+
 **Proposed Fields:**
 - `id` - Unique identifier
 - `category` - Type of item: "Children's Socks", "Children's Underwear", "Kids Shoes", "Diapers"
 - `size` - Size of the item (from predefined list per category)
 - `quantity` - Number of items in stock
-- `location` - Storage location (if applicable) - *pending decision*
-- `condition` - Condition of items (New, Good, Fair) - *pending decision*
+- `location` - Storage location (modeled for future multi-location support, but not exposed in Phase 1 UX)
 - `notes` - Additional notes
 - `lastUpdated` - Timestamp of last inventory update
 - `createdAt` - Timestamp of creation
 
 > **Note:** Low stock alerts are not needed in the data model at this time. This will be a manual process managed by the clothing coordinator. Any future low stock highlighting can be implemented with constants in the frontend code.
+
+#### InventoryMessage Model (New)
+
+A messaging system allowing inventory users to post and resolve messages about inventory concerns.
+
+**Proposed Fields:**
+- `id` - Unique identifier
+- `content` - Message text
+- `authorId` - User who posted the message
+- `authorName` - Display name of author
+- `resolved` - Boolean indicating if the message has been resolved
+- `resolvedBy` - User who resolved the message (if resolved)
+- `resolvedAt` - Timestamp when resolved
+- `createdAt` - Timestamp of creation
+
+#### Donor Model (New)
+
+Track individuals who have donated clothing or goods, linked to Breeze personas.
+
+**Proposed Fields:**
+- `id` - Unique identifier
+- `breezeId` - Link to Breeze persona (optional - for known donors)
+- `name` - Donor name
+- `notes` - Additional notes about the donor
+- `lastDonation` - Timestamp of most recent donation
+- `createdAt` - Timestamp of creation
 
 ### Phase 1 Features
 
@@ -111,9 +158,21 @@ The following items and sizes will be supported in Phase 1:
 - Edit existing inventory quantities (to correct inventory)
 - Delete inventory items
 
+**Messaging System:**
+- Post messages about inventory concerns (e.g., "Running low on size 4 underwear")
+- View all active (unresolved) messages
+- Resolve messages when the concern has been addressed
+- View message history (resolved messages)
+
+**Donor Tracking:**
+- Add new donors (optionally linked to Breeze persona)
+- View list of donors
+- Record when donations are received (updates `lastDonation` timestamp)
+
 **UX Requirements:**
 - **Desktop Experience:** Focused on overall inventory management, bulk operations, and comprehensive views
 - **Mobile Experience:** Optimized for on-site inventory updates (e.g., when receiving donations or checking stock)
+- **Location:** Not exposed in Phase 1 UX (modeled in data for future use)
 
 ---
 
@@ -177,18 +236,28 @@ The following decisions have been confirmed:
 8. **Phase 1 Scope:** Initial implementation will focus only on inventory management with the following item categories:
    - Children's Socks (sizes: Newborn, 6-12m, 12-24m, 2T-3T, 4T-5T)
    - Children's Underwear (sizes: 4, 6, 8, 10, 12, 14, 16)
-   - Kids Shoes (sizes: Infant/Toddler 0-10, Little Kids 10.5-3, Big Kids 3.5-7)
-   - Diapers (sizes: Preemie, Newborn, #1-7)
+   - Kids Shoes (individual sizes: 0-10, 10.5-13.5, 1Y-7Y)
+   - Diapers (individual sizes: Preemie, Newborn, #1-7)
+
+9. **Inventory Location:** Model will support multiple locations for future use, but location will NOT be exposed in Phase 1 UX.
+
+10. **Condition Tracking:** Not needed. Condition tracking is unnecessary for this use case.
+
+11. **Donation Tracking:** Per-item donation tracking is unnecessary. Instead, a separate Donor model will track individuals who have donated (optionally linked to Breeze personas).
+
+12. **Messaging System:** Phase 1 will include a messaging system where users can post and resolve messages about inventory concerns.
 
 ---
 
 ## Next Steps
 
 ### Phase 1 Implementation
-1. **Resolve pending decisions** (see "Decisions Required Before Phase 1" above)
-2. **Design GraphQL schema** - For the ClothingInventory model
+1. ✅ **All decisions resolved** - Ready to begin implementation
+2. **Design GraphQL schema** - For ClothingInventory, InventoryMessage, and Donor models
 3. **Implement inventory management page** - CRUD operations for inventory items
-4. **Test and deploy Phase 1**
+4. **Implement messaging system** - Post/resolve messages
+5. **Implement donor tracking** - Manage donors with optional Breeze linking
+6. **Test and deploy Phase 1**
 
 ### Phase 2 Implementation (Future)
 1. **Resolve Phase 2 questions** (see "Phase 2 Questions" above)
