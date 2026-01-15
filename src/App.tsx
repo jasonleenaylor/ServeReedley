@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import ReportForm from "./ReportForm";
 import TeamPicker from "./TeamPicker";
 import TeamManagement from "./TeamManagementForm";
+import ClothingInventoryPage from "./ClothingInventoryPage";
 import "@aws-amplify/ui-react/styles.css";
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/reports" element={<ReportForm t={t} />} />
             <Route path="/teams" element={<TeamManagement />} />
             <Route path="/team" element={<TeamPicker />} />
+            <Route path="/inventory" element={<ClothingInventoryPage />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </div>

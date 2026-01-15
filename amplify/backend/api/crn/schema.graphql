@@ -160,6 +160,8 @@ type TeamMember @model @auth(rules: [{ allow: private }]) {
   name: String!
   asks: [TeamRequest] @manyToMany(relationName: "AskedMembers")
   fulfilled: [TeamRequest] @hasMany(indexName: "byMember", fields: ["breezeId"])
+  lastDonation: AWSDateTime
+  donationNotes: String
 }
 
 type TeamRequest @model @auth(rules: [{ allow: private }]) {
@@ -210,4 +212,35 @@ enum LeadSource {
   FAMILY
   FRIEND
   OTHER
+}
+
+# Clothing Inventory System - Phase 1
+
+enum ClothingCategory {
+  CHILDRENS_SOCKS
+  CHILDRENS_UNDERWEAR
+  KIDS_SHOES
+  DIAPERS
+}
+
+type ClothingInventory @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  category: ClothingCategory!
+  size: String!
+  quantity: Int!
+  location: String
+  notes: String
+  lastUpdated: AWSDateTime
+  createdAt: AWSDateTime
+}
+
+type InventoryMessage @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  content: String!
+  authorId: String!
+  authorName: String!
+  resolved: Boolean!
+  resolvedBy: String
+  resolvedAt: AWSDateTime
+  createdAt: AWSDateTime
 }
