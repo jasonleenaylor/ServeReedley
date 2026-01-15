@@ -234,10 +234,13 @@ The following decisions have been confirmed:
 7. **Access Control:** All authenticated coordinators will have access to the clothing inventory management page.
 
 8. **Phase 1 Scope:** Initial implementation will focus only on inventory management with the following item categories:
-   - Children's Socks (sizes: Newborn, 6-12m, 12-24m, 2T-3T, 4T-5T)
-   - Children's Underwear (sizes: 4, 6, 8, 10, 12, 14, 16)
-   - Kids Shoes (individual sizes: 0-10, 10.5-13.5, 1Y-7Y)
-   - Diapers (individual sizes: Preemie, Newborn, #1-7)
+   - Children's Socks (5 sizes): Newborn, 6-12m, 12-24m, 2T-3T, 4T-5T
+   - Children's Underwear (7 sizes): 4, 6, 8, 10, 12, 14, 16
+   - Kids Shoes (31 individual sizes):
+     - Infant/Toddler: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+     - Little Kids: 10.5, 11, 11.5, 12, 12.5, 13, 13.5
+     - Youth: 1Y, 1.5Y, 2Y, 2.5Y, 3Y, 3.5Y, 4Y, 4.5Y, 5Y, 5.5Y, 6Y, 6.5Y, 7Y
+   - Diapers (9 individual sizes): Preemie, Newborn, #1, #2, #3, #4, #5, #6, #7
 
 9. **Inventory Location:** Model will support multiple locations for future use, but location will NOT be exposed in Phase 1 UX.
 
