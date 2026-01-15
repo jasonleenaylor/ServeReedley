@@ -138,17 +138,21 @@ A messaging system allowing inventory users to post and resolve messages about i
 - `resolvedAt` - Timestamp when resolved
 - `createdAt` - Timestamp of creation
 
-#### Donor Model (New)
+#### TeamMember Model Enhancement
 
-Track individuals who have donated clothing or goods, linked to Breeze personas.
+Enhance the existing `TeamMember` model (which already has `breezeId`) to support donation tracking.
 
-**Proposed Fields:**
-- `id` - Unique identifier
-- `breezeId` - Link to Breeze persona (optional - for known donors)
-- `name` - Donor name
-- `notes` - Additional notes about the donor
-- `lastDonation` - Timestamp of most recent donation
-- `createdAt` - Timestamp of creation
+**Existing Fields:**
+- `breezeId` - Primary key (ID linking to Breeze persona)
+- `name` - Team member name
+- `asks` - Many-to-many relationship with TeamRequests
+- `fulfilled` - Requests fulfilled by this team member
+
+**New Fields to Add:**
+- `lastDonation` - Timestamp of most recent donation (optional)
+- `donationNotes` - Notes about donations from this person (optional)
+
+> **Note:** This approach reuses the existing TeamMember model rather than creating a separate Donor model, since team members and donors are both linked to Breeze personas.
 
 ### Phase 1 Features
 
@@ -164,10 +168,10 @@ Track individuals who have donated clothing or goods, linked to Breeze personas.
 - Resolve messages when the concern has been addressed
 - View message history (resolved messages)
 
-**Donor Tracking:**
-- Add new donors (optionally linked to Breeze persona)
-- View list of donors
-- Record when donations are received (updates `lastDonation` timestamp)
+**Donation Tracking:**
+- View team members who have donated (those with `lastDonation` set)
+- Record when donations are received from a team member (updates `lastDonation` timestamp)
+- Uses existing TeamMember model (linked to Breeze personas)
 
 **UX Requirements:**
 - **Desktop Experience:** Focused on overall inventory management, bulk operations, and comprehensive views
@@ -246,7 +250,7 @@ The following decisions have been confirmed:
 
 10. **Condition Tracking:** Not needed. Condition tracking is unnecessary for this use case.
 
-11. **Donation Tracking:** Per-item donation tracking is unnecessary. Instead, a separate Donor model will track individuals who have donated (optionally linked to Breeze personas).
+11. **Donation Tracking:** Per-item donation tracking is unnecessary. Instead, enhance the existing `TeamMember` model (which already has `breezeId`) to track donation history by adding `lastDonation` and `donationNotes` fields.
 
 12. **Messaging System:** Phase 1 will include a messaging system where users can post and resolve messages about inventory concerns.
 
@@ -256,10 +260,10 @@ The following decisions have been confirmed:
 
 ### Phase 1 Implementation
 1. ✅ **All decisions resolved** - Ready to begin implementation
-2. **Design GraphQL schema** - For ClothingInventory, InventoryMessage, and Donor models
+2. **Design GraphQL schema** - For ClothingInventory, InventoryMessage models + TeamMember enhancements
 3. **Implement inventory management page** - CRUD operations for inventory items
 4. **Implement messaging system** - Post/resolve messages
-5. **Implement donor tracking** - Manage donors with optional Breeze linking
+5. **Implement donation tracking** - Enhance TeamMember model with donation fields
 6. **Test and deploy Phase 1**
 
 ### Phase 2 Implementation (Future)

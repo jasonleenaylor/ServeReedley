@@ -17,14 +17,15 @@ This document outlines the implementation tasks for Phase 1 of the Clothing Inve
 - [ ] **1.2** Add `InventoryMessage` type to GraphQL schema
   - Fields: id, content, authorId, authorName, resolved, resolvedBy, resolvedAt, createdAt
 
-- [ ] **1.3** Add `Donor` type to GraphQL schema
-  - Fields: id, breezeId, name, notes, lastDonation, createdAt
+- [ ] **1.3** Enhance existing `TeamMember` type in GraphQL schema
+  - Add new fields: lastDonation, donationNotes
+  - No new model needed - reuses existing TeamMember with breezeId
 
 - [ ] **1.4** Create GraphQL queries
   - `listClothingInventory` - List all inventory items (with filtering)
   - `getClothingInventory` - Get single inventory item
   - `listInventoryMessages` - List messages (filter by resolved status)
-  - `listDonors` - List all donors
+  - `listTeamMembers` (existing) - Filter by lastDonation to show donors
 
 - [ ] **1.5** Create GraphQL mutations
   - `createClothingInventory` - Add new inventory item
@@ -32,8 +33,7 @@ This document outlines the implementation tasks for Phase 1 of the Clothing Inve
   - `deleteClothingInventory` - Remove inventory item
   - `createInventoryMessage` - Post new message
   - `resolveInventoryMessage` - Mark message as resolved
-  - `createDonor` - Add new donor
-  - `updateDonor` - Update donor info
+  - `updateTeamMember` (existing) - Update donation info (lastDonation, donationNotes)
 
 - [ ] **1.6** Run `amplify push` to deploy schema changes
 
@@ -98,24 +98,20 @@ This document outlines the implementation tasks for Phase 1 of the Clothing Inve
   - Toggle to show resolved messages
   - Different styling for resolved vs active
 
-### 5. Frontend: Donor Tracking
+### 5. Frontend: Donation Tracking (via TeamMember)
 
 - [ ] **5.1** Create `DonorList.tsx` component
-  - Display list of all donors
-  - Show name, last donation date, notes
+  - Display list of team members who have donated (lastDonation is set)
+  - Show name, last donation date, donation notes
 
-- [ ] **5.2** Implement "Add Donor" dialog
-  - Name input (required)
-  - Breeze ID input (optional)
-  - Notes textarea
+- [ ] **5.2** Implement "Record Donation" functionality
+  - Select team member from Breeze lookup
+  - Update lastDonation timestamp
+  - Add/update donationNotes
 
-- [ ] **5.3** Implement "Edit Donor" functionality
-  - Update donor information
-  - Record new donation (update lastDonation timestamp)
-
-- [ ] **5.4** Implement Breeze persona lookup (optional enhancement)
+- [ ] **5.3** Implement Breeze persona lookup
   - Search Breeze for matching persona
-  - Link donor to Breeze ID
+  - Create TeamMember record if not exists, or update existing
 
 ### 6. UX: Desktop & Mobile Optimization
 
@@ -128,7 +124,7 @@ This document outlines the implementation tasks for Phase 1 of the Clothing Inve
   - Mobile: Collapsible section or separate tab
 
 - [ ] **6.3** Implement responsive layout for donor list
-  - Desktop: Table view
+  - Desktop: Table view of team members with donation history
   - Mobile: Compact list view
 
 - [ ] **6.4** Test on various screen sizes
@@ -144,12 +140,12 @@ This document outlines the implementation tasks for Phase 1 of the Clothing Inve
 
 - [ ] **7.3** Write component tests for messaging system
 
-- [ ] **7.4** Write component tests for donor tracking
+- [ ] **7.4** Write component tests for donation tracking (TeamMember enhancement)
 
 - [ ] **7.5** Manual testing of full workflow
   - Add/edit/delete inventory items
   - Post/resolve messages
-  - Add/edit donors
+  - Record donations for team members
 
 ### 8. Deployment
 
@@ -212,3 +208,4 @@ This document outlines the implementation tasks for Phase 1 of the Clothing Inve
 - Location field is modeled in the data but NOT exposed in Phase 1 UX
 - Access control: All authenticated coordinators have access
 - Phase 2 will add team page integration and donation request workflow
+- **Donation tracking uses the existing TeamMember model (with breezeId) rather than a separate Donor model**
