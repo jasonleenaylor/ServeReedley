@@ -45,23 +45,125 @@ import { Authenticator } from '@aws-amplify/ui-react';
 import { generateClient } from 'aws-amplify/api';
 import {
   ClothingCategory,
+  CLOTHING_CATEGORY_LABELS,
   getSizesForCategory,
   getAllCategories,
   getCategoryLabel,
 } from './inventorySizes';
 
-// Import auto-generated GraphQL operations
-import {
-  listClothingInventories,
-  listInventoryMessages,
-} from './graphql/queries';
-import {
-  createClothingInventory,
-  updateClothingInventory,
-  deleteClothingInventory,
-  createInventoryMessage,
-  updateInventoryMessage,
-} from './graphql/mutations';
+// GraphQL operations will be auto-generated after amplify push
+// For now, we'll define them inline
+const listClothingInventory = /* GraphQL */ `
+  query ListClothingInventory(
+    $filter: ModelClothingInventoryFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClothingInventories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        category
+        size
+        quantity
+        location
+        notes
+        lastUpdated
+        createdAt
+      }
+      nextToken
+    }
+  }
+`;
+
+const createClothingInventory = /* GraphQL */ `
+  mutation CreateClothingInventory($input: CreateClothingInventoryInput!) {
+    createClothingInventory(input: $input) {
+      id
+      category
+      size
+      quantity
+      location
+      notes
+      lastUpdated
+      createdAt
+    }
+  }
+`;
+
+const updateClothingInventory = /* GraphQL */ `
+  mutation UpdateClothingInventory($input: UpdateClothingInventoryInput!) {
+    updateClothingInventory(input: $input) {
+      id
+      category
+      size
+      quantity
+      location
+      notes
+      lastUpdated
+      createdAt
+    }
+  }
+`;
+
+const deleteClothingInventory = /* GraphQL */ `
+  mutation DeleteClothingInventory($input: DeleteClothingInventoryInput!) {
+    deleteClothingInventory(input: $input) {
+      id
+    }
+  }
+`;
+
+const listInventoryMessages = /* GraphQL */ `
+  query ListInventoryMessages(
+    $filter: ModelInventoryMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listInventoryMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        content
+        authorId
+        authorName
+        resolved
+        resolvedBy
+        resolvedAt
+        createdAt
+      }
+      nextToken
+    }
+  }
+`;
+
+const createInventoryMessage = /* GraphQL */ `
+  mutation CreateInventoryMessage($input: CreateInventoryMessageInput!) {
+    createInventoryMessage(input: $input) {
+      id
+      content
+      authorId
+      authorName
+      resolved
+      resolvedBy
+      resolvedAt
+      createdAt
+    }
+  }
+`;
+
+const updateInventoryMessage = /* GraphQL */ `
+  mutation UpdateInventoryMessage($input: UpdateInventoryMessageInput!) {
+    updateInventoryMessage(input: $input) {
+      id
+      content
+      authorId
+      authorName
+      resolved
+      resolvedBy
+      resolvedAt
+      createdAt
+    }
+  }
+`;
 
 // Types
 interface InventoryItem {
@@ -144,7 +246,7 @@ const ClothingInventoryPage: React.FC = () => {
   const fetchInventory = useCallback(async () => {
     try {
       const result = await client.graphql({
-        query: listClothingInventories,
+        query: listClothingInventory,
         variables: { limit: 1000 },
       }) as { data: { listClothingInventories: { items: InventoryItem[] } } };
       setInventory(result.data.listClothingInventories.items || []);
