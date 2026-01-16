@@ -1135,6 +1135,162 @@ export enum ModelSortDirection {
   DESC = "DESC",
 }
 
+export enum ClothingCategory {
+  CHILDRENS_SOCKS = "CHILDRENS_SOCKS",
+  CHILDRENS_UNDERWEAR = "CHILDRENS_UNDERWEAR",
+  KIDS_SHOES = "KIDS_SHOES",
+  DIAPERS = "DIAPERS",
+}
+
+export type CreateClothingInventoryInput = {
+  id?: string | null,
+  category: ClothingCategory,
+  size: string,
+  quantity: number,
+  location?: string | null,
+  notes?: string | null,
+  lastUpdated?: string | null,
+};
+
+export type ModelClothingInventoryConditionInput = {
+  category?: ModelClothingCategoryInput | null,
+  size?: ModelStringInput | null,
+  quantity?: ModelIntInput | null,
+  location?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  lastUpdated?: ModelStringInput | null,
+  and?: Array< ModelClothingInventoryConditionInput | null > | null,
+  or?: Array< ModelClothingInventoryConditionInput | null > | null,
+  not?: ModelClothingInventoryConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelClothingCategoryInput = {
+  eq?: ClothingCategory | null,
+  ne?: ClothingCategory | null,
+};
+
+export type ClothingInventory = {
+  __typename: "ClothingInventory",
+  id: string,
+  category: ClothingCategory,
+  size: string,
+  quantity: number,
+  location?: string | null,
+  notes?: string | null,
+  lastUpdated?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateClothingInventoryInput = {
+  id: string,
+  category?: ClothingCategory | null,
+  size?: string | null,
+  quantity?: number | null,
+  location?: string | null,
+  notes?: string | null,
+  lastUpdated?: string | null,
+};
+
+export type DeleteClothingInventoryInput = {
+  id: string,
+};
+
+export type CreateInventoryMessageInput = {
+  id?: string | null,
+  content: string,
+  authorId: string,
+  authorName: string,
+  resolved: boolean,
+  resolvedBy?: string | null,
+  resolvedAt?: string | null,
+};
+
+export type ModelInventoryMessageConditionInput = {
+  content?: ModelStringInput | null,
+  authorId?: ModelStringInput | null,
+  authorName?: ModelStringInput | null,
+  resolved?: ModelBooleanInput | null,
+  resolvedBy?: ModelStringInput | null,
+  resolvedAt?: ModelStringInput | null,
+  and?: Array< ModelInventoryMessageConditionInput | null > | null,
+  or?: Array< ModelInventoryMessageConditionInput | null > | null,
+  not?: ModelInventoryMessageConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type InventoryMessage = {
+  __typename: "InventoryMessage",
+  id: string,
+  content: string,
+  authorId: string,
+  authorName: string,
+  resolved: boolean,
+  resolvedBy?: string | null,
+  resolvedAt?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateInventoryMessageInput = {
+  id: string,
+  content?: string | null,
+  authorId?: string | null,
+  authorName?: string | null,
+  resolved?: boolean | null,
+  resolvedBy?: string | null,
+  resolvedAt?: string | null,
+};
+
+export type DeleteInventoryMessageInput = {
+  id: string,
+};
+
+export type ModelClothingInventoryFilterInput = {
+  id?: ModelIDInput | null,
+  category?: ModelClothingCategoryInput | null,
+  size?: ModelStringInput | null,
+  quantity?: ModelIntInput | null,
+  location?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  lastUpdated?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelClothingInventoryFilterInput | null > | null,
+  or?: Array< ModelClothingInventoryFilterInput | null > | null,
+  not?: ModelClothingInventoryFilterInput | null,
+};
+
+export type ModelClothingInventoryConnection = {
+  __typename: "ModelClothingInventoryConnection",
+  items:  Array<ClothingInventory | null >,
+  nextToken?: string | null,
+};
+
+export type ModelInventoryMessageFilterInput = {
+  id?: ModelIDInput | null,
+  content?: ModelStringInput | null,
+  authorId?: ModelStringInput | null,
+  authorName?: ModelStringInput | null,
+  resolved?: ModelBooleanInput | null,
+  resolvedBy?: ModelStringInput | null,
+  resolvedAt?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelInventoryMessageFilterInput | null > | null,
+  or?: Array< ModelInventoryMessageFilterInput | null > | null,
+  not?: ModelInventoryMessageFilterInput | null,
+};
+
+export type ModelInventoryMessageConnection = {
+  __typename: "ModelInventoryMessageConnection",
+  items:  Array<InventoryMessage | null >,
+  nextToken?: string | null,
+};
+
 
 export type ModelTeamMemberConnection = {
   __typename: "ModelTeamMemberConnection",
@@ -4048,6 +4204,126 @@ export type DeleteAskedMembersMutation = {
       createdAt: string,
       updatedAt: string,
     },
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateClothingInventoryMutationVariables = {
+  input: CreateClothingInventoryInput,
+  condition?: ModelClothingInventoryConditionInput | null,
+};
+
+export type CreateClothingInventoryMutation = {
+  createClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateClothingInventoryMutationVariables = {
+  input: UpdateClothingInventoryInput,
+  condition?: ModelClothingInventoryConditionInput | null,
+};
+
+export type UpdateClothingInventoryMutation = {
+  updateClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteClothingInventoryMutationVariables = {
+  input: DeleteClothingInventoryInput,
+  condition?: ModelClothingInventoryConditionInput | null,
+};
+
+export type DeleteClothingInventoryMutation = {
+  deleteClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateInventoryMessageMutationVariables = {
+  input: CreateInventoryMessageInput,
+  condition?: ModelInventoryMessageConditionInput | null,
+};
+
+export type CreateInventoryMessageMutation = {
+  createInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateInventoryMessageMutationVariables = {
+  input: UpdateInventoryMessageInput,
+  condition?: ModelInventoryMessageConditionInput | null,
+};
+
+export type UpdateInventoryMessageMutation = {
+  updateInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteInventoryMessageMutationVariables = {
+  input: DeleteInventoryMessageInput,
+  condition?: ModelInventoryMessageConditionInput | null,
+};
+
+export type DeleteInventoryMessageMutation = {
+  deleteInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -8206,5 +8482,93 @@ export type OnDeleteAskedMembersSubscription = {
     },
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetClothingInventoryQueryVariables = {
+  id: string,
+};
+
+export type GetClothingInventoryQuery = {
+  getClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListClothingInventoriesQueryVariables = {
+  filter?: ModelClothingInventoryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListClothingInventoriesQuery = {
+  listClothingInventories?:  {
+    __typename: "ModelClothingInventoryConnection",
+    items:  Array< {
+      __typename: "ClothingInventory",
+      id: string,
+      category: ClothingCategory,
+      size: string,
+      quantity: number,
+      location?: string | null,
+      notes?: string | null,
+      lastUpdated?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetInventoryMessageQueryVariables = {
+  id: string,
+};
+
+export type GetInventoryMessageQuery = {
+  getInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListInventoryMessagesQueryVariables = {
+  filter?: ModelInventoryMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListInventoryMessagesQuery = {
+  listInventoryMessages?:  {
+    __typename: "ModelInventoryMessageConnection",
+    items:  Array< {
+      __typename: "InventoryMessage",
+      id: string,
+      content: string,
+      authorId: string,
+      authorName: string,
+      resolved: boolean,
+      resolvedBy?: string | null,
+      resolvedAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };

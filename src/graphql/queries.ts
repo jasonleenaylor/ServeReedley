@@ -1557,3 +1557,91 @@ export const listAskedMembers = /* GraphQL */ `query ListAskedMembers(
   APITypes.ListAskedMembersQueryVariables,
   APITypes.ListAskedMembersQuery
 >;
+export const getClothingInventory = /* GraphQL */ `query GetClothingInventory($id: ID!) {
+  getClothingInventory(id: $id) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetClothingInventoryQueryVariables,
+  APITypes.GetClothingInventoryQuery
+>;
+export const listClothingInventories = /* GraphQL */ `query ListClothingInventories(
+  $filter: ModelClothingInventoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listClothingInventories(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      category
+      size
+      quantity
+      location
+      notes
+      lastUpdated
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListClothingInventoriesQueryVariables,
+  APITypes.ListClothingInventoriesQuery
+>;
+export const getInventoryMessage = /* GraphQL */ `query GetInventoryMessage($id: ID!) {
+  getInventoryMessage(id: $id) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetInventoryMessageQueryVariables,
+  APITypes.GetInventoryMessageQuery
+>;
+export const listInventoryMessages = /* GraphQL */ `query ListInventoryMessages(
+  $filter: ModelInventoryMessageFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInventoryMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      content
+      authorId
+      authorName
+      resolved
+      resolvedBy
+      resolvedAt
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListInventoryMessagesQueryVariables,
+  APITypes.ListInventoryMessagesQuery
+>;
