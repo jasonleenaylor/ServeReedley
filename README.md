@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## For AI agents
+
+Agents: start with [AGENTS.md](AGENTS.md). Full context and workflows are in `docs/` (tool-agnostic). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for project overview, build/test commands, and conventions; see [docs/workflows/](docs/workflows/) for step-by-step workflows (e.g. update GraphQL model, change a Lambda).
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -21,7 +25,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `dist/` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
