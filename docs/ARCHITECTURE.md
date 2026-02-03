@@ -1,4 +1,4 @@
-# ServeReedley — Project architecture and context
+# ServeReedley - Project architecture and context
 
 ## Repository overview
 
@@ -56,7 +56,7 @@ This mock allows builds but will not connect to real AWS services. For actual de
 ```bash
 npm install
 ```
-**Time:** ~45–60 seconds. Always run this first in a fresh clone. May show 2 moderate severity vulnerabilities (expected).
+**Time:** ~45-60 seconds. Always run this first in a fresh clone. May show 2 moderate severity vulnerabilities (expected).
 
 ### Development server
 ```bash
@@ -68,13 +68,13 @@ Runs `vite`. Port: http://localhost:3000. Hot-reloading enabled. Requires `src/a
 ```bash
 npm run build
 ```
-Runs `vite build`. Time: ~15–20 seconds. Output: `dist/` directory. Requires `src/aws-exports.js`. May show chunk size warning (expected). Bundle ~2.3MB JS (gzipped ~645KB).
+Runs `vite build`. Time: ~15-20 seconds. Output: `dist/` directory. Requires `src/aws-exports.js`. May show chunk size warning (expected). Bundle ~2.3MB JS (gzipped ~645KB).
 
 ### Run tests
 ```bash
 npm test
 ```
-Runs `vitest`. Time: ~2–3 seconds. Current status: 4 tests pass (App.test.tsx, TeamList.test.tsx). Uses jsdom; setup: `src/setupTests.ts`. Watch mode by default. React Router future flag warnings are non-blocking.
+Runs `vitest`. Time: ~2-3 seconds. Current status: 4 tests pass (App.test.tsx, TeamList.test.tsx). Uses jsdom; setup: `src/setupTests.ts`. Watch mode by default. React Router future flag warnings are non-blocking.
 
 ### Linting and TypeScript
 - **ESLint:** Inline in `package.json` (extends `react-app`, `react-app/jest`). No separate lint command; runs during build. See `.eslintignore`.
@@ -84,38 +84,38 @@ Runs `vitest`. Time: ~2–3 seconds. Current status: 4 tests pass (App.test.tsx,
 
 ```
 /
-├── .github/                    # GitHub configuration, workflows
-├── .vscode/                    # VS Code settings (format on save)
-├── amplify/                    # AWS Amplify backend
-│   ├── backend/
-│   │   ├── api/crn/            # AppSync GraphQL API
-│   │   │   └── schema.graphql  # GraphQL schema
-│   │   ├── auth/               # Cognito (crnAuth, userPoolGroups)
-│   │   └── function/           # Lambda functions (6)
-│   │       ├── NotifyCoordinators/
-│   │       ├── NotifyTeamOnRequest/
-│   │       ├── findlatlong/
-│   │       ├── getUserContactInfo/
-│   │       ├── listPeopleOnTeam/
-│   │       └── sendReminders/
-│   ├── .config/project-config.json
-│   └── cli.json
-├── docs/                       # Agent and project documentation
-├── public/                     # Static assets
-├── src/                        # React TypeScript source
-│   ├── graphql/                # Auto-generated GraphQL
-│   ├── data/                    # Static data (areasOfConcern.json)
-│   ├── en.json, es.json        # i18n
-│   └── [.tsx/.ts components and utilities]
-├── mapdata/                    # KML geographical data
-├── index.html, package.json, vite.config.ts, vitest.config.ts, tsconfig.json
-└── .graphqlconfig.yml          # GraphQL codegen
+|-- .github/                    # GitHub configuration, workflows
+|-- .vscode/                    # VS Code settings (format on save)
+|-- amplify/                    # AWS Amplify backend
+|   |-- backend/
+|   |   |-- api/crn/            # AppSync GraphQL API
+|   |   |   |-- schema.graphql  # GraphQL schema
+|   |   |-- auth/               # Cognito (crnAuth, userPoolGroups)
+|   |   |-- function/           # Lambda functions (6)
+|   |       |-- NotifyCoordinators/
+|   |       |-- NotifyTeamOnRequest/
+|   |       |-- findlatlong/
+|   |       |-- getUserContactInfo/
+|   |       |-- listPeopleOnTeam/
+|   |       |-- sendReminders/
+|   |-- .config/project-config.json
+|   |-- cli.json
+|-- docs/                       # Agent and project documentation
+|-- public/                     # Static assets
+|-- src/                        # React TypeScript source
+|   |-- graphql/                # Auto-generated GraphQL
+|   |-- data/                   # Static data (areasOfConcern.json)
+|   |-- en.json, es.json        # i18n
+|   |-- [.tsx/.ts components and utilities]
+|-- mapdata/                    # KML geographical data
+|-- index.html, package.json, vite.config.ts, vitest.config.ts, tsconfig.json
+|-- .graphqlconfig.yml          # GraphQL codegen
 ```
 
 ## Key source files
 
-- **Entry:** `src/index.tsx` → renders `<App />` into `#root`
-- **App:** `src/App.tsx` — routes: `/` (redirect), `/request-need`, `/need-submitted`, `/requests` (auth), `/reports` (auth), `/teams` (auth), `/team`
+- **Entry:** `src/index.tsx` -> renders `<App />` into `#root`
+- **App:** `src/App.tsx` - routes: `/` (redirect), `/request-need`, `/need-submitted`, `/requests` (auth), `/reports` (auth), `/teams` (auth), `/team`
 - **Core components:** `needRequestForm.tsx`, `NeedRequestTable.tsx`, `ReportForm.tsx`, `TeamPicker.tsx`, `TeamManagementForm.tsx`, `UpdateRequestDialog.tsx`
 - **Data:** `API.ts` (generated), `RequestAPI.ts`, `needRequestTypes.ts`
 - **Utilities:** `theme.ts`, `i18n.ts`, `useRequestCounts.ts`, `useRequestsById.ts`, `useTeams.ts`
@@ -132,17 +132,17 @@ Runs `vitest`. Time: ~2–3 seconds. Current status: 4 tests pass (App.test.tsx,
 
 Each has its own `package.json` in `amplify/backend/function/<name>/src/`. Run `npm install` in that `src/` when changing code or dependencies.
 
-1. **getUserContactInfo** — User contact info (axios)
-2. **listPeopleOnTeam** — Team members
-3. **NotifyTeamOnRequest** — Notifications when requests assigned
-4. **NotifyCoordinators** — New request alerts
-5. **sendReminders** — Scheduled reminder emails
-6. **findlatlong** — Geocoding
+1. **getUserContactInfo** - User contact info (axios)
+2. **listPeopleOnTeam** - Team members
+3. **NotifyTeamOnRequest** - Notifications when requests assigned
+4. **NotifyCoordinators** - New request alerts
+5. **sendReminders** - Scheduled reminder emails
+6. **findlatlong** - Geocoding
 
 ## Environment
 
-- `.env.development` → `VITE_FUNCTION_ENV=dev`
-- `.env.production` → `VITE_FUNCTION_ENV=prod`  
+- `.env.development` -> `VITE_FUNCTION_ENV=dev`
+- `.env.production` -> `VITE_FUNCTION_ENV=prod`  
 Vite loads by mode.
 
 ## CI/CD
@@ -153,9 +153,9 @@ Vite loads by mode.
 ## Do-not-edit list
 
 **Auto-generated (do not edit):**
-- `src/API.ts` — regenerated by `amplify push` (codegen output; see `.graphqlconfig.yml`)
-- `src/graphql/*.ts` — regenerated by Amplify codegen
-- `src/aws-exports.js` — from `amplify pull` if present
+- `src/API.ts` - regenerated by `amplify push` (codegen output; see `.graphqlconfig.yml`)
+- `src/graphql/*.ts` - regenerated by Amplify codegen
+- `src/aws-exports.js` - from `amplify pull` if present
 - `amplify/backend/amplify-meta.json`
 - `amplify/#current-cloud-backend/`
 
@@ -180,6 +180,6 @@ Vite loads by mode.
 - **Pre-commit:** `npm install`, `npm test`, `npm run build` (with aws-exports).
 - **GraphQL update:** See [docs/workflows/UPDATE_GRAPHQL_MODEL.md](workflows/UPDATE_GRAPHQL_MODEL.md).
 - **New UX after a GraphQL model change:** Complete [UPDATE_GRAPHQL_MODEL.md](workflows/UPDATE_GRAPHQL_MODEL.md) (including codegen verification) first; then see [NEW_UX_WITH_GRAPHQL_MODEL.md](workflows/NEW_UX_WITH_GRAPHQL_MODEL.md) for where to add routes, components, and i18n.
-- **Lambda change:** See [docs/workflows/CHANGE_LAMBDA.md](workflows/CHANGE_LAMBDA.md).
+- **Lambda change:** Edit under `amplify/backend/function/<name>/src/`; run `npm install` in that `src/` if deps changed (see Lambda functions section above).
 
-**Performance:** Install ~60s, build ~15–20s, test ~2–3s, dev server ~2–3s.
+**Performance:** Install ~60s, build ~15-20s, test ~2-3s, dev server ~2-3s.

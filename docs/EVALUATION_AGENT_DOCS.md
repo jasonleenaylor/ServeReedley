@@ -10,7 +10,7 @@ Evaluation of all agent-related markdown against the repository contents and Amp
 
 **Issue:** ARCHITECTURE lists "Team, TeamPeople" but the schema defines **Team**, **TeamMember**, and **TeamRequest** (no type named TeamPeople). It also omits **SelfOrOtherInfo**, which is a top-level model in the schema.
 
-**Location:** docs/ARCHITECTURE.md, "GraphQL API" → "Models" bullet.
+**Location:** docs/ARCHITECTURE.md, "GraphQL API" -> "Models" bullet.
 
 **Fix:** Update to: Request, NoteType, SelfOrOtherInfo, FoodInfo, MovingInfo, HomeRepairType, HouseholdItems, Team, TeamMember, TeamRequest (and enums like LeadSource, NeedReason, NeedType, RequestStatus as needed).
 
@@ -79,16 +79,16 @@ To make it reliable for agents to **implement a new UX backed by a GraphQL model
 
 Add **docs/workflows/NEW_UX_WITH_GRAPHQL_MODEL.md** (or equivalent) that ties together in one place:
 
-1. **Schema change** — Same as UPDATE_GRAPHQL_MODEL: pull, edit `amplify/backend/api/crn/schema.graphql`, push, accept codegen.
+1. **Schema change** - Same as UPDATE_GRAPHQL_MODEL: pull, edit `amplify/backend/api/crn/schema.graphql`, push, accept codegen.
 2. **Where to add UX:**
    - **Routes:** Add a new `<Route path="..." element={...} />` in `src/App.tsx` (same pattern as `/request-need`, `/requests`, etc.).
    - **Components:** Add new components under `src/` (e.g. `NewFeatureForm.tsx`). Use existing patterns: functional components, hooks, MUI from `@mui/material`, theme from `src/theme`.
-   - **Types:** Use generated types from `src/API.ts` (or the project’s chosen layer, e.g. RequestAPI.ts if that’s the canonical re-export). For form/display types, align with `needRequestTypes.ts` patterns if applicable.
+   - **Types:** Use generated types from `src/API.ts` (or the project's chosen layer, e.g. RequestAPI.ts if that's the canonical re-export). For form/display types, align with `needRequestTypes.ts` patterns if applicable.
    - **Data:** Use GraphQL operations from `src/graphql/` (queries/mutations/subscriptions); use Amplify API (e.g. generated client) as in existing components (NeedRequestTable, ReportForm, TeamPicker).
 3. **i18n:** Add keys to `src/en.json` and `src/es.json`; use `useTranslation()` and `t('key')` as in needRequestForm and App.
 4. **Auth:** If the new UX is coordinator-only, protect the route (e.g. same pattern as `/requests` or `/reports`); if public, follow `/request-need` pattern.
 5. **Testing:** Add a test file (e.g. `NewFeature.test.tsx`) following `App.test.tsx` / `TeamList.test.tsx` / `TeamPicker.test.tsx`; mock Amplify/GraphQL as in existing tests. Run `npm test` and `npm run build`.
-6. **Caveats:** Same as UPDATE_GRAPHQL_MODEL (avoid test data the current frontend doesn’t support; run full test suite and smoke test).
+6. **Caveats:** Same as UPDATE_GRAPHQL_MODEL (avoid test data the current frontend doesn't support; run full test suite and smoke test).
 
 This gives agents one place to look for "new screen + new model" instead of inferring from UPDATE_GRAPHQL_MODEL plus codebase exploration.
 
@@ -118,7 +118,7 @@ In ARCHITECTURE or in the new workflow, add a short "Example slice" subsection: 
 |------|--------|
 | docs/ARCHITECTURE.md | Fix GraphQL model list (TeamMember, TeamRequest, SelfOrOtherInfo); add CI/CD section; list all three test files; clarify RequestAPI.ts generated vs editable. |
 | README.md | Change "build folder" to "dist/ folder" for build output. |
-| .github/workflows/test.yml | Fix comment "v20" → "v22". |
+| .github/workflows/test.yml | Fix comment "v20" -> "v22". |
 | docs/workflows/NEW_UX_WITH_GRAPHQL_MODEL.md | Add (new file) end-to-end workflow for new UX + schema change, routes, components, i18n, tests. |
 | AGENTS.md | Add link to NEW_UX_WITH_GRAPHQL_MODEL (or chosen name) under workflows. |
 | docs/ARCHITECTURE.md | Link new workflow under "Validation and workflows". |
