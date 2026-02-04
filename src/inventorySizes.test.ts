@@ -29,7 +29,7 @@ describe('inventorySizes', () => {
 
   describe('Category labels', () => {
     it('should have labels for all categories', () => {
-      const categories = Object.values(ClothingCategory);
+      const categories = Object.values(ClothingCategory) as ClothingCategory[];
       categories.forEach(cat => {
         expect(CLOTHING_CATEGORY_LABELS[cat]).toBeDefined();
         expect(typeof CLOTHING_CATEGORY_LABELS[cat]).toBe('string');
@@ -147,7 +147,7 @@ describe('inventorySizes', () => {
 
   describe('CATEGORY_SIZES mapping', () => {
     it('should have all categories mapped', () => {
-      const categories = Object.values(ClothingCategory);
+      const categories = Object.values(ClothingCategory) as ClothingCategory[];
       categories.forEach(cat => {
         expect(CATEGORY_SIZES[cat]).toBeDefined();
         expect(Array.isArray(CATEGORY_SIZES[cat])).toBe(true);
