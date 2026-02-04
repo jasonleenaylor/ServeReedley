@@ -21,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.1
       
-      # Security: Use Node.js version matching repository requirements (v20)
+      # Security: Use Node.js version matching repository requirements (v22)
       - name: Setup Node.js
         uses: actions/setup-node@v4.0.2
         with:
