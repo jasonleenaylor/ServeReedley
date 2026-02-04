@@ -1114,6 +1114,8 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1198,6 +1200,8 @@ export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -1221,6 +1225,8 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1305,6 +1311,8 @@ export const onUpdateTeamMember = /* GraphQL */ `subscription OnUpdateTeamMember
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -1328,6 +1336,8 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1412,6 +1422,8 @@ export const onDeleteTeamMember = /* GraphQL */ `subscription OnDeleteTeamMember
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -1582,6 +1594,8 @@ export const onCreateTeamRequest = /* GraphQL */ `subscription OnCreateTeamReque
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1776,6 +1790,8 @@ export const onUpdateTeamRequest = /* GraphQL */ `subscription OnUpdateTeamReque
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1970,6 +1986,8 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -2002,6 +2020,126 @@ export const onDeleteTeamRequest = /* GraphQL */ `subscription OnDeleteTeamReque
 ` as GeneratedSubscription<
   APITypes.OnDeleteTeamRequestSubscriptionVariables,
   APITypes.OnDeleteTeamRequestSubscription
+>;
+export const onCreateClothingInventory = /* GraphQL */ `subscription OnCreateClothingInventory(
+  $filter: ModelSubscriptionClothingInventoryFilterInput
+) {
+  onCreateClothingInventory(filter: $filter) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateClothingInventorySubscriptionVariables,
+  APITypes.OnCreateClothingInventorySubscription
+>;
+export const onUpdateClothingInventory = /* GraphQL */ `subscription OnUpdateClothingInventory(
+  $filter: ModelSubscriptionClothingInventoryFilterInput
+) {
+  onUpdateClothingInventory(filter: $filter) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateClothingInventorySubscriptionVariables,
+  APITypes.OnUpdateClothingInventorySubscription
+>;
+export const onDeleteClothingInventory = /* GraphQL */ `subscription OnDeleteClothingInventory(
+  $filter: ModelSubscriptionClothingInventoryFilterInput
+) {
+  onDeleteClothingInventory(filter: $filter) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteClothingInventorySubscriptionVariables,
+  APITypes.OnDeleteClothingInventorySubscription
+>;
+export const onCreateInventoryMessage = /* GraphQL */ `subscription OnCreateInventoryMessage(
+  $filter: ModelSubscriptionInventoryMessageFilterInput
+) {
+  onCreateInventoryMessage(filter: $filter) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateInventoryMessageSubscriptionVariables,
+  APITypes.OnCreateInventoryMessageSubscription
+>;
+export const onUpdateInventoryMessage = /* GraphQL */ `subscription OnUpdateInventoryMessage(
+  $filter: ModelSubscriptionInventoryMessageFilterInput
+) {
+  onUpdateInventoryMessage(filter: $filter) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateInventoryMessageSubscriptionVariables,
+  APITypes.OnUpdateInventoryMessageSubscription
+>;
+export const onDeleteInventoryMessage = /* GraphQL */ `subscription OnDeleteInventoryMessage(
+  $filter: ModelSubscriptionInventoryMessageFilterInput
+) {
+  onDeleteInventoryMessage(filter: $filter) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteInventoryMessageSubscriptionVariables,
+  APITypes.OnDeleteInventoryMessageSubscription
 >;
 export const onCreateAskedMembers = /* GraphQL */ `subscription OnCreateAskedMembers(
   $filter: ModelSubscriptionAskedMembersFilterInput
@@ -2042,6 +2180,8 @@ export const onCreateAskedMembers = /* GraphQL */ `subscription OnCreateAskedMem
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
@@ -2249,6 +2389,8 @@ export const onUpdateAskedMembers = /* GraphQL */ `subscription OnUpdateAskedMem
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
@@ -2456,6 +2598,8 @@ export const onDeleteAskedMembers = /* GraphQL */ `subscription OnDeleteAskedMem
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename

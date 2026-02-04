@@ -802,6 +802,8 @@ export type TeamMember = {
   name: string,
   asks?: ModelAskedMembersConnection | null,
   fulfilled?: ModelTeamRequestConnection | null,
+  lastDonation?: string | null,
+  donationNotes?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -820,10 +822,14 @@ export type DeleteTeamInput = {
 export type CreateTeamMemberInput = {
   breezeId: string,
   name: string,
+  lastDonation?: string | null,
+  donationNotes?: string | null,
 };
 
 export type ModelTeamMemberConditionInput = {
   name?: ModelStringInput | null,
+  lastDonation?: ModelStringInput | null,
+  donationNotes?: ModelStringInput | null,
   and?: Array< ModelTeamMemberConditionInput | null > | null,
   or?: Array< ModelTeamMemberConditionInput | null > | null,
   not?: ModelTeamMemberConditionInput | null,
@@ -834,6 +840,8 @@ export type ModelTeamMemberConditionInput = {
 export type UpdateTeamMemberInput = {
   breezeId: string,
   name?: string | null,
+  lastDonation?: string | null,
+  donationNotes?: string | null,
 };
 
 export type DeleteTeamMemberInput = {
@@ -878,6 +886,125 @@ export type UpdateTeamRequestInput = {
 };
 
 export type DeleteTeamRequestInput = {
+  id: string,
+};
+
+export type CreateClothingInventoryInput = {
+  id?: string | null,
+  category: ClothingCategory,
+  size: string,
+  quantity: number,
+  location?: string | null,
+  notes?: string | null,
+  lastUpdated?: string | null,
+  createdAt?: string | null,
+};
+
+export enum ClothingCategory {
+  CHILDRENS_SOCKS = "CHILDRENS_SOCKS",
+  CHILDRENS_UNDERWEAR = "CHILDRENS_UNDERWEAR",
+  KIDS_SHOES = "KIDS_SHOES",
+  DIAPERS = "DIAPERS",
+}
+
+
+export type ModelClothingInventoryConditionInput = {
+  category?: ModelClothingCategoryInput | null,
+  size?: ModelStringInput | null,
+  quantity?: ModelIntInput | null,
+  location?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  lastUpdated?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelClothingInventoryConditionInput | null > | null,
+  or?: Array< ModelClothingInventoryConditionInput | null > | null,
+  not?: ModelClothingInventoryConditionInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelClothingCategoryInput = {
+  eq?: ClothingCategory | null,
+  ne?: ClothingCategory | null,
+};
+
+export type ClothingInventory = {
+  __typename: "ClothingInventory",
+  id: string,
+  category: ClothingCategory,
+  size: string,
+  quantity: number,
+  location?: string | null,
+  notes?: string | null,
+  lastUpdated?: string | null,
+  createdAt?: string | null,
+  updatedAt: string,
+};
+
+export type UpdateClothingInventoryInput = {
+  id: string,
+  category?: ClothingCategory | null,
+  size?: string | null,
+  quantity?: number | null,
+  location?: string | null,
+  notes?: string | null,
+  lastUpdated?: string | null,
+  createdAt?: string | null,
+};
+
+export type DeleteClothingInventoryInput = {
+  id: string,
+};
+
+export type CreateInventoryMessageInput = {
+  id?: string | null,
+  content: string,
+  authorId: string,
+  authorName: string,
+  resolved: boolean,
+  resolvedBy?: string | null,
+  resolvedAt?: string | null,
+  createdAt?: string | null,
+};
+
+export type ModelInventoryMessageConditionInput = {
+  content?: ModelStringInput | null,
+  authorId?: ModelStringInput | null,
+  authorName?: ModelStringInput | null,
+  resolved?: ModelBooleanInput | null,
+  resolvedBy?: ModelStringInput | null,
+  resolvedAt?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelInventoryMessageConditionInput | null > | null,
+  or?: Array< ModelInventoryMessageConditionInput | null > | null,
+  not?: ModelInventoryMessageConditionInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type InventoryMessage = {
+  __typename: "InventoryMessage",
+  id: string,
+  content: string,
+  authorId: string,
+  authorName: string,
+  resolved: boolean,
+  resolvedBy?: string | null,
+  resolvedAt?: string | null,
+  createdAt?: string | null,
+  updatedAt: string,
+};
+
+export type UpdateInventoryMessageInput = {
+  id: string,
+  content?: string | null,
+  authorId?: string | null,
+  authorName?: string | null,
+  resolved?: boolean | null,
+  resolvedBy?: string | null,
+  resolvedAt?: string | null,
+  createdAt?: string | null,
+};
+
+export type DeleteInventoryMessageInput = {
   id: string,
 };
 
@@ -1122,6 +1249,8 @@ export type ModelTeamConnection = {
 export type ModelTeamMemberFilterInput = {
   breezeId?: ModelIDInput | null,
   name?: ModelStringInput | null,
+  lastDonation?: ModelStringInput | null,
+  donationNotes?: ModelStringInput | null,
   id?: ModelIDInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
@@ -1156,6 +1285,48 @@ export type ModelTeamRequestFilterInput = {
   and?: Array< ModelTeamRequestFilterInput | null > | null,
   or?: Array< ModelTeamRequestFilterInput | null > | null,
   not?: ModelTeamRequestFilterInput | null,
+};
+
+export type ModelClothingInventoryFilterInput = {
+  id?: ModelIDInput | null,
+  category?: ModelClothingCategoryInput | null,
+  size?: ModelStringInput | null,
+  quantity?: ModelIntInput | null,
+  location?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  lastUpdated?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelClothingInventoryFilterInput | null > | null,
+  or?: Array< ModelClothingInventoryFilterInput | null > | null,
+  not?: ModelClothingInventoryFilterInput | null,
+};
+
+export type ModelClothingInventoryConnection = {
+  __typename: "ModelClothingInventoryConnection",
+  items:  Array<ClothingInventory | null >,
+  nextToken?: string | null,
+};
+
+export type ModelInventoryMessageFilterInput = {
+  id?: ModelIDInput | null,
+  content?: ModelStringInput | null,
+  authorId?: ModelStringInput | null,
+  authorName?: ModelStringInput | null,
+  resolved?: ModelBooleanInput | null,
+  resolvedBy?: ModelStringInput | null,
+  resolvedAt?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelInventoryMessageFilterInput | null > | null,
+  or?: Array< ModelInventoryMessageFilterInput | null > | null,
+  not?: ModelInventoryMessageFilterInput | null,
+};
+
+export type ModelInventoryMessageConnection = {
+  __typename: "ModelInventoryMessageConnection",
+  items:  Array<InventoryMessage | null >,
+  nextToken?: string | null,
 };
 
 export type ModelAskedMembersFilterInput = {
@@ -1381,6 +1552,8 @@ export type ModelSubscriptionTeamFilterInput = {
 export type ModelSubscriptionTeamMemberFilterInput = {
   breezeId?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
+  lastDonation?: ModelSubscriptionStringInput | null,
+  donationNotes?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
@@ -1401,6 +1574,34 @@ export type ModelSubscriptionTeamRequestFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionTeamRequestFilterInput | null > | null,
   or?: Array< ModelSubscriptionTeamRequestFilterInput | null > | null,
+};
+
+export type ModelSubscriptionClothingInventoryFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  category?: ModelSubscriptionStringInput | null,
+  size?: ModelSubscriptionStringInput | null,
+  quantity?: ModelSubscriptionIntInput | null,
+  location?: ModelSubscriptionStringInput | null,
+  notes?: ModelSubscriptionStringInput | null,
+  lastUpdated?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionClothingInventoryFilterInput | null > | null,
+  or?: Array< ModelSubscriptionClothingInventoryFilterInput | null > | null,
+};
+
+export type ModelSubscriptionInventoryMessageFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  content?: ModelSubscriptionStringInput | null,
+  authorId?: ModelSubscriptionStringInput | null,
+  authorName?: ModelSubscriptionStringInput | null,
+  resolved?: ModelSubscriptionBooleanInput | null,
+  resolvedBy?: ModelSubscriptionStringInput | null,
+  resolvedAt?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionInventoryMessageFilterInput | null > | null,
+  or?: Array< ModelSubscriptionInventoryMessageFilterInput | null > | null,
 };
 
 export type ModelSubscriptionAskedMembersFilterInput = {
@@ -2550,6 +2751,8 @@ export type CreateTeamMemberMutation = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2631,6 +2834,8 @@ export type CreateTeamMemberMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2657,6 +2862,8 @@ export type UpdateTeamMemberMutation = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2738,6 +2945,8 @@ export type UpdateTeamMemberMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2764,6 +2973,8 @@ export type DeleteTeamMemberMutation = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -2845,6 +3056,8 @@ export type DeleteTeamMemberMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3018,6 +3231,8 @@ export type CreateTeamRequestMutation = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3212,6 +3427,8 @@ export type UpdateTeamRequestMutation = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3406,6 +3623,8 @@ export type DeleteTeamRequestMutation = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -3428,6 +3647,126 @@ export type DeleteTeamRequestMutation = {
       nextToken?: string | null,
     } | null,
     createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateClothingInventoryMutationVariables = {
+  input: CreateClothingInventoryInput,
+  condition?: ModelClothingInventoryConditionInput | null,
+};
+
+export type CreateClothingInventoryMutation = {
+  createClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateClothingInventoryMutationVariables = {
+  input: UpdateClothingInventoryInput,
+  condition?: ModelClothingInventoryConditionInput | null,
+};
+
+export type UpdateClothingInventoryMutation = {
+  updateClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteClothingInventoryMutationVariables = {
+  input: DeleteClothingInventoryInput,
+  condition?: ModelClothingInventoryConditionInput | null,
+};
+
+export type DeleteClothingInventoryMutation = {
+  deleteClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateInventoryMessageMutationVariables = {
+  input: CreateInventoryMessageInput,
+  condition?: ModelInventoryMessageConditionInput | null,
+};
+
+export type CreateInventoryMessageMutation = {
+  createInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateInventoryMessageMutationVariables = {
+  input: UpdateInventoryMessageInput,
+  condition?: ModelInventoryMessageConditionInput | null,
+};
+
+export type UpdateInventoryMessageMutation = {
+  updateInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteInventoryMessageMutationVariables = {
+  input: DeleteInventoryMessageInput,
+  condition?: ModelInventoryMessageConditionInput | null,
+};
+
+export type DeleteInventoryMessageMutation = {
+  deleteInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -3476,6 +3815,8 @@ export type CreateAskedMembersMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -3683,6 +4024,8 @@ export type UpdateAskedMembersMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -3890,6 +4233,8 @@ export type DeleteAskedMembersMutation = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -4806,6 +5151,8 @@ export type GetTeamMemberQuery = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -4887,6 +5234,8 @@ export type GetTeamMemberQuery = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -4936,6 +5285,8 @@ export type ListTeamMembersQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -5110,6 +5461,8 @@ export type GetTeamRequestQuery = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -5304,6 +5657,94 @@ export type ListTeamRequestsQuery = {
   } | null,
 };
 
+export type GetClothingInventoryQueryVariables = {
+  id: string,
+};
+
+export type GetClothingInventoryQuery = {
+  getClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListClothingInventoriesQueryVariables = {
+  filter?: ModelClothingInventoryFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListClothingInventoriesQuery = {
+  listClothingInventories?:  {
+    __typename: "ModelClothingInventoryConnection",
+    items:  Array< {
+      __typename: "ClothingInventory",
+      id: string,
+      category: ClothingCategory,
+      size: string,
+      quantity: number,
+      location?: string | null,
+      notes?: string | null,
+      lastUpdated?: string | null,
+      createdAt?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetInventoryMessageQueryVariables = {
+  id: string,
+};
+
+export type GetInventoryMessageQuery = {
+  getInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListInventoryMessagesQueryVariables = {
+  filter?: ModelInventoryMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListInventoryMessagesQuery = {
+  listInventoryMessages?:  {
+    __typename: "ModelInventoryMessageConnection",
+    items:  Array< {
+      __typename: "InventoryMessage",
+      id: string,
+      content: string,
+      authorId: string,
+      authorName: string,
+      resolved: boolean,
+      resolvedBy?: string | null,
+      resolvedAt?: string | null,
+      createdAt?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetAskedMembersQueryVariables = {
   id: string,
 };
@@ -5347,6 +5788,8 @@ export type GetAskedMembersQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -5536,6 +5979,8 @@ export type ListAskedMembersQuery = {
           __typename: "ModelTeamRequestConnection",
           nextToken?: string | null,
         } | null,
+        lastDonation?: string | null,
+        donationNotes?: string | null,
         createdAt: string,
         updatedAt: string,
       },
@@ -6714,6 +7159,8 @@ export type OnCreateTeamMemberSubscription = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -6795,6 +7242,8 @@ export type OnCreateTeamMemberSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -6820,6 +7269,8 @@ export type OnUpdateTeamMemberSubscription = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -6901,6 +7352,8 @@ export type OnUpdateTeamMemberSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -6926,6 +7379,8 @@ export type OnDeleteTeamMemberSubscription = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -7007,6 +7462,8 @@ export type OnDeleteTeamMemberSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    lastDonation?: string | null,
+    donationNotes?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -7179,6 +7636,8 @@ export type OnCreateTeamRequestSubscription = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -7372,6 +7831,8 @@ export type OnUpdateTeamRequestSubscription = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -7565,6 +8026,8 @@ export type OnDeleteTeamRequestSubscription = {
           __typename: "TeamMember",
           breezeId: string,
           name: string,
+          lastDonation?: string | null,
+          donationNotes?: string | null,
           createdAt: string,
           updatedAt: string,
         },
@@ -7587,6 +8050,120 @@ export type OnDeleteTeamRequestSubscription = {
       nextToken?: string | null,
     } | null,
     createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateClothingInventorySubscriptionVariables = {
+  filter?: ModelSubscriptionClothingInventoryFilterInput | null,
+};
+
+export type OnCreateClothingInventorySubscription = {
+  onCreateClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateClothingInventorySubscriptionVariables = {
+  filter?: ModelSubscriptionClothingInventoryFilterInput | null,
+};
+
+export type OnUpdateClothingInventorySubscription = {
+  onUpdateClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteClothingInventorySubscriptionVariables = {
+  filter?: ModelSubscriptionClothingInventoryFilterInput | null,
+};
+
+export type OnDeleteClothingInventorySubscription = {
+  onDeleteClothingInventory?:  {
+    __typename: "ClothingInventory",
+    id: string,
+    category: ClothingCategory,
+    size: string,
+    quantity: number,
+    location?: string | null,
+    notes?: string | null,
+    lastUpdated?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateInventoryMessageSubscriptionVariables = {
+  filter?: ModelSubscriptionInventoryMessageFilterInput | null,
+};
+
+export type OnCreateInventoryMessageSubscription = {
+  onCreateInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateInventoryMessageSubscriptionVariables = {
+  filter?: ModelSubscriptionInventoryMessageFilterInput | null,
+};
+
+export type OnUpdateInventoryMessageSubscription = {
+  onUpdateInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteInventoryMessageSubscriptionVariables = {
+  filter?: ModelSubscriptionInventoryMessageFilterInput | null,
+};
+
+export type OnDeleteInventoryMessageSubscription = {
+  onDeleteInventoryMessage?:  {
+    __typename: "InventoryMessage",
+    id: string,
+    content: string,
+    authorId: string,
+    authorName: string,
+    resolved: boolean,
+    resolvedBy?: string | null,
+    resolvedAt?: string | null,
+    createdAt?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -7634,6 +8211,8 @@ export type OnCreateAskedMembersSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -7840,6 +8419,8 @@ export type OnUpdateAskedMembersSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
@@ -8046,6 +8627,8 @@ export type OnDeleteAskedMembersSubscription = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      lastDonation?: string | null,
+      donationNotes?: string | null,
       createdAt: string,
       updatedAt: string,
     },
