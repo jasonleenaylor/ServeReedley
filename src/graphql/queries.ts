@@ -747,6 +747,8 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: ID!) 
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -831,6 +833,8 @@ export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: ID!) 
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -886,6 +890,8 @@ export const listTeamMembers = /* GraphQL */ `query ListTeamMembers(
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
@@ -1057,6 +1063,8 @@ export const getTeamRequest = /* GraphQL */ `query GetTeamRequest($id: ID!) {
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1259,6 +1267,98 @@ export const listTeamRequests = /* GraphQL */ `query ListTeamRequests(
   APITypes.ListTeamRequestsQueryVariables,
   APITypes.ListTeamRequestsQuery
 >;
+export const getClothingInventory = /* GraphQL */ `query GetClothingInventory($id: ID!) {
+  getClothingInventory(id: $id) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetClothingInventoryQueryVariables,
+  APITypes.GetClothingInventoryQuery
+>;
+export const listClothingInventories = /* GraphQL */ `query ListClothingInventories(
+  $filter: ModelClothingInventoryFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listClothingInventories(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      category
+      size
+      quantity
+      location
+      notes
+      lastUpdated
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListClothingInventoriesQueryVariables,
+  APITypes.ListClothingInventoriesQuery
+>;
+export const getInventoryMessage = /* GraphQL */ `query GetInventoryMessage($id: ID!) {
+  getInventoryMessage(id: $id) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetInventoryMessageQueryVariables,
+  APITypes.GetInventoryMessageQuery
+>;
+export const listInventoryMessages = /* GraphQL */ `query ListInventoryMessages(
+  $filter: ModelInventoryMessageFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listInventoryMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      content
+      authorId
+      authorName
+      resolved
+      resolvedBy
+      resolvedAt
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListInventoryMessagesQueryVariables,
+  APITypes.ListInventoryMessagesQuery
+>;
 export const getAskedMembers = /* GraphQL */ `query GetAskedMembers($id: ID!) {
   getAskedMembers(id: $id) {
     id
@@ -1296,6 +1396,8 @@ export const getAskedMembers = /* GraphQL */ `query GetAskedMembers($id: ID!) {
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
@@ -1485,6 +1587,8 @@ export const listAskedMembers = /* GraphQL */ `query ListAskedMembers(
           nextToken
           __typename
         }
+        lastDonation
+        donationNotes
         createdAt
         updatedAt
         __typename

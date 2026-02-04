@@ -1163,6 +1163,8 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1247,6 +1249,8 @@ export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -1271,6 +1275,8 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1355,6 +1361,8 @@ export const updateTeamMember = /* GraphQL */ `mutation UpdateTeamMember(
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -1379,6 +1387,8 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1463,6 +1473,8 @@ export const deleteTeamMember = /* GraphQL */ `mutation DeleteTeamMember(
       nextToken
       __typename
     }
+    lastDonation
+    donationNotes
     createdAt
     updatedAt
     __typename
@@ -1634,6 +1646,8 @@ export const createTeamRequest = /* GraphQL */ `mutation CreateTeamRequest(
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -1829,6 +1843,8 @@ export const updateTeamRequest = /* GraphQL */ `mutation UpdateTeamRequest(
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -2024,6 +2040,8 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
         teamMember {
           breezeId
           name
+          lastDonation
+          donationNotes
           createdAt
           updatedAt
           __typename
@@ -2056,6 +2074,132 @@ export const deleteTeamRequest = /* GraphQL */ `mutation DeleteTeamRequest(
 ` as GeneratedMutation<
   APITypes.DeleteTeamRequestMutationVariables,
   APITypes.DeleteTeamRequestMutation
+>;
+export const createClothingInventory = /* GraphQL */ `mutation CreateClothingInventory(
+  $input: CreateClothingInventoryInput!
+  $condition: ModelClothingInventoryConditionInput
+) {
+  createClothingInventory(input: $input, condition: $condition) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateClothingInventoryMutationVariables,
+  APITypes.CreateClothingInventoryMutation
+>;
+export const updateClothingInventory = /* GraphQL */ `mutation UpdateClothingInventory(
+  $input: UpdateClothingInventoryInput!
+  $condition: ModelClothingInventoryConditionInput
+) {
+  updateClothingInventory(input: $input, condition: $condition) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateClothingInventoryMutationVariables,
+  APITypes.UpdateClothingInventoryMutation
+>;
+export const deleteClothingInventory = /* GraphQL */ `mutation DeleteClothingInventory(
+  $input: DeleteClothingInventoryInput!
+  $condition: ModelClothingInventoryConditionInput
+) {
+  deleteClothingInventory(input: $input, condition: $condition) {
+    id
+    category
+    size
+    quantity
+    location
+    notes
+    lastUpdated
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteClothingInventoryMutationVariables,
+  APITypes.DeleteClothingInventoryMutation
+>;
+export const createInventoryMessage = /* GraphQL */ `mutation CreateInventoryMessage(
+  $input: CreateInventoryMessageInput!
+  $condition: ModelInventoryMessageConditionInput
+) {
+  createInventoryMessage(input: $input, condition: $condition) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateInventoryMessageMutationVariables,
+  APITypes.CreateInventoryMessageMutation
+>;
+export const updateInventoryMessage = /* GraphQL */ `mutation UpdateInventoryMessage(
+  $input: UpdateInventoryMessageInput!
+  $condition: ModelInventoryMessageConditionInput
+) {
+  updateInventoryMessage(input: $input, condition: $condition) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateInventoryMessageMutationVariables,
+  APITypes.UpdateInventoryMessageMutation
+>;
+export const deleteInventoryMessage = /* GraphQL */ `mutation DeleteInventoryMessage(
+  $input: DeleteInventoryMessageInput!
+  $condition: ModelInventoryMessageConditionInput
+) {
+  deleteInventoryMessage(input: $input, condition: $condition) {
+    id
+    content
+    authorId
+    authorName
+    resolved
+    resolvedBy
+    resolvedAt
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteInventoryMessageMutationVariables,
+  APITypes.DeleteInventoryMessageMutation
 >;
 export const createAskedMembers = /* GraphQL */ `mutation CreateAskedMembers(
   $input: CreateAskedMembersInput!
@@ -2097,6 +2241,8 @@ export const createAskedMembers = /* GraphQL */ `mutation CreateAskedMembers(
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
@@ -2305,6 +2451,8 @@ export const updateAskedMembers = /* GraphQL */ `mutation UpdateAskedMembers(
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
@@ -2513,6 +2661,8 @@ export const deleteAskedMembers = /* GraphQL */ `mutation DeleteAskedMembers(
         nextToken
         __typename
       }
+      lastDonation
+      donationNotes
       createdAt
       updatedAt
       __typename
