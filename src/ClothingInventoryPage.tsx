@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Container,
   Typography,
@@ -16,10 +16,10 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
+  Select,
+  MenuItem,
   IconButton,
   Chip,
   Card,
@@ -32,161 +32,39 @@ import {
   CircularProgress,
   Alert,
   Snackbar,
-  SelectChangeEvent,
 } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
 import {
   Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
+  Remove as RemoveIcon,
   Message as MessageIcon,
   Check as CheckIcon,
 } from '@mui/icons-material';
 import { Authenticator } from '@aws-amplify/ui-react';
 import { generateClient } from 'aws-amplify/api';
+import type {
+  ClothingInventory,
+  InventoryMessage,
+  CreateInventoryMessageInput,
+  UpdateInventoryMessageInput,
+} from './API';
+import {
+  listClothingInventories,
+  listInventoryMessages,
+} from './graphql/queries';
+import {
+  createClothingInventory,
+  updateClothingInventory,
+  deleteClothingInventory,
+  createInventoryMessage,
+  updateInventoryMessage,
+} from './graphql/mutations';
 import {
   ClothingCategory,
-  CLOTHING_CATEGORY_LABELS,
   getSizesForCategory,
   getAllCategories,
   getCategoryLabel,
 } from './inventorySizes';
-
-// GraphQL operations will be auto-generated after amplify push
-// For now, we'll define them inline
-const listClothingInventory = /* GraphQL */ `
-  query ListClothingInventory(
-    $filter: ModelClothingInventoryFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listClothingInventories(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        category
-        size
-        quantity
-        location
-        notes
-        lastUpdated
-        createdAt
-      }
-      nextToken
-    }
-  }
-`;
-
-const createClothingInventory = /* GraphQL */ `
-  mutation CreateClothingInventory($input: CreateClothingInventoryInput!) {
-    createClothingInventory(input: $input) {
-      id
-      category
-      size
-      quantity
-      location
-      notes
-      lastUpdated
-      createdAt
-    }
-  }
-`;
-
-const updateClothingInventory = /* GraphQL */ `
-  mutation UpdateClothingInventory($input: UpdateClothingInventoryInput!) {
-    updateClothingInventory(input: $input) {
-      id
-      category
-      size
-      quantity
-      location
-      notes
-      lastUpdated
-      createdAt
-    }
-  }
-`;
-
-const deleteClothingInventory = /* GraphQL */ `
-  mutation DeleteClothingInventory($input: DeleteClothingInventoryInput!) {
-    deleteClothingInventory(input: $input) {
-      id
-    }
-  }
-`;
-
-const listInventoryMessages = /* GraphQL */ `
-  query ListInventoryMessages(
-    $filter: ModelInventoryMessageFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listInventoryMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        content
-        authorId
-        authorName
-        resolved
-        resolvedBy
-        resolvedAt
-        createdAt
-      }
-      nextToken
-    }
-  }
-`;
-
-const createInventoryMessage = /* GraphQL */ `
-  mutation CreateInventoryMessage($input: CreateInventoryMessageInput!) {
-    createInventoryMessage(input: $input) {
-      id
-      content
-      authorId
-      authorName
-      resolved
-      resolvedBy
-      resolvedAt
-      createdAt
-    }
-  }
-`;
-
-const updateInventoryMessage = /* GraphQL */ `
-  mutation UpdateInventoryMessage($input: UpdateInventoryMessageInput!) {
-    updateInventoryMessage(input: $input) {
-      id
-      content
-      authorId
-      authorName
-      resolved
-      resolvedBy
-      resolvedAt
-      createdAt
-    }
-  }
-`;
-
-// Types
-interface InventoryItem {
-  id: string;
-  category: ClothingCategory;
-  size: string;
-  quantity: number;
-  location?: string;
-  notes?: string;
-  lastUpdated?: string;
-  createdAt?: string;
-}
-
-interface InventoryMessage {
-  id: string;
-  content: string;
-  authorId: string;
-  authorName: string;
-  resolved: boolean;
-  resolvedBy?: string;
-  resolvedAt?: string;
-  createdAt?: string;
-}
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -212,31 +90,30 @@ function TabPanel(props: TabPanelProps) {
 const ClothingInventoryPage: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const client = generateClient();
+  const client = useMemo(() => generateClient(), []);
 
   // State
-  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+  const [inventory, setInventory] = useState<ClothingInventory[]>([]);
   const [messages, setMessages] = useState<InventoryMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
-  const [filterCategory, setFilterCategory] = useState<ClothingCategory | ''>('');
-  
+  const [categoryTabValue, setCategoryTabValue] = useState(0);
+
   // Dialog state
-  const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [messageDialogOpen, setMessageDialogOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
-  
-  // Form state
-  const [formCategory, setFormCategory] = useState<ClothingCategory | ''>('');
-  const [formSize, setFormSize] = useState('');
-  const [formQuantity, setFormQuantity] = useState(0);
-  const [formNotes, setFormNotes] = useState('');
+
+  // Form state (for Post Message dialog)
   const [newMessage, setNewMessage] = useState('');
-  
+
+  // Quantity input: which cell is being edited and its current text value
+  const [editingQuantity, setEditingQuantity] = useState<{
+    category: ClothingCategory;
+    size: string;
+    value: string;
+  } | null>(null);
+
   // Snackbar state
-  const [snackbar, setSnackbar] = useState<{open: boolean; message: string; severity: 'success' | 'error'}>({
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
     open: false,
     message: '',
     severity: 'success',
@@ -246,10 +123,12 @@ const ClothingInventoryPage: React.FC = () => {
   const fetchInventory = useCallback(async () => {
     try {
       const result = await client.graphql({
-        query: listClothingInventory,
+        query: listClothingInventories,
         variables: { limit: 1000 },
-      }) as { data: { listClothingInventories: { items: InventoryItem[] } } };
-      setInventory(result.data.listClothingInventories.items || []);
+        authMode: 'userPool',
+      });
+      const items = result.data?.listClothingInventories?.items ?? [];
+      setInventory(items.filter((x): x is ClothingInventory => x != null));
     } catch (error) {
       console.error('Error fetching inventory:', error);
       setSnackbar({ open: true, message: 'Error loading inventory', severity: 'error' });
@@ -261,8 +140,10 @@ const ClothingInventoryPage: React.FC = () => {
       const result = await client.graphql({
         query: listInventoryMessages,
         variables: { limit: 100 },
-      }) as { data: { listInventoryMessages: { items: InventoryMessage[] } } };
-      setMessages(result.data.listInventoryMessages.items || []);
+        authMode: 'userPool',
+      });
+      const items = result.data?.listInventoryMessages?.items ?? [];
+      setMessages(items.filter((x): x is InventoryMessage => x != null));
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
@@ -282,114 +163,147 @@ const ClothingInventoryPage: React.FC = () => {
     setTabValue(newValue);
   };
 
-  const handleFilterChange = (event: SelectChangeEvent<ClothingCategory | ''>) => {
-    setFilterCategory(event.target.value as ClothingCategory | '');
+  const handleCategoryTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setCategoryTabValue(newValue);
   };
 
-  const handleAddClick = () => {
-    setFormCategory('');
-    setFormSize('');
-    setFormQuantity(0);
-    setFormNotes('');
-    setAddDialogOpen(true);
-  };
-
-  const handleEditClick = (item: InventoryItem) => {
-    setSelectedItem(item);
-    setFormCategory(item.category);
-    setFormSize(item.size);
-    setFormQuantity(item.quantity);
-    setFormNotes(item.notes || '');
-    setEditDialogOpen(true);
-  };
-
-  const handleDeleteClick = (item: InventoryItem) => {
-    setSelectedItem(item);
-    setDeleteDialogOpen(true);
-  };
-
-  const handleAddSubmit = async () => {
-    if (!formCategory || !formSize) return;
-    
+  const handleIncrement = async (category: ClothingCategory, size: string) => {
+    const existing = inventory.find(
+      (i) => i.category === category && i.size === size
+    );
     try {
-      await client.graphql({
-        query: createClothingInventory,
-        variables: {
-          input: {
-            category: formCategory,
-            size: formSize,
-            quantity: formQuantity,
-            notes: formNotes || null,
-            lastUpdated: new Date().toISOString(),
+      if (existing) {
+        await client.graphql({
+          query: updateClothingInventory,
+          variables: {
+            input: {
+              id: existing.id,
+              quantity: existing.quantity + 1,
+              lastUpdated: new Date().toISOString(),
+            },
           },
-        },
-      });
-      setAddDialogOpen(false);
-      setSnackbar({ open: true, message: 'Item added successfully', severity: 'success' });
+          authMode: 'userPool',
+        });
+      } else {
+        await client.graphql({
+          query: createClothingInventory,
+          variables: {
+            input: {
+              category,
+              size,
+              quantity: 1,
+              lastUpdated: new Date().toISOString(),
+            },
+          },
+          authMode: 'userPool',
+        });
+      }
+      setSnackbar({ open: true, message: 'Quantity updated', severity: 'success' });
       fetchInventory();
     } catch (error) {
-      console.error('Error adding item:', error);
-      setSnackbar({ open: true, message: 'Error adding item', severity: 'error' });
+      console.error('Error updating quantity:', error);
+      setSnackbar({ open: true, message: 'Error updating quantity', severity: 'error' });
     }
   };
 
-  const handleEditSubmit = async () => {
-    if (!selectedItem) return;
-    
+  const handleDecrement = async (category: ClothingCategory, size: string) => {
+    const existing = inventory.find(
+      (i) => i.category === category && i.size === size
+    );
+    if (!existing || existing.quantity <= 0) return;
     try {
-      await client.graphql({
-        query: updateClothingInventory,
-        variables: {
-          input: {
-            id: selectedItem.id,
-            quantity: formQuantity,
-            notes: formNotes || null,
-            lastUpdated: new Date().toISOString(),
+      if (existing.quantity === 1) {
+        await client.graphql({
+          query: deleteClothingInventory,
+          variables: { input: { id: existing.id } },
+          authMode: 'userPool',
+        });
+      } else {
+        await client.graphql({
+          query: updateClothingInventory,
+          variables: {
+            input: {
+              id: existing.id,
+              quantity: existing.quantity - 1,
+              lastUpdated: new Date().toISOString(),
+            },
           },
-        },
-      });
-      setEditDialogOpen(false);
-      setSnackbar({ open: true, message: 'Item updated successfully', severity: 'success' });
+          authMode: 'userPool',
+        });
+      }
+      setSnackbar({ open: true, message: 'Quantity updated', severity: 'success' });
       fetchInventory();
     } catch (error) {
-      console.error('Error updating item:', error);
-      setSnackbar({ open: true, message: 'Error updating item', severity: 'error' });
+      console.error('Error updating quantity:', error);
+      setSnackbar({ open: true, message: 'Error updating quantity', severity: 'error' });
     }
   };
 
-  const handleDeleteConfirm = async () => {
-    if (!selectedItem) return;
-    
+  const handleQuantityChange = async (
+    category: ClothingCategory,
+    size: string,
+    newQuantity: number
+  ) => {
+    const existing = inventory.find(
+      (i) => i.category === category && i.size === size
+    );
     try {
-      await client.graphql({
-        query: deleteClothingInventory,
-        variables: {
-          input: { id: selectedItem.id },
-        },
-      });
-      setDeleteDialogOpen(false);
-      setSnackbar({ open: true, message: 'Item deleted successfully', severity: 'success' });
+      if (newQuantity <= 0) {
+        if (existing) {
+          await client.graphql({
+            query: deleteClothingInventory,
+            variables: { input: { id: existing.id } },
+            authMode: 'userPool',
+          });
+        }
+      } else if (existing) {
+        await client.graphql({
+          query: updateClothingInventory,
+          variables: {
+            input: {
+              id: existing.id,
+              quantity: newQuantity,
+              lastUpdated: new Date().toISOString(),
+            },
+          },
+          authMode: 'userPool',
+        });
+      } else {
+        await client.graphql({
+          query: createClothingInventory,
+          variables: {
+            input: {
+              category,
+              size,
+              quantity: newQuantity,
+              lastUpdated: new Date().toISOString(),
+            },
+          },
+          authMode: 'userPool',
+        });
+      }
+      setSnackbar({ open: true, message: 'Quantity updated', severity: 'success' });
       fetchInventory();
     } catch (error) {
-      console.error('Error deleting item:', error);
-      setSnackbar({ open: true, message: 'Error deleting item', severity: 'error' });
+      console.error('Error updating quantity:', error);
+      setSnackbar({ open: true, message: 'Error updating quantity', severity: 'error' });
     }
   };
 
   const handlePostMessage = async (authorName: string) => {
     if (!newMessage.trim()) return;
-    
+
+    const input: CreateInventoryMessageInput = {
+      content: newMessage.trim(),
+      authorId: 'current-user',
+      authorName,
+      resolved: false,
+    };
     try {
       await client.graphql({
         query: createInventoryMessage,
-        variables: {
-          input: {
-            content: newMessage,
-            authorId: 'current-user', // This should come from auth context
-            authorName: authorName,
-            resolved: false,
-          },
-        },
+        variables: { input },
+        authMode: 'userPool',
       });
       setNewMessage('');
       setMessageDialogOpen(false);
@@ -402,17 +316,17 @@ const ClothingInventoryPage: React.FC = () => {
   };
 
   const handleResolveMessage = async (message: InventoryMessage, resolverName: string) => {
+    const input: UpdateInventoryMessageInput = {
+      id: message.id,
+      resolved: true,
+      resolvedBy: resolverName,
+      resolvedAt: new Date().toISOString(),
+    };
     try {
       await client.graphql({
         query: updateInventoryMessage,
-        variables: {
-          input: {
-            id: message.id,
-            resolved: true,
-            resolvedBy: resolverName,
-            resolvedAt: new Date().toISOString(),
-          },
-        },
+        variables: { input },
+        authMode: 'userPool',
       });
       setSnackbar({ open: true, message: 'Message resolved', severity: 'success' });
       fetchMessages();
@@ -422,52 +336,105 @@ const ClothingInventoryPage: React.FC = () => {
     }
   };
 
-  // Filter inventory by category
-  const filteredInventory = filterCategory
-    ? inventory.filter(item => item.category === filterCategory)
-    : inventory;
-
-  // Sort inventory by category then size
-  const sortedInventory = [...filteredInventory].sort((a, b) => {
-    if (a.category !== b.category) {
-      return a.category.localeCompare(b.category);
-    }
-    return a.size.localeCompare(b.size);
+  // Category sub-tab: selected category and its rows (one per size)
+  const categories = getAllCategories();
+  const selectedCategory = categories[categoryTabValue] ?? categories[0];
+  const categoryRows = getSizesForCategory(selectedCategory).map((size) => {
+    const item = inventory.find(
+      (i) => i.category === selectedCategory && i.size === size
+    );
+    return { size, item: item ?? null, quantity: item?.quantity ?? 0 };
   });
 
   // Separate active and resolved messages
   const activeMessages = messages.filter(m => !m.resolved);
   const resolvedMessages = messages.filter(m => m.resolved);
 
-  // Render inventory item for mobile
-  const renderMobileCard = (item: InventoryItem) => (
-    <Card key={item.id} sx={{ mb: 2 }}>
-      <CardContent>
-        <Typography variant="subtitle1" fontWeight="bold">
-          {getCategoryLabel(item.category)}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Size: {item.size}
-        </Typography>
-        <Typography variant="h6" color="primary">
-          Qty: {item.quantity}
-        </Typography>
-        {item.notes && (
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            {item.notes}
-          </Typography>
-        )}
-      </CardContent>
-      <CardActions>
-        <IconButton size="small" onClick={() => handleEditClick(item)}>
-          <EditIcon />
-        </IconButton>
-        <IconButton size="small" onClick={() => handleDeleteClick(item)} color="error">
-          <DeleteIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
-  );
+  // Render one category row for mobile (size, qty input, +/-, notes; no edit/delete)
+  const renderMobileCategoryRow = (row: { size: string; item: ClothingInventory | null; quantity: number }) => {
+    const isEditing =
+      editingQuantity?.category === selectedCategory &&
+      editingQuantity?.size === row.size;
+    const displayValue = isEditing ? editingQuantity!.value : String(row.quantity);
+    return (
+      <Card key={row.size} sx={{ mb: 1 }}>
+        <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+            <Typography variant="subtitle2">{row.size}</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <IconButton
+                size="small"
+                onClick={() => handleDecrement(selectedCategory, row.size)}
+                disabled={row.quantity <= 0}
+                aria-label="Decrease quantity"
+              >
+                <RemoveIcon fontSize="small" />
+              </IconButton>
+              <TextField
+                type="number"
+                size="small"
+                value={displayValue}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (isEditing) {
+                    setEditingQuantity((prev) =>
+                      prev ? { ...prev, value: v } : null
+                    );
+                  } else {
+                    setEditingQuantity({
+                      category: selectedCategory,
+                      size: row.size,
+                      value: v,
+                    });
+                  }
+                }}
+                onFocus={() =>
+                  setEditingQuantity({
+                    category: selectedCategory,
+                    size: row.size,
+                    value: String(row.quantity),
+                  })
+                }
+                onBlur={(e) => {
+                  const input = e.target as HTMLInputElement;
+                  const num = Math.max(
+                    0,
+                    parseInt(input.value, 10) || 0
+                  );
+                  setEditingQuantity(null);
+                  if (num !== row.quantity) {
+                    handleQuantityChange(selectedCategory, row.size, num);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    (e.target as HTMLInputElement).blur();
+                  }
+                }}
+                inputProps={{
+                  min: 0,
+                  'aria-label': `Quantity for size ${row.size}`,
+                }}
+                sx={{ width: 56 }}
+              />
+              <IconButton
+                size="small"
+                onClick={() => handleIncrement(selectedCategory, row.size)}
+                aria-label="Increase quantity"
+              >
+                <AddIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          </Box>
+          {row.item?.notes && (
+            <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
+              {row.item.notes}
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <Authenticator hideSignUp>
@@ -479,7 +446,7 @@ const ClothingInventoryPage: React.FC = () => {
 
           <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
             <Tab label="Inventory" />
-            <Tab 
+            <Tab
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   Messages
@@ -487,77 +454,150 @@ const ClothingInventoryPage: React.FC = () => {
                     <Chip label={activeMessages.length} size="small" color="primary" />
                   )}
                 </Box>
-              } 
+              }
             />
           </Tabs>
 
           {/* Inventory Tab */}
           <TabPanel value={tabValue} index={0}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 2 }}>
-              <FormControl size="small" sx={{ minWidth: 200 }}>
-                <InputLabel>Filter by Category</InputLabel>
+            {isMobile ? (
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="category-select-label">Category</InputLabel>
                 <Select
-                  value={filterCategory}
-                  label="Filter by Category"
-                  onChange={handleFilterChange}
+                  labelId="category-select-label"
+                  value={String(categoryTabValue)}
+                  label="Category"
+                  onChange={(e: SelectChangeEvent<string>) =>
+                    setCategoryTabValue(Number(e.target.value))
+                  }
                 >
-                  <MenuItem value="">All Categories</MenuItem>
-                  {getAllCategories().map(cat => (
-                    <MenuItem key={cat} value={cat}>{getCategoryLabel(cat)}</MenuItem>
+                  {categories.map((cat, idx) => (
+                    <MenuItem key={cat} value={String(idx)}>
+                      {getCategoryLabel(cat)}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleAddClick}
+            ) : (
+              <Tabs
+                value={categoryTabValue}
+                onChange={handleCategoryTabChange}
+                sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
               >
-                Add Item
-              </Button>
-            </Box>
+                {categories.map((cat, idx) => (
+                  <Tab key={cat} label={getCategoryLabel(cat)} id={`category-tab-${idx}`} />
+                ))}
+              </Tabs>
+            )}
 
             {loading ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
                 <CircularProgress />
               </Box>
-            ) : sortedInventory.length === 0 ? (
-              <Alert severity="info">No inventory items found. Add your first item!</Alert>
+            ) : categoryRows.length === 0 ? (
+              <Alert severity="info">No sizes defined for this category.</Alert>
             ) : isMobile ? (
-              // Mobile view - cards
               <Box>
-                {sortedInventory.map(renderMobileCard)}
+                {categoryRows.map(renderMobileCategoryRow)}
               </Box>
             ) : (
-              // Desktop view - table
               <TableContainer component={Paper}>
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Category</TableCell>
                       <TableCell>Size</TableCell>
                       <TableCell align="right">Quantity</TableCell>
-                      <TableCell>Notes</TableCell>
-                      <TableCell align="center">Actions</TableCell>
+                      <TableCell align="center">Adjust</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {sortedInventory.map(item => (
-                      <TableRow key={item.id}>
-                        <TableCell>{getCategoryLabel(item.category)}</TableCell>
-                        <TableCell>{item.size}</TableCell>
-                        <TableCell align="right">{item.quantity}</TableCell>
-                        <TableCell>{item.notes || '-'}</TableCell>
-                        <TableCell align="center">
-                          <IconButton size="small" onClick={() => handleEditClick(item)}>
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton size="small" onClick={() => handleDeleteClick(item)} color="error">
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {categoryRows.map((row) => {
+                      const isEditing =
+                        editingQuantity?.category === selectedCategory &&
+                        editingQuantity?.size === row.size;
+                      const displayValue = isEditing
+                        ? editingQuantity!.value
+                        : String(row.quantity);
+                      return (
+                        <TableRow key={row.size}>
+                          <TableCell>{row.size}</TableCell>
+                          <TableCell align="right">
+                            <TextField
+                              type="number"
+                              size="small"
+                              value={displayValue}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                if (isEditing) {
+                                  setEditingQuantity((prev) =>
+                                    prev ? { ...prev, value: v } : null
+                                  );
+                                } else {
+                                  setEditingQuantity({
+                                    category: selectedCategory,
+                                    size: row.size,
+                                    value: v,
+                                  });
+                                }
+                              }}
+                              onFocus={() =>
+                                setEditingQuantity({
+                                  category: selectedCategory,
+                                  size: row.size,
+                                  value: String(row.quantity),
+                                })
+                              }
+                              onBlur={(e) => {
+                                const input = e.target as HTMLInputElement;
+                                const num = Math.max(
+                                  0,
+                                  parseInt(input.value, 10) || 0
+                                );
+                                setEditingQuantity(null);
+                                if (num !== row.quantity) {
+                                  handleQuantityChange(
+                                    selectedCategory,
+                                    row.size,
+                                    num
+                                  );
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  (e.target as HTMLInputElement).blur();
+                                }
+                              }}
+                              inputProps={{
+                                min: 0,
+                                'aria-label': `Quantity for size ${row.size}`,
+                              }}
+                              sx={{ width: 72 }}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton
+                              size="small"
+                              onClick={() =>
+                                handleDecrement(selectedCategory, row.size)
+                              }
+                              disabled={row.quantity <= 0}
+                              aria-label="Decrease quantity"
+                            >
+                              <RemoveIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              onClick={() =>
+                                handleIncrement(selectedCategory, row.size)
+                              }
+                              aria-label="Increase quantity"
+                            >
+                              <AddIcon fontSize="small" />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -629,132 +669,6 @@ const ClothingInventoryPage: React.FC = () => {
             )}
           </TabPanel>
 
-          {/* Add Item Dialog */}
-          <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)} maxWidth="sm" fullWidth>
-            <DialogTitle>Add Inventory Item</DialogTitle>
-            <DialogContent>
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <InputLabel>Category</InputLabel>
-                <Select
-                  value={formCategory}
-                  label="Category"
-                  onChange={(e) => {
-                    setFormCategory(e.target.value as ClothingCategory);
-                    setFormSize('');
-                  }}
-                >
-                  {getAllCategories().map(cat => (
-                    <MenuItem key={cat} value={cat}>{getCategoryLabel(cat)}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth sx={{ mt: 2 }}>
-                <InputLabel>Size</InputLabel>
-                <Select
-                  value={formSize}
-                  label="Size"
-                  onChange={(e) => setFormSize(e.target.value)}
-                  disabled={!formCategory}
-                >
-                  {formCategory && getSizesForCategory(formCategory).map(size => (
-                    <MenuItem key={size} value={size}>{size}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <TextField
-                fullWidth
-                label="Quantity"
-                type="number"
-                value={formQuantity}
-                onChange={(e) => setFormQuantity(parseInt(e.target.value) || 0)}
-                sx={{ mt: 2 }}
-                inputProps={{ min: 0 }}
-              />
-
-              <TextField
-                fullWidth
-                label="Notes"
-                multiline
-                rows={2}
-                value={formNotes}
-                onChange={(e) => setFormNotes(e.target.value)}
-                sx={{ mt: 2 }}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setAddDialogOpen(false)}>Cancel</Button>
-              <Button 
-                onClick={handleAddSubmit} 
-                variant="contained"
-                disabled={!formCategory || !formSize}
-              >
-                Add
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          {/* Edit Item Dialog */}
-          <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="sm" fullWidth>
-            <DialogTitle>Edit Inventory Item</DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" sx={{ mt: 2 }}>
-                <strong>Category:</strong> {selectedItem && getCategoryLabel(selectedItem.category)}
-              </Typography>
-              <Typography variant="body1">
-                <strong>Size:</strong> {selectedItem?.size}
-              </Typography>
-
-              <TextField
-                fullWidth
-                label="Quantity"
-                type="number"
-                value={formQuantity}
-                onChange={(e) => setFormQuantity(parseInt(e.target.value) || 0)}
-                sx={{ mt: 2 }}
-                inputProps={{ min: 0 }}
-              />
-
-              <TextField
-                fullWidth
-                label="Notes"
-                multiline
-                rows={2}
-                value={formNotes}
-                onChange={(e) => setFormNotes(e.target.value)}
-                sx={{ mt: 2 }}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleEditSubmit} variant="contained">
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
-
-          {/* Delete Confirmation Dialog */}
-          <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-            <DialogTitle>Delete Item?</DialogTitle>
-            <DialogContent>
-              <Typography>
-                Are you sure you want to delete this item?
-              </Typography>
-              {selectedItem && (
-                <Typography sx={{ mt: 1 }}>
-                  <strong>{getCategoryLabel(selectedItem.category)}</strong> - Size: {selectedItem.size}
-                </Typography>
-              )}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-
           {/* Post Message Dialog */}
           <Dialog open={messageDialogOpen} onClose={() => setMessageDialogOpen(false)} maxWidth="sm" fullWidth>
             <DialogTitle>Post Message</DialogTitle>
@@ -772,8 +686,8 @@ const ClothingInventoryPage: React.FC = () => {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setMessageDialogOpen(false)}>Cancel</Button>
-              <Button 
-                onClick={() => handlePostMessage(user?.signInDetails?.loginId || 'Unknown')} 
+              <Button
+                onClick={() => handlePostMessage(user?.signInDetails?.loginId || 'Unknown')}
                 variant="contained"
                 disabled={!newMessage.trim()}
               >
@@ -788,8 +702,8 @@ const ClothingInventoryPage: React.FC = () => {
             autoHideDuration={4000}
             onClose={() => setSnackbar({ ...snackbar, open: false })}
           >
-            <Alert 
-              onClose={() => setSnackbar({ ...snackbar, open: false })} 
+            <Alert
+              onClose={() => setSnackbar({ ...snackbar, open: false })}
               severity={snackbar.severity}
               sx={{ width: '100%' }}
             >
