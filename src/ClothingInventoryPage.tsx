@@ -69,6 +69,10 @@ import {
   hasVariants,
   type DisplayCategory,
 } from './inventorySizes';
+import {
+  buildInventoryMessageThreads,
+  type InventoryMessageWithParent,
+} from './inventoryMessageThreads';
 
 const VALID_CATEGORIES = new Set<string>(Object.values(ClothingCategory));
 
@@ -77,6 +81,10 @@ interface TabPanelProps {
   index: number;
   value: number;
 }
+
+type CreateInventoryMessageInputWithParent = CreateInventoryMessageInput & {
+  parentMessageId?: string;
+};
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -100,7 +108,7 @@ const ClothingInventoryPage: React.FC = () => {
 
   // State
   const [inventory, setInventory] = useState<ClothingInventory[]>([]);
-  const [messages, setMessages] = useState<InventoryMessage[]>([]);
+  const [messages, setMessages] = useState<InventoryMessageWithParent[]>([]);
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
   const [categoryTabValue, setCategoryTabValue] = useState(0);
@@ -111,6 +119,9 @@ const ClothingInventoryPage: React.FC = () => {
 
   // Form state (for Post Message dialog)
   const [newMessage, setNewMessage] = useState('');
+  const [replyByThreadId, setReplyByThreadId] = useState<Record<string, string>>(
+    {}
+  );
 
   // Quantity input: which cell is being edited and its current text value
   const [editingQuantity, setEditingQuantity] = useState<{
@@ -154,7 +165,9 @@ const ClothingInventoryPage: React.FC = () => {
         authMode: 'userPool',
       });
       const items = result.data?.listInventoryMessages?.items ?? [];
-      setMessages(items.filter((x): x is InventoryMessage => x != null));
+      setMessages(
+        items.filter((x): x is InventoryMessageWithParent => x != null)
+      );
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
@@ -335,6 +348,32 @@ const ClothingInventoryPage: React.FC = () => {
     }
   };
 
+  const handlePostReply = async (parentMessageId: string, authorName: string) => {
+    const reply = (replyByThreadId[parentMessageId] ?? '').trim();
+    if (!reply) return;
+
+    const input: CreateInventoryMessageInputWithParent = {
+      content: reply,
+      authorId: 'current-user',
+      authorName,
+      resolved: false,
+      parentMessageId,
+    };
+    try {
+      await client.graphql({
+        query: createInventoryMessage,
+        variables: { input },
+        authMode: 'userPool',
+      });
+      setReplyByThreadId((prev) => ({ ...prev, [parentMessageId]: '' }));
+      setSnackbar({ open: true, message: 'Reply posted', severity: 'success' });
+      fetchMessages();
+    } catch (error) {
+      console.error('Error posting reply:', error);
+      setSnackbar({ open: true, message: 'Error posting reply', severity: 'error' });
+    }
+  };
+
   const handleResolveMessage = async (message: InventoryMessage, resolverName: string) => {
     const input: UpdateInventoryMessageInput = {
       id: message.id,
@@ -390,9 +429,12 @@ const ClothingInventoryPage: React.FC = () => {
     }
   );
 
-  // Separate active and resolved messages
-  const activeMessages = messages.filter(m => !m.resolved);
-  const resolvedMessages = messages.filter(m => m.resolved);
+  const messageThreads = useMemo(
+    () => buildInventoryMessageThreads(messages),
+    [messages]
+  );
+  const activeMessageThreads = messageThreads.filter((thread) => !thread.root.resolved);
+  const resolvedMessageThreads = messageThreads.filter((thread) => thread.root.resolved);
 
   // Subtle blue/pink background when viewing Boy/Girl variant
   const variantBg =
@@ -507,8 +549,8 @@ const ClothingInventoryPage: React.FC = () => {
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   Messages
-                  {activeMessages.length > 0 && (
-                    <Chip label={activeMessages.length} size="small" color="primary" />
+                  {activeMessageThreads.length > 0 && (
+                    <Chip label={activeMessageThreads.length} size="small" color="primary" />
                   )}
                 </Box>
               }
@@ -708,27 +750,69 @@ const ClothingInventoryPage: React.FC = () => {
             </Box>
 
             <Typography variant="h6" gutterBottom>
-              Active Messages ({activeMessages.length})
+              Active Messages ({activeMessageThreads.length})
             </Typography>
-            {activeMessages.length === 0 ? (
+            {activeMessageThreads.length === 0 ? (
               <Alert severity="info" sx={{ mb: 3 }}>No active messages</Alert>
             ) : (
               <Box sx={{ mb: 3 }}>
-                {activeMessages.map(msg => (
-                  <Card key={msg.id} sx={{ mb: 2 }}>
+                {activeMessageThreads.map((thread) => (
+                  <Card key={thread.root.id} sx={{ mb: 2 }}>
                     <CardContent>
-                      <Typography variant="body1">{msg.content}</Typography>
+                      <Typography variant="body1">{thread.root.content}</Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Posted by {msg.authorName} on {msg.createdAt ? new Date(msg.createdAt).toLocaleDateString() : 'Unknown'}
+                        Posted by {thread.root.authorName} on{' '}
+                        {thread.root.createdAt ? new Date(thread.root.createdAt).toLocaleDateString() : 'Unknown'}
                       </Typography>
+                      {thread.replies.length > 0 && (
+                        <Box sx={{ mt: 1.5, pl: 2, borderLeft: 2, borderColor: 'divider' }}>
+                          {thread.replies.map((reply) => (
+                            <Box key={reply.id} sx={{ mt: 1 }}>
+                              <Typography variant="body2">{reply.content}</Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                Reply by {reply.authorName} on{' '}
+                                {reply.createdAt ? new Date(reply.createdAt).toLocaleDateString() : 'Unknown'}
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{ flexWrap: 'wrap', gap: 1 }}>
                       <Button
                         size="small"
                         startIcon={<CheckIcon />}
-                        onClick={() => handleResolveMessage(msg, user?.signInDetails?.loginId || 'Unknown')}
+                        onClick={() =>
+                          handleResolveMessage(
+                            thread.root,
+                            user?.signInDetails?.loginId || 'Unknown'
+                          )
+                        }
                       >
                         Resolve
+                      </Button>
+                      <TextField
+                        size="small"
+                        placeholder="Reply in thread"
+                        value={replyByThreadId[thread.root.id] ?? ''}
+                        onChange={(e) =>
+                          setReplyByThreadId((prev) => ({
+                            ...prev,
+                            [thread.root.id]: e.target.value,
+                          }))
+                        }
+                      />
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          handlePostReply(
+                            thread.root.id,
+                            user?.signInDetails?.loginId || 'Unknown'
+                          )
+                        }
+                        disabled={!(replyByThreadId[thread.root.id] ?? '').trim()}
+                      >
+                        Reply
                       </Button>
                     </CardActions>
                   </Card>
@@ -737,22 +821,35 @@ const ClothingInventoryPage: React.FC = () => {
             )}
 
             <Typography variant="h6" gutterBottom>
-              Resolved Messages ({resolvedMessages.length})
+              Resolved Messages ({resolvedMessageThreads.length})
             </Typography>
-            {resolvedMessages.length === 0 ? (
+            {resolvedMessageThreads.length === 0 ? (
               <Alert severity="info">No resolved messages</Alert>
             ) : (
               <Box>
-                {resolvedMessages.map(msg => (
-                  <Card key={msg.id} sx={{ mb: 2, opacity: 0.7 }}>
+                {resolvedMessageThreads.map((thread) => (
+                  <Card key={thread.root.id} sx={{ mb: 2, opacity: 0.7 }}>
                     <CardContent>
                       <Typography variant="body1" sx={{ textDecoration: 'line-through' }}>
-                        {msg.content}
+                        {thread.root.content}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Posted by {msg.authorName} • Resolved by {msg.resolvedBy} on{' '}
-                        {msg.resolvedAt ? new Date(msg.resolvedAt).toLocaleDateString() : 'Unknown'}
+                        Posted by {thread.root.authorName} • Resolved by {thread.root.resolvedBy} on{' '}
+                        {thread.root.resolvedAt ? new Date(thread.root.resolvedAt).toLocaleDateString() : 'Unknown'}
                       </Typography>
+                      {thread.replies.length > 0 && (
+                        <Box sx={{ mt: 1.5, pl: 2, borderLeft: 2, borderColor: 'divider' }}>
+                          {thread.replies.map((reply) => (
+                            <Box key={reply.id} sx={{ mt: 1 }}>
+                              <Typography variant="body2">{reply.content}</Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                Reply by {reply.authorName} on{' '}
+                                {reply.createdAt ? new Date(reply.createdAt).toLocaleDateString() : 'Unknown'}
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

@@ -244,6 +244,7 @@ type InventoryMessage @model @auth(rules: [{ allow: private }]) {
   content: String!
   authorId: String!
   authorName: String!
+  parentMessageId: ID @index(name: "byParent")
   resolved: Boolean!
   resolvedBy: String
   resolvedAt: AWSDateTime
