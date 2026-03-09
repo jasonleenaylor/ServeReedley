@@ -7,33 +7,56 @@
 
 export enum ClothingCategory {
   CHILDRENS_SOCKS = 'CHILDRENS_SOCKS',
-  CHILDRENS_UNDERWEAR = 'CHILDRENS_UNDERWEAR',
+  CHILDRENS_UNDERWEAR_BOY = 'CHILDRENS_UNDERWEAR_BOY',
+  CHILDRENS_UNDERWEAR_GIRL = 'CHILDRENS_UNDERWEAR_GIRL',
   KIDS_SHOES = 'KIDS_SHOES',
   DIAPERS = 'DIAPERS',
+  PULL_UPS = 'PULL_UPS',
+  WIPES = 'WIPES',
+  PAJAMAS_BOY = 'PAJAMAS_BOY',
+  PAJAMAS_GIRL = 'PAJAMAS_GIRL',
 }
 
 export const CLOTHING_CATEGORY_LABELS: Record<ClothingCategory, string> = {
   [ClothingCategory.CHILDRENS_SOCKS]: "Children's Socks",
-  [ClothingCategory.CHILDRENS_UNDERWEAR]: "Children's Underwear",
+  [ClothingCategory.CHILDRENS_UNDERWEAR_BOY]: "Children's Underwear (Boy)",
+  [ClothingCategory.CHILDRENS_UNDERWEAR_GIRL]: "Children's Underwear (Girl)",
   [ClothingCategory.KIDS_SHOES]: 'Kids Shoes',
   [ClothingCategory.DIAPERS]: 'Diapers',
+  [ClothingCategory.PULL_UPS]: 'Pull-Ups',
+  [ClothingCategory.WIPES]: 'Wipes',
+  [ClothingCategory.PAJAMAS_BOY]: 'Pajamas (Boy)',
+  [ClothingCategory.PAJAMAS_GIRL]: 'Pajamas (Girl)',
 };
 
 /**
- * Children's Socks - 5 sizes
+ * Children's Socks - 4 sizes
+ * Colors are intentionally purchased by size for easy identification.
  */
 export const CHILDRENS_SOCKS_SIZES = [
   'Newborn',
   '6-12m',
-  '12-24m',
-  '2T-3T',
-  '4T-5T',
+  '12-36 months (Gray)',
+  '4-7 years (Black)',
 ] as const;
 
 /**
- * Children's Underwear - 7 sizes
+ * Children's Underwear (Boy) - 7 sizes
  */
-export const CHILDRENS_UNDERWEAR_SIZES = [
+export const CHILDRENS_UNDERWEAR_BOY_SIZES = [
+  '4',
+  '6',
+  '8',
+  '10',
+  '12',
+  '14',
+  '16',
+] as const;
+
+/**
+ * Children's Underwear (Girl) - 7 sizes
+ */
+export const CHILDRENS_UNDERWEAR_GIRL_SIZES = [
   '4',
   '6',
   '8',
@@ -102,13 +125,71 @@ export const DIAPERS_SIZES = [
 ] as const;
 
 /**
+ * Pull-Ups - 2 sizes
+ */
+export const PULL_UPS_SIZES = [
+  '2T-3T',
+  '3T-4T',
+] as const;
+
+/**
+ * Wipes - 1 size
+ */
+export const WIPES_SIZES = [
+  'Standard',
+] as const;
+
+/**
+ * Pajamas (Boy) - 13 sizes
+ */
+export const PAJAMAS_BOY_SIZES = [
+  'Preemie',
+  'Newborn',
+  '3 month',
+  '6 month',
+  '9 month',
+  '12 month',
+  '18 month',
+  '24 month',
+  '2T',
+  '3T',
+  '4T',
+  '5T',
+  '6',
+] as const;
+
+/**
+ * Pajamas (Girl) - 13 sizes
+ */
+export const PAJAMAS_GIRL_SIZES = [
+  'Preemie',
+  'Newborn',
+  '3 month',
+  '6 month',
+  '9 month',
+  '12 month',
+  '18 month',
+  '24 month',
+  '2T',
+  '3T',
+  '4T',
+  '5T',
+  '6',
+] as const;
+
+/**
  * Map of category to available sizes
  */
 export const CATEGORY_SIZES: Record<ClothingCategory, readonly string[]> = {
   [ClothingCategory.CHILDRENS_SOCKS]: CHILDRENS_SOCKS_SIZES,
-  [ClothingCategory.CHILDRENS_UNDERWEAR]: CHILDRENS_UNDERWEAR_SIZES,
+  [ClothingCategory.CHILDRENS_UNDERWEAR_BOY]: CHILDRENS_UNDERWEAR_BOY_SIZES,
+  [ClothingCategory.CHILDRENS_UNDERWEAR_GIRL]: CHILDRENS_UNDERWEAR_GIRL_SIZES,
   [ClothingCategory.KIDS_SHOES]: KIDS_SHOES_SIZES,
   [ClothingCategory.DIAPERS]: DIAPERS_SIZES,
+  [ClothingCategory.PULL_UPS]: PULL_UPS_SIZES,
+  [ClothingCategory.WIPES]: WIPES_SIZES,
+  [ClothingCategory.PAJAMAS_BOY]: PAJAMAS_BOY_SIZES,
+  [ClothingCategory.PAJAMAS_GIRL]: PAJAMAS_GIRL_SIZES,
 };
 
 /**

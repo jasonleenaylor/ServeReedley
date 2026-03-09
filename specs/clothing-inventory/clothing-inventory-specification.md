@@ -41,15 +41,27 @@ Phase 1 focuses on building the core inventory management functionality with a l
 The following items and sizes will be supported in Phase 1:
 
 #### Children's Socks
+Colors are intentionally purchased by size for easy identification when socks get separated.
+
 | Size |
 |------|
 | Newborn |
 | 6-12m |
-| 12-24m |
-| 2T-3T |
-| 4T-5T |
+| 12-36 months (Gray) |
+| 4-7 years (Black) |
 
-#### Children's Underwear
+#### Children's Underwear (Boy)
+| Size |
+|------|
+| 4 |
+| 6 |
+| 8 |
+| 10 |
+| 12 |
+| 14 |
+| 16 |
+
+#### Children's Underwear (Girl)
 | Size |
 |------|
 | 4 |
@@ -108,13 +120,58 @@ The following items and sizes will be supported in Phase 1:
 | #6 |
 | #7 |
 
+#### Pull-Ups
+| Size |
+|------|
+| 2T-3T |
+| 3T-4T |
+
+#### Wipes
+| Size |
+|------|
+| Standard |
+
+#### Pajamas (Boy)
+| Size |
+|------|
+| Preemie |
+| Newborn |
+| 3 month |
+| 6 month |
+| 9 month |
+| 12 month |
+| 18 month |
+| 24 month |
+| 2T |
+| 3T |
+| 4T |
+| 5T |
+| 6 |
+
+#### Pajamas (Girl)
+| Size |
+|------|
+| Preemie |
+| Newborn |
+| 3 month |
+| 6 month |
+| 9 month |
+| 12 month |
+| 18 month |
+| 24 month |
+| 2T |
+| 3T |
+| 4T |
+| 5T |
+| 6 |
+
 ### Phase 1 Data Model
 
 #### ClothingInventory Model
 
 **Proposed Fields:**
 - `id` - Unique identifier
-- `category` - Type of item: "Children's Socks", "Children's Underwear", "Kids Shoes", "Diapers"
+- `category` - Type of item: "Children's Socks", "Children's Underwear (Boy)", "Children's Underwear (Girl)", "Kids Shoes", "Diapers", "Pull-Ups", "Wipes", "Pajamas (Boy)", "Pajamas (Girl)"
 - `size` - Size of the item (from predefined list per category)
 - `quantity` - Number of items in stock
 - `location` - Storage location (modeled for future multi-location support, but not exposed in Phase 1 UX)
@@ -238,13 +295,18 @@ The following decisions have been confirmed:
 7. **Access Control:** All authenticated coordinators will have access to the clothing inventory management page.
 
 8. **Phase 1 Scope:** Initial implementation will focus only on inventory management with the following item categories:
-   - Children's Socks (5 sizes): Newborn, 6-12m, 12-24m, 2T-3T, 4T-5T
-   - Children's Underwear (7 sizes): 4, 6, 8, 10, 12, 14, 16
+   - Children's Socks (4 sizes): Newborn, 6-12m, 12-36 months (Gray), 4-7 years (Black)
+   - Children's Underwear Boy (7 sizes): 4, 6, 8, 10, 12, 14, 16
+   - Children's Underwear Girl (7 sizes): 4, 6, 8, 10, 12, 14, 16
    - Kids Shoes (31 individual sizes):
      - Infant/Toddler: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
      - Little Kids: 10.5, 11, 11.5, 12, 12.5, 13, 13.5
      - Youth: 1Y, 1.5Y, 2Y, 2.5Y, 3Y, 3.5Y, 4Y, 4.5Y, 5Y, 5.5Y, 6Y, 6.5Y, 7Y
    - Diapers (9 individual sizes): Preemie, Newborn, #1, #2, #3, #4, #5, #6, #7
+   - Pull-Ups (2 sizes): 2T-3T, 3T-4T
+   - Wipes (1 size): Standard
+   - Pajamas Boy (13 sizes): Preemie, Newborn, 3 month, 6 month, 9 month, 12 month, 18 month, 24 month, 2T, 3T, 4T, 5T, 6
+   - Pajamas Girl (13 sizes): Preemie, Newborn, 3 month, 6 month, 9 month, 12 month, 18 month, 24 month, 2T, 3T, 4T, 5T, 6
 
 9. **Inventory Location:** Model will support multiple locations for future use, but location will NOT be exposed in Phase 1 UX.
 
