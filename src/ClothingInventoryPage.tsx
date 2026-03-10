@@ -29,6 +29,8 @@ import {
   useTheme,
   Tabs,
   Tab,
+  ToggleButton,
+  ToggleButtonGroup,
   CircularProgress,
   Alert,
   Snackbar,
@@ -61,10 +63,14 @@ import {
 } from './graphql/mutations';
 import {
   ClothingCategory,
-  getSizesForCategory,
-  getAllCategories,
-  getCategoryLabel,
+  CHILDRENS_SOCKS_DISPLAY,
+  getAllDisplayCategories,
+  getCategoryRows,
+  hasVariants,
+  type DisplayCategory,
 } from './inventorySizes';
+
+const VALID_CATEGORIES = new Set<string>(Object.values(ClothingCategory));
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -98,6 +104,7 @@ const ClothingInventoryPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [tabValue, setTabValue] = useState(0);
   const [categoryTabValue, setCategoryTabValue] = useState(0);
+  const [variantTabValue, setVariantTabValue] = useState(0); // 0=Boy, 1=Girl for combined categories
 
   // Dialog state
   const [messageDialogOpen, setMessageDialogOpen] = useState(false);
@@ -128,7 +135,11 @@ const ClothingInventoryPage: React.FC = () => {
         authMode: 'userPool',
       });
       const items = result.data?.listClothingInventories?.items ?? [];
-      setInventory(items.filter((x): x is ClothingInventory => x != null));
+      const valid = items.filter(
+        (x): x is ClothingInventory =>
+          x != null && VALID_CATEGORIES.has(x.category as string)
+      );
+      setInventory(valid);
     } catch (error) {
       console.error('Error fetching inventory:', error);
       setSnackbar({ open: true, message: 'Error loading inventory', severity: 'error' });
@@ -163,8 +174,17 @@ const ClothingInventoryPage: React.FC = () => {
     setTabValue(newValue);
   };
 
+  const selectCategory = (index: number) => {
+    setCategoryTabValue(index);
+    setVariantTabValue(0);
+  };
+
   const handleCategoryTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setCategoryTabValue(newValue);
+    selectCategory(newValue);
+  };
+
+  const handleVariantChange = (_event: React.MouseEvent<HTMLElement>, newValue: number | null) => {
+    if (newValue !== null) setVariantTabValue(newValue);
   };
 
   const handleIncrement = async (category: ClothingCategory, size: string) => {
@@ -336,35 +356,72 @@ const ClothingInventoryPage: React.FC = () => {
     }
   };
 
-  // Category sub-tab: selected category and its rows (one per size)
-  const categories = getAllCategories();
-  const selectedCategory = categories[categoryTabValue] ?? categories[0];
-  const categoryRows = getSizesForCategory(selectedCategory).map((size) => {
-    const item = inventory.find(
-      (i) => i.category === selectedCategory && i.size === size
-    );
-    return { size, item: item ?? null, quantity: item?.quantity ?? 0 };
-  });
+  // Display categories (5 tabs; some have Boy/Girl toggle; Diapers & Baby Care is composite)
+  const displayCategories = getAllDisplayCategories();
+  const maxCategoryIndex = displayCategories.length - 1;
+  const safeCategoryTabValue = Math.min(Math.max(0, categoryTabValue), maxCategoryIndex);
+
+  // Sync state when categoryTabValue is out of bounds (e.g. after 7→5 tabs)
+  useEffect(() => {
+    if (categoryTabValue > maxCategoryIndex) {
+      setCategoryTabValue(maxCategoryIndex);
+      setVariantTabValue(0);
+    }
+  }, [categoryTabValue, maxCategoryIndex]);
+  const selectedDisplayCategory: DisplayCategory =
+    displayCategories[safeCategoryTabValue] ?? displayCategories[0];
+  const categoryRows = getCategoryRows(selectedDisplayCategory, variantTabValue).map(
+    (row) => {
+      const item = inventory.find(
+        (i) => i.category === row.category && i.size === row.size
+      );
+      return {
+        size: row.size,
+        displayLabel:
+          'displayLabel' in row
+            ? row.displayLabel ?? row.size
+            : row.category === ClothingCategory.CHILDRENS_SOCKS
+              ? (CHILDRENS_SOCKS_DISPLAY[row.size] ?? row.size)
+              : row.size,
+        category: row.category,
+        item: item ?? null,
+        quantity: item?.quantity ?? 0,
+      };
+    }
+  );
 
   // Separate active and resolved messages
   const activeMessages = messages.filter(m => !m.resolved);
   const resolvedMessages = messages.filter(m => m.resolved);
 
+  // Subtle blue/pink background when viewing Boy/Girl variant
+  const variantBg =
+    hasVariants(selectedDisplayCategory) && categoryRows.length > 0
+      ? variantTabValue === 0
+        ? 'rgba(25, 118, 210, 0.06)'
+        : 'rgba(233, 30, 99, 0.06)'
+      : undefined;
+
   // Render one category row for mobile (size, qty input, +/-, notes; no edit/delete)
-  const renderMobileCategoryRow = (row: { size: string; item: ClothingInventory | null; quantity: number }) => {
+  const renderMobileCategoryRow = (row: {
+    size: string;
+    displayLabel: string;
+    category: ClothingCategory;
+    item: ClothingInventory | null;
+    quantity: number;
+  }) => {
     const isEditing =
-      editingQuantity?.category === selectedCategory &&
-      editingQuantity?.size === row.size;
+      editingQuantity?.category === row.category && editingQuantity?.size === row.size;
     const displayValue = isEditing ? editingQuantity!.value : String(row.quantity);
     return (
-      <Card key={row.size} sx={{ mb: 1 }}>
+      <Card key={`${row.category}-${row.size}`} sx={{ mb: 1 }}>
         <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
-            <Typography variant="subtitle2">{row.size}</Typography>
+            <Typography variant="subtitle2">{row.displayLabel}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
               <IconButton
                 size="small"
-                onClick={() => handleDecrement(selectedCategory, row.size)}
+                onClick={() => handleDecrement(row.category, row.size)}
                 disabled={row.quantity <= 0}
                 aria-label="Decrease quantity"
               >
@@ -382,7 +439,7 @@ const ClothingInventoryPage: React.FC = () => {
                     );
                   } else {
                     setEditingQuantity({
-                      category: selectedCategory,
+                      category: row.category,
                       size: row.size,
                       value: v,
                     });
@@ -390,7 +447,7 @@ const ClothingInventoryPage: React.FC = () => {
                 }}
                 onFocus={() =>
                   setEditingQuantity({
-                    category: selectedCategory,
+                    category: row.category,
                     size: row.size,
                     value: String(row.quantity),
                   })
@@ -403,7 +460,7 @@ const ClothingInventoryPage: React.FC = () => {
                   );
                   setEditingQuantity(null);
                   if (num !== row.quantity) {
-                    handleQuantityChange(selectedCategory, row.size, num);
+                    handleQuantityChange(row.category, row.size, num);
                   }
                 }}
                 onKeyDown={(e) => {
@@ -413,13 +470,13 @@ const ClothingInventoryPage: React.FC = () => {
                 }}
                 inputProps={{
                   min: 0,
-                  'aria-label': `Quantity for size ${row.size}`,
+                  'aria-label': `Quantity for ${row.displayLabel}`,
                 }}
                 sx={{ width: 56 }}
               />
               <IconButton
                 size="small"
-                onClick={() => handleIncrement(selectedCategory, row.size)}
+                onClick={() => handleIncrement(row.category, row.size)}
                 aria-label="Increase quantity"
               >
                 <AddIcon fontSize="small" />
@@ -461,33 +518,67 @@ const ClothingInventoryPage: React.FC = () => {
           {/* Inventory Tab */}
           <TabPanel value={tabValue} index={0}>
             {isMobile ? (
-              <FormControl fullWidth sx={{ mb: 2 }}>
-                <InputLabel id="category-select-label">Category</InputLabel>
-                <Select
-                  labelId="category-select-label"
-                  value={String(categoryTabValue)}
-                  label="Category"
-                  onChange={(e: SelectChangeEvent<string>) =>
-                    setCategoryTabValue(Number(e.target.value))
-                  }
-                >
-                  {categories.map((cat, idx) => (
-                    <MenuItem key={cat} value={String(idx)}>
-                      {getCategoryLabel(cat)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Box sx={{ mb: 2 }}>
+                <FormControl fullWidth sx={{ mb: hasVariants(selectedDisplayCategory) ? 2 : 0 }}>
+                  <InputLabel id="category-select-label">Category</InputLabel>
+                  <Select
+                    labelId="category-select-label"
+                    value={String(safeCategoryTabValue)}
+                    label="Category"
+                    onChange={(e: SelectChangeEvent<string>) =>
+                      selectCategory(Number(e.target.value))
+                    }
+                  >
+                    {displayCategories.map((dc, idx) => (
+                      <MenuItem key={dc.label} value={String(idx)}>
+                        {dc.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {hasVariants(selectedDisplayCategory) && (
+                  <ToggleButtonGroup
+                    value={variantTabValue}
+                    exclusive
+                    onChange={handleVariantChange}
+                    size="small"
+                    sx={{ mt: 1 }}
+                  >
+                    {selectedDisplayCategory.variantLabels.map((lbl, i) => (
+                      <ToggleButton key={lbl} value={i}>
+                        {lbl}
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                )}
+              </Box>
             ) : (
-              <Tabs
-                value={categoryTabValue}
-                onChange={handleCategoryTabChange}
-                sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
-              >
-                {categories.map((cat, idx) => (
-                  <Tab key={cat} label={getCategoryLabel(cat)} id={`category-tab-${idx}`} />
-                ))}
-              </Tabs>
+              <Box sx={{ mb: 2 }}>
+                <Tabs
+                  value={safeCategoryTabValue}
+                  onChange={handleCategoryTabChange}
+                  sx={{ borderBottom: 1, borderColor: 'divider' }}
+                >
+                  {displayCategories.map((dc, idx) => (
+                    <Tab key={dc.label} label={dc.label} id={`category-tab-${idx}`} />
+                  ))}
+                </Tabs>
+                {hasVariants(selectedDisplayCategory) && (
+                  <ToggleButtonGroup
+                    value={variantTabValue}
+                    exclusive
+                    onChange={handleVariantChange}
+                    size="small"
+                    sx={{ mt: 2 }}
+                  >
+                    {selectedDisplayCategory.variantLabels.map((lbl, i) => (
+                      <ToggleButton key={lbl} value={i}>
+                        {lbl}
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                )}
+              </Box>
             )}
 
             {loading ? (
@@ -497,11 +588,11 @@ const ClothingInventoryPage: React.FC = () => {
             ) : categoryRows.length === 0 ? (
               <Alert severity="info">No sizes defined for this category.</Alert>
             ) : isMobile ? (
-              <Box>
+              <Box sx={{ bgcolor: variantBg, borderRadius: 1, px: 2, py: 2 }}>
                 {categoryRows.map(renderMobileCategoryRow)}
               </Box>
             ) : (
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} sx={{ bgcolor: variantBg }}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -513,14 +604,14 @@ const ClothingInventoryPage: React.FC = () => {
                   <TableBody>
                     {categoryRows.map((row) => {
                       const isEditing =
-                        editingQuantity?.category === selectedCategory &&
+                        editingQuantity?.category === row.category &&
                         editingQuantity?.size === row.size;
                       const displayValue = isEditing
                         ? editingQuantity!.value
                         : String(row.quantity);
                       return (
-                        <TableRow key={row.size}>
-                          <TableCell>{row.size}</TableCell>
+                        <TableRow key={`${row.category}-${row.size}`}>
+                          <TableCell>{row.displayLabel}</TableCell>
                           <TableCell align="right">
                             <TextField
                               type="number"
@@ -534,7 +625,7 @@ const ClothingInventoryPage: React.FC = () => {
                                   );
                                 } else {
                                   setEditingQuantity({
-                                    category: selectedCategory,
+                                    category: row.category,
                                     size: row.size,
                                     value: v,
                                   });
@@ -542,7 +633,7 @@ const ClothingInventoryPage: React.FC = () => {
                               }}
                               onFocus={() =>
                                 setEditingQuantity({
-                                  category: selectedCategory,
+                                  category: row.category,
                                   size: row.size,
                                   value: String(row.quantity),
                                 })
@@ -556,7 +647,7 @@ const ClothingInventoryPage: React.FC = () => {
                                 setEditingQuantity(null);
                                 if (num !== row.quantity) {
                                   handleQuantityChange(
-                                    selectedCategory,
+                                    row.category,
                                     row.size,
                                     num
                                   );
@@ -569,7 +660,7 @@ const ClothingInventoryPage: React.FC = () => {
                               }}
                               inputProps={{
                                 min: 0,
-                                'aria-label': `Quantity for size ${row.size}`,
+                                'aria-label': `Quantity for ${row.displayLabel}`,
                               }}
                               sx={{ width: 72 }}
                             />
@@ -578,7 +669,7 @@ const ClothingInventoryPage: React.FC = () => {
                             <IconButton
                               size="small"
                               onClick={() =>
-                                handleDecrement(selectedCategory, row.size)
+                                handleDecrement(row.category, row.size)
                               }
                               disabled={row.quantity <= 0}
                               aria-label="Decrease quantity"
@@ -586,10 +677,10 @@ const ClothingInventoryPage: React.FC = () => {
                               <RemoveIcon fontSize="small" />
                             </IconButton>
                             <IconButton
-                              size="small"
-                              onClick={() =>
-                                handleIncrement(selectedCategory, row.size)
-                              }
+                                size="small"
+                                onClick={() =>
+                                  handleIncrement(row.category, row.size)
+                                }
                               aria-label="Increase quantity"
                             >
                               <AddIcon fontSize="small" />

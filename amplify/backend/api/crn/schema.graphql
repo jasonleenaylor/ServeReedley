@@ -218,9 +218,14 @@ enum LeadSource {
 
 enum ClothingCategory {
   CHILDRENS_SOCKS
-  CHILDRENS_UNDERWEAR
+  CHILDRENS_UNDERWEAR_BOY
+  CHILDRENS_UNDERWEAR_GIRL
   KIDS_SHOES
   DIAPERS
+  PULL_UPS
+  WIPES
+  PAJAMAS_BOY
+  PAJAMAS_GIRL
 }
 
 type ClothingInventory @model @auth(rules: [{ allow: private }]) {
