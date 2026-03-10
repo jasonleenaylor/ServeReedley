@@ -2,20 +2,11 @@
  * Clothing Inventory Size Constants
  *
  * Predefined sizes for each clothing category in the inventory system.
- * ClothingCategory enum matches the GraphQL schema enum.
+ * ClothingCategory is imported from the generated API (GraphQL schema source of truth).
  */
 
-export enum ClothingCategory {
-  CHILDRENS_SOCKS = 'CHILDRENS_SOCKS',
-  CHILDRENS_UNDERWEAR_BOY = 'CHILDRENS_UNDERWEAR_BOY',
-  CHILDRENS_UNDERWEAR_GIRL = 'CHILDRENS_UNDERWEAR_GIRL',
-  KIDS_SHOES = 'KIDS_SHOES',
-  DIAPERS = 'DIAPERS',
-  PULL_UPS = 'PULL_UPS',
-  WIPES = 'WIPES',
-  PAJAMAS_BOY = 'PAJAMAS_BOY',
-  PAJAMAS_GIRL = 'PAJAMAS_GIRL',
-}
+import { ClothingCategory } from './API';
+export { ClothingCategory };
 
 export const CLOTHING_CATEGORY_LABELS: Record<ClothingCategory, string> = {
   [ClothingCategory.CHILDRENS_SOCKS]: "Children's Socks",
