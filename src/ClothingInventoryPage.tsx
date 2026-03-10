@@ -174,9 +174,13 @@ const ClothingInventoryPage: React.FC = () => {
     setTabValue(newValue);
   };
 
+  const selectCategory = (index: number) => {
+    setCategoryTabValue(index);
+    setVariantTabValue(0);
+  };
+
   const handleCategoryTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setCategoryTabValue(newValue);
-    setVariantTabValue(0); // Reset Boy/Girl when switching category
+    selectCategory(newValue);
   };
 
   const handleVariantChange = (_event: React.MouseEvent<HTMLElement>, newValue: number | null) => {
@@ -376,7 +380,9 @@ const ClothingInventoryPage: React.FC = () => {
         displayLabel:
           'displayLabel' in row
             ? row.displayLabel ?? row.size
-            : (CHILDRENS_SOCKS_DISPLAY[row.size] ?? row.size),
+            : row.category === ClothingCategory.CHILDRENS_SOCKS
+              ? (CHILDRENS_SOCKS_DISPLAY[row.size] ?? row.size)
+              : row.size,
         category: row.category,
         item: item ?? null,
         quantity: item?.quantity ?? 0,
@@ -408,7 +414,7 @@ const ClothingInventoryPage: React.FC = () => {
       editingQuantity?.category === row.category && editingQuantity?.size === row.size;
     const displayValue = isEditing ? editingQuantity!.value : String(row.quantity);
     return (
-      <Card key={row.size} sx={{ mb: 1 }}>
+      <Card key={`${row.category}-${row.size}`} sx={{ mb: 1 }}>
         <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
             <Typography variant="subtitle2">{row.displayLabel}</Typography>
@@ -520,7 +526,7 @@ const ClothingInventoryPage: React.FC = () => {
                     value={String(safeCategoryTabValue)}
                     label="Category"
                     onChange={(e: SelectChangeEvent<string>) =>
-                      setCategoryTabValue(Number(e.target.value))
+                      selectCategory(Number(e.target.value))
                     }
                   >
                     {displayCategories.map((dc, idx) => (
@@ -604,7 +610,7 @@ const ClothingInventoryPage: React.FC = () => {
                         ? editingQuantity!.value
                         : String(row.quantity);
                       return (
-                        <TableRow key={row.size}>
+                        <TableRow key={`${row.category}-${row.size}`}>
                           <TableCell>{row.displayLabel}</TableCell>
                           <TableCell align="right">
                             <TextField

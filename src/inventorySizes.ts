@@ -312,11 +312,12 @@ export function getEffectiveCategory(
 
 /**
  * Get category rows for a display category. For composite, returns rows with category per row.
+ * Composite rows may include optional displayLabel; use 'displayLabel' in row to detect.
  */
 export function getCategoryRows(
   displayCategory: DisplayCategory,
   variantIndex: number
-): readonly { category: ClothingCategory; size: string }[] {
+): readonly (CompositeInventoryRow | { category: ClothingCategory; size: string })[] {
   if (isComposite(displayCategory)) {
     return displayCategory.composite;
   }
