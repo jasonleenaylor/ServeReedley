@@ -12,9 +12,16 @@ import {
   PAJAMAS_BOY_SIZES,
   PAJAMAS_GIRL_SIZES,
   CATEGORY_SIZES,
+  DISPLAY_CATEGORIES,
+  DIAPERS_BABY_CARE_ROWS,
   getSizesForCategory,
   getCategoryLabel,
   getAllCategories,
+  getAllDisplayCategories,
+  getCategoryRows,
+  getEffectiveCategory,
+  hasVariants,
+  isComposite,
 } from './inventorySizes';
 
 describe('inventorySizes', () => {
@@ -252,6 +259,80 @@ describe('inventorySizes', () => {
         0
       );
       expect(totalSizes).toBe(87);
+    });
+  });
+
+  describe('Display categories (combined)', () => {
+    it('should have 5 display categories', () => {
+      expect(DISPLAY_CATEGORIES).toHaveLength(5);
+      expect(getAllDisplayCategories()).toEqual(DISPLAY_CATEGORIES);
+    });
+
+    it('should have single-category items for Socks and Shoes', () => {
+      expect(hasVariants(DISPLAY_CATEGORIES[0])).toBe(false);
+      expect(hasVariants(DISPLAY_CATEGORIES[2])).toBe(false);
+    });
+
+    it('should have variants for Underwear and Pajamas (Boy/Girl)', () => {
+      expect(hasVariants(DISPLAY_CATEGORIES[1])).toBe(true);
+      expect(hasVariants(DISPLAY_CATEGORIES[4])).toBe(true);
+      if (hasVariants(DISPLAY_CATEGORIES[1])) {
+        expect(DISPLAY_CATEGORIES[1].variantLabels).toEqual(['Boy', 'Girl']);
+      }
+      if (hasVariants(DISPLAY_CATEGORIES[4])) {
+        expect(DISPLAY_CATEGORIES[4].variantLabels).toEqual(['Boy', 'Girl']);
+      }
+    });
+
+    it('Diapers & Baby Care should be composite (no toggle): diapers, pull-ups, wipes in one list', () => {
+      const babyCare = DISPLAY_CATEGORIES[3];
+      expect(hasVariants(babyCare)).toBe(false);
+      expect(isComposite(babyCare)).toBe(true);
+      if (isComposite(babyCare)) {
+        expect(babyCare.composite).toEqual(DIAPERS_BABY_CARE_ROWS);
+        expect(babyCare.composite.length).toBe(12); // 9 diapers + 2 pull-ups + 1 wipes
+        expect(babyCare.composite.slice(0, 9).every((r) => r.category === ClothingCategory.DIAPERS)).toBe(true);
+        expect(babyCare.composite.slice(9, 11).every((r) => r.category === ClothingCategory.PULL_UPS)).toBe(true);
+        expect(babyCare.composite[11].category).toBe(ClothingCategory.WIPES);
+        expect(babyCare.composite[11].size).toBe('Standard');
+        expect(babyCare.composite[11].displayLabel).toBe('Wipes');
+      }
+    });
+
+    it('getCategoryRows for Diapers & Baby Care returns diapers then pull-ups then wipes', () => {
+      const rows = getCategoryRows(DISPLAY_CATEGORIES[3], 0);
+      expect(rows.length).toBe(12);
+      expect(rows[0]).toEqual({ category: ClothingCategory.DIAPERS, size: 'Preemie' });
+      expect(rows[8]).toEqual({ category: ClothingCategory.DIAPERS, size: '#7' });
+      expect(rows[9]).toEqual({
+        category: ClothingCategory.PULL_UPS,
+        size: '2T-3T',
+        displayLabel: 'Pull-ups 2T-3T',
+      });
+      expect(rows[10]).toEqual({
+        category: ClothingCategory.PULL_UPS,
+        size: '3T-4T',
+        displayLabel: 'Pull-ups 3T-4T',
+      });
+      expect(rows[11]).toEqual({
+        category: ClothingCategory.WIPES,
+        size: 'Standard',
+        displayLabel: 'Wipes',
+      });
+    });
+
+    it('getEffectiveCategory should return correct category for Underwear and Pajamas variants', () => {
+      const underwear = DISPLAY_CATEGORIES[1];
+      expect(getEffectiveCategory(underwear, 0)).toBe(ClothingCategory.CHILDRENS_UNDERWEAR_BOY);
+      expect(getEffectiveCategory(underwear, 1)).toBe(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL);
+      const pajamas = DISPLAY_CATEGORIES[4];
+      expect(getEffectiveCategory(pajamas, 0)).toBe(ClothingCategory.PAJAMAS_BOY);
+      expect(getEffectiveCategory(pajamas, 1)).toBe(ClothingCategory.PAJAMAS_GIRL);
+    });
+
+    it('getEffectiveCategory should return single category for non-variant items', () => {
+      expect(getEffectiveCategory(DISPLAY_CATEGORIES[0], 0)).toBe(ClothingCategory.CHILDRENS_SOCKS);
+      expect(getEffectiveCategory(DISPLAY_CATEGORIES[0], 99)).toBe(ClothingCategory.CHILDRENS_SOCKS);
     });
   });
 });
