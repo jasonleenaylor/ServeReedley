@@ -1321,6 +1321,7 @@ export const getInventoryMessage = /* GraphQL */ `query GetInventoryMessage($id:
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt
@@ -1344,6 +1345,7 @@ export const listInventoryMessages = /* GraphQL */ `query ListInventoryMessages(
       content
       authorId
       authorName
+      parentMessageId
       resolved
       resolvedBy
       resolvedAt

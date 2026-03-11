@@ -2147,6 +2147,7 @@ export const createInventoryMessage = /* GraphQL */ `mutation CreateInventoryMes
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt
@@ -2168,6 +2169,7 @@ export const updateInventoryMessage = /* GraphQL */ `mutation UpdateInventoryMes
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt
@@ -2189,6 +2191,7 @@ export const deleteInventoryMessage = /* GraphQL */ `mutation DeleteInventoryMes
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt

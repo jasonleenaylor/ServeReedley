@@ -634,12 +634,12 @@ const ClothingInventoryPage: React.FC = () => {
                 {categoryRows.map(renderMobileCategoryRow)}
               </Box>
             ) : (
-              <TableContainer component={Paper} sx={{ bgcolor: variantBg }}>
-                <Table>
+              <TableContainer component={Paper} sx={{ bgcolor: variantBg, px: 2 }}>
+                <Table sx={{ borderCollapse: 'separate', borderSpacing: '0 6px' }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Size</TableCell>
-                      <TableCell align="right">Quantity</TableCell>
+                      <TableCell sx={{ width: '1%', whiteSpace: 'nowrap', pr: 1 }}>Size</TableCell>
+                      <TableCell align="center" sx={{ pl: 1, pr: 1 }}>Quantity</TableCell>
                       <TableCell align="center">Adjust</TableCell>
                     </TableRow>
                   </TableHead>
@@ -653,8 +653,8 @@ const ClothingInventoryPage: React.FC = () => {
                         : String(row.quantity);
                       return (
                         <TableRow key={`${row.category}-${row.size}`}>
-                          <TableCell>{row.displayLabel}</TableCell>
-                          <TableCell align="right">
+                          <TableCell sx={{ width: '1%', whiteSpace: 'nowrap', pr: 1 }}>{row.displayLabel}</TableCell>
+                          <TableCell align="center" sx={{ pl: 1, pr: 1 }}>
                             <TextField
                               type="number"
                               size="small"
@@ -703,6 +703,7 @@ const ClothingInventoryPage: React.FC = () => {
                               inputProps={{
                                 min: 0,
                                 'aria-label': `Quantity for ${row.displayLabel}`,
+                                style: { textAlign: 'center' },
                               }}
                               sx={{ width: 72 }}
                             />
@@ -779,18 +780,6 @@ const ClothingInventoryPage: React.FC = () => {
                       )}
                     </CardContent>
                     <CardActions sx={{ flexWrap: 'wrap', gap: 1 }}>
-                      <Button
-                        size="small"
-                        startIcon={<CheckIcon />}
-                        onClick={() =>
-                          handleResolveMessage(
-                            thread.root,
-                            user?.signInDetails?.loginId || 'Unknown'
-                          )
-                        }
-                      >
-                        Resolve
-                      </Button>
                       <TextField
                         size="small"
                         placeholder="Reply in thread"
@@ -801,9 +790,23 @@ const ClothingInventoryPage: React.FC = () => {
                             [thread.root.id]: e.target.value,
                           }))
                         }
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const reply = (replyByThreadId[thread.root.id] ?? '').trim();
+                            if (reply) {
+                              handlePostReply(
+                                thread.root.id,
+                                user?.signInDetails?.loginId || 'Unknown'
+                              );
+                            }
+                          }
+                        }}
                       />
                       <Button
                         size="small"
+                        variant="outlined"
+                        color="inherit"
                         onClick={() =>
                           handlePostReply(
                             thread.root.id,
@@ -813,6 +816,19 @@ const ClothingInventoryPage: React.FC = () => {
                         disabled={!(replyByThreadId[thread.root.id] ?? '').trim()}
                       >
                         Reply
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        startIcon={<CheckIcon />}
+                        onClick={() =>
+                          handleResolveMessage(
+                            thread.root,
+                            user?.signInDetails?.loginId || 'Unknown'
+                          )
+                        }
+                      >
+                        Resolve
                       </Button>
                     </CardActions>
                   </Card>

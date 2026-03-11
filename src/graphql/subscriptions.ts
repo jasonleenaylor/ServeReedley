@@ -2089,6 +2089,7 @@ export const onCreateInventoryMessage = /* GraphQL */ `subscription OnCreateInve
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt
@@ -2109,6 +2110,7 @@ export const onUpdateInventoryMessage = /* GraphQL */ `subscription OnUpdateInve
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt
@@ -2129,6 +2131,7 @@ export const onDeleteInventoryMessage = /* GraphQL */ `subscription OnDeleteInve
     content
     authorId
     authorName
+    parentMessageId
     resolved
     resolvedBy
     resolvedAt
