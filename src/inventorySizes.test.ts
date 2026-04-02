@@ -5,7 +5,8 @@ import {
   CHILDRENS_SOCKS_SIZES,
   CHILDRENS_UNDERWEAR_BOY_SIZES,
   CHILDRENS_UNDERWEAR_GIRL_SIZES,
-  KIDS_SHOES_SIZES,
+  KIDS_SHOES_BOY_SIZES,
+  KIDS_SHOES_GIRL_SIZES,
   DIAPERS_SIZES,
   PULL_UPS_SIZES,
   WIPES_SIZES,
@@ -26,16 +27,17 @@ import {
 
 describe('inventorySizes', () => {
   describe('ClothingCategory enum', () => {
-    it('should have 9 categories', () => {
+    it('should have 10 categories', () => {
       const categories = Object.values(ClothingCategory);
-      expect(categories).toHaveLength(9);
+      expect(categories).toHaveLength(10);
     });
 
     it('should contain expected categories', () => {
       expect(ClothingCategory.CHILDRENS_SOCKS).toBe('CHILDRENS_SOCKS');
       expect(ClothingCategory.CHILDRENS_UNDERWEAR_BOY).toBe('CHILDRENS_UNDERWEAR_BOY');
       expect(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL).toBe('CHILDRENS_UNDERWEAR_GIRL');
-      expect(ClothingCategory.KIDS_SHOES).toBe('KIDS_SHOES');
+      expect(ClothingCategory.KIDS_SHOES_BOY).toBe('KIDS_SHOES_BOY');
+      expect(ClothingCategory.KIDS_SHOES_GIRL).toBe('KIDS_SHOES_GIRL');
       expect(ClothingCategory.DIAPERS).toBe('DIAPERS');
       expect(ClothingCategory.PULL_UPS).toBe('PULL_UPS');
       expect(ClothingCategory.WIPES).toBe('WIPES');
@@ -57,7 +59,8 @@ describe('inventorySizes', () => {
       expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.CHILDRENS_SOCKS]).toBe("Children's Socks");
       expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.CHILDRENS_UNDERWEAR_BOY]).toBe("Children's Underwear (Boy)");
       expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.CHILDRENS_UNDERWEAR_GIRL]).toBe("Children's Underwear (Girl)");
-      expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.KIDS_SHOES]).toBe('Kids Shoes');
+      expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.KIDS_SHOES_BOY]).toBe('Kids Shoes (Boy)');
+      expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.KIDS_SHOES_GIRL]).toBe('Kids Shoes (Girl)');
       expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.DIAPERS]).toBe('Diapers');
       expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.PULL_UPS]).toBe('Pull-Ups');
       expect(CLOTHING_CATEGORY_LABELS[ClothingCategory.WIPES]).toBe('Wipes');
@@ -112,27 +115,33 @@ describe('inventorySizes', () => {
     });
   });
 
-  describe('Kids Shoes sizes', () => {
+  describe('Kids Shoes (Boy) sizes', () => {
     it('should have 31 sizes', () => {
-      expect(KIDS_SHOES_SIZES).toHaveLength(31);
+      expect(KIDS_SHOES_BOY_SIZES).toHaveLength(31);
     });
 
     it('should contain infant/toddler sizes (0-10)', () => {
       ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'].forEach(size => {
-        expect(KIDS_SHOES_SIZES).toContain(size);
+        expect(KIDS_SHOES_BOY_SIZES).toContain(size);
       });
     });
 
     it('should contain little kids sizes (10.5-13.5)', () => {
       ['10.5', '11', '11.5', '12', '12.5', '13', '13.5'].forEach(size => {
-        expect(KIDS_SHOES_SIZES).toContain(size);
+        expect(KIDS_SHOES_BOY_SIZES).toContain(size);
       });
     });
 
     it('should contain youth sizes (1Y-7Y)', () => {
       ['1Y', '1.5Y', '2Y', '2.5Y', '3Y', '3.5Y', '4Y', '4.5Y', '5Y', '5.5Y', '6Y', '6.5Y', '7Y'].forEach(size => {
-        expect(KIDS_SHOES_SIZES).toContain(size);
+        expect(KIDS_SHOES_BOY_SIZES).toContain(size);
       });
+    });
+  });
+
+  describe('Kids Shoes (Girl) sizes', () => {
+    it('should match boys shoe sizes', () => {
+      expect(KIDS_SHOES_GIRL_SIZES).toEqual(KIDS_SHOES_BOY_SIZES);
     });
   });
 
@@ -206,7 +215,8 @@ describe('inventorySizes', () => {
       expect(getSizesForCategory(ClothingCategory.CHILDRENS_SOCKS)).toEqual(CHILDRENS_SOCKS_SIZES);
       expect(getSizesForCategory(ClothingCategory.CHILDRENS_UNDERWEAR_BOY)).toEqual(CHILDRENS_UNDERWEAR_BOY_SIZES);
       expect(getSizesForCategory(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL)).toEqual(CHILDRENS_UNDERWEAR_GIRL_SIZES);
-      expect(getSizesForCategory(ClothingCategory.KIDS_SHOES)).toEqual(KIDS_SHOES_SIZES);
+      expect(getSizesForCategory(ClothingCategory.KIDS_SHOES_BOY)).toEqual(KIDS_SHOES_BOY_SIZES);
+      expect(getSizesForCategory(ClothingCategory.KIDS_SHOES_GIRL)).toEqual(KIDS_SHOES_GIRL_SIZES);
       expect(getSizesForCategory(ClothingCategory.DIAPERS)).toEqual(DIAPERS_SIZES);
       expect(getSizesForCategory(ClothingCategory.PULL_UPS)).toEqual(PULL_UPS_SIZES);
       expect(getSizesForCategory(ClothingCategory.WIPES)).toEqual(WIPES_SIZES);
@@ -220,7 +230,8 @@ describe('inventorySizes', () => {
       expect(getCategoryLabel(ClothingCategory.CHILDRENS_SOCKS)).toBe("Children's Socks");
       expect(getCategoryLabel(ClothingCategory.CHILDRENS_UNDERWEAR_BOY)).toBe("Children's Underwear (Boy)");
       expect(getCategoryLabel(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL)).toBe("Children's Underwear (Girl)");
-      expect(getCategoryLabel(ClothingCategory.KIDS_SHOES)).toBe('Kids Shoes');
+      expect(getCategoryLabel(ClothingCategory.KIDS_SHOES_BOY)).toBe('Kids Shoes (Boy)');
+      expect(getCategoryLabel(ClothingCategory.KIDS_SHOES_GIRL)).toBe('Kids Shoes (Girl)');
       expect(getCategoryLabel(ClothingCategory.DIAPERS)).toBe('Diapers');
       expect(getCategoryLabel(ClothingCategory.PULL_UPS)).toBe('Pull-Ups');
       expect(getCategoryLabel(ClothingCategory.WIPES)).toBe('Wipes');
@@ -230,13 +241,14 @@ describe('inventorySizes', () => {
   });
 
   describe('getAllCategories', () => {
-    it('should return all 9 categories', () => {
+    it('should return all 10 categories', () => {
       const categories = getAllCategories();
-      expect(categories).toHaveLength(9);
+      expect(categories).toHaveLength(10);
       expect(categories).toContain(ClothingCategory.CHILDRENS_SOCKS);
       expect(categories).toContain(ClothingCategory.CHILDRENS_UNDERWEAR_BOY);
       expect(categories).toContain(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL);
-      expect(categories).toContain(ClothingCategory.KIDS_SHOES);
+      expect(categories).toContain(ClothingCategory.KIDS_SHOES_BOY);
+      expect(categories).toContain(ClothingCategory.KIDS_SHOES_GIRL);
       expect(categories).toContain(ClothingCategory.DIAPERS);
       expect(categories).toContain(ClothingCategory.PULL_UPS);
       expect(categories).toContain(ClothingCategory.WIPES);
@@ -254,12 +266,12 @@ describe('inventorySizes', () => {
       });
     });
 
-    it('should have correct total of 88 sizes across all categories', () => {
+    it('should have correct total of 119 sizes across all categories', () => {
       const totalSizes = Object.values(CATEGORY_SIZES).reduce(
         (sum, sizes) => sum + sizes.length,
         0
       );
-      expect(totalSizes).toBe(88);
+      expect(totalSizes).toBe(119);
     });
   });
 
@@ -330,8 +342,8 @@ describe('inventorySizes', () => {
       expect(getEffectiveCategory(underwear, 0)).toBe(ClothingCategory.CHILDRENS_UNDERWEAR_BOY);
       expect(getEffectiveCategory(underwear, 1)).toBe(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL);
       const shoes = DISPLAY_CATEGORIES[2];
-      expect(getEffectiveCategory(shoes, 0)).toBe(ClothingCategory.KIDS_SHOES);
-      expect(getEffectiveCategory(shoes, 1)).toBe(ClothingCategory.KIDS_SHOES);
+      expect(getEffectiveCategory(shoes, 0)).toBe(ClothingCategory.KIDS_SHOES_BOY);
+      expect(getEffectiveCategory(shoes, 1)).toBe(ClothingCategory.KIDS_SHOES_GIRL);
       const pajamas = DISPLAY_CATEGORIES[4];
       expect(getEffectiveCategory(pajamas, 0)).toBe(ClothingCategory.PAJAMAS_BOY);
       expect(getEffectiveCategory(pajamas, 1)).toBe(ClothingCategory.PAJAMAS_GIRL);
