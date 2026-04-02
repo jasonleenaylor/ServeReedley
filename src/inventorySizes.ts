@@ -38,22 +38,23 @@ export const CHILDRENS_SOCKS_DISPLAY: Record<string, string> = {
 };
 
 /**
- * Children's Underwear (Boy) - 7 sizes
+ * Children's Underwear (Boy) - 6 sizes
  */
 export const CHILDRENS_UNDERWEAR_BOY_SIZES = [
-  '4',
-  '6',
-  '8',
-  '10',
-  '12',
-  '14',
-  '16',
+  '2T / 3T',
+  '4 / 5 (XS)',
+  '6 / 7 (Small)',
+  '8 (Medium)',
+  '10-12 (Large)',
+  '14 (Extra Large)',
 ] as const;
 
 /**
- * Children's Underwear (Girl) - 7 sizes
+ * Children's Underwear (Girl) - 9 sizes
  */
 export const CHILDRENS_UNDERWEAR_GIRL_SIZES = [
+  '2T / 3T',
+  '4T / 5T',
   '4',
   '6',
   '8',
@@ -259,7 +260,11 @@ export const DISPLAY_CATEGORIES: DisplayCategory[] = [
     ],
     variantLabels: ['Boy', 'Girl'],
   },
-  { label: 'Kids Shoes', categories: [ClothingCategory.KIDS_SHOES] },
+  {
+    label: 'Kids Shoes',
+    categories: [ClothingCategory.KIDS_SHOES, ClothingCategory.KIDS_SHOES],
+    variantLabels: ['Boy', 'Girl'],
+  },
   { label: 'Diapers & Baby Care', composite: DIAPERS_BABY_CARE_ROWS },
   {
     label: 'Pajamas',

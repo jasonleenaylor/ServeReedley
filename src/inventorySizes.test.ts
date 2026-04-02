@@ -80,27 +80,28 @@ describe('inventorySizes', () => {
   });
 
   describe("Children's Underwear (Boy) sizes", () => {
-    it('should have 7 sizes', () => {
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toHaveLength(7);
+    it('should have 6 sizes', () => {
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toHaveLength(6);
     });
 
     it('should contain expected sizes', () => {
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('4');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('6');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('8');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('10');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('12');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('14');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('16');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('2T / 3T');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('4 / 5 (XS)');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('6 / 7 (Small)');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('8 (Medium)');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('10-12 (Large)');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('14 (Extra Large)');
     });
   });
 
   describe("Children's Underwear (Girl) sizes", () => {
-    it('should have 7 sizes', () => {
-      expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toHaveLength(7);
+    it('should have 9 sizes', () => {
+      expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toHaveLength(9);
     });
 
     it('should contain expected sizes', () => {
+      expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toContain('2T / 3T');
+      expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toContain('4T / 5T');
       expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toContain('4');
       expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toContain('6');
       expect(CHILDRENS_UNDERWEAR_GIRL_SIZES).toContain('8');
@@ -253,12 +254,12 @@ describe('inventorySizes', () => {
       });
     });
 
-    it('should have correct total of 87 sizes across all categories', () => {
+    it('should have correct total of 88 sizes across all categories', () => {
       const totalSizes = Object.values(CATEGORY_SIZES).reduce(
         (sum, sizes) => sum + sizes.length,
         0
       );
-      expect(totalSizes).toBe(87);
+      expect(totalSizes).toBe(88);
     });
   });
 
@@ -268,16 +269,19 @@ describe('inventorySizes', () => {
       expect(getAllDisplayCategories()).toEqual(DISPLAY_CATEGORIES);
     });
 
-    it('should have single-category items for Socks and Shoes', () => {
+    it('should have single-category item for Socks', () => {
       expect(hasVariants(DISPLAY_CATEGORIES[0])).toBe(false);
-      expect(hasVariants(DISPLAY_CATEGORIES[2])).toBe(false);
     });
 
-    it('should have variants for Underwear and Pajamas (Boy/Girl)', () => {
+    it('should have variants for Underwear, Shoes, and Pajamas (Boy/Girl)', () => {
       expect(hasVariants(DISPLAY_CATEGORIES[1])).toBe(true);
+      expect(hasVariants(DISPLAY_CATEGORIES[2])).toBe(true);
       expect(hasVariants(DISPLAY_CATEGORIES[4])).toBe(true);
       if (hasVariants(DISPLAY_CATEGORIES[1])) {
         expect(DISPLAY_CATEGORIES[1].variantLabels).toEqual(['Boy', 'Girl']);
+      }
+      if (hasVariants(DISPLAY_CATEGORIES[2])) {
+        expect(DISPLAY_CATEGORIES[2].variantLabels).toEqual(['Boy', 'Girl']);
       }
       if (hasVariants(DISPLAY_CATEGORIES[4])) {
         expect(DISPLAY_CATEGORIES[4].variantLabels).toEqual(['Boy', 'Girl']);
@@ -325,6 +329,9 @@ describe('inventorySizes', () => {
       const underwear = DISPLAY_CATEGORIES[1];
       expect(getEffectiveCategory(underwear, 0)).toBe(ClothingCategory.CHILDRENS_UNDERWEAR_BOY);
       expect(getEffectiveCategory(underwear, 1)).toBe(ClothingCategory.CHILDRENS_UNDERWEAR_GIRL);
+      const shoes = DISPLAY_CATEGORIES[2];
+      expect(getEffectiveCategory(shoes, 0)).toBe(ClothingCategory.KIDS_SHOES);
+      expect(getEffectiveCategory(shoes, 1)).toBe(ClothingCategory.KIDS_SHOES);
       const pajamas = DISPLAY_CATEGORIES[4];
       expect(getEffectiveCategory(pajamas, 0)).toBe(ClothingCategory.PAJAMAS_BOY);
       expect(getEffectiveCategory(pajamas, 1)).toBe(ClothingCategory.PAJAMAS_GIRL);
