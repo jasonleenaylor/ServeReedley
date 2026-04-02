@@ -45,7 +45,7 @@ export const CHILDRENS_UNDERWEAR_BOY_SIZES = [
   '4 / 5 (XS)',
   '6 / 7 (Small)',
   '8 (Medium)',
-  '10-12 (Large)',
+  '10–12 (Large)',
   '14 (Extra Large)',
 ] as const;
 
@@ -262,6 +262,7 @@ export const DISPLAY_CATEGORIES: DisplayCategory[] = [
   },
   {
     label: 'Kids Shoes',
+    // Backend currently has one shoes category; Boy/Girl are display-only variants.
     categories: [ClothingCategory.KIDS_SHOES, ClothingCategory.KIDS_SHOES],
     variantLabels: ['Boy', 'Girl'],
   },

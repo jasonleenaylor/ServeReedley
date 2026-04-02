@@ -89,7 +89,7 @@ describe('inventorySizes', () => {
       expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('4 / 5 (XS)');
       expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('6 / 7 (Small)');
       expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('8 (Medium)');
-      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('10-12 (Large)');
+      expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('10–12 (Large)');
       expect(CHILDRENS_UNDERWEAR_BOY_SIZES).toContain('14 (Extra Large)');
     });
   });
