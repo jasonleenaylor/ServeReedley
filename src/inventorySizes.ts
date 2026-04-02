@@ -244,7 +244,7 @@ export type DisplayCategory =
   | { label: string; composite: readonly CompositeInventoryRow[] };
 
 /**
- * Combined display categories (5 tabs instead of 9).
+ * Combined display categories (5 tabs instead of 10).
  * Diapers & Baby Care: diapers (smallest to largest), pull-ups as larger sizes, then wipes—no toggle.
  */
 export const DIAPERS_BABY_CARE_ROWS: readonly CompositeInventoryRow[] = [
