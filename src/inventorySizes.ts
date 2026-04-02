@@ -12,7 +12,8 @@ export const CLOTHING_CATEGORY_LABELS: Record<ClothingCategory, string> = {
   [ClothingCategory.CHILDRENS_SOCKS]: "Children's Socks",
   [ClothingCategory.CHILDRENS_UNDERWEAR_BOY]: "Children's Underwear (Boy)",
   [ClothingCategory.CHILDRENS_UNDERWEAR_GIRL]: "Children's Underwear (Girl)",
-  [ClothingCategory.KIDS_SHOES]: 'Kids Shoes',
+  [ClothingCategory.KIDS_SHOES_BOY]: 'Kids Shoes (Boy)',
+  [ClothingCategory.KIDS_SHOES_GIRL]: 'Kids Shoes (Girl)',
   [ClothingCategory.DIAPERS]: 'Diapers',
   [ClothingCategory.PULL_UPS]: 'Pull-Ups',
   [ClothingCategory.WIPES]: 'Wipes',
@@ -38,22 +39,23 @@ export const CHILDRENS_SOCKS_DISPLAY: Record<string, string> = {
 };
 
 /**
- * Children's Underwear (Boy) - 7 sizes
+ * Children's Underwear (Boy) - 6 sizes
  */
 export const CHILDRENS_UNDERWEAR_BOY_SIZES = [
-  '4',
-  '6',
-  '8',
-  '10',
-  '12',
-  '14',
-  '16',
+  '2T / 3T',
+  '4 / 5 (XS)',
+  '6 / 7 (Small)',
+  '8 (Medium)',
+  '10–12 (Large)',
+  '14 (Extra Large)',
 ] as const;
 
 /**
- * Children's Underwear (Girl) - 7 sizes
+ * Children's Underwear (Girl) - 9 sizes
  */
 export const CHILDRENS_UNDERWEAR_GIRL_SIZES = [
+  '2T / 3T',
+  '4T / 5T',
   '4',
   '6',
   '8',
@@ -64,12 +66,12 @@ export const CHILDRENS_UNDERWEAR_GIRL_SIZES = [
 ] as const;
 
 /**
- * Kids Shoes - 31 sizes
+ * Kids Shoes (Boy) - 31 sizes
  * Infant/Toddler: 0-10 (11 sizes)
  * Little Kids: 10.5-13.5 (7 sizes)
  * Youth: 1Y-7Y (13 sizes)
  */
-export const KIDS_SHOES_SIZES = [
+export const KIDS_SHOES_BOY_SIZES = [
   // Infant/Toddler (0-10)
   '0',
   '1',
@@ -105,6 +107,11 @@ export const KIDS_SHOES_SIZES = [
   '6.5Y',
   '7Y',
 ] as const;
+
+/**
+ * Kids Shoes (Girl) - 31 sizes
+ */
+export const KIDS_SHOES_GIRL_SIZES = KIDS_SHOES_BOY_SIZES;
 
 /**
  * Diapers - 9 sizes
@@ -181,7 +188,8 @@ export const CATEGORY_SIZES: Record<ClothingCategory, readonly string[]> = {
   [ClothingCategory.CHILDRENS_SOCKS]: CHILDRENS_SOCKS_SIZES,
   [ClothingCategory.CHILDRENS_UNDERWEAR_BOY]: CHILDRENS_UNDERWEAR_BOY_SIZES,
   [ClothingCategory.CHILDRENS_UNDERWEAR_GIRL]: CHILDRENS_UNDERWEAR_GIRL_SIZES,
-  [ClothingCategory.KIDS_SHOES]: KIDS_SHOES_SIZES,
+  [ClothingCategory.KIDS_SHOES_BOY]: KIDS_SHOES_BOY_SIZES,
+  [ClothingCategory.KIDS_SHOES_GIRL]: KIDS_SHOES_GIRL_SIZES,
   [ClothingCategory.DIAPERS]: DIAPERS_SIZES,
   [ClothingCategory.PULL_UPS]: PULL_UPS_SIZES,
   [ClothingCategory.WIPES]: WIPES_SIZES,
@@ -236,7 +244,7 @@ export type DisplayCategory =
   | { label: string; composite: readonly CompositeInventoryRow[] };
 
 /**
- * Combined display categories (5 tabs instead of 9).
+ * Combined display categories (5 tabs instead of 10).
  * Diapers & Baby Care: diapers (smallest to largest), pull-ups as larger sizes, then wipes—no toggle.
  */
 export const DIAPERS_BABY_CARE_ROWS: readonly CompositeInventoryRow[] = [
@@ -259,7 +267,11 @@ export const DISPLAY_CATEGORIES: DisplayCategory[] = [
     ],
     variantLabels: ['Boy', 'Girl'],
   },
-  { label: 'Kids Shoes', categories: [ClothingCategory.KIDS_SHOES] },
+  {
+    label: 'Kids Shoes',
+    categories: [ClothingCategory.KIDS_SHOES_BOY, ClothingCategory.KIDS_SHOES_GIRL],
+    variantLabels: ['Boy', 'Girl'],
+  },
   { label: 'Diapers & Baby Care', composite: DIAPERS_BABY_CARE_ROWS },
   {
     label: 'Pajamas',
