@@ -147,12 +147,71 @@ type HomeRepairType
   details: String
 }
 
+type Coordinator
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["SysOps"]
+        operations: [create, read, update, delete]
+      }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  email: AWSEmail!
+  enabled: Boolean!
+  teams: [Team] @hasMany(indexName: "byCoordinator", fields: ["id"])
+}
+
 type Team @model @auth(rules: [{ allow: private }]) {
   id: ID!
   teamName: String!
-  teamType: NeedType!
+  teamType: NeedType! @index(name: "byTeamType", queryField: "teamsByType")
   email: String
+  coordinatorID: ID @index(name: "byCoordinator")
+  coordinator: Coordinator @belongsTo(fields: ["coordinatorID"])
   requests: [TeamRequest] @hasMany(indexName: "byTeam", fields: ["id"])
+}
+
+enum NotificationListRole {
+  NEW_REQUEST
+  STALE_REQUEST_REMINDER
+}
+
+type NotificationRecipient
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["SysOps"]
+        operations: [create, read, update, delete]
+      }
+    ]
+  ) {
+  id: ID!
+  role: NotificationListRole!
+    @index(name: "byRole", queryField: "recipientsByRole")
+  email: AWSEmail!
+  displayName: String
+  enabled: Boolean!
+}
+
+type AppEmailSettings
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["SysOps"]
+        operations: [create, read, update, delete]
+      }
+    ]
+  ) {
+  id: ID!
+  fromAddress: AWSEmail!
 }
 
 type TeamMember @model @auth(rules: [{ allow: private }]) {

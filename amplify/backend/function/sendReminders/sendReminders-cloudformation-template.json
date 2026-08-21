@@ -77,6 +77,48 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_CRN_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apicrnGraphQLAPIIdOutput"
+            },
+            "API_CRN_REQUESTTABLE_NAME": {
+              "Fn::Sub": [
+                "Request-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_NOTIFICATIONRECIPIENTTABLE_NAME": {
+              "Fn::Sub": [
+                "NotificationRecipient-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_APPEMAILSETTINGSTABLE_NAME": {
+              "Fn::Sub": [
+                "AppEmailSettings-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
             }
           }
         },
@@ -151,15 +193,103 @@
                 "dynamodb:GetItem",
                 "dynamodb:Query"
               ],
-              "Resource": "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod/index/requestsByDate"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:GetItem",
-                "dynamodb:Query"
-              ],
-              "Resource": "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod"
+              "Resource": [
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Request-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Request-${apicrnGraphQLAPIIdOutput}-${env}/index/*",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/NotificationRecipient-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/NotificationRecipient-${apicrnGraphQLAPIIdOutput}-${env}/index/*",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/AppEmailSettings-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                }
+              ]
             },
             {
               "Effect": "Allow",
@@ -205,57 +335,12 @@
           "Version": "2012-10-17",
           "Statement": [
             {
-              "Effect": "Allow",
               "Action": [
-                "dynamodb:GetItem",
-                "dynamodb:Query"
-              ],
-              "Resource": [
-                "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod/index/requestsByDate",
-                "arn:aws:dynamodb:us-west-1:765421687952:table/Request-2ytqsqa7mjczhid7bkitt6vnsq-prod"
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "secretsmanager:GetSecretValue"
-              ],
-              "Resource": {
-                "Fn::Sub": [
-                  "arn:aws:secretsmanager:us-west-1:765421687952:secret:request-email-info-42Wte4",
-                  {
-                    "region": {
-                      "Ref": "AWS::Region"
-                    },
-                    "account": {
-                      "Ref": "AWS::AccountId"
-                    }
-                  }
-                ]
-              }
-            },
-            {
-              "Action": [
-                "ses:SendEmail"
+                "ses:SendEmail",
+                "ses:SendRawEmail"
               ],
               "Effect": "Allow",
-              "Resource": "arn:aws:ses:us-west-1:765421687952:identity/*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:DescribeStream",
-                "dynamodb:ListStreams"
-              ],
-              "Resource": [
-                {
-                  "Fn::ImportValue": {
-                    "Fn::Sub": "${apicrnGraphQLAPIIdOutput}:GetAtt:RequestTable:StreamArn"
-                  }
-                }
-              ]
+              "Resource": "*"
             }
           ]
         }
