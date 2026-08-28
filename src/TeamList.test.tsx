@@ -2,16 +2,16 @@ import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { describe, test, expect, beforeEach, vi } from "vitest";
 import TeamList from "./TeamList";
-import { useTeams } from "./useTeams";
+import { useTeamsContext } from "./TeamsProvider";
 import { useRequestCounts } from "./useRequestCounts";
 import { NeedType } from "./API";
 import type { Team, TeamRequest } from "./RequestAPI";
 
 // Mock the hooks
-vi.mock("./useTeams");
+vi.mock("./TeamsProvider");
 vi.mock("./useRequestCounts");
 
-const mockUseTeams = useTeams as ReturnType<typeof vi.fn>;
+const mockUseTeamsContext = useTeamsContext as ReturnType<typeof vi.fn>;
 const mockUseRequestCounts = useRequestCounts as ReturnType<typeof vi.fn>;
 
 // Helper function to create a partial TeamRequest for testing
@@ -39,7 +39,7 @@ describe("TeamList", () => {
 
   test("displays pending team requests count for each team", () => {
     // Mock teams with some pending and completed team requests
-    mockUseTeams.mockReturnValue({
+    mockUseTeamsContext.mockReturnValue({
       teams: [
         createMockTeam({
           id: "team1",
@@ -94,7 +94,7 @@ describe("TeamList", () => {
   });
 
   test("handles teams with no requests", () => {
-    mockUseTeams.mockReturnValue({
+    mockUseTeamsContext.mockReturnValue({
       teams: [
         createMockTeam({
           id: "team1",
@@ -124,7 +124,7 @@ describe("TeamList", () => {
   });
 
   test("shows loading indicator when data is loading", () => {
-    mockUseTeams.mockReturnValue({
+    mockUseTeamsContext.mockReturnValue({
       teams: [],
       loading: true,
       setTeams: vi.fn(),

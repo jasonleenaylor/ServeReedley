@@ -1,11 +1,11 @@
 import { List, ListItem, ListItemText, CircularProgress } from "@mui/material";
 import { useMemo } from "react";
-import { useTeams } from "./useTeams"; // Adjust the import path accordingly
+import { useTeamsContext } from "./TeamsProvider";
 import { useRequestCounts } from "./useRequestCounts";
 import { Link } from "react-router-dom";
 
 const TeamList = () => {
-  const { teams, loading: teamsLoading } = useTeams();
+  const { teams, loading: teamsLoading } = useTeamsContext();
   const { requestCounts, loading: countsLoading } = useRequestCounts();
 
   // Memoize pending team requests counts to avoid recalculation on every render

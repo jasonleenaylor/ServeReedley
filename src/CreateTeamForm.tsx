@@ -9,7 +9,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { generateClient } from "aws-amplify/api";
-import { useTeams } from "./useTeams";
+import { useTeamsContext } from "./TeamsProvider";
 import { NeedType } from "./RequestAPI";
 import { Coordinator } from "./emailNotificationTypes";
 import { createTeam } from "./graphql/mutations";
@@ -43,7 +43,7 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
   const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { setTeams } = useTeams();
+  const { refetchTeams } = useTeamsContext();
   const graphqlClient = generateClient();
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
           authMode: "userPool",
         });
       }
-      setTeams((prevTeams) => [...prevTeams, createdTeam]);
+      await refetchTeams();
       setTeamName("");
       setTeamType("");
       setEmail("");

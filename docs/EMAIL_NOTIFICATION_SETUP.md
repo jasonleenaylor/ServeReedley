@@ -41,25 +41,27 @@ After verifying emails in dev/prod:
 
 ## SysOps UI
 
-Signed-in users in the **SysOps** Cognito group see extra sections on `/teams`:
+Signed-in users in the **SysOps** Cognito group see extra sections on `/teams` **below** the team list:
 
 - Email sender (SES from address)
 - Notification recipient lists
 - Coordinators
 - Per-team coordinator assignment
 
-Users in the **Coordinators** group (without SysOps) can manage teams but **not** email settings. Add the user to the SysOps group in Cognito if they need the admin UI.
+Requirements:
 
-The feature branch frontend must be **deployed** (merged to `main` or hosted from the feature branch). The production `main` build before merge will not show these sections.
+1. **SysOps Cognito group** — the **Coordinators** group alone is not enough.
+2. **Signed in on `/teams`** — the check runs after Authenticator sign-in; sign out and back in after group changes.
+3. **This feature’s frontend deployed** — merged to `main` (or hosted from the feature branch).
 
 ## Troubleshooting
 
 | Symptom | Likely cause |
 |---------|----------------|
-| No email settings on `/teams` | Not in SysOps group, or frontend not deployed from the feature branch |
-| Create team fails silently | Open browser devtools → Console/Network; ensure `amplify push` ran on dev and you are signed in |
-| GraphQL error on `coordinatorID` | Backend schema not pushed to dev; run `amplify push` on the dev env |
-| Admin UI loads but mutations fail | Cognito user not in SysOps (Coordinator/NotificationRecipient are SysOps-only) |
+| `/teams` works but no email settings below the list | User is not in **SysOps**, or signed in before the group check ran (sign out/in) |
+| Create team “does nothing” | Create may have succeeded; the list used a separate copy of team state (fixed in `TeamsProvider`). Refresh the page to confirm. Check form error text or GraphQL in devtools. |
+| GraphQL error on `coordinatorID` or `listCoordinators` | `amplify push` not applied on dev — new schema types missing |
+| Email admin forms error on save | User not in SysOps — `Coordinator`, `NotificationRecipient`, and `AppEmailSettings` are SysOps-only in the schema |
 
 ## Adding a new vetter / admin email
 
