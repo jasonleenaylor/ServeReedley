@@ -12,9 +12,10 @@ import { generateClient } from "aws-amplify/api";
 import { useTeams } from "./useTeams";
 import { NeedType } from "./RequestAPI";
 import { Coordinator } from "./emailNotificationTypes";
+import { createTeam } from "./graphql/mutations";
 import {
-  createTeamWithCoordinator,
   listCoordinators,
+  updateTeamCoordinator,
 } from "./emailNotificationGraphql";
 
 const needTypeLabels = {
@@ -41,6 +42,7 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
   const [coordinatorID, setCoordinatorID] = useState("");
   const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { setTeams } = useTeams();
   const graphqlClient = generateClient();
 
@@ -63,6 +65,7 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    setErrorMessage(null);
     if (teamType === "") {
       console.error("Team type is required");
       setLoading(false);
@@ -75,26 +78,37 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
     }
 
     try {
-      const input: Record<string, unknown> = {
-        teamName,
-        teamType,
-        email,
-      };
-      if (showCoordinatorSelect && coordinatorID) {
-        input.coordinatorID = coordinatorID;
-      }
+      const input = { teamName, teamType, email };
       const apiData: any = await graphqlClient.graphql({
-        query: createTeamWithCoordinator,
+        query: createTeam,
         variables: { input },
         authMode: "userPool",
       });
-      setTeams((prevTeams) => [...prevTeams, apiData.data.createTeam]);
+      const createdTeam = apiData.data?.createTeam;
+      if (!createdTeam) {
+        throw new Error("Create team returned no data");
+      }
+      if (showCoordinatorSelect && coordinatorID) {
+        await graphqlClient.graphql({
+          query: updateTeamCoordinator,
+          variables: {
+            input: { id: createdTeam.id, coordinatorID },
+          },
+          authMode: "userPool",
+        });
+      }
+      setTeams((prevTeams) => [...prevTeams, createdTeam]);
       setTeamName("");
       setTeamType("");
       setEmail("");
       setCoordinatorID("");
     } catch (error) {
       console.error("Error creating team:", error);
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to create team. Check the browser console for details.";
+      setErrorMessage(message);
     } finally {
       setLoading(false);
     }
@@ -164,6 +178,9 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
       >
         {loading ? "Creating..." : "Create Team"}
       </Button>
+      {errorMessage && (
+        <Box sx={{ mt: 1, color: "error.main" }}>{errorMessage}</Box>
+      )}
     </Box>
   );
 };

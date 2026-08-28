@@ -1,8 +1,12 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Amplify } from "aws-amplify";
+import awsExports from "./aws-exports";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+
+Amplify.configure(awsExports);
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element not found");

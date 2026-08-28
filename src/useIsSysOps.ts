@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react";
 import { fetchAuthSession } from "@aws-amplify/auth";
 
+function readCognitoGroups(session: Awaited<ReturnType<typeof fetchAuthSession>>): string[] {
+  const idGroups = session.tokens?.idToken?.payload?.["cognito:groups"];
+  const accessGroups = session.tokens?.accessToken?.payload?.["cognito:groups"];
+  const raw = idGroups ?? accessGroups;
+  if (Array.isArray(raw)) {
+    return raw.filter((g): g is string => typeof g === "string");
+  }
+  if (typeof raw === "string") {
+    return [raw];
+  }
+  return [];
+}
+
 export function useIsSysOps(): boolean {
   const [isSysOps, setIsSysOps] = useState(false);
 
@@ -9,12 +22,7 @@ export function useIsSysOps(): boolean {
     (async () => {
       try {
         const session = await fetchAuthSession();
-        const groups = session.tokens?.idToken?.payload?.["cognito:groups"];
-        const groupList = Array.isArray(groups)
-          ? groups
-          : typeof groups === "string"
-            ? [groups]
-            : [];
+        const groupList = readCognitoGroups(session);
         if (!cancelled) {
           setIsSysOps(groupList.includes("SysOps"));
         }

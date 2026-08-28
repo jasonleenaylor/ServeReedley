@@ -48,6 +48,19 @@ Signed-in users in the **SysOps** Cognito group see extra sections on `/teams`:
 - Coordinators
 - Per-team coordinator assignment
 
+Users in the **Coordinators** group (without SysOps) can manage teams but **not** email settings. Add the user to the SysOps group in Cognito if they need the admin UI.
+
+The feature branch frontend must be **deployed** (merged to `main` or hosted from the feature branch). The production `main` build before merge will not show these sections.
+
+## Troubleshooting
+
+| Symptom | Likely cause |
+|---------|----------------|
+| No email settings on `/teams` | Not in SysOps group, or frontend not deployed from the feature branch |
+| Create team fails silently | Open browser devtools → Console/Network; ensure `amplify push` ran on dev and you are signed in |
+| GraphQL error on `coordinatorID` | Backend schema not pushed to dev; run `amplify push` on the dev env |
+| Admin UI loads but mutations fail | Cognito user not in SysOps (Coordinator/NotificationRecipient are SysOps-only) |
+
 ## Adding a new vetter / admin email
 
 1. Add the Cognito user and SES identity as in [README.md](../README.md) (login access).
