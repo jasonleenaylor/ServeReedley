@@ -626,12 +626,115 @@ export const listHomeRepairTypes = /* GraphQL */ `query ListHomeRepairTypes(
   APITypes.ListHomeRepairTypesQueryVariables,
   APITypes.ListHomeRepairTypesQuery
 >;
+export const getCoordinator = /* GraphQL */ `query GetCoordinator($id: ID!) {
+  getCoordinator(id: $id) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetCoordinatorQueryVariables,
+  APITypes.GetCoordinatorQuery
+>;
+export const listCoordinators = /* GraphQL */ `query ListCoordinators(
+  $filter: ModelCoordinatorFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCoordinators(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListCoordinatorsQueryVariables,
+  APITypes.ListCoordinatorsQuery
+>;
 export const getTeam = /* GraphQL */ `query GetTeam($id: ID!) {
   getTeam(id: $id) {
     id
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -709,6 +812,20 @@ export const listTeams = /* GraphQL */ `query ListTeams(
       teamName
       teamType
       email
+      coordinatorID
+      coordinator {
+        id
+        name
+        email
+        enabled
+        teams {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
       requests {
         items {
           id
@@ -735,6 +852,178 @@ export const listTeams = /* GraphQL */ `query ListTeams(
   }
 }
 ` as GeneratedQuery<APITypes.ListTeamsQueryVariables, APITypes.ListTeamsQuery>;
+export const teamsByType = /* GraphQL */ `query TeamsByType(
+  $teamType: NeedType!
+  $sortDirection: ModelSortDirection
+  $filter: ModelTeamFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  teamsByType(
+    teamType: $teamType
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      teamName
+      teamType
+      email
+      coordinatorID
+      coordinator {
+        id
+        name
+        email
+        enabled
+        teams {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      requests {
+        items {
+          id
+          requestID
+          type
+          teamID
+          askDate
+          note
+          filledDate
+          filledBy
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.TeamsByTypeQueryVariables,
+  APITypes.TeamsByTypeQuery
+>;
+export const getNotificationRecipient = /* GraphQL */ `query GetNotificationRecipient($id: ID!) {
+  getNotificationRecipient(id: $id) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetNotificationRecipientQueryVariables,
+  APITypes.GetNotificationRecipientQuery
+>;
+export const listNotificationRecipients = /* GraphQL */ `query ListNotificationRecipients(
+  $filter: ModelNotificationRecipientFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listNotificationRecipients(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      role
+      email
+      displayName
+      enabled
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListNotificationRecipientsQueryVariables,
+  APITypes.ListNotificationRecipientsQuery
+>;
+export const recipientsByRole = /* GraphQL */ `query RecipientsByRole(
+  $role: NotificationListRole!
+  $sortDirection: ModelSortDirection
+  $filter: ModelNotificationRecipientFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipientsByRole(
+    role: $role
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      role
+      email
+      displayName
+      enabled
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.RecipientsByRoleQueryVariables,
+  APITypes.RecipientsByRoleQuery
+>;
+export const getAppEmailSettings = /* GraphQL */ `query GetAppEmailSettings($id: ID!) {
+  getAppEmailSettings(id: $id) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetAppEmailSettingsQueryVariables,
+  APITypes.GetAppEmailSettingsQuery
+>;
+export const listAppEmailSettings = /* GraphQL */ `query ListAppEmailSettings(
+  $filter: ModelAppEmailSettingsFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAppEmailSettings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      fromAddress
+      createdAt
+      updatedAt
+      __typename
+    }
+    nextToken
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListAppEmailSettingsQueryVariables,
+  APITypes.ListAppEmailSettingsQuery
+>;
 export const getTeamMember = /* GraphQL */ `query GetTeamMember($breezeId: ID!) {
   getTeamMember(breezeId: $breezeId) {
     breezeId

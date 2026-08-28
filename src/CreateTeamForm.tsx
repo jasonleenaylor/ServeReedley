@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -9,9 +9,13 @@ import {
   InputLabel,
 } from "@mui/material";
 import { generateClient } from "aws-amplify/api";
-import { createTeam } from "./graphql/mutations"; // Adjust the import path accordingly
-import { useTeams } from "./useTeams"; // Adjust the import path accordingly
-import { NeedType } from "./RequestAPI"; // Adjust the import path accordingly
+import { useTeams } from "./useTeams";
+import { NeedType } from "./RequestAPI";
+import { Coordinator } from "./emailNotificationTypes";
+import {
+  createTeamWithCoordinator,
+  listCoordinators,
+} from "./emailNotificationGraphql";
 
 const needTypeLabels = {
   [NeedType.MEALS]: "Meals",
@@ -28,12 +32,33 @@ const needTypeLabels = {
   [NeedType.OTHER]: "Other",
 };
 
-const CreateTeamForm: React.FC = () => {
+const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
+  showCoordinatorSelect = false,
+}) => {
   const [teamName, setTeamName] = useState("");
   const [teamType, setTeamType] = useState<NeedType | "">("");
   const [email, setEmail] = useState("");
+  const [coordinatorID, setCoordinatorID] = useState("");
+  const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
   const [loading, setLoading] = useState(false);
-  const { setTeams } = useTeams(); // to update the team list after creating a new team
+  const { setTeams } = useTeams();
+  const graphqlClient = generateClient();
+
+  useEffect(() => {
+    if (!showCoordinatorSelect) return;
+    (async () => {
+      try {
+        const result: any = await graphqlClient.graphql({
+          query: listCoordinators,
+          variables: { limit: 500 },
+          authMode: "userPool",
+        });
+        setCoordinators(result.data?.listCoordinators?.items ?? []);
+      } catch (err) {
+        console.error("Error loading coordinators:", err);
+      }
+    })();
+  }, [showCoordinatorSelect, graphqlClient]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -49,18 +74,25 @@ const CreateTeamForm: React.FC = () => {
       return;
     }
 
-    const graphqlClient = generateClient();
     try {
-      const newTeam = { teamName, teamType, email };
+      const input: Record<string, unknown> = {
+        teamName,
+        teamType,
+        email,
+      };
+      if (showCoordinatorSelect && coordinatorID) {
+        input.coordinatorID = coordinatorID;
+      }
       const apiData: any = await graphqlClient.graphql({
-        query: createTeam,
-        variables: { input: newTeam },
+        query: createTeamWithCoordinator,
+        variables: { input },
         authMode: "userPool",
       });
       setTeams((prevTeams) => [...prevTeams, apiData.data.createTeam]);
       setTeamName("");
       setTeamType("");
       setEmail("");
+      setCoordinatorID("");
     } catch (error) {
       console.error("Error creating team:", error);
     } finally {
@@ -102,6 +134,28 @@ const CreateTeamForm: React.FC = () => {
           ))}
         </Select>
       </FormControl>
+      {showCoordinatorSelect && (
+        <FormControl fullWidth margin="dense">
+          <InputLabel id="create-team-coordinator-label">Coordinator</InputLabel>
+          <Select
+            labelId="create-team-coordinator-label"
+            label="Coordinator"
+            value={coordinatorID}
+            onChange={(e) => setCoordinatorID(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {coordinators
+              .filter((c) => c.enabled)
+              .map((c) => (
+                <MenuItem key={c.id} value={c.id}>
+                  {c.name} ({c.email})
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+      )}
       <Button
         type="submit"
         variant="contained"

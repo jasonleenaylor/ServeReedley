@@ -135,8 +135,10 @@ Each has its own `package.json` in `amplify/backend/function/<name>/src/`. Run `
 1. **getUserContactInfo** - User contact info (axios)
 2. **listPeopleOnTeam** - Team members
 3. **NotifyTeamOnRequest** - Notifications when requests assigned
-4. **NotifyCoordinators** - New request alerts
-5. **sendReminders** - Scheduled reminder emails
+4. **NotifyCoordinators** - New request alerts (DB list) and vetted-request alerts (coordinators by team need type)
+5. **sendReminders** - Scheduled reminder emails (DB list)
+
+Email recipient configuration: [EMAIL_NOTIFICATION_SETUP.md](EMAIL_NOTIFICATION_SETUP.md).
 6. **findlatlong** - Geocoding
 
 ## Environment

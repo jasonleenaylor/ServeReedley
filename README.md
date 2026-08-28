@@ -43,7 +43,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Adding a New Coordinator
+## Adding a New Coordinator (app login)
 
 1. Add a Cognito User
 
@@ -57,11 +57,13 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 	1. Can only be completed AFTER user follows the login link.
 	1. Create an identity for the email address
 
-1. Open the Secrets Manager
+## Request notification emails
 
-	1. Select request-email-info
-	1. Retrive the secret value
-	1. Edit it to add the new email address
+Email lists and the SES from-address are managed in the database, not Secrets Manager. See [docs/EMAIL_NOTIFICATION_SETUP.md](docs/EMAIL_NOTIFICATION_SETUP.md).
+
+**New request / reminder mail:** SysOps adds `NotificationRecipient` rows on **Team Management** (`/teams`).
+
+**Vetted request mail:** SysOps creates `Coordinator` records and assigns them to teams (same page).
 
 ## Updating the graphql model
 

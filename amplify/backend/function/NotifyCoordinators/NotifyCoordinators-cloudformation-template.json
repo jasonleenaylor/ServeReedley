@@ -77,6 +77,61 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_CRN_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apicrnGraphQLAPIIdOutput"
+            },
+            "API_CRN_TEAMTABLE_NAME": {
+              "Fn::Sub": [
+                "Team-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_COORDINATORTABLE_NAME": {
+              "Fn::Sub": [
+                "Coordinator-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_NOTIFICATIONRECIPIENTTABLE_NAME": {
+              "Fn::Sub": [
+                "NotificationRecipient-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_APPEMAILSETTINGSTABLE_NAME": {
+              "Fn::Sub": [
+                "AppEmailSettings-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
             }
           }
         },
@@ -203,30 +258,154 @@
               }
             },
             {
-              "Effect": "Allow",
               "Action": [
-                "secretsmanager:GetSecretValue"
+                "ses:SendEmail",
+                "ses:SendRawEmail"
               ],
-              "Resource": {
-                "Fn::Sub": [
-                  "arn:aws:secretsmanager:us-west-1:765421687952:secret:request-email-info-42Wte4",
-                  {
-                    "region": {
-                      "Ref": "AWS::Region"
-                    },
-                    "account": {
-                      "Ref": "AWS::AccountId"
-                    }
-                  }
-                ]
-              }
-            },
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "LambdaDynamoDBReadPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-dynamodb-read-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
             {
-              "Action": [
-                "ses:SendEmail"
-              ],
               "Effect": "Allow",
-              "Resource": "arn:aws:ses:us-west-1:765421687952:identity/*"
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Query"
+              ],
+              "Resource": [
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Team-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Team-${apicrnGraphQLAPIIdOutput}-${env}/index/*",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/Coordinator-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/NotificationRecipient-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/NotificationRecipient-${apicrnGraphQLAPIIdOutput}-${env}/index/*",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/AppEmailSettings-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      },
+                      "env": {
+                        "Ref": "env"
+                      },
+                      "apicrnGraphQLAPIIdOutput": {
+                        "Ref": "apicrnGraphQLAPIIdOutput"
+                      }
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
