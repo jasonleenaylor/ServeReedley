@@ -1529,56 +1529,7 @@ export function hygeneItemsCard(
   copy: undefined | (() => void)
 ): JSX.Element {
   const copyItemsToClipboard = () => {
-    let selectedItems = [];
-    for (var key in items) {
-      switch (key) {
-        case "bathSoap":
-          if (items.bathSoap) selectedItems.push("Bath Soap");
-          break;
-        case "deodorant":
-          if (items.deodorant) selectedItems.push("Deodorant");
-          break;
-        case "handSoap":
-          if (items.handSoap) selectedItems.push("Hand Soap");
-          break;
-        case "sanitaryPads":
-          if (items.sanitaryPads) selectedItems.push("Sanitary Pads");
-          break;
-        case "shampoo":
-          if (items.shampoo) selectedItems.push("Shampoo");
-          break;
-        case "conditioner":
-          if (items.conditioner) selectedItems.push("Conditioner");
-          break;
-        case "tampons":
-          if (items.tampons) selectedItems.push("Tampons");
-          break;
-        case "toiletPaper":
-          if (items.toiletPaper) selectedItems.push("Toilet Paper");
-          break;
-        case "toothbrush":
-          if (items.toothbrush) selectedItems.push("Tooth Brush");
-          break;
-        case "toothpaste":
-          if (items.toothpaste) selectedItems.push("Toothpaste");
-          break;
-        case "bleach":
-        case "lysolSpray":
-        case "lysolWipes":
-        case "dishsoap":
-        case "sponges":
-        case "pinesol":
-        case "paperTowels":
-        case "laundrySoap":
-        case "id":
-        case "createdAt":
-        case "updatedAt":
-          break;
-        default:
-          alert("Tell Jason that he forgot to copy " + key);
-      }
-    }
-    navigator.clipboard.writeText(selectedItems.join());
+    navigator.clipboard.writeText(getHygeneItemsText(items));
     if (copy) {
       copy();
     }
