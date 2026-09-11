@@ -914,6 +914,141 @@ export const deleteHomeRepairType = /* GraphQL */ `mutation DeleteHomeRepairType
   APITypes.DeleteHomeRepairTypeMutationVariables,
   APITypes.DeleteHomeRepairTypeMutation
 >;
+export const createCoordinator = /* GraphQL */ `mutation CreateCoordinator(
+  $input: CreateCoordinatorInput!
+  $condition: ModelCoordinatorConditionInput
+) {
+  createCoordinator(input: $input, condition: $condition) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateCoordinatorMutationVariables,
+  APITypes.CreateCoordinatorMutation
+>;
+export const updateCoordinator = /* GraphQL */ `mutation UpdateCoordinator(
+  $input: UpdateCoordinatorInput!
+  $condition: ModelCoordinatorConditionInput
+) {
+  updateCoordinator(input: $input, condition: $condition) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateCoordinatorMutationVariables,
+  APITypes.UpdateCoordinatorMutation
+>;
+export const deleteCoordinator = /* GraphQL */ `mutation DeleteCoordinator(
+  $input: DeleteCoordinatorInput!
+  $condition: ModelCoordinatorConditionInput
+) {
+  deleteCoordinator(input: $input, condition: $condition) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteCoordinatorMutationVariables,
+  APITypes.DeleteCoordinatorMutation
+>;
 export const createTeam = /* GraphQL */ `mutation CreateTeam(
   $input: CreateTeamInput!
   $condition: ModelTeamConditionInput
@@ -923,6 +1058,30 @@ export const createTeam = /* GraphQL */ `mutation CreateTeam(
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -1001,6 +1160,30 @@ export const updateTeam = /* GraphQL */ `mutation UpdateTeam(
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -1079,6 +1262,30 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -1147,6 +1354,111 @@ export const deleteTeam = /* GraphQL */ `mutation DeleteTeam(
 ` as GeneratedMutation<
   APITypes.DeleteTeamMutationVariables,
   APITypes.DeleteTeamMutation
+>;
+export const createNotificationRecipient = /* GraphQL */ `mutation CreateNotificationRecipient(
+  $input: CreateNotificationRecipientInput!
+  $condition: ModelNotificationRecipientConditionInput
+) {
+  createNotificationRecipient(input: $input, condition: $condition) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateNotificationRecipientMutationVariables,
+  APITypes.CreateNotificationRecipientMutation
+>;
+export const updateNotificationRecipient = /* GraphQL */ `mutation UpdateNotificationRecipient(
+  $input: UpdateNotificationRecipientInput!
+  $condition: ModelNotificationRecipientConditionInput
+) {
+  updateNotificationRecipient(input: $input, condition: $condition) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateNotificationRecipientMutationVariables,
+  APITypes.UpdateNotificationRecipientMutation
+>;
+export const deleteNotificationRecipient = /* GraphQL */ `mutation DeleteNotificationRecipient(
+  $input: DeleteNotificationRecipientInput!
+  $condition: ModelNotificationRecipientConditionInput
+) {
+  deleteNotificationRecipient(input: $input, condition: $condition) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteNotificationRecipientMutationVariables,
+  APITypes.DeleteNotificationRecipientMutation
+>;
+export const createAppEmailSettings = /* GraphQL */ `mutation CreateAppEmailSettings(
+  $input: CreateAppEmailSettingsInput!
+  $condition: ModelAppEmailSettingsConditionInput
+) {
+  createAppEmailSettings(input: $input, condition: $condition) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateAppEmailSettingsMutationVariables,
+  APITypes.CreateAppEmailSettingsMutation
+>;
+export const updateAppEmailSettings = /* GraphQL */ `mutation UpdateAppEmailSettings(
+  $input: UpdateAppEmailSettingsInput!
+  $condition: ModelAppEmailSettingsConditionInput
+) {
+  updateAppEmailSettings(input: $input, condition: $condition) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateAppEmailSettingsMutationVariables,
+  APITypes.UpdateAppEmailSettingsMutation
+>;
+export const deleteAppEmailSettings = /* GraphQL */ `mutation DeleteAppEmailSettings(
+  $input: DeleteAppEmailSettingsInput!
+  $condition: ModelAppEmailSettingsConditionInput
+) {
+  deleteAppEmailSettings(input: $input, condition: $condition) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteAppEmailSettingsMutationVariables,
+  APITypes.DeleteAppEmailSettingsMutation
 >;
 export const createTeamMember = /* GraphQL */ `mutation CreateTeamMember(
   $input: CreateTeamMemberInput!

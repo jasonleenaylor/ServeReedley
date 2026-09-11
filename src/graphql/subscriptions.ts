@@ -875,12 +875,168 @@ export const onDeleteHomeRepairType = /* GraphQL */ `subscription OnDeleteHomeRe
   APITypes.OnDeleteHomeRepairTypeSubscriptionVariables,
   APITypes.OnDeleteHomeRepairTypeSubscription
 >;
+export const onCreateCoordinator = /* GraphQL */ `subscription OnCreateCoordinator(
+  $filter: ModelSubscriptionCoordinatorFilterInput
+) {
+  onCreateCoordinator(filter: $filter) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateCoordinatorSubscriptionVariables,
+  APITypes.OnCreateCoordinatorSubscription
+>;
+export const onUpdateCoordinator = /* GraphQL */ `subscription OnUpdateCoordinator(
+  $filter: ModelSubscriptionCoordinatorFilterInput
+) {
+  onUpdateCoordinator(filter: $filter) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateCoordinatorSubscriptionVariables,
+  APITypes.OnUpdateCoordinatorSubscription
+>;
+export const onDeleteCoordinator = /* GraphQL */ `subscription OnDeleteCoordinator(
+  $filter: ModelSubscriptionCoordinatorFilterInput
+) {
+  onDeleteCoordinator(filter: $filter) {
+    id
+    name
+    email
+    enabled
+    teams {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        coordinator {
+          id
+          name
+          email
+          enabled
+          createdAt
+          updatedAt
+          __typename
+        }
+        requests {
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteCoordinatorSubscriptionVariables,
+  APITypes.OnDeleteCoordinatorSubscription
+>;
 export const onCreateTeam = /* GraphQL */ `subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
   onCreateTeam(filter: $filter) {
     id
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -956,6 +1112,30 @@ export const onUpdateTeam = /* GraphQL */ `subscription OnUpdateTeam($filter: Mo
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -1031,6 +1211,30 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam($filter: Mo
     teamName
     teamType
     email
+    coordinatorID
+    coordinator {
+      id
+      name
+      email
+      enabled
+      teams {
+        items {
+          id
+          teamName
+          teamType
+          email
+          coordinatorID
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     requests {
       items {
         id
@@ -1099,6 +1303,105 @@ export const onDeleteTeam = /* GraphQL */ `subscription OnDeleteTeam($filter: Mo
 ` as GeneratedSubscription<
   APITypes.OnDeleteTeamSubscriptionVariables,
   APITypes.OnDeleteTeamSubscription
+>;
+export const onCreateNotificationRecipient = /* GraphQL */ `subscription OnCreateNotificationRecipient(
+  $filter: ModelSubscriptionNotificationRecipientFilterInput
+) {
+  onCreateNotificationRecipient(filter: $filter) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateNotificationRecipientSubscriptionVariables,
+  APITypes.OnCreateNotificationRecipientSubscription
+>;
+export const onUpdateNotificationRecipient = /* GraphQL */ `subscription OnUpdateNotificationRecipient(
+  $filter: ModelSubscriptionNotificationRecipientFilterInput
+) {
+  onUpdateNotificationRecipient(filter: $filter) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateNotificationRecipientSubscriptionVariables,
+  APITypes.OnUpdateNotificationRecipientSubscription
+>;
+export const onDeleteNotificationRecipient = /* GraphQL */ `subscription OnDeleteNotificationRecipient(
+  $filter: ModelSubscriptionNotificationRecipientFilterInput
+) {
+  onDeleteNotificationRecipient(filter: $filter) {
+    id
+    role
+    email
+    displayName
+    enabled
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteNotificationRecipientSubscriptionVariables,
+  APITypes.OnDeleteNotificationRecipientSubscription
+>;
+export const onCreateAppEmailSettings = /* GraphQL */ `subscription OnCreateAppEmailSettings(
+  $filter: ModelSubscriptionAppEmailSettingsFilterInput
+) {
+  onCreateAppEmailSettings(filter: $filter) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateAppEmailSettingsSubscriptionVariables,
+  APITypes.OnCreateAppEmailSettingsSubscription
+>;
+export const onUpdateAppEmailSettings = /* GraphQL */ `subscription OnUpdateAppEmailSettings(
+  $filter: ModelSubscriptionAppEmailSettingsFilterInput
+) {
+  onUpdateAppEmailSettings(filter: $filter) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateAppEmailSettingsSubscriptionVariables,
+  APITypes.OnUpdateAppEmailSettingsSubscription
+>;
+export const onDeleteAppEmailSettings = /* GraphQL */ `subscription OnDeleteAppEmailSettings(
+  $filter: ModelSubscriptionAppEmailSettingsFilterInput
+) {
+  onDeleteAppEmailSettings(filter: $filter) {
+    id
+    fromAddress
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteAppEmailSettingsSubscriptionVariables,
+  APITypes.OnDeleteAppEmailSettingsSubscription
 >;
 export const onCreateTeamMember = /* GraphQL */ `subscription OnCreateTeamMember(
   $filter: ModelSubscriptionTeamMemberFilterInput

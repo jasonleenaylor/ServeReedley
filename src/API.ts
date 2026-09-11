@@ -728,22 +728,39 @@ export type DeleteHomeRepairTypeInput = {
   id: string,
 };
 
-export type CreateTeamInput = {
+export type CreateCoordinatorInput = {
   id?: string | null,
-  teamName: string,
-  teamType: NeedType,
-  email?: string | null,
+  name: string,
+  email: string,
+  enabled: boolean,
 };
 
-export type ModelTeamConditionInput = {
-  teamName?: ModelStringInput | null,
-  teamType?: ModelNeedTypeInput | null,
+export type ModelCoordinatorConditionInput = {
+  name?: ModelStringInput | null,
   email?: ModelStringInput | null,
-  and?: Array< ModelTeamConditionInput | null > | null,
-  or?: Array< ModelTeamConditionInput | null > | null,
-  not?: ModelTeamConditionInput | null,
+  enabled?: ModelBooleanInput | null,
+  and?: Array< ModelCoordinatorConditionInput | null > | null,
+  or?: Array< ModelCoordinatorConditionInput | null > | null,
+  not?: ModelCoordinatorConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+};
+
+export type Coordinator = {
+  __typename: "Coordinator",
+  id: string,
+  name: string,
+  email: string,
+  enabled: boolean,
+  teams?: ModelTeamConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelTeamConnection = {
+  __typename: "ModelTeamConnection",
+  items:  Array<Team | null >,
+  nextToken?: string | null,
 };
 
 export type Team = {
@@ -752,6 +769,8 @@ export type Team = {
   teamName: string,
   teamType: NeedType,
   email?: string | null,
+  coordinatorID?: string | null,
+  coordinator?: Coordinator | null,
   requests?: ModelTeamRequestConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -808,14 +827,131 @@ export type TeamMember = {
   updatedAt: string,
 };
 
+export type UpdateCoordinatorInput = {
+  id: string,
+  name?: string | null,
+  email?: string | null,
+  enabled?: boolean | null,
+};
+
+export type DeleteCoordinatorInput = {
+  id: string,
+};
+
+export type CreateTeamInput = {
+  id?: string | null,
+  teamName: string,
+  teamType: NeedType,
+  email?: string | null,
+  coordinatorID?: string | null,
+};
+
+export type ModelTeamConditionInput = {
+  teamName?: ModelStringInput | null,
+  teamType?: ModelNeedTypeInput | null,
+  email?: ModelStringInput | null,
+  coordinatorID?: ModelIDInput | null,
+  and?: Array< ModelTeamConditionInput | null > | null,
+  or?: Array< ModelTeamConditionInput | null > | null,
+  not?: ModelTeamConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
 export type UpdateTeamInput = {
   id: string,
   teamName?: string | null,
   teamType?: NeedType | null,
   email?: string | null,
+  coordinatorID?: string | null,
 };
 
 export type DeleteTeamInput = {
+  id: string,
+};
+
+export type CreateNotificationRecipientInput = {
+  id?: string | null,
+  role: NotificationListRole,
+  email: string,
+  displayName?: string | null,
+  enabled: boolean,
+};
+
+export enum NotificationListRole {
+  NEW_REQUEST = "NEW_REQUEST",
+  STALE_REQUEST_REMINDER = "STALE_REQUEST_REMINDER",
+}
+
+
+export type ModelNotificationRecipientConditionInput = {
+  role?: ModelNotificationListRoleInput | null,
+  email?: ModelStringInput | null,
+  displayName?: ModelStringInput | null,
+  enabled?: ModelBooleanInput | null,
+  and?: Array< ModelNotificationRecipientConditionInput | null > | null,
+  or?: Array< ModelNotificationRecipientConditionInput | null > | null,
+  not?: ModelNotificationRecipientConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelNotificationListRoleInput = {
+  eq?: NotificationListRole | null,
+  ne?: NotificationListRole | null,
+};
+
+export type NotificationRecipient = {
+  __typename: "NotificationRecipient",
+  id: string,
+  role: NotificationListRole,
+  email: string,
+  displayName?: string | null,
+  enabled: boolean,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateNotificationRecipientInput = {
+  id: string,
+  role?: NotificationListRole | null,
+  email?: string | null,
+  displayName?: string | null,
+  enabled?: boolean | null,
+};
+
+export type DeleteNotificationRecipientInput = {
+  id: string,
+};
+
+export type CreateAppEmailSettingsInput = {
+  id?: string | null,
+  fromAddress: string,
+};
+
+export type ModelAppEmailSettingsConditionInput = {
+  fromAddress?: ModelStringInput | null,
+  and?: Array< ModelAppEmailSettingsConditionInput | null > | null,
+  or?: Array< ModelAppEmailSettingsConditionInput | null > | null,
+  not?: ModelAppEmailSettingsConditionInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type AppEmailSettings = {
+  __typename: "AppEmailSettings",
+  id: string,
+  fromAddress: string,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateAppEmailSettingsInput = {
+  id: string,
+  fromAddress?: string | null,
+};
+
+export type DeleteAppEmailSettingsInput = {
   id: string,
 };
 
@@ -1238,11 +1374,30 @@ export type ModelHomeRepairTypeConnection = {
   nextToken?: string | null,
 };
 
+export type ModelCoordinatorFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  enabled?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelCoordinatorFilterInput | null > | null,
+  or?: Array< ModelCoordinatorFilterInput | null > | null,
+  not?: ModelCoordinatorFilterInput | null,
+};
+
+export type ModelCoordinatorConnection = {
+  __typename: "ModelCoordinatorConnection",
+  items:  Array<Coordinator | null >,
+  nextToken?: string | null,
+};
+
 export type ModelTeamFilterInput = {
   id?: ModelIDInput | null,
   teamName?: ModelStringInput | null,
   teamType?: ModelNeedTypeInput | null,
   email?: ModelStringInput | null,
+  coordinatorID?: ModelIDInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelTeamFilterInput | null > | null,
@@ -1250,9 +1405,44 @@ export type ModelTeamFilterInput = {
   not?: ModelTeamFilterInput | null,
 };
 
-export type ModelTeamConnection = {
-  __typename: "ModelTeamConnection",
-  items:  Array<Team | null >,
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type ModelNotificationRecipientFilterInput = {
+  id?: ModelIDInput | null,
+  role?: ModelNotificationListRoleInput | null,
+  email?: ModelStringInput | null,
+  displayName?: ModelStringInput | null,
+  enabled?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelNotificationRecipientFilterInput | null > | null,
+  or?: Array< ModelNotificationRecipientFilterInput | null > | null,
+  not?: ModelNotificationRecipientFilterInput | null,
+};
+
+export type ModelNotificationRecipientConnection = {
+  __typename: "ModelNotificationRecipientConnection",
+  items:  Array<NotificationRecipient | null >,
+  nextToken?: string | null,
+};
+
+export type ModelAppEmailSettingsFilterInput = {
+  id?: ModelIDInput | null,
+  fromAddress?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  and?: Array< ModelAppEmailSettingsFilterInput | null > | null,
+  or?: Array< ModelAppEmailSettingsFilterInput | null > | null,
+  not?: ModelAppEmailSettingsFilterInput | null,
+};
+
+export type ModelAppEmailSettingsConnection = {
+  __typename: "ModelAppEmailSettingsConnection",
+  items:  Array<AppEmailSettings | null >,
   nextToken?: string | null,
 };
 
@@ -1268,12 +1458,6 @@ export type ModelTeamMemberFilterInput = {
   or?: Array< ModelTeamMemberFilterInput | null > | null,
   not?: ModelTeamMemberFilterInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelTeamMemberConnection = {
   __typename: "ModelTeamMemberConnection",
@@ -1549,15 +1733,48 @@ export type ModelSubscriptionHomeRepairTypeFilterInput = {
   or?: Array< ModelSubscriptionHomeRepairTypeFilterInput | null > | null,
 };
 
+export type ModelSubscriptionCoordinatorFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  enabled?: ModelSubscriptionBooleanInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionCoordinatorFilterInput | null > | null,
+  or?: Array< ModelSubscriptionCoordinatorFilterInput | null > | null,
+};
+
 export type ModelSubscriptionTeamFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   teamName?: ModelSubscriptionStringInput | null,
   teamType?: ModelSubscriptionStringInput | null,
   email?: ModelSubscriptionStringInput | null,
+  coordinatorID?: ModelSubscriptionIDInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionTeamFilterInput | null > | null,
   or?: Array< ModelSubscriptionTeamFilterInput | null > | null,
+};
+
+export type ModelSubscriptionNotificationRecipientFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  role?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  displayName?: ModelSubscriptionStringInput | null,
+  enabled?: ModelSubscriptionBooleanInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionNotificationRecipientFilterInput | null > | null,
+  or?: Array< ModelSubscriptionNotificationRecipientFilterInput | null > | null,
+};
+
+export type ModelSubscriptionAppEmailSettingsFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  fromAddress?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionAppEmailSettingsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionAppEmailSettingsFilterInput | null > | null,
 };
 
 export type ModelSubscriptionTeamMemberFilterInput = {
@@ -2511,6 +2728,138 @@ export type DeleteHomeRepairTypeMutation = {
   } | null,
 };
 
+export type CreateCoordinatorMutationVariables = {
+  input: CreateCoordinatorInput,
+  condition?: ModelCoordinatorConditionInput | null,
+};
+
+export type CreateCoordinatorMutation = {
+  createCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateCoordinatorMutationVariables = {
+  input: UpdateCoordinatorInput,
+  condition?: ModelCoordinatorConditionInput | null,
+};
+
+export type UpdateCoordinatorMutation = {
+  updateCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteCoordinatorMutationVariables = {
+  input: DeleteCoordinatorInput,
+  condition?: ModelCoordinatorConditionInput | null,
+};
+
+export type DeleteCoordinatorMutation = {
+  deleteCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreateTeamMutationVariables = {
   input: CreateTeamInput,
   condition?: ModelTeamConditionInput | null,
@@ -2523,6 +2872,30 @@ export type CreateTeamMutation = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -2600,6 +2973,30 @@ export type UpdateTeamMutation = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -2677,6 +3074,30 @@ export type DeleteTeamMutation = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -2737,6 +3158,105 @@ export type DeleteTeamMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateNotificationRecipientMutationVariables = {
+  input: CreateNotificationRecipientInput,
+  condition?: ModelNotificationRecipientConditionInput | null,
+};
+
+export type CreateNotificationRecipientMutation = {
+  createNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateNotificationRecipientMutationVariables = {
+  input: UpdateNotificationRecipientInput,
+  condition?: ModelNotificationRecipientConditionInput | null,
+};
+
+export type UpdateNotificationRecipientMutation = {
+  updateNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteNotificationRecipientMutationVariables = {
+  input: DeleteNotificationRecipientInput,
+  condition?: ModelNotificationRecipientConditionInput | null,
+};
+
+export type DeleteNotificationRecipientMutation = {
+  deleteNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateAppEmailSettingsMutationVariables = {
+  input: CreateAppEmailSettingsInput,
+  condition?: ModelAppEmailSettingsConditionInput | null,
+};
+
+export type CreateAppEmailSettingsMutation = {
+  createAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateAppEmailSettingsMutationVariables = {
+  input: UpdateAppEmailSettingsInput,
+  condition?: ModelAppEmailSettingsConditionInput | null,
+};
+
+export type UpdateAppEmailSettingsMutation = {
+  updateAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteAppEmailSettingsMutationVariables = {
+  input: DeleteAppEmailSettingsInput,
+  condition?: ModelAppEmailSettingsConditionInput | null,
+};
+
+export type DeleteAppEmailSettingsMutation = {
+  deleteAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -5031,6 +5551,85 @@ export type ListHomeRepairTypesQuery = {
   } | null,
 };
 
+export type GetCoordinatorQueryVariables = {
+  id: string,
+};
+
+export type GetCoordinatorQuery = {
+  getCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListCoordinatorsQueryVariables = {
+  filter?: ModelCoordinatorFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListCoordinatorsQuery = {
+  listCoordinators?:  {
+    __typename: "ModelCoordinatorConnection",
+    items:  Array< {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetTeamQueryVariables = {
   id: string,
 };
@@ -5042,6 +5641,30 @@ export type GetTeamQuery = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -5122,6 +5745,20 @@ export type ListTeamsQuery = {
       teamName: string,
       teamType: NeedType,
       email?: string | null,
+      coordinatorID?: string | null,
+      coordinator?:  {
+        __typename: "Coordinator",
+        id: string,
+        name: string,
+        email: string,
+        enabled: boolean,
+        teams?:  {
+          __typename: "ModelTeamConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
       requests?:  {
         __typename: "ModelTeamRequestConnection",
         items:  Array< {
@@ -5139,6 +5776,160 @@ export type ListTeamsQuery = {
         } | null >,
         nextToken?: string | null,
       } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type TeamsByTypeQueryVariables = {
+  teamType: NeedType,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTeamFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TeamsByTypeQuery = {
+  teamsByType?:  {
+    __typename: "ModelTeamConnection",
+    items:  Array< {
+      __typename: "Team",
+      id: string,
+      teamName: string,
+      teamType: NeedType,
+      email?: string | null,
+      coordinatorID?: string | null,
+      coordinator?:  {
+        __typename: "Coordinator",
+        id: string,
+        name: string,
+        email: string,
+        enabled: boolean,
+        teams?:  {
+          __typename: "ModelTeamConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      requests?:  {
+        __typename: "ModelTeamRequestConnection",
+        items:  Array< {
+          __typename: "TeamRequest",
+          id: string,
+          requestID: string,
+          type: NeedType,
+          teamID: string,
+          askDate: string,
+          note: string,
+          filledDate?: string | null,
+          filledBy?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetNotificationRecipientQueryVariables = {
+  id: string,
+};
+
+export type GetNotificationRecipientQuery = {
+  getNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListNotificationRecipientsQueryVariables = {
+  filter?: ModelNotificationRecipientFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListNotificationRecipientsQuery = {
+  listNotificationRecipients?:  {
+    __typename: "ModelNotificationRecipientConnection",
+    items:  Array< {
+      __typename: "NotificationRecipient",
+      id: string,
+      role: NotificationListRole,
+      email: string,
+      displayName?: string | null,
+      enabled: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type RecipientsByRoleQueryVariables = {
+  role: NotificationListRole,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelNotificationRecipientFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type RecipientsByRoleQuery = {
+  recipientsByRole?:  {
+    __typename: "ModelNotificationRecipientConnection",
+    items:  Array< {
+      __typename: "NotificationRecipient",
+      id: string,
+      role: NotificationListRole,
+      email: string,
+      displayName?: string | null,
+      enabled: boolean,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetAppEmailSettingsQueryVariables = {
+  id: string,
+};
+
+export type GetAppEmailSettingsQuery = {
+  getAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListAppEmailSettingsQueryVariables = {
+  filter?: ModelAppEmailSettingsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListAppEmailSettingsQuery = {
+  listAppEmailSettings?:  {
+    __typename: "ModelAppEmailSettingsConnection",
+    items:  Array< {
+      __typename: "AppEmailSettings",
+      id: string,
+      fromAddress: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -6928,6 +7719,135 @@ export type OnDeleteHomeRepairTypeSubscription = {
   } | null,
 };
 
+export type OnCreateCoordinatorSubscriptionVariables = {
+  filter?: ModelSubscriptionCoordinatorFilterInput | null,
+};
+
+export type OnCreateCoordinatorSubscription = {
+  onCreateCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateCoordinatorSubscriptionVariables = {
+  filter?: ModelSubscriptionCoordinatorFilterInput | null,
+};
+
+export type OnUpdateCoordinatorSubscription = {
+  onUpdateCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteCoordinatorSubscriptionVariables = {
+  filter?: ModelSubscriptionCoordinatorFilterInput | null,
+};
+
+export type OnDeleteCoordinatorSubscription = {
+  onDeleteCoordinator?:  {
+    __typename: "Coordinator",
+    id: string,
+    name: string,
+    email: string,
+    enabled: boolean,
+    teams?:  {
+      __typename: "ModelTeamConnection",
+      items:  Array< {
+        __typename: "Team",
+        id: string,
+        teamName: string,
+        teamType: NeedType,
+        email?: string | null,
+        coordinatorID?: string | null,
+        coordinator?:  {
+          __typename: "Coordinator",
+          id: string,
+          name: string,
+          email: string,
+          enabled: boolean,
+          createdAt: string,
+          updatedAt: string,
+        } | null,
+        requests?:  {
+          __typename: "ModelTeamRequestConnection",
+          nextToken?: string | null,
+        } | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateTeamSubscriptionVariables = {
   filter?: ModelSubscriptionTeamFilterInput | null,
 };
@@ -6939,6 +7859,30 @@ export type OnCreateTeamSubscription = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -7015,6 +7959,30 @@ export type OnUpdateTeamSubscription = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -7091,6 +8059,30 @@ export type OnDeleteTeamSubscription = {
     teamName: string,
     teamType: NeedType,
     email?: string | null,
+    coordinatorID?: string | null,
+    coordinator?:  {
+      __typename: "Coordinator",
+      id: string,
+      name: string,
+      email: string,
+      enabled: boolean,
+      teams?:  {
+        __typename: "ModelTeamConnection",
+        items:  Array< {
+          __typename: "Team",
+          id: string,
+          teamName: string,
+          teamType: NeedType,
+          email?: string | null,
+          coordinatorID?: string | null,
+          createdAt: string,
+          updatedAt: string,
+        } | null >,
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
     requests?:  {
       __typename: "ModelTeamRequestConnection",
       items:  Array< {
@@ -7151,6 +8143,99 @@ export type OnDeleteTeamSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateNotificationRecipientSubscriptionVariables = {
+  filter?: ModelSubscriptionNotificationRecipientFilterInput | null,
+};
+
+export type OnCreateNotificationRecipientSubscription = {
+  onCreateNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateNotificationRecipientSubscriptionVariables = {
+  filter?: ModelSubscriptionNotificationRecipientFilterInput | null,
+};
+
+export type OnUpdateNotificationRecipientSubscription = {
+  onUpdateNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteNotificationRecipientSubscriptionVariables = {
+  filter?: ModelSubscriptionNotificationRecipientFilterInput | null,
+};
+
+export type OnDeleteNotificationRecipientSubscription = {
+  onDeleteNotificationRecipient?:  {
+    __typename: "NotificationRecipient",
+    id: string,
+    role: NotificationListRole,
+    email: string,
+    displayName?: string | null,
+    enabled: boolean,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateAppEmailSettingsSubscriptionVariables = {
+  filter?: ModelSubscriptionAppEmailSettingsFilterInput | null,
+};
+
+export type OnCreateAppEmailSettingsSubscription = {
+  onCreateAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateAppEmailSettingsSubscriptionVariables = {
+  filter?: ModelSubscriptionAppEmailSettingsFilterInput | null,
+};
+
+export type OnUpdateAppEmailSettingsSubscription = {
+  onUpdateAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteAppEmailSettingsSubscriptionVariables = {
+  filter?: ModelSubscriptionAppEmailSettingsFilterInput | null,
+};
+
+export type OnDeleteAppEmailSettingsSubscription = {
+  onDeleteAppEmailSettings?:  {
+    __typename: "AppEmailSettings",
+    id: string,
+    fromAddress: string,
     createdAt: string,
     updatedAt: string,
   } | null,
