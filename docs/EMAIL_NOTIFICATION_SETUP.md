@@ -41,12 +41,27 @@ After verifying emails in dev/prod:
 
 ## SysOps UI
 
-Signed-in users in the **SysOps** Cognito group see extra sections on `/teams`:
+Signed-in users in the **SysOps** Cognito group see extra sections on `/teams` **below** the team list:
 
 - Email sender (SES from address)
 - Notification recipient lists
 - Coordinators
 - Per-team coordinator assignment
+
+Requirements:
+
+1. **SysOps Cognito group** — the **Coordinators** group alone is not enough.
+2. **Signed in on `/teams`** — the check runs after Authenticator sign-in; sign out and back in after group changes.
+3. **This feature’s frontend deployed** — merged to `main` (or hosted from the feature branch).
+
+## Troubleshooting
+
+| Symptom | Likely cause |
+|---------|----------------|
+| `/teams` works but no email settings below the list | User is not in **SysOps**, or signed in before the group check ran (sign out/in) |
+| Create team “does nothing” | Create may have succeeded; the list used a separate copy of team state (fixed in `TeamsProvider`). Refresh the page to confirm. Check form error text or GraphQL in devtools. |
+| GraphQL error on `coordinatorID` or `listCoordinators` | `amplify push` not applied on dev — new schema types missing |
+| Email admin forms error on save | User not in SysOps — `Coordinator`, `NotificationRecipient`, and `AppEmailSettings` are SysOps-only in the schema |
 
 ## Adding a new vetter / admin email
 

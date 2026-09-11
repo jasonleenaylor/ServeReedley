@@ -12,7 +12,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Team } from "./RequestAPI";
-import { useTeams } from "./useTeams";
+import { useTeamsContext } from "./TeamsProvider";
 import { Coordinator } from "./emailNotificationTypes";
 import {
   listCoordinators,
@@ -20,7 +20,7 @@ import {
 } from "./emailNotificationGraphql";
 
 const TeamCoordinatorAssignment: React.FC = () => {
-  const { teams, loading: teamsLoading, setTeams } = useTeams();
+  const { teams, loading: teamsLoading, refetchTeams } = useTeamsContext();
   const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
   const graphqlClient = generateClient();
 
@@ -59,9 +59,7 @@ const TeamCoordinatorAssignment: React.FC = () => {
       });
       const updated = result.data?.updateTeam;
       if (updated) {
-        setTeams((prev) =>
-          prev.map((t) => (t.id === team.id ? { ...t, ...updated } : t))
-        );
+        await refetchTeams();
       }
     } catch (err) {
       console.error("Error assigning coordinator:", err);
