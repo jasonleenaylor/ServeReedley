@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { generateClient } from "aws-amplify/api";
 import {
   Box,
@@ -42,7 +42,8 @@ const NotificationRecipientsAdmin: React.FC = () => {
   const [displayName, setDisplayName] = useState("");
   const [enabled, setEnabled] = useState(true);
   const [loading, setLoading] = useState(false);
-  const graphqlClient = generateClient();
+  const [loadedOnce, setLoadedOnce] = useState(false);
+  const graphqlClient = useMemo(() => generateClient(), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -57,6 +58,7 @@ const NotificationRecipientsAdmin: React.FC = () => {
       console.error("Error loading notification recipients:", err);
     } finally {
       setLoading(false);
+      setLoadedOnce(true);
     }
   }, [graphqlClient, role]);
 
@@ -128,9 +130,7 @@ const NotificationRecipientsAdmin: React.FC = () => {
           labelId="notification-role-label"
           value={role}
           label="List"
-          onChange={(e) =>
-            setRole(e.target.value as NotificationListRole)
-          }
+          onChange={(e) => setRole(e.target.value as NotificationListRole)}
         >
           {Object.values(NotificationListRole).map((r) => (
             <MenuItem key={r} value={r}>
@@ -165,7 +165,7 @@ const NotificationRecipientsAdmin: React.FC = () => {
             </Button>
           </ListItem>
         ))}
-        {!loading && items.length === 0 && (
+        {loadedOnce && !loading && items.length === 0 && (
           <Typography variant="body2" color="text.secondary">
             No recipients for this list.
           </Typography>

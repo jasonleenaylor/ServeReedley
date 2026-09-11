@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { generateClient } from "aws-amplify/api";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import {
@@ -12,9 +12,10 @@ const EmailSettingsAdmin: React.FC = () => {
   const [fromAddress, setFromAddress] = useState("");
   const [exists, setExists] = useState(false);
   const [loading, setLoading] = useState(true);
-  const graphqlClient = generateClient();
+  const graphqlClient = useMemo(() => generateClient(), []);
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       setLoading(true);
       try {
@@ -23,6 +24,7 @@ const EmailSettingsAdmin: React.FC = () => {
           variables: { id: DEFAULT_EMAIL_SETTINGS_ID },
           authMode: "userPool",
         });
+        if (cancelled) return;
         const settings = result.data?.getAppEmailSettings;
         if (settings?.fromAddress) {
           setFromAddress(settings.fromAddress);
@@ -31,9 +33,14 @@ const EmailSettingsAdmin: React.FC = () => {
       } catch (err) {
         console.error("Error loading email settings:", err);
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [graphqlClient]);
 
   const handleSave = async (e: React.FormEvent) => {
