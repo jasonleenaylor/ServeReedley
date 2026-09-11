@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { generateClient } from "aws-amplify/api";
 import {
   Box,
@@ -22,9 +22,10 @@ import {
 const TeamCoordinatorAssignment: React.FC = () => {
   const { teams, loading: teamsLoading, refetchTeams } = useTeamsContext();
   const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
-  const graphqlClient = generateClient();
+  const graphqlClient = useMemo(() => generateClient(), []);
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
       try {
         const result: any = await graphqlClient.graphql({
@@ -32,11 +33,16 @@ const TeamCoordinatorAssignment: React.FC = () => {
           variables: { limit: 500 },
           authMode: "userPool",
         });
-        setCoordinators(result.data?.listCoordinators?.items ?? []);
+        if (!cancelled) {
+          setCoordinators(result.data?.listCoordinators?.items ?? []);
+        }
       } catch (err) {
         console.error("Error loading coordinators:", err);
       }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [graphqlClient]);
 
   const coordinatorName = (id: string | null | undefined) => {
@@ -78,7 +84,10 @@ const TeamCoordinatorAssignment: React.FC = () => {
       ) : (
         <List dense>
           {(teams as TeamWithCoordinator[]).map((team) => (
-            <ListItem key={team.id} sx={{ flexDirection: "column", alignItems: "stretch" }}>
+            <ListItem
+              key={team.id}
+              sx={{ flexDirection: "column", alignItems: "stretch" }}
+            >
               <ListItemText
                 primary={`${team.teamName} (${team.teamType})`}
                 secondary={`Team lead: ${team.email || "—"} · Coordinator: ${coordinatorName(team.coordinatorID)}`}
