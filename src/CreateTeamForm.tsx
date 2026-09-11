@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   TextField,
   Button,
@@ -12,8 +12,8 @@ import { generateClient } from "aws-amplify/api";
 import { useTeamsContext } from "./TeamsProvider";
 import { NeedType } from "./RequestAPI";
 import { Coordinator } from "./emailNotificationTypes";
-import { createTeam } from "./graphql/mutations";
 import {
+  createTeamWithCoordinator,
   listCoordinators,
   updateTeamCoordinator,
 } from "./emailNotificationGraphql";
@@ -44,10 +44,11 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { refetchTeams } = useTeamsContext();
-  const graphqlClient = generateClient();
+  const graphqlClient = useMemo(() => generateClient(), []);
 
   useEffect(() => {
     if (!showCoordinatorSelect) return;
+    let cancelled = false;
     (async () => {
       try {
         const result: any = await graphqlClient.graphql({
@@ -55,11 +56,16 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
           variables: { limit: 500 },
           authMode: "userPool",
         });
-        setCoordinators(result.data?.listCoordinators?.items ?? []);
+        if (!cancelled) {
+          setCoordinators(result.data?.listCoordinators?.items ?? []);
+        }
       } catch (err) {
         console.error("Error loading coordinators:", err);
       }
     })();
+    return () => {
+      cancelled = true;
+    };
   }, [showCoordinatorSelect, graphqlClient]);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -79,8 +85,9 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
 
     try {
       const input = { teamName, teamType, email };
+      // Slim mutation — generated createTeam nests SysOps-only `coordinator`.
       const apiData: any = await graphqlClient.graphql({
-        query: createTeam,
+        query: createTeamWithCoordinator,
         variables: { input },
         authMode: "userPool",
       });

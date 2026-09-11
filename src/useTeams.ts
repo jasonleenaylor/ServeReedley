@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
-import { generateClient } from 'aws-amplify/api';
-import { listTeams } from "./graphql/queries"; // Adjust the import path accordingly
+import { useEffect, useMemo, useState } from "react";
+import { generateClient } from "aws-amplify/api";
+import { listTeamsForManagement } from "./emailNotificationGraphql";
 import { Team } from "./RequestAPI";
 
 export const useTeams = () => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
-  const graphqlClient = generateClient();
+  const graphqlClient = useMemo(() => generateClient(), []);
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
+        // Slim selection set — generated listTeams nests SysOps-only `coordinator`
+        // and throws Unauthorized for Coordinators-group users.
         const apiData: any = await graphqlClient.graphql({
-          query: listTeams,
+          query: listTeamsForManagement,
           variables: { limit: 1000 },
-          authMode: 'userPool',
+          authMode: "userPool",
         });
         setTeams(apiData.data.listTeams.items);
       } catch (error) {
@@ -25,7 +27,7 @@ export const useTeams = () => {
     };
 
     fetchTeams();
-  }, []);
+  }, [graphqlClient]);
 
   return { teams, loading, setTeams };
 };
