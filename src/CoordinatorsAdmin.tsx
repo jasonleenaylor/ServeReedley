@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { generateClient } from "aws-amplify/api";
 import {
   Box,
@@ -26,7 +26,7 @@ const CoordinatorsAdmin: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [enabled, setEnabled] = useState(true);
-  const graphqlClient = generateClient();
+  const graphqlClient = useMemo(() => generateClient(), []);
 
   const load = useCallback(async () => {
     try {
