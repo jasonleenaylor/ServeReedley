@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { generateClient } from "aws-amplify/api";
 import {
   Box,
@@ -17,33 +17,17 @@ import { Coordinator } from "./emailNotificationTypes";
 import {
   createCoordinator,
   deleteCoordinator,
-  listCoordinators,
   updateCoordinator,
 } from "./emailNotificationGraphql";
+import { useCoordinatorsContext } from "./CoordinatorsProvider";
 
 const CoordinatorsAdmin: React.FC = () => {
-  const [items, setItems] = useState<Coordinator[]>([]);
+  const { coordinators: items, refetchCoordinators: load } =
+    useCoordinatorsContext();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [enabled, setEnabled] = useState(true);
   const graphqlClient = useMemo(() => generateClient(), []);
-
-  const load = useCallback(async () => {
-    try {
-      const result: any = await graphqlClient.graphql({
-        query: listCoordinators,
-        variables: { limit: 500 },
-        authMode: "userPool",
-      });
-      setItems(result.data?.listCoordinators?.items ?? []);
-    } catch (err) {
-      console.error("Error loading coordinators:", err);
-    }
-  }, [graphqlClient]);
-
-  useEffect(() => {
-    load();
-  }, [load]);
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
