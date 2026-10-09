@@ -2,6 +2,19 @@ const aws = require("aws-sdk");
 const ses = new aws.SES();
 const dynamodb = new aws.DynamoDB.DocumentClient();
 
+async function getFromAddress() {
+  const result = await dynamodb
+    .get({
+      TableName: process.env.API_CRN_APPEMAILSETTINGSTABLE_NAME,
+      Key: { id: "default" },
+    })
+    .promise();
+  if (!result.Item?.fromAddress) {
+    throw new Error('AppEmailSettings "default" is missing or has no fromAddress');
+  }
+  return result.Item.fromAddress;
+}
+
 exports.handler = async (event) => {
   for (const streamedItem of event.Records) {
     if (streamedItem.eventName === "INSERT") {
@@ -82,12 +95,14 @@ Thank you for serving our community!
 
 Serve Reedley Team`;
 
+        // SES only sends from verified identities; team lead addresses usually aren't.
+        const fromAddress = await getFromAddress();
         await ses
           .sendEmail({
             Destination: {
               ToAddresses: [team.email],
             },
-            Source: team.email, // Now using the team's email as the source
+            Source: fromAddress,
             Message: {
               Subject: {
                 Data: subject,
