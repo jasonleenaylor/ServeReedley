@@ -120,6 +120,41 @@ export const deleteCoordinator = /* GraphQL */ `
   }
 `;
 
+export const listTeamsForManagement = /* GraphQL */ `
+  query ListTeamsForManagement($limit: Int, $nextToken: String) {
+    listTeams(limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        teamName
+        teamType
+        email
+        coordinatorID
+        requests {
+          items {
+            id
+            requestID
+            type
+            teamID
+            askDate
+            note
+            filledDate
+            filledBy
+            createdAt
+            updatedAt
+            __typename
+          }
+          nextToken
+          __typename
+        }
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+    }
+  }
+`;
+
 export const createTeamWithCoordinator = /* GraphQL */ `
   mutation CreateTeamWithCoordinator($input: CreateTeamInput!) {
     createTeam(input: $input) {
@@ -145,3 +180,4 @@ export const updateTeamCoordinator = /* GraphQL */ `
 `;
 
 export const DEFAULT_EMAIL_SETTINGS_ID = "default";
+

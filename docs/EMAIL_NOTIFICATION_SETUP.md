@@ -59,9 +59,10 @@ Requirements:
 | Symptom | Likely cause |
 |---------|----------------|
 | `/teams` works but no email settings below the list | User is not in **SysOps**, or signed in before the group check ran (sign out/in) |
-| Create team “does nothing” | Create may have succeeded; the list used a separate copy of team state (fixed in `TeamsProvider`). Refresh the page to confirm. Check form error text or GraphQL in devtools. |
+| Create team “fails” but team exists / Error fetching teams | Generated GraphQL ops nest SysOps-only `coordinator`. Use slim ops (`listTeamsForManagement` / `createTeamWithCoordinator`) that only request `coordinatorID`. |
 | GraphQL error on `coordinatorID` or `listCoordinators` | `amplify push` not applied on dev — new schema types missing |
 | Email admin forms error on save | User not in SysOps — `Coordinator`, `NotificationRecipient`, and `AppEmailSettings` are SysOps-only in the schema |
+| `runtime.lastError: Receiving end does not exist` | Browser extension noise — ignore |
 
 ## Adding a new vetter / admin email
 
