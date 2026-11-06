@@ -1,6 +1,5 @@
 export enum NotificationListRole {
   NEW_REQUEST = "NEW_REQUEST",
-  STALE_REQUEST_REMINDER = "STALE_REQUEST_REMINDER",
 }
 
 export type NotificationRecipient = {

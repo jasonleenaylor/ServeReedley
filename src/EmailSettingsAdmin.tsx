@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { generateClient } from "aws-amplify/api";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import {
   createAppEmailSettings,
   DEFAULT_EMAIL_SETTINGS_ID,
@@ -12,6 +12,11 @@ const EmailSettingsAdmin: React.FC = () => {
   const [fromAddress, setFromAddress] = useState("");
   const [exists, setExists] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState<{
+    severity: "success" | "error";
+    message: string;
+  } | null>(null);
   const graphqlClient = useMemo(() => generateClient(), []);
 
   useEffect(() => {
@@ -46,6 +51,8 @@ const EmailSettingsAdmin: React.FC = () => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fromAddress.trim()) return;
+    setSaving(true);
+    setStatus(null);
     try {
       if (exists) {
         await graphqlClient.graphql({
@@ -71,8 +78,15 @@ const EmailSettingsAdmin: React.FC = () => {
         });
         setExists(true);
       }
+      setStatus({ severity: "success", message: "Saved." });
     } catch (err) {
       console.error("Error saving email settings:", err);
+      setStatus({
+        severity: "error",
+        message: "Save failed. Check the browser console for details.",
+      });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -89,7 +103,10 @@ const EmailSettingsAdmin: React.FC = () => {
           label="From address"
           type="email"
           value={fromAddress}
-          onChange={(e) => setFromAddress(e.target.value)}
+          onChange={(e) => {
+            setFromAddress(e.target.value);
+            setStatus(null);
+          }}
           required
           fullWidth
           margin="dense"
@@ -99,11 +116,16 @@ const EmailSettingsAdmin: React.FC = () => {
           type="submit"
           variant="contained"
           color="primary"
-          disabled={loading}
+          disabled={loading || saving}
           sx={{ mt: 1 }}
         >
-          Save
+          {saving ? "Saving..." : "Save"}
         </Button>
+        {status && (
+          <Alert severity={status.severity} sx={{ mt: 1 }}>
+            {status.message}
+          </Alert>
+        )}
       </Box>
     </Box>
   );
