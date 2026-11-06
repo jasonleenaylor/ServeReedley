@@ -177,7 +177,6 @@ type Team @model @auth(rules: [{ allow: private }]) {
 
 enum NotificationListRole {
   NEW_REQUEST
-  STALE_REQUEST_REMINDER
 }
 
 type NotificationRecipient

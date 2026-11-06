@@ -75,7 +75,7 @@ exports.handler = async () => {
   });
 
   const [toAddresses, fromAddress] = await Promise.all([
-    getRecipientEmails("STALE_REQUEST_REMINDER"),
+    getRecipientEmails("NEW_REQUEST"),
     getFromAddress(),
   ]);
 

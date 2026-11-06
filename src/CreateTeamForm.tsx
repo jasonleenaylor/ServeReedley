@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   TextField,
   Button,
@@ -11,10 +11,9 @@ import {
 import { generateClient } from "aws-amplify/api";
 import { useTeamsContext } from "./TeamsProvider";
 import { NeedType } from "./RequestAPI";
-import { Coordinator } from "./emailNotificationTypes";
+import { useCoordinatorsContext } from "./CoordinatorsProvider";
 import {
   createTeamWithCoordinator,
-  listCoordinators,
   updateTeamCoordinator,
 } from "./emailNotificationGraphql";
 
@@ -40,33 +39,11 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
   const [teamType, setTeamType] = useState<NeedType | "">("");
   const [email, setEmail] = useState("");
   const [coordinatorID, setCoordinatorID] = useState("");
-  const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { refetchTeams } = useTeamsContext();
+  const { coordinators } = useCoordinatorsContext();
   const graphqlClient = useMemo(() => generateClient(), []);
-
-  useEffect(() => {
-    if (!showCoordinatorSelect) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const result: any = await graphqlClient.graphql({
-          query: listCoordinators,
-          variables: { limit: 500 },
-          authMode: "userPool",
-        });
-        if (!cancelled) {
-          setCoordinators(result.data?.listCoordinators?.items ?? []);
-        }
-      } catch (err) {
-        console.error("Error loading coordinators:", err);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [showCoordinatorSelect, graphqlClient]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -157,7 +134,9 @@ const CreateTeamForm: React.FC<{ showCoordinatorSelect?: boolean }> = ({
       </FormControl>
       {showCoordinatorSelect && (
         <FormControl fullWidth margin="dense">
-          <InputLabel id="create-team-coordinator-label">Coordinator</InputLabel>
+          <InputLabel id="create-team-coordinator-label">
+            Coordinator
+          </InputLabel>
           <Select
             labelId="create-team-coordinator-label"
             label="Coordinator"

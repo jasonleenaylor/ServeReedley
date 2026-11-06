@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { generateClient } from "aws-amplify/api";
 import {
   Box,
@@ -13,37 +13,13 @@ import {
 } from "@mui/material";
 import { Team } from "./RequestAPI";
 import { useTeamsContext } from "./TeamsProvider";
-import { Coordinator } from "./emailNotificationTypes";
-import {
-  listCoordinators,
-  updateTeamCoordinator,
-} from "./emailNotificationGraphql";
+import { useCoordinatorsContext } from "./CoordinatorsProvider";
+import { updateTeamCoordinator } from "./emailNotificationGraphql";
 
 const TeamCoordinatorAssignment: React.FC = () => {
   const { teams, loading: teamsLoading, refetchTeams } = useTeamsContext();
-  const [coordinators, setCoordinators] = useState<Coordinator[]>([]);
+  const { coordinators } = useCoordinatorsContext();
   const graphqlClient = useMemo(() => generateClient(), []);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const result: any = await graphqlClient.graphql({
-          query: listCoordinators,
-          variables: { limit: 500 },
-          authMode: "userPool",
-        });
-        if (!cancelled) {
-          setCoordinators(result.data?.listCoordinators?.items ?? []);
-        }
-      } catch (err) {
-        console.error("Error loading coordinators:", err);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [graphqlClient]);
 
   const coordinatorName = (id: string | null | undefined) => {
     if (!id) return "None";
@@ -98,9 +74,7 @@ const TeamCoordinatorAssignment: React.FC = () => {
                   labelId={`coord-${team.id}`}
                   label="Coordinator"
                   value={team.coordinatorID ?? ""}
-                  onChange={(e) =>
-                    handleAssign(team, e.target.value as string)
-                  }
+                  onChange={(e) => handleAssign(team, e.target.value as string)}
                 >
                   <MenuItem value="">
                     <em>None</em>

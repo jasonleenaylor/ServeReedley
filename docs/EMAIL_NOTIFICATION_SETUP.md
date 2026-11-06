@@ -14,14 +14,11 @@ In the app (SysOps user on **Team Management** `/teams`), or via AppSync:
 
 ### 2. Notification recipients
 
-Migrate addresses from the old secret `sysopAddresses` comma-separated list:
+Migrate addresses from the old secret `sysopAddresses` comma-separated list, plus vetters.
 
-| Role | Used when |
-|------|-----------|
-| `NEW_REQUEST` | A new public request is submitted |
-| `STALE_REQUEST_REMINDER` | Weekly reminder for requests still `NEW` after 7 days |
+Recipients (role `NEW_REQUEST`) are emailed when a new public request is submitted and in the weekly reminder for requests still `NEW` after 7 days.
 
-Add one `NotificationRecipient` row per email per role. Set `enabled: true`.
+Add one `NotificationRecipient` row per email. Set `enabled: true`.
 
 ### 3. Coordinators (vetted requests)
 
@@ -30,7 +27,9 @@ When a request status becomes **VETTED**, email goes to **coordinators** linked 
 1. Create `Coordinator` records (name, email, enabled).
 2. Assign each `Team` a `coordinatorID` (Team Management → Team coordinator assignment).
 
-Team lead email (`Team.email`) is unchanged; `NotifyTeamOnRequest` still emails team leads when a `TeamRequest` is created.
+Team lead email (`Team.email`) is unchanged; `NotifyTeamOnRequest` still emails team leads when a `TeamRequest` is created, sent from the `AppEmailSettings` from address.
+
+SES in this account is in sandbox mode, so every recipient (vetters, coordinators, team leads) must be a verified SES identity.
 
 ### 4. Retire Secrets Manager (optional)
 
@@ -67,6 +66,6 @@ Requirements:
 ## Adding a new vetter / admin email
 
 1. Add the Cognito user and SES identity as in [README.md](../README.md) (login access).
-2. Add a `NotificationRecipient` with role `NEW_REQUEST` (and optionally `STALE_REQUEST_REMINDER`) in Team Management.
+2. Add them under **Notification recipients** in Team Management.
 
 Do not edit Secrets Manager for notification lists.

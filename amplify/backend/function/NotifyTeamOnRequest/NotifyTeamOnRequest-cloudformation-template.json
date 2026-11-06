@@ -77,6 +77,45 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_CRN_TEAMTABLE_NAME": {
+              "Fn::Sub": [
+                "Team-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_REQUESTTABLE_NAME": {
+              "Fn::Sub": [
+                "Request-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
+            },
+            "API_CRN_APPEMAILSETTINGSTABLE_NAME": {
+              "Fn::Sub": [
+                "AppEmailSettings-${apicrnGraphQLAPIIdOutput}-${env}",
+                {
+                  "env": {
+                    "Ref": "env"
+                  },
+                  "apicrnGraphQLAPIIdOutput": {
+                    "Ref": "apicrnGraphQLAPIIdOutput"
+                  }
+                }
+              ]
             }
           }
         },
@@ -267,6 +306,19 @@
                 {
                   "Fn::Sub": [
                     "arn:aws:dynamodb:${region}:${account}:table/Request-${apicrnGraphQLAPIIdOutput}-${env}",
+                    {
+                      "region": {
+                        "Ref": "AWS::Region"
+                      },
+                      "account": {
+                        "Ref": "AWS::AccountId"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Fn::Sub": [
+                    "arn:aws:dynamodb:${region}:${account}:table/AppEmailSettings-${apicrnGraphQLAPIIdOutput}-${env}",
                     {
                       "region": {
                         "Ref": "AWS::Region"

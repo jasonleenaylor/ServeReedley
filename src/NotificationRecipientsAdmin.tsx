@@ -4,11 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
   Typography,
   List,
@@ -28,15 +24,9 @@ import {
   updateNotificationRecipient,
 } from "./emailNotificationGraphql";
 
-const roleLabels: Record<NotificationListRole, string> = {
-  [NotificationListRole.NEW_REQUEST]: "New request (vetters / admins)",
-  [NotificationListRole.STALE_REQUEST_REMINDER]: "Stale NEW request reminders",
-};
+const role = NotificationListRole.NEW_REQUEST;
 
 const NotificationRecipientsAdmin: React.FC = () => {
-  const [role, setRole] = useState<NotificationListRole>(
-    NotificationListRole.NEW_REQUEST
-  );
   const [items, setItems] = useState<NotificationRecipient[]>([]);
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -60,7 +50,7 @@ const NotificationRecipientsAdmin: React.FC = () => {
       setLoading(false);
       setLoadedOnce(true);
     }
-  }, [graphqlClient, role]);
+  }, [graphqlClient]);
 
   useEffect(() => {
     load();
@@ -124,21 +114,10 @@ const NotificationRecipientsAdmin: React.FC = () => {
       <Typography variant="h6" gutterBottom>
         Notification recipients
       </Typography>
-      <FormControl fullWidth margin="dense">
-        <InputLabel id="notification-role-label">List</InputLabel>
-        <Select
-          labelId="notification-role-label"
-          value={role}
-          label="List"
-          onChange={(e) => setRole(e.target.value as NotificationListRole)}
-        >
-          {Object.values(NotificationListRole).map((r) => (
-            <MenuItem key={r} value={r}>
-              {roleLabels[r]}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        Admins and vetters. Emailed when a new request is submitted and in the
+        weekly reminder for requests still NEW after 7 days.
+      </Typography>
       <List dense>
         {items.map((item) => (
           <ListItem
@@ -167,7 +146,7 @@ const NotificationRecipientsAdmin: React.FC = () => {
         ))}
         {loadedOnce && !loading && items.length === 0 && (
           <Typography variant="body2" color="text.secondary">
-            No recipients for this list.
+            No recipients yet.
           </Typography>
         )}
       </List>
